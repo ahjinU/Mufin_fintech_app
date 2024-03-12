@@ -4,11 +4,7 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-export default function Button({
-  mode,
-  label,
-  ...props
-}: ButtonProps): JSX.Element {
+export default function Button({ mode, label, ...props }: ButtonProps) {
   let backgroundColor: string;
   switch (mode) {
     case 'ACTIVE':

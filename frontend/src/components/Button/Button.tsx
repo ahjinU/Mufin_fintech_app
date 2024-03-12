@@ -22,7 +22,7 @@ export default function Button({ mode, label, ...props }: ButtonProps) {
 
   return (
     <button
-      className={`w-full h-[43px] rounded-lg text-custom-white custom-semibold-text ${backgroundColor}`}
+      className={`w-full h-[4.4rem] rounded-lg text-custom-white custom-semibold-text ${backgroundColor}`}
       {...props}
     >
       {label}

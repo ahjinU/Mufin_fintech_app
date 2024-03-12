@@ -20,6 +20,7 @@ const config: Config = {
         'custom-light-sky': '#e4fbff',
         'custom-purple': '#7868e6',
         'custom-light-purple': '#b8b5ff',
+        'custom-dark-purple': '#5242c0',
         'custom-black': '#27272a',
         'custom-light-gray': '#edeef7',
         'custom-dark-gray': '#52525b',

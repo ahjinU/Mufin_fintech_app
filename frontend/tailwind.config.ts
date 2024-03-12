@@ -16,6 +16,7 @@ const config: Config = {
       colors: {
         'custom-white': '#ffffff',
         'custom-red': '#cd2626',
+        'custom-dark-red': '#a80101',
         'custom-blue': '#5969ff',
         'custom-light-sky': '#e4fbff',
         'custom-purple': '#7868e6',

@@ -1,5 +1,5 @@
 interface SmallButtonProps {
-  mode: 'ACTIVE' | 'NOT_SELECTED' | 'NON_ACTIVE';
+  mode: 'ACTIVE' | 'DESTRUCTIVE' | 'NON_ACTIVE';
   label: string;
   onClick?: () => void;
 }
@@ -16,9 +16,9 @@ export default function SmallButton({
       backgroundColor = 'bg-custom-purple';
       hoverEvent = 'hover:bg-custom-dark-purple';
       break;
-    case 'NOT_SELECTED':
-      backgroundColor = 'bg-custom-light-purple';
-      hoverEvent = 'hover:bg-custom-purple';
+    case 'DESTRUCTIVE':
+      backgroundColor = 'bg-custom-red';
+      hoverEvent = 'hover:bg-custom-dark-red';
       break;
     case 'NON_ACTIVE':
       backgroundColor = 'bg-custom-medium-gray';

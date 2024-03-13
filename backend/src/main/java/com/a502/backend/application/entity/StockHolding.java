@@ -13,10 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_holdings")
 public class StockHolding {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
 	@Column(name = "stock_holding_uuid")
 	private byte[] stockHoldingUuid;
 
@@ -35,14 +31,25 @@ public class StockHolding {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "stock_id")
+	private Stock stock;
+
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
 	@Builder
-	public StockHolding(int id, byte[] stockHoldingUuid, int cnt, int total, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
-		this.id = id;
+	public StockHolding(byte[] stockHoldingUuid, int cnt, int total, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock, User user) {
 		this.stockHoldingUuid = stockHoldingUuid;
 		this.cnt = cnt;
 		this.total = total;
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
 		this.isDeleted = isDeleted;
+		this.stock = stock;
+		this.user = user;
 	}
 }

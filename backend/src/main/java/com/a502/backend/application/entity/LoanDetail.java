@@ -30,12 +30,22 @@ public class LoanDetail {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
+	@ManyToOne
+	@JoinColumn(name = "loan_id")
+	private Loan loan;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "account_datail_id")
+	private AccountDetail accountDetail;
+
 	@Builder
-	public LoanDetail(int id, byte[] loanDetailUuid, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
+	public LoanDetail(int id, byte[] loanDetailUuid, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Loan loan, AccountDetail accountDetail) {
 		this.id = id;
 		this.loanDetailUuid = loanDetailUuid;
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
 		this.isDeleted = isDeleted;
+		this.loan = loan;
+		this.accountDetail = accountDetail;
 	}
 }

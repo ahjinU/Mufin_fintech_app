@@ -45,7 +45,7 @@ public class StockDetail {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 

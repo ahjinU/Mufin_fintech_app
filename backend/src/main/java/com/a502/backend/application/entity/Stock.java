@@ -44,6 +44,9 @@ public class Stock {
 	@OneToMany(mappedBy = "stock")
 	private List<StockDetail> stockDetails = new ArrayList<>();
 
+	@OneToMany(mappedBy = "stock")
+	private List<StockHolding> stockHoldings = new ArrayList<>();
+	
 	@Builder
 	public Stock(int id, byte[] stockUuid, String name, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
 		this.id = id;

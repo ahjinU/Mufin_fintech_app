@@ -46,8 +46,12 @@ public class StockBuy {
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
 	@Builder
-	public StockBuy(int id, byte[] stockBuyUuid, int price, int cntTotal, int cntNot, int status, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock) {
+	public StockBuy(int id, byte[] stockBuyUuid, int price, int cntTotal, int cntNot, int status, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock, User user) {
 		this.id = id;
 		this.stockBuyUuid = stockBuyUuid;
 		this.price = price;
@@ -58,6 +62,7 @@ public class StockBuy {
 		this.modifiedAt = modifiedAt;
 		this.isDeleted = isDeleted;
 		this.stock = stock;
+		this.user = user;
 	}
 
 }

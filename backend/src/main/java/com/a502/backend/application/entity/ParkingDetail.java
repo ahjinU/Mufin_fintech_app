@@ -39,7 +39,7 @@ public class ParkingDetail {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parking_id")
 	private Parking parking;
 

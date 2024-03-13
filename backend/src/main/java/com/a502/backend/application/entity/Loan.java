@@ -54,8 +54,20 @@ public class Loan {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
+	@ManyToOne
+	@JoinColumn(name = "child_id")
+	private User childId;
+
+	@ManyToOne
+	@JoinColumn(name = "parent_id")
+	private User parentId;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "loan_conversation_id")
+	private LoanConversation loanConversation;
+
 	@Builder
-	public Loan(int id, byte[] loanUuid, String name, int amount, int paymentDate, String penalty, int paymentTotalCnt, int paymentNowCnt, int statusCode, int overdueCnt, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
+	public Loan(int id, byte[] loanUuid, String name, int amount, int paymentDate, String penalty, int paymentTotalCnt, int paymentNowCnt, int statusCode, int overdueCnt, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, User childId, User parentId, LoanConversation loanConversation) {
 		this.id = id;
 		this.loanUuid = loanUuid;
 		this.name = name;
@@ -69,5 +81,8 @@ public class Loan {
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
 		this.isDeleted = isDeleted;
+		this.childId = childId;
+		this.parentId = parentId;
+		this.loanConversation = loanConversation;
 	}
 }

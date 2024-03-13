@@ -42,12 +42,16 @@ public class StockSell {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
+
 	@Builder
-	public StockSell(int id, byte[] stockSellUuid, int price, int cntTotal, int cntNot, int status, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock) {
+	public StockSell(int id, byte[] stockSellUuid, int price, int cntTotal, int cntNot, int status, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock, User user) {
 		this.id = id;
 		this.stockSellUuid = stockSellUuid;
 		this.price = price;
@@ -57,5 +61,7 @@ public class StockSell {
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
 		this.isDeleted = isDeleted;
+		this.stock = stock;
+		this.user = user;
 	}
 }

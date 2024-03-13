@@ -33,13 +33,18 @@ public class LoanConversation {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
 	@Builder
-	public LoanConversation(int id, byte[] loanConversationUuid, String content, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
+	public LoanConversation(int id, byte[] loanConversationUuid, String content, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, User user) {
 		this.id = id;
 		this.loanConversationUuid = loanConversationUuid;
 		this.content = content;
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
 		this.isDeleted = isDeleted;
+		this.user = user;
 	}
 }

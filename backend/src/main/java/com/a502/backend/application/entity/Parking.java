@@ -35,7 +35,7 @@ public class Parking {
 	private boolean isDeleted;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	@Builder

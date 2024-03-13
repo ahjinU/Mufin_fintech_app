@@ -46,19 +46,11 @@ public class Account {
     @Column(name = "payment_cycle")
     private Integer paymentCycle;
 
-    @Column(name = "created_at")
-    @Temporal(TemporalType.DATE)
-    private Date createdAt;
-
     @Column(name = "password")
     private Integer password;
 
     @Column(name = "incorrect_cnt")
     private Integer incorrectCount;
-
-    @Column(name = "modified_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modifiedAt;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
@@ -72,10 +64,7 @@ public class Account {
     private User user;
 
     @Builder
-    public Account(int accountId, byte[] accountUuid, String accountNumber, Integer balance, String state,
-                   Integer interestAmount, String type, Integer paymentAmount, Date paymentDate,
-                   Integer paymentCycle, Date createdAt, Integer password, Integer incorrectCount,
-                   Date modifiedAt, Boolean isDeleted, Savings savings) {
+    public Account(int accountId, byte[] accountUuid, String accountNumber, Integer balance, String state, Integer interestAmount, String type, Integer paymentAmount, Date paymentDate, Integer paymentCycle, Integer password, Integer incorrectCount, Boolean isDeleted, Savings savings, User user) {
         this.accountId = accountId;
         this.accountUuid = accountUuid;
         this.accountNumber = accountNumber;
@@ -86,13 +75,10 @@ public class Account {
         this.paymentAmount = paymentAmount;
         this.paymentDate = paymentDate;
         this.paymentCycle = paymentCycle;
-        this.createdAt = createdAt;
         this.password = password;
         this.incorrectCount = incorrectCount;
-        this.modifiedAt = modifiedAt;
         this.isDeleted = isDeleted;
         this.savings = savings;
         this.user = user;
     }
-
 }

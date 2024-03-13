@@ -22,7 +22,7 @@ export default function AdBox({
 
   const adContent = (
     <div
-      className={`w-full h-[8.4rem] px-[2rem] rounded-[2rem] flex justify-center items-center bg-custom-purple`}
+      className={`w-full h-[8.4rem] px-[2rem] rounded-[2rem] flex justify-start items-center bg-custom-purple`}
     >
       {iconContent}
       <div className='ml-[0.8rem] text-custom-white'>

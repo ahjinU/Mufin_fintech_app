@@ -1,12 +1,14 @@
 package com.a502.backend.application.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_details")
 public class StockDetail {
     @Id
@@ -44,4 +46,19 @@ public class StockDetail {
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private Stock stock;
+
+    @Builder
+    public StockDetail(int id, byte[] stockDetailUuid, int price, int highestPrice, int lowestPrice, int upperLimitPrice, int lowerLimitPrice, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock){
+        this.id = id;
+        this.stockDetailUuid = stockDetailUuid;
+        this.price = price;
+        this.highestPrice = highestPrice;
+        this.lowestPrice = lowestPrice;
+        this.upperLimitPrice = upperLimitPrice;
+        this.lowerLimitPrice = lowerLimitPrice;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.isDeleted = isDeleted;
+        this.stock = stock;
+    }
 }

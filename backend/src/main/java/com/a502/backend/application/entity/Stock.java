@@ -1,7 +1,7 @@
 package com.a502.backend.application.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import java.util.List;
 
 @Entity
 @Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stocks")
 public class Stock {
     @Id
@@ -39,4 +41,14 @@ public class Stock {
 
     @OneToMany(mappedBy = "stock")
     private List<StockDetail> stockDetails = new ArrayList<>();
+
+    @Builder
+    public Stock(int id,byte[] stockUuid, String name, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted){
+        this.id = id;
+        this.stockUuid = stockUuid;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.isDeleted = isDeleted;
+    }
 }

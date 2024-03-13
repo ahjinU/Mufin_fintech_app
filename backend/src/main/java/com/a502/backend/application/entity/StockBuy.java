@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Data
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_buys")

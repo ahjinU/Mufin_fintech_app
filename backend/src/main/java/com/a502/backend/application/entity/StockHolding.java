@@ -7,7 +7,6 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_holdings")

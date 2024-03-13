@@ -6,7 +6,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_details")

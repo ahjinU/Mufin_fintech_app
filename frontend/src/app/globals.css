@@ -31,6 +31,7 @@ body {
 @layer base {
   html {
     font-family: 'pretendard', sans-serif;
+    font-size : 62.5%;
   }
 }
 
@@ -40,18 +41,18 @@ body {
   }
   .custom-bold-text {
     font-weight: 700;
-    font-size: 20px;
+    font-size: 2rem;
   }
   .custom-semibold-text {
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1.6rem;
   }
   .custom-medium-text {
     font-weight: 400;
-    font-size: 14px;
+    font-size: 1.4rem;
   }
   .custom-light-text {
     font-weight: 200;
-    font-size: 12px;
+    font-size: 1.2rem;
   }
 }

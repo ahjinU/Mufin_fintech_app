@@ -1,8 +1,8 @@
 'use client'
 
-import Link from "next/link";
+import Link from 'next/link';
 import { HomeIcon, Squares2X2Icon, CalendarIcon, ChartBarIcon, Bars3Icon } from '@heroicons/react/24/solid'
-import { useState } from "react";
+import { useState } from 'react';
 
 interface NavBarProps {
   mode: 'CHILD' | 'PARENT' ;

@@ -67,9 +67,12 @@ public class User{
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Account> accounts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Alert> alerts = new ArrayList<>();
 
     @Builder
-    public User(int userId, byte[] userUuid, String name, String email, String password, String gender, String address, String address2, Integer type, String telephone, Date birth, Short failed, User parent, Boolean isDeleted) {
+
+    public User(int userId, byte[] userUuid, String name, String email, String password, String gender, String address, String address2, Integer type, String telephone, Date birth, Short failed, User parent, List<User> childrens, Boolean isDeleted, List<Account> accounts, List<Alert> alerts) {
         this.userId = userId;
         this.userUuid = userUuid;
         this.name = name;
@@ -83,6 +86,9 @@ public class User{
         this.birth = birth;
         this.failed = failed;
         this.parent = parent;
+        this.childrens = childrens;
         this.isDeleted = isDeleted;
+        this.accounts = accounts;
+        this.alerts = alerts;
     }
 }

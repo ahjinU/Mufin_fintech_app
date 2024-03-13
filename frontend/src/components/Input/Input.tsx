@@ -8,7 +8,7 @@ interface InputProps{
   reset?: boolean;
   placeholder?: string;
   value?: string;
-  setValue?: ( value : string ) => void;
+  setValue?: Function;
 }
 
 export default function Input({ width , reset = true, placeholder, value, setValue, ...props } : InputProps ){

@@ -23,6 +23,14 @@ const meta = {
     isXButtonVisible: {
       description: '우측 상단 X 버튼의 여부를 지정합니다.',
     },
+    onClose: {
+      description:
+        '(옵션)상위 컴포넌트에서 전달되는 바텀 시트 닫기 제어 함수(setIsOpen)를 할당합니다.',
+    },
+    onConfirm: {
+      description:
+        '(옵션)상위 컴포넌트에서 전달되는 바텀 시트에서 발생한 데이터 제어 함수(setData)를 할당합니다.',
+    },
   },
 } satisfies Meta<typeof BottomSheet>;
 

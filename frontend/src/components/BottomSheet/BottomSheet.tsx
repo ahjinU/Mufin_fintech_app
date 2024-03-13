@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Button from '../Button/Button';
+import { motion } from 'framer-motion';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
 interface BottomSheetProps {
@@ -8,8 +9,9 @@ interface BottomSheetProps {
   content?: string;
   imageSrc: string;
   isXButtonVisible: boolean;
-  onClick?: () => void;
   isOpen: boolean;
+  onClose?: () => void;
+  onConfirm?: () => void;
 }
 
 export default function BottomSheet({
@@ -24,9 +26,23 @@ export default function BottomSheet({
   const height: string = size === 'SMALL' ? 'h-[30rem]' : 'h-[40rem]';
   const isButtonVisible: boolean = size !== 'SMALL';
 
+  const container = {
+    show: { y: 0, opacity: 1 },
+    hidden: { y: '100%', opacity: 0 },
+  };
+
   return (
-    <section
-      className={`absolute left-[0] top-[100dvh] transition-[height] duration-500 ease-in-out w-full min-w-[36rem] ${height} rounded-t-[1.6rem] bg-custom-white text-custom-black p-[3rem] flex flex-col justify-between`}
+    <motion.section
+      variants={container}
+      initial="hidden"
+      animate={isOpen ? 'show' : 'hidden'}
+      transition={{
+        type: 'spring',
+        mass: 0.5,
+        damping: 40,
+        stiffness: 400,
+      }}
+      className={`fixed bottom-0 left-0 right-0 w-full min-w-[36rem] ${height} rounded-t-[1.6rem] bg-custom-white text-custom-black p-[3rem] flex flex-col justify-between`}
       {...props}
     >
       {isXButtonVisible && (
@@ -46,6 +62,6 @@ export default function BottomSheet({
       ></Image>
 
       {isButtonVisible && <Button mode="ACTIVE" label="확인" />}
-    </section>
+    </motion.section>
   );
 }

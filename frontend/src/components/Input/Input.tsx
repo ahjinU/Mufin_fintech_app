@@ -13,7 +13,7 @@ interface InputProps{
 
 export default function Input({ width , reset = true, placeholder, value, setValue, ...props } : InputProps ){
 
-  const [ inputPlaceholder, setInputPlaceholder ] = useState( placeholder || '내용을 입력해주세요' );
+  const [ inputPlaceholder, setInputPlaceholder ] = useState( placeholder || '' );
   const [ inputValue, setInputValue ] = useState( value || '' );
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -30,7 +30,7 @@ export default function Input({ width , reset = true, placeholder, value, setVal
 
   return(
     <div
-      className= {`${width ? `w-[${width}]` : 'w-full'}  bg-custom-white h-[4.4rem] border border-custom-medium-gray 
+      className= {`min-w-[16rem] h-[4.4rem] ${ width || 'w-full' } bg-custom-white border border-custom-medium-gray 
       rounded-[0.8rem] p-[1.5rem] pr-[1rem]  border-[0.1rem]
       focus:outline-none focus-within:border-custom-purple focus-within:ring-[0.05rem] focus-within:ring-custom-purple
       text-[1.6rem] custom-semibold-text flex items-center justify-center`}

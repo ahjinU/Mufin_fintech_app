@@ -32,5 +32,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Main: Story = {
   args: {
+    placeholder: '내용을 입력해주세요'
   },
 };

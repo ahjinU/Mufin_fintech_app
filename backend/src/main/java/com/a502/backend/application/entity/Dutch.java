@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -38,8 +40,10 @@ public class Dutch {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @Builder
+    @OneToMany(mappedBy = "dutchDetails", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DutchDetail> dutchDetailss = new ArrayList<>();
 
+    @Builder
     public Dutch(Integer dutchId, byte[] dutchUuid, Integer totalPerson, User receivedUser, Integer receivedPersonsCnt, AccountDetail accountDetail, Boolean isDeleted) {
         this.dutchId = dutchId;
         this.dutchUuid = dutchUuid;

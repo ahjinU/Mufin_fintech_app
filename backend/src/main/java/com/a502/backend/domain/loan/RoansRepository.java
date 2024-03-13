@@ -1,4 +1,4 @@
-package com.a502.backend.domain.roans;
+package com.a502.backend.domain.loan;
 
 import org.springframework.stereotype.Repository;
 

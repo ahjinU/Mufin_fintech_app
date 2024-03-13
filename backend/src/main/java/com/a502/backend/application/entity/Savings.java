@@ -1,4 +1,4 @@
-package com.a502.backend.domain.savings;
+package com.a502.backend.application.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

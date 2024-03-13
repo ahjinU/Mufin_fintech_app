@@ -1,4 +1,4 @@
-package com.a502.backend.domain.stocks;
+package com.a502.backend.domain.stock;
 
 import org.springframework.stereotype.Repository;
 

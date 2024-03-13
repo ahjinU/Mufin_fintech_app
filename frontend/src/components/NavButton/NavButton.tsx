@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
 interface NavButtonProps {
   mode: 'HIGHLIGHT' | 'GENERAL';
@@ -17,12 +17,7 @@ export default function NavButton({ mode, label, ...props }: NavButtonProps) {
       {...props}
     >
       {label}
-      <Image
-        src={'http://localhost:3000/images/icon-right.png'}
-        width={16}
-        height={16}
-        alt="오른쪽 이동"
-      />
+      <ChevronRightIcon className="w-[1.6rem] h-[1.6rem] text-custom-medium-gray" />
     </button>
   );
 }

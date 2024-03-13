@@ -3,65 +3,43 @@ package com.a502.backend.application.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "stocks")
+@Table(name = "stock_buys")
 public class StockBuy {
-    @Entity
-    @Data
-    @Table(name = "users")
-    public static class User {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "user_id")
-        private Integer userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="sotck_buy_id")
+    private int id;
 
-        @Column(name = "name", length = 10)
-        private String name;
+    @Column(name="stock_buy_uuid")
+    private byte[] stockSellUuid;
 
-        @Column(name = "email", length = 20)
-        private String email;
+    @Column()
+    private int price;
 
-        @Column(name = "password", length = 30)
-        private String password;
+    @Column(name="cnt_total")
+    private int cntTotal;
 
-        @Column(name = "gender", length = 4)
-        private String gender;
+    @Column(name="cnt_not")
+    private int cntNot;
 
-        @Column(name = "address", length = 100)
-        private String address;
+    @Column()
+    private int status;
 
-        @Column(name = "address2", length = 100)
-        private String address2;
+    @Column(name="created_at")
+    private LocalDateTime createdAt;
 
-        @Column(name = "type")
-        private Integer type;
+    @Column(name="modified_at")
+    private LocalDateTime modifiedAt;
 
-        @Column(name = "telephone", length = 20)
-        private String telephone;
+    @Column(name="is_deleted")
+    private boolean isDeleted;
 
-        @Column(name = "birth")
-        @Temporal(TemporalType.DATE)
-        private Date birth;
-
-        @Column(name = "failed")
-        private Integer failed;
-
-        @Column(name = "parent_id")
-        private Integer parentId;
-
-        @Column(name = "created_at")
-        @Temporal(TemporalType.TIMESTAMP)
-        private Date createdAt;
-
-        @Column(name = "modified_at")
-        @Temporal(TemporalType.TIMESTAMP)
-        private Date modifiedAt;
-
-        @Column(name = "is_deleted")
-        private Boolean deleted;
-
-    }
+    @ManyToOne
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
 }

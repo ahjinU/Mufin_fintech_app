@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -14,46 +15,45 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "cash_details")
 public class CashDetail {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cash_detail_id")
-    private Integer cashDetailId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cash_detail_id")
+	private int id;
 
-    @Column(name = "cash_detail_uuid")
-    private byte[] cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
+	@Column(name = "cash_detail_uuid")
+	private byte[] cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
 
-    @Column(name = "created_at")
-    @Temporal(TemporalType.DATE)
-    private Date createdAt;
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
 
-    @Column(name = "type")
-    private String type;
+	@Column(name = "type")
+	private String type;
 
-    @ManyToOne
-    @JoinColumn(name = "memo_id")
-    private Memo memo;
+	@ManyToOne
+	@JoinColumn(name = "memo_id")
+	private Memo memo;
 
-    @ManyToOne
-    @JoinColumn(name = "receipt_id")
-    private Receipt receipt;
+	@ManyToOne
+	@JoinColumn(name = "receipt_id")
+	private Receipt receipt;
 
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
-    private Account account;
+	@ManyToOne
+	@JoinColumn(name = "account_id", nullable = false)
+	private Account account;
 
-    @Builder
+	@Builder
 
-    public CashDetail(Integer cashDetailId, byte[] cashDetailUuid, Date createdAt, String type, Memo memo, Receipt receipt, Boolean isDeleted, Account account) {
-        this.cashDetailId = cashDetailId;
-        this.cashDetailUuid = cashDetailUuid;
-        this.createdAt = createdAt;
-        this.type = type;
-        this.memo = memo;
-        this.receipt = receipt;
-        this.isDeleted = isDeleted;
-        this.account = account;
-    }
+	public CashDetail(int id, byte[] cashDetailUuid, LocalDateTime createdAt, String type, Memo memo, Receipt receipt, boolean isDeleted, Account account) {
+		this.id = id;
+		this.cashDetailUuid = cashDetailUuid;
+		this.createdAt = createdAt;
+		this.type = type;
+		this.memo = memo;
+		this.receipt = receipt;
+		this.isDeleted = isDeleted;
+		this.account = account;
+	}
 }

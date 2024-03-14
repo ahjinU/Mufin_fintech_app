@@ -9,27 +9,29 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
-    //유저 등록
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody Integer userId) {
+	private final UserService userService;
 
-        System.out.println("나를 불렀나");
-        String email = userService.loginUser(userId);
+	//유저 등록
+	@PostMapping("/login")
+	public ResponseEntity<?> loginUser(@RequestBody Integer userId) {
 
-        Map<String, Object> result = new HashMap<String, Object>();
-        result.put("email", email);
+		System.out.println("나를 불렀나");
+		String email = userService.loginUser(userId);
 
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-    }
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("email", email);
+
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+	}
 
 }

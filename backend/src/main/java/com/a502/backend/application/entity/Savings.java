@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -13,48 +14,46 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "savings")
 public class Savings {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "saving_id")
-    private Integer savingId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "saving_id")
+	private int id;
 
-    @Column(name = "saving_uuid")
-    private byte[] savingUuid;
+	@Column(name = "saving_uuid")
+	private byte[] savingUuid;
 
-    @Column(name = "interest")
-    private Double interest;
+	@Column(name = "interest")
+	private double interest;
 
-    @Column(name = "period")
-    private Integer period;
+	@Column(name = "period")
+	private int period;
 
-    @Column(name = "name")
-    private String name;
+	@Column(name = "name")
+	private String name;
 
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
 
-    @Column(name = "modified_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modifiedAt;
+	@Column(name = "modified_at")
+	private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
-    @Builder
-    public Savings(Integer savingId, byte[] savingUuid, Double interest, Integer period, String name, Date createdAt, Date modifiedAt, Boolean isDeleted, User user) {
-        this.savingId = savingId;
-        this.savingUuid = savingUuid;
-        this.interest = interest;
-        this.period = period;
-        this.name = name;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.isDeleted = isDeleted;
-        this.user = user;
-    }
+	@Builder
+	public Savings(int id, byte[] savingUuid, double interest, int period, String name, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, User user) {
+		this.id = id;
+		this.savingUuid = savingUuid;
+		this.interest = interest;
+		this.period = period;
+		this.name = name;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+		this.isDeleted = isDeleted;
+		this.user = user;
+	}
 }

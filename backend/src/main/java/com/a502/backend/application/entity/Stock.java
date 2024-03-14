@@ -46,14 +46,18 @@ public class Stock {
 
 	@OneToMany(mappedBy = "stock")
 	private List<StockHolding> stockHoldings = new ArrayList<>();
-	
+
 	@Builder
-	public Stock(int id, byte[] stockUuid, String name, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
+	public Stock(int id, byte[] stockUuid, String name, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, List<StockSell> stockSells, List<StockBuy> stockBuys, List<StockHolding> stockHoldings, List<StockDetail> stockDetails) {
 		this.id = id;
 		this.stockUuid = stockUuid;
 		this.name = name;
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
 		this.isDeleted = isDeleted;
+		this.stockSells = stockSells;
+		this.stockBuys = stockBuys;
+		this.stockHoldings = stockHoldings;
+		this.stockDetails = stockDetails;
 	}
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -16,7 +17,7 @@ public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "account_id")
-	private int accountId;
+	private int id;
 
 	@Column(name = "account_uuid")
 	private byte[] accountUuid;
@@ -25,32 +26,31 @@ public class Account {
 	private String accountNumber;
 
 	@Column(name = "balance")
-	private Integer balance;
+	private int balance;
 
 	@Column(name = "state")
 	private String state;
 
 	@Column(name = "interestAmount")
-	private Integer interestAmount; //이자수령액
+	private int interestAmount; //이자수령액
 
 	@Column(name = "type")
 	private String type;
 
 	@Column(name = "payment_amount")
-	private Integer paymentAmount;
+	private int paymentAmount;
 
 	@Column(name = "payment_date")
-	@Temporal(TemporalType.DATE)
-	private Date paymentDate;
+	private LocalDateTime paymentDate;
 
 	@Column(name = "payment_cycle")
-	private Integer paymentCycle;
+	private int paymentCycle;
 
 	@Column(name = "password")
-	private Integer password;
+	private int password;
 
 	@Column(name = "incorrect_cnt")
-	private Integer incorrectCount;
+	private int incorrectCount;
 
 	@Column(name = "is_deleted")
 	private Boolean isDeleted;
@@ -64,8 +64,8 @@ public class Account {
 	private User user;
 
 	@Builder
-	public Account(int accountId, byte[] accountUuid, String accountNumber, Integer balance, String state, Integer interestAmount, String type, Integer paymentAmount, Date paymentDate, Integer paymentCycle, Integer password, Integer incorrectCount, Boolean isDeleted, Savings savings, User user) {
-		this.accountId = accountId;
+	public Account(int id, byte[] accountUuid, String accountNumber, int balance, String state, int interestAmount, String type, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, int password, int incorrectCount, Boolean isDeleted, Savings savings, User user) {
+		this.id = id;
 		this.accountUuid = accountUuid;
 		this.accountNumber = accountNumber;
 		this.balance = balance;

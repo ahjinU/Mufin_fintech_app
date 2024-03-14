@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
-	private int userId;
+	private int id;
 
 	@Column(name = "user_uuid")
 	private byte[] userUuid;
@@ -42,14 +43,13 @@ public class User {
 	private String address2;
 
 	@Column(name = "type")
-	private Integer type;
+	private int type;
 
 	@Column(name = "telephone")
 	private String telephone;
 
 	@Column(name = "birth")
-	@Temporal(TemporalType.DATE)
-	private Date birth;
+	private LocalDateTime birth;
 
 	@Column(name = "failed")
 	private Short failed;
@@ -62,11 +62,10 @@ public class User {
 	private List<User> childrens = new ArrayList<>();
 
 	@Column(name = "is_deleted")
-	private Boolean isDeleted;
+	private boolean isDeleted;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<Account> accounts = new ArrayList<>();
-
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Alert> alerts = new ArrayList<>();
@@ -76,8 +75,8 @@ public class User {
 
 	@Builder
 
-	public User(int userId, byte[] userUuid, String name, String email, String password, String gender, String address, String address2, Integer type, String telephone, Date birth, Short failed, User parent, List<User> childrens, Boolean isDeleted, List<Account> accounts, List<Alert> alerts) {
-		this.userId = userId;
+	public User(int id, byte[] userUuid, String name, String email, String password, String gender, String address, String address2, int type, String telephone, LocalDateTime birth, Short failed, User parent, List<User> childrens, boolean isDeleted, List<Account> accounts, List<Alert> alerts) {
+		this.id = id;
 		this.userUuid = userUuid;
 		this.name = name;
 		this.email = email;

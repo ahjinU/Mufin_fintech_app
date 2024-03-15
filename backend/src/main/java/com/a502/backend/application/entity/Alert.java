@@ -24,7 +24,6 @@ public class Alert {
 	private byte[] alertUuid;
 
 	@Column(name = "created_at")
-	@Temporal(TemporalType.DATE)
 	private LocalDateTime createdAt;
 
 	@Column(name = "is_deleted")

@@ -1,7 +1,7 @@
 spring:
   config:
     import:
-#      - secret/application-secret.yml
+      - secret/application-secret.yml
 
   jpa:
     hibernate:

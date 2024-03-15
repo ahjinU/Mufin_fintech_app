@@ -10,8 +10,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    public String loginUser(Integer userId) {
-        Optional<User> userOptional = Optional.ofNullable(userRepository.findUserByUserId(userId));
+    public String loginUser(int id) {
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findUserById(id));
 
         return userOptional.get().getEmail();
     }

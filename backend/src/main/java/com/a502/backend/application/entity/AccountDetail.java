@@ -51,7 +51,6 @@ public class AccountDetail {
 	@JoinColumn(name = "receipt_id")
 	private Receipt receipt;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "modified_at")
 	private LocalDateTime modifiedAt;
 

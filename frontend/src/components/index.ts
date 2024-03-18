@@ -12,6 +12,8 @@ import GuideText from './GuideText/GuideText';
 import GuideAccordion from './GuideAccordion/GuideAccordion';
 import BottomSheet from './BottomSheet/BottomSheet';
 import BackButton from './BackButton/BackButton';
+import Tag from './Tag/Tag';
+import AgreeBottomSheet from './AgreeBottomSheet/AgreeBottomSheet';
 
 export {
   Button,
@@ -28,4 +30,6 @@ export {
   GuideAccordion,
   GuideText,
   Tab,
+  Tag,
+  AgreeBottomSheet,
 };

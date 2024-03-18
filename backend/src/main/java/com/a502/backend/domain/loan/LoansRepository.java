@@ -4,5 +4,5 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public class RoansRepository {
+public class LoansRepository {
 }

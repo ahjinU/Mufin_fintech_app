@@ -1,4 +1,4 @@
 package com.a502.backend.domain.loan;
 
-public class RoansService {
+public class LoansService {
 }

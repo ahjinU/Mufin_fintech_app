@@ -63,7 +63,7 @@ export default function MoneyInfoElement({
   const RightButton: React.FC = () => {
     if (buttonOption === 'RIGHT_ARROW')
       return (
-        <ChevronRightIcon className="w-[1.6rem] h-[1.6rem] text-custom-light-gray cursor-pointer" />
+        <ChevronRightIcon className="w-[1.6rem] h-[1.6rem] text-custom-medium-gray cursor-pointer" />
       );
     if (buttonOption === 'TINY_BUTTON' && tinyButtonLabel)
       return <TinyButton label={tinyButtonLabel} />;

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import FlexBox from './FlexBox';
-import OtherInfoElement from ./OtherInfoElement';
+import OtherInfoElement from '../OtherInfoElement/OtherInfoElement';
 
 const meta = {
   title: 'Common/FlexBox',

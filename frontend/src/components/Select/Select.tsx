@@ -15,31 +15,26 @@ export default function Select({ mode, min, max, initialValue }: SelectProps) {
 
   const isDisabled: boolean = mode === 'LOAN_REPORT';
 
-  let labelString: string, unitString: string;
+  let unitString: string;
   switch (mode) {
     case 'LOAN': {
-      labelString = '매월 대출액을 상환하는 날짜를 정해주세요.';
       unitString = '일';
       break;
     }
     case 'LOAN_RETURN':
     case 'SAVINGS_RETURN': {
-      labelString = '한 번에 몇 달 치를 낼지 정해주세요.';
       unitString = '달 치';
       break;
     }
     case 'LOAN_REPORT': {
-      labelString = '매월 대출금 상환 일자';
       unitString = '일';
       break;
     }
     case 'SAVINGS': {
-      labelString = '매월 적금을 납부할 날짜를 정해주세요.';
       unitString = '일';
       break;
     }
     default:
-      labelString = '';
       unitString = '';
   }
 
@@ -54,9 +49,7 @@ export default function Select({ mode, min, max, initialValue }: SelectProps) {
   };
 
   return (
-    <section className="flex flex-col">
-      <span className="mb-[0.7rem] custom-semibold-text">{labelString}</span>
-
+    <section>
       <div className="flex gap-[0.7rem] items-center">
         <button
           onClick={() => !isDisabled && setIsOpen((prev) => !prev)}

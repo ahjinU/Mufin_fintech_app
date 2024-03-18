@@ -15,4 +15,8 @@ public class StocksService {
         return stocksRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_STOCK_NOT_EXIST));
     }
 
+    public Stock findByName(String name){
+        return stocksRepository.findByName(name).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_STOCK_NOT_EXIST));
+    }
+
 }

@@ -21,19 +21,7 @@ public class StockBuysService {
     }
 
     @Transactional
-    public void save(int price, int cntTotal, int status, Stock stock, User user){
-        StockBuy stockBuy = stockBuysRepository.save(new StockBuy(price, cntTotal, status, stock, user));
-        // stock details : 변경 주식 가격 추가 하기
-        // stock sell : 살 수 있는 주식 있는지 검사하고 있으면 거래 하기
-        //
-
-    }
-
-    @Transactional
-    public void transactionBuy(StockBuy stockBuy){
-        // 거래하기
-        // stockSell 에서 주식 id, price 가 똑같은 사람들의 리스트를 가져온다.
-        // 개수를 매칭하면서 거래를 성사 시킨다.
-        // parking 통장 거래내역 수정 ( 매도자/매수자 통장에 둘다 )
+    public StockBuy save(int price, int cntTotal, Stock stock, User user){
+        return stockBuysRepository.save(new StockBuy(price, cntTotal, stock, user));
     }
 }

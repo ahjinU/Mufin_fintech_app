@@ -52,6 +52,7 @@ public enum ErrorCode {
 
     // Parking
     API_ERROR_PARKING_NOT_EXIST(400, "P001", "존재하지 않는 파킹통장 입니다."),
+    API_ERROR_PARKING_NOT_ENOUGH_BALANCE(400, "P002", "파킹통장에 잔액이 부족하여 주문할 수 없습니다."),
 
     // ParkingDetail
     API_ERROR_PARKING_DETAIL_NOT_EXIST(400, "PD01", "존재하지 않는 파킹통장 거래내역 입니다."),

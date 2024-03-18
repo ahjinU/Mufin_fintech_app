@@ -1,5 +1,6 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.code.StockCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -58,11 +59,11 @@ public class StockBuy {
 	private User user;
 
 	@Builder
-	public StockBuy(int price, int cntTotal, int status, Stock stock, User user) {
+	public StockBuy(int price, int cntTotal, Stock stock, User user) {
 		this.price = price;
 		this.cntTotal = cntTotal;
 		this.cntNot = cntTotal;
-		this.status = status;
+		this.status = StockCode.STOCK_STATUS_NEW;
 		this.isDeleted = true;
 		this.stock = stock;
 		this.user = user;

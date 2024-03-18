@@ -23,7 +23,7 @@ public class Stock {
 	@Column(name = "stock_uuid")
 	private byte[] stockUuid;
 
-	@Column()
+	@Column(name = "name")
 	private String name;
 
 	@Column(name = "created_at")

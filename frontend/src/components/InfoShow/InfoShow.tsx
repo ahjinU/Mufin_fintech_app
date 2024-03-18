@@ -29,7 +29,7 @@ export default function InfoShow({ label, text, copyIcon }: InfoShowProps) {
   ) : null;
 
   return (
-    <div className="flex flex-col gap-[0.8rem]">
+    <div className="flex flex-col gap-[0.4rem]">
       <label className="custom-medium-text">{label}</label>
       <div className="flex justify-between items-center border-b border-custom-medium-gray">
         <input

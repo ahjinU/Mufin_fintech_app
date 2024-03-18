@@ -1,6 +1,7 @@
 package com.a502.backend.application.controller;
 
 import com.a502.backend.application.entity.Stock;
+import com.a502.backend.domain.stock.StocksService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,6 @@ import com.a502.backend.application.facade.StockFacade;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
 import org.springframework.web.bind.annotation.PostMapping;
-import java.util.Arrays;
 
 @RestController
 @Slf4j
@@ -24,15 +24,24 @@ public class StockController {
 	private final SimpMessageSendingOperations sendingOperations;
 	private Stock stock;
 
+	private final StockFacade stockFacade;
+
+	// 해당 주식 정보 조회
 	@MessageMapping("/enter")
 	public ResponseEntity<?> enter(@RequestBody Stock stock) {
+		// DB 내 주식이 존재하는지 조회
+//		Stock dbStock = stocksService.findByName(stock.getName());
+//		//
+//		if(dbStock != null){
+//
+//		}
+
 		if (stock.getName().equals("주식이름")) {
 			sendingOperations.convertAndSend("/sub/stock/" + stock.getName(), stock);
 		}
 		return new ResponseEntity<String>(stock.getName(), HttpStatus.OK);
 	}
 
-	private final StockFacade stockFacade;
 
 	@PostMapping("/buy")
 	public ResponseEntity<ApiResponse<Void>> stockBuy(int userId, String name, int price, int cnt_total) {

@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -37,6 +40,18 @@ public class StockFacade {
         stockBuysService.save(price, cnt_total, stock, user);
 
         // 주문 넣은 후 거래 할 수 있는 매도 주문이 있는지 확인
+
+    }
+
+    public void enter(String name){
+        // db에서 요청 받은 이름으로 주식 정보 조회
+        Stock stock = stocksService.findByName(name);
+        // 주식 id
+        int id = stock.getId();
+        // 주식 id에 해당하는 매수 주문 리스트 조회
+        List<StockBuy> sellList = stockBuysService.getBuyList(id);
+        // 주식 id에 해당하는 매도 주문 리스트 조회
+        List<StockSell> buyList = stockSellsService.getSellList(id);
 
     }
 

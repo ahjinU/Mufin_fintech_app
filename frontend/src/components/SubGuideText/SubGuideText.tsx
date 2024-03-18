@@ -1,10 +1,10 @@
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 
-interface GuideTextProps {
+interface SubGuideTextProps {
   text: string;
 }
 
-export default function GuideText({ text, ...props }: GuideTextProps) {
+export default function SubGuideText({ text, ...props }: SubGuideTextProps) {
   return (
     <p className="flex gap-[0.5rem]" {...props}>
       <ExclamationTriangleIcon className="w-[2rem] h-[2rem] text-custom-light-purple" />

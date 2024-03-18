@@ -2,8 +2,10 @@ package com.a502.backend.application.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -17,13 +19,13 @@ public class Parking {
 	private int id;
 
 	@Column(name = "parking_uuid")
-	private byte[] parkingUuid;
+	private UUID parkingUuid;
 
-	@Column()
+	@Column(name = "balance")
 	private int balance;
 
-	@Column()
-	private int interest;
+	@Column(name = "interest")
+	private double interest;
 
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
@@ -31,6 +33,7 @@ public class Parking {
 	@Column(name = "modified_at")
 	private LocalDateTime modifiedAt;
 
+	@ColumnDefault("false")
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
@@ -39,14 +42,9 @@ public class Parking {
 	private User user;
 
 	@Builder
-	public Parking(int id, byte[] parkingUuid, int balance, int interest, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, User user) {
-		this.id = id;
-		this.parkingUuid = parkingUuid;
+	public Parking(int balance, int interest, User user) {
 		this.balance = balance;
 		this.interest = interest;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
 		this.user = user;
 	}
 }

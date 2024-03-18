@@ -4,7 +4,9 @@ import com.a502.backend.application.entity.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface StocksRepository extends JpaRepository<Stock,Integer> {
+import java.util.Optional;
 
+@Repository
+interface StocksRepository extends JpaRepository<Stock,Integer> {
+    Optional<Stock> findByName(String name);
 }

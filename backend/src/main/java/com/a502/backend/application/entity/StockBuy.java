@@ -1,12 +1,17 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.code.StockCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,13 +20,14 @@ import java.time.LocalDateTime;
 public class StockBuy {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "sotck_buy_id")
+	@Column(name = "stock_buy_id")
 	private int id;
 
 	@Column(name = "stock_buy_uuid")
-	private byte[] stockBuyUuid;
+	@UuidGenerator
+	private UUID stockBuyUuid;
 
-	@Column()
+	@Column(name = "price")
 	private int price;
 
 	@Column(name = "cnt_total")
@@ -30,12 +36,14 @@ public class StockBuy {
 	@Column(name = "cnt_not")
 	private int cntNot;
 
-	@Column()
+	@Column(name = "status")
 	private int status;
 
+	@CreationTimestamp
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
+	@UpdateTimestamp
 	@Column(name = "modified_at")
 	private LocalDateTime modifiedAt;
 
@@ -51,16 +59,12 @@ public class StockBuy {
 	private User user;
 
 	@Builder
-	public StockBuy(int id, byte[] stockBuyUuid, int price, int cntTotal, int cntNot, int status, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock, User user) {
-		this.id = id;
-		this.stockBuyUuid = stockBuyUuid;
+	public StockBuy(int price, int cntTotal, Stock stock, User user) {
 		this.price = price;
 		this.cntTotal = cntTotal;
-		this.cntNot = cntNot;
-		this.status = status;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
+		this.cntNot = cntTotal;
+		this.status = StockCode.STOCK_STATUS_NEW;
+		this.isDeleted = true;
 		this.stock = stock;
 		this.user = user;
 	}

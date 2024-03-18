@@ -1,2 +1,4 @@
-package com.a502.backend.application.facade;public class StockFacade {
+package com.a502.backend.application.facade;
+
+public class StockFacade {
 }

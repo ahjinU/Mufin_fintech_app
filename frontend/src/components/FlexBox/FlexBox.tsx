@@ -16,7 +16,7 @@ export default function FlexBox({
 }: FlexBoxProps) {
   return (
     <section
-      className="w-full bg-custom-light-gray rounded-[2rem] p-[2.2rem] gap-[0.5rem]"
+      className="w-full flex flex-col bg-custom-light-gray rounded-[2rem] p-[2.2rem] gap-[1.4rem]"
       {...props}
     >
       <>{topChildren}</>

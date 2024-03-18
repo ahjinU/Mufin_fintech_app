@@ -20,7 +20,7 @@ export const MyStock: Story = {
     leftHighlightText: '우산 회사',
     rightExplainText: '-205,400(-53.2%)',
     rightHighlightText: '181,000 자스민',
-    state: 'DONW',
+    state: 'DOWN',
   },
 };
 
@@ -31,7 +31,7 @@ export const CompanyStock: Story = {
     leftHighlightText: '눈오리 회사',
     rightExplainText: '-2,400(-13.2%)',
     rightHighlightText: '20,460 자스민',
-    state: 'DONW',
+    state: 'DOWN',
   },
 };
 

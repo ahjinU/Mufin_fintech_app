@@ -4,7 +4,7 @@ interface OtherInfoElementProps {
   imageSrc: string;
   leftExplainText: string;
   leftHighlightText: string;
-  state: 'UP' | 'DONW';
+  state: 'UP' | 'DOWN';
   rightExplainText?: string;
   rightHighlightText?: string;
   money?: string;

@@ -14,6 +14,8 @@ import BottomSheet from './BottomSheet/BottomSheet';
 import BackButton from './BackButton/BackButton';
 import Tag from './Tag/Tag';
 import AgreeBottomSheet from './AgreeBottomSheet/AgreeBottomSheet';
+import Select from './Select/Select';
+import ProgressBar from './ProgressBar/ProgressBar';
 
 export {
   Button,
@@ -32,4 +34,6 @@ export {
   Tab,
   Tag,
   AgreeBottomSheet,
+  Select,
+  ProgressBar,
 };

@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 interface StockHoldingsRepository extends JpaRepository<StockHolding, StockHoldingsId> {
 
-    StockHolding findByUserAndStock(User user, Stock stock);
 }

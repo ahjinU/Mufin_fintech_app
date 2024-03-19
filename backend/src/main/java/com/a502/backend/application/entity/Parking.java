@@ -21,6 +21,7 @@ public class Parking {
 	@Column(name = "parking_uuid")
 	private UUID parkingUuid;
 
+	@Setter
 	@Column(name = "balance")
 	private int balance;
 

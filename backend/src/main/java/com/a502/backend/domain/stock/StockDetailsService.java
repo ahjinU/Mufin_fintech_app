@@ -13,16 +13,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class StockDetailsService {
     private final StockDetailsRepository stockDetailsRepository;
+    @Transactional
+    public StockDetail getLastDetail(Stock stock){
+        return stockDetailsRepository.findTopByStockOrderByCreatedAtDesc(stock);
+    }
 
     @Transactional
     public void validStockPrice(Stock stock, int price){
-        StockDetail stockDetail = stockDetailsRepository.findTopByStockOrderByCreatedAtDesc(stock);
+        StockDetail stockDetail = getLastDetail(stock);
         if (stockDetail.getLowerLimitPrice() > price
             || stockDetail.getUpperLimitPrice() < price)
             throw BusinessException.of(ErrorCode.API_ERROR_STOCK_NOT_EXIST);
     }
 
-    public void stockTransaction(Stock stock, int price){
-
+    @Transactional
+    public void updateStockDetail(Stock stock, int price){
+        StockDetail stockDetail = getLastDetail(stock);
+        stockDetail.setPrice(price);
+        stockDetail.setHighestPrice(Math.max(stockDetail.getHighestPrice(), price));
+        stockDetail.setLowestPrice(Math.min(stockDetail.getLowestPrice(), price));
     }
 }

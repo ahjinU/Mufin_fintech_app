@@ -14,6 +14,7 @@ public enum ResponseCode {
 
     // Stock
     API_SUCCESS_STOCK_BUY("S001", "성공적으로 매수 주문했습니다."),
+    API_SUCCESS_STOCK_SELL("S001", "성공적으로 매도 주문했습니다."),
 
     ;
     private final String code;

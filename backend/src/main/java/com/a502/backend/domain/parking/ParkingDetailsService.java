@@ -1,8 +1,7 @@
 package com.a502.backend.domain.parking;
 
-import com.a502.backend.application.entity.Parking;
-import com.a502.backend.application.entity.Stock;
-import com.a502.backend.application.entity.User;
+import com.a502.backend.application.entity.*;
+import com.a502.backend.global.code.StockCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +12,33 @@ import org.springframework.transaction.annotation.Transactional;
 public class ParkingDetailsService {
     private final ParkingDetailsRepository parkingDetailsRepository;
 
-    public void stockBuy(User user, Stock stock, Parking parking, int cnt, int price){
-
+    public ParkingDetail getLastDetail(Parking parking){
+        return parkingDetailsRepository.findTopByParkingOrderByCreatedAtDesc(parking);
     }
 
-    public void stockSell(User user, Stock stock, Parking parking, int cnt, int price){
+    public ParkingDetail saveStockBuy(StockBuy stockBuy, Parking parking, int cnt){
+        ParkingDetail last = getLastDetail(parking);
+        int amount = -stockBuy.getPrice() * cnt;
+        return parkingDetailsRepository.save(ParkingDetail.builder()
+                .parking(parking)
+                .amount(amount)
+                .balance(last.getBalance() + amount)
+                .transCode(StockCode.PARKING_TRANSCODE_BUY)
+                .memo("매수 " + stockBuy.getStock().getName() + " " + cnt + "주")
+                .build()
+        );
+    }
 
+    public ParkingDetail saveStockSell(StockSell stockSell, Parking parking, int cnt){
+        ParkingDetail last = getLastDetail(parking);
+        int amount = stockSell.getPrice() * cnt;
+        return parkingDetailsRepository.save(ParkingDetail.builder()
+                .parking(parking)
+                .amount(amount)
+                .balance(last.getBalance() + amount)
+                .transCode(StockCode.PARKING_TRANSCODE_SELL)
+                .memo("매도 " + stockSell.getStock().getName() + " " + cnt + "주")
+                .build()
+        );
     }
 }

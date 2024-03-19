@@ -36,9 +36,12 @@ public class StockSellsService {
         return stockSellsRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
     }
 
+    @Transactional
     public void stockSell(StockSell stocksell, int cnt){
+        int cntNot = stocksell.getCntNot();
+        if (cntNot - cnt < 0)
+            throw BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_STOCK_IS_NOT_ENOUGH);
+        stocksell.setCntNot(cntNot - cnt);
     }
-
-
 
 }

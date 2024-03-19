@@ -2,6 +2,7 @@ package com.a502.backend.domain.stock;
 
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.entity.StockBuy;
+import com.a502.backend.application.entity.StockSell;
 import com.a502.backend.application.entity.User;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
@@ -23,7 +24,7 @@ public class StockBuysService {
     }
 
     @Transactional
-    public StockBuy save(int price, int cntTotal, Stock stock, User user){
+    public StockBuy save(User user, Stock stock, int price, int cntTotal){
         return stockBuysRepository.save(new StockBuy(price, cntTotal, stock, user));
     }
 
@@ -35,7 +36,11 @@ public class StockBuysService {
         return stockBuysRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
     }
 
+    @Transactional
     public void stockBuy(StockBuy stockBuy, int cnt){
-
+        int cntNot = stockBuy.getCntNot();
+        if (cntNot - cnt < 0)
+            throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_STOCK_IS_NOT_ENOUGH);
+        stockBuy.setCntNot(cntNot - cnt);
     }
 }

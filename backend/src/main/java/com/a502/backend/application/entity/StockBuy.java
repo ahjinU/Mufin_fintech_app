@@ -2,10 +2,7 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.code.StockCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -34,6 +31,7 @@ public class StockBuy {
 	@Column(name = "cnt_total")
 	private int cntTotal;
 
+	@Setter
 	@Column(name = "cnt_not")
 	private int cntNot;
 

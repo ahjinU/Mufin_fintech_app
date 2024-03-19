@@ -2,10 +2,7 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.code.StockCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
@@ -30,12 +27,12 @@ public class StockSell {
 	@Column(name = "cnt_total")
 	private int cntTotal;
 
+	@Setter
 	@Column(name = "cnt_not")
 	private int cntNot;
 
-	@Column()
+	@Column(name = "status")
 	private int status;
-
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "stock_id")

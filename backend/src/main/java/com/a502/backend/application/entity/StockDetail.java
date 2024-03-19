@@ -1,10 +1,7 @@
 package com.a502.backend.application.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -22,12 +19,15 @@ public class StockDetail {
 	@Column(name = "stock_detail_uuid")
 	private UUID stockDetailUuid;
 
+	@Setter
 	@Column(name = "price")
 	private int price;
 
+	@Setter
 	@Column(name = "highest_price")
 	private int highestPrice;
 
+	@Setter
 	@Column(name = "lowest_price")
 	private int lowestPrice;
 

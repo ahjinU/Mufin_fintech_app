@@ -2,10 +2,7 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.domain.stock.StockHoldingsId;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
@@ -23,9 +20,11 @@ public class StockHolding {
 	@Column(name = "stock_holding_uuid")
 	private UUID stockHoldingUuid;
 
+	@Setter
 	@Column(name = "cnt")
 	private int cnt;
 
+	@Setter
 	@Column(name = "total")
 	private int total;
 

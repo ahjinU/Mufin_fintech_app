@@ -13,6 +13,7 @@ public enum ErrorCode {
 
     // User
     API_ERROR_USER_NOT_EXIST(400, "U001", "존재하지 않는 회원입니다."),
+    API_ERROR_USER_INCORRECT_PASSWORD(401, "U002", "비밀번호가 잘못되었습니다. 다시 시도해주세요."),
 
     // Account
     API_ERROR_ACCOUNT_NOT_EXIST(400, "A001", "존재하지 않는 계좌 입니다."),

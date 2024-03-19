@@ -5,18 +5,22 @@ import { useRef, useState } from 'react';
 
 interface InputProps {
   width?: string;
+  height?: string;
   reset?: boolean;
   placeholder?: string;
-  value?: string;
+  value?: string | number;
   setValue?: Function;
+  onChange?: () => void;
 }
 
-export default function Input({
-  width,
+export default function DealList({
+  width = 'w-full',
+  height = 'h-[4.4rem]',
   reset = true,
   placeholder,
   value,
   setValue,
+  onChange,
   ...props
 }: InputProps) {
   const [inputPlaceholder, setInputPlaceholder] = useState(placeholder || '');
@@ -31,20 +35,27 @@ export default function Input({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
+    onChange && onChange();
     setValue && setValue(newValue);
   };
 
   return (
     <div
-      className={`min-w-[16rem] h-[4.4rem] ${
-        width || 'w-full'
-      } bg-custom-white border-custom-medium-gray  border-[0.1rem] 
-      rounded-[0.8rem] p-[1.5rem] pr-[1rem] 
+      className={`${height} ${width} bg-custom-white border-custom-medium-gray  border-[0.1rem] 
+      rounded-[0.8rem] p-[1.5rem] pr-[0.6rem] 
       focus:outline-none focus-within:border-custom-purple focus-within:ring-[0.05rem] focus-within:ring-custom-purple
-      flex items-center justify-center`}
+      flex items-center justify-center z-999`}
+      onClick={() => {
+        inputRef.current?.setSelectionRange(
+          inputRef.current?.value.length,
+          inputRef.current?.value.length,
+        );
+      }}
     >
       <input
-        className="w-full outline-none text-[1.6rem] custom-semibold-text text-custom-black"
+        className={`w-full outline-none  text-[1.6rem] custom-semibold-text text-custom-black ${
+          typeof value === 'number' && 'text-right'
+        }`}
         {...props}
         placeholder={inputPlaceholder}
         value={inputValue}
@@ -54,7 +65,7 @@ export default function Input({
       />
       {reset && (
         <button onClick={handleReset}>
-          <XCircleIcon className="h-[2.4rem] w-[2.4rem] text-custom-light-gray hover:text-custom-medium-gray" />
+          <XCircleIcon className="h-[2.4rem] w-[2.4rem] text-custom-light-gray hover:text-custom-medium-gray mr-[0.8rem]" />
         </button>
       )}
     </div>

@@ -37,6 +37,7 @@ public class StockSell extends BaseEntity {
 	@Column(name = "cnt_not")
 	private int cntNot;
 
+	@Setter
 	@Column(name = "status")
 	private int status;
 
@@ -53,7 +54,7 @@ public class StockSell extends BaseEntity {
 		this.price = price;
 		this.cntTotal = cntTotal;
 		this.cntNot = cntTotal;
-		this.status = StockCode.STOCK_STATUS_NEW;
+		this.status = StockCode.STOCK_STATUS_TRANS;
 		this.stock = stock;
 		this.user = user;
 	}

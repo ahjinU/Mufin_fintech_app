@@ -1,5 +1,6 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "accounts")
-public class Account {
+public class Account extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "account_id")
@@ -22,6 +23,11 @@ public class Account {
 
 	@Column(name = "account_uuid")
 	private UUID accountUuid;
+	@PrePersist
+	public void initUUID() {
+		if (accountUuid == null)
+			accountUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "account_number")
 	private String accountNumber;
@@ -61,8 +67,6 @@ public class Account {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Column(name = "is_deleted")
-	private Boolean isDeleted;
 
 	@Builder
 	public Account(String accountNumber, int balance, String state, int interestAmount, String type, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, int password, int incorrectCount, User user) {

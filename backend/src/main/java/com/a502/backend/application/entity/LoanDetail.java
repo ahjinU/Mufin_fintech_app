@@ -1,5 +1,6 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "loan_details")
-public class LoanDetail {
+public class LoanDetail extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "loan_detail_id")
@@ -21,6 +22,11 @@ public class LoanDetail {
 
 	@Column(name = "loan_detail_uuid")
 	private UUID loanDetailUuid;
+	@PrePersist
+	public void initUUID() {
+		if (loanDetailUuid == null)
+			loanDetailUuid = UUID.randomUUID();
+	}
 
 	@ManyToOne
 	@JoinColumn(name = "loan_id")
@@ -29,15 +35,6 @@ public class LoanDetail {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_datail_id")
 	private AccountDetail accountDetail;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@Builder
 	public LoanDetail(Loan loan, AccountDetail accountDetail) {

@@ -1,5 +1,6 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "memos")
-public class Memo {
+public class Memo extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "memo_id")
@@ -21,21 +22,17 @@ public class Memo {
 
 	@Column(name = "memo_uuid")
 	private UUID memoUuid;
+	@PrePersist
+	public void initUUID() {
+		if (memoUuid == null)
+			memoUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "content")
 	private String content;
 
 	@Column(name = "category")
 	private String category;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private Boolean isDeleted;
 
 	@Builder
 	public Memo(String content, String category) {

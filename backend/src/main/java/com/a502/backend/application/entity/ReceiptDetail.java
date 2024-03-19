@@ -7,20 +7,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "receipt_details")
 public class ReceiptDetail {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "receipt_detail_id")
 	private int id;
 
 	@Column(name = "receipt_detail_uuid")
-	private byte[] receiptDetailUuid;
+	private UUID receiptDetailUuid;
 
 	@Column(name = "item")
 	private String item;
@@ -38,27 +38,21 @@ public class ReceiptDetail {
 	@JoinColumn(name = "receipt_id")
 	private Receipt receipt;
 
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
-
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
 	@Column(name = "modified_at")
 	private LocalDateTime modifiedAt;
 
-	@Builder
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
 
-	public ReceiptDetail(int id, byte[] receiptDetailUuid, String item, int price, int cnt, int total, Receipt receipt, boolean isDeleted, LocalDateTime createdAt, LocalDateTime modifiedAt) {
-		this.id = id;
-		this.receiptDetailUuid = receiptDetailUuid;
+	@Builder
+	public ReceiptDetail(String item, int price, int cnt, int total, Receipt receipt) {
 		this.item = item;
 		this.price = price;
 		this.cnt = cnt;
 		this.total = total;
 		this.receipt = receipt;
-		this.isDeleted = isDeleted;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
 	}
 }

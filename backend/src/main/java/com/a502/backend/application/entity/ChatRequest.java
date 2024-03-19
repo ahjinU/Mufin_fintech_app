@@ -1,0 +1,39 @@
+package com.a502.backend.application.entity;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
+
+@Getter
+@NoArgsConstructor
+public class ChatRequest {
+	/**
+	 * 송신자 id
+	 */
+	@NotNull
+	private Long senderId;
+
+	/**
+	 * 수신자 id
+	 */
+	@NotNull
+	private Long receiverId;
+
+	/**
+	 * 채팅방 id
+	 */
+	@NotNull
+	private Long roomId;
+
+	/**
+	 * 메시지 내용
+	 */
+	private String message;
+
+	public ChatRequest(Long senderId, Long receiverId, Long roomId, String message) {
+		this.senderId = senderId;
+		this.receiverId = receiverId;
+		this.roomId = roomId;
+		this.message = message;
+	}
+}

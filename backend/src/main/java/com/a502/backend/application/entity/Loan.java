@@ -5,8 +5,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,23 +21,24 @@ public class Loan {
 	private int id;
 
 	@Column(name = "loan_uuid")
-	private byte[] loanUuid;
+	private UUID loanUuid;
 
-	@Column()
+	@Column(name = "name")
 	private String name;
 
-	@Column()
+	@Column(name = "amount")
 	private int amount;
 
 	@Column(name = "payment_date")
 	private int paymentDate;
 
-	@Column()
+	@Column(name = "penalty")
 	private String penalty;
 
 	@Column(name = "payment_total_cnt")
 	private int paymentTotalCnt;
 
+	@ColumnDefault("0")
 	@Column(name = "payment_now_cnt")
 	private int paymentNowCnt;
 
@@ -44,6 +47,18 @@ public class Loan {
 
 	@Column(name = "overdue_cnt")
 	private int overdueCnt;
+
+	@ManyToOne
+	@JoinColumn(name = "child_id")
+	private User child;
+
+	@ManyToOne
+	@JoinColumn(name = "parent_id")
+	private User parent;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "loan_conversation_id")
+	private LoanConversation loanConversation;
 
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
@@ -54,35 +69,15 @@ public class Loan {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-	@ManyToOne
-	@JoinColumn(name = "child_id")
-	private User childId;
-
-	@ManyToOne
-	@JoinColumn(name = "parent_id")
-	private User parentId;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "loan_conversation_id")
-	private LoanConversation loanConversation;
-
 	@Builder
-	public Loan(int id, byte[] loanUuid, String name, int amount, int paymentDate, String penalty, int paymentTotalCnt, int paymentNowCnt, int statusCode, int overdueCnt, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, User childId, User parentId, LoanConversation loanConversation) {
-		this.id = id;
-		this.loanUuid = loanUuid;
+	public Loan(String name, int amount, int paymentDate, String penalty, int paymentTotalCnt, User child, User parent) {
 		this.name = name;
 		this.amount = amount;
 		this.paymentDate = paymentDate;
 		this.penalty = penalty;
 		this.paymentTotalCnt = paymentTotalCnt;
-		this.paymentNowCnt = paymentNowCnt;
-		this.statusCode = statusCode;
-		this.overdueCnt = overdueCnt;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
-		this.childId = childId;
-		this.parentId = parentId;
-		this.loanConversation = loanConversation;
+//		this.statusCode = statusCode; // default "심사중"
+		this.child = child;
+		this.parent = parent;
 	}
 }

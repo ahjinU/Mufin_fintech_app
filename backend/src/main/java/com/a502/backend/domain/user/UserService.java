@@ -21,4 +21,12 @@ public class UserService {
         return user.getEmail();
     }
 
+    public User save(String email, String password){
+        return userRepository.save(User.builder()
+                .email(email)
+                .password(password)
+                .build());
+
+    }
+
 }

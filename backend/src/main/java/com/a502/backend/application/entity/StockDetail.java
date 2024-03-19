@@ -1,12 +1,10 @@
 package com.a502.backend.application.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,14 +17,17 @@ public class StockDetail {
 	private int id;
 
 	@Column(name = "stock_detail_uuid")
-	private byte[] stockDetailUuid;
+	private UUID stockDetailUuid;
 
-	@Column()
+	@Setter
+	@Column(name = "price")
 	private int price;
 
+	@Setter
 	@Column(name = "highest_price")
 	private int highestPrice;
 
+	@Setter
 	@Column(name = "lowest_price")
 	private int lowestPrice;
 
@@ -35,6 +36,10 @@ public class StockDetail {
 
 	@Column(name = "lower_limit_price")
 	private int lowerLimitPrice;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "stock_id")
+	private Stock stock;
 
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
@@ -45,22 +50,13 @@ public class StockDetail {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "stock_id")
-	private Stock stock;
-
 	@Builder
-	public StockDetail(int id, byte[] stockDetailUuid, int price, int highestPrice, int lowestPrice, int upperLimitPrice, int lowerLimitPrice, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock) {
-		this.id = id;
-		this.stockDetailUuid = stockDetailUuid;
+	public StockDetail(int price, int highestPrice, int lowestPrice, int upperLimitPrice, int lowerLimitPrice, Stock stock) {
 		this.price = price;
 		this.highestPrice = highestPrice;
 		this.lowestPrice = lowestPrice;
 		this.upperLimitPrice = upperLimitPrice;
 		this.lowerLimitPrice = lowerLimitPrice;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
 		this.stock = stock;
 	}
 }

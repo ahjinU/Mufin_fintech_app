@@ -9,6 +9,7 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -21,7 +22,17 @@ public class Alert {
 	private int id;
 
 	@Column(name = "alert_uuid")
-	private byte[] alertUuid;
+	private UUID alertUuid;
+
+	@Column(name = "type")
+	private String type;
+
+	@Column(name = "type_id")
+	private int type_id;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
@@ -29,24 +40,10 @@ public class Alert {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-	@Column(name = "content")
-	private String content;
-
-	@Column(name = "type")
-	private String type;
-
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-
 	@Builder
-	public Alert(int id, byte[] alertUuid, LocalDateTime createdAt, boolean isDeleted, String content, String type, User user) {
-		this.id = id;
-		this.alertUuid = alertUuid;
-		this.createdAt = createdAt;
-		this.isDeleted = isDeleted;
-		this.content = content;
+	public Alert(String type, int type_id, User user) {
 		this.type = type;
+		this.type_id = type_id;
 		this.user = user;
 	}
 }

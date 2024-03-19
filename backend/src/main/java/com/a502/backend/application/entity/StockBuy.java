@@ -2,10 +2,8 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.code.StockCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -33,22 +31,12 @@ public class StockBuy {
 	@Column(name = "cnt_total")
 	private int cntTotal;
 
+	@Setter
 	@Column(name = "cnt_not")
 	private int cntNot;
 
 	@Column(name = "status")
 	private int status;
-
-	@CreationTimestamp
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@UpdateTimestamp
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@ManyToOne
 	@JoinColumn(name = "stock_id")
@@ -58,13 +46,24 @@ public class StockBuy {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@CreationTimestamp
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
+
+	@UpdateTimestamp
+	@Column(name = "modified_at")
+	private LocalDateTime modifiedAt;
+
+	@ColumnDefault("false")
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
+
 	@Builder
 	public StockBuy(int price, int cntTotal, Stock stock, User user) {
 		this.price = price;
 		this.cntTotal = cntTotal;
 		this.cntNot = cntTotal;
 		this.status = StockCode.STOCK_STATUS_NEW;
-		this.isDeleted = true;
 		this.stock = stock;
 		this.user = user;
 	}

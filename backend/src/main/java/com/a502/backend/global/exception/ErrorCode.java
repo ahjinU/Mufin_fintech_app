@@ -40,15 +40,19 @@ public enum ErrorCode {
 
     // StockDetail
     API_ERROR_STOCK_DETAIL_NOT_EXIST(400, "SD01", "존재하지 않는 주식정보입니다."),
+    API_ERROR_STOCK_PRICE_OUT_OF_RANGE(400, "SD02", "상한가와 하한가에 맞는 주식 액수를 입력해주세요."),
 
     // StockHolding
     API_ERROR_STOCK_HOLDING_NOT_EXIST(400, "SH01", "존재하지 않는 거래입니다."),
+    API_ERROR_STOCK_HOIDING_NOT_ENOUGH(400, "SH02", "보유 주식이 충분하지 않습니다."),
 
     // StockSell
     API_ERROR_STOCKSELL_NOT_EXIST(400, "SS01", "존재하지 않는 주식매도 요청입니다."),
+    API_ERROR_STOCKSELL_STOCK_IS_NOT_ENOUGH(400, "SS02", "거래량이 충분하지 않습니다."),
 
     // StockBuy
     API_ERROR_STOCKBUY_NOT_EXIST(400, "SB01", "존재하지 않는 주식매수 요청입니다."),
+    API_ERROR_STOCKBUY_STOCK_IS_NOT_ENOUGH(400, "SB02", "거래량이 충분하지 않습니다."),
 
     // Parking
     API_ERROR_PARKING_NOT_EXIST(400, "P001", "존재하지 않는 파킹통장 입니다."),

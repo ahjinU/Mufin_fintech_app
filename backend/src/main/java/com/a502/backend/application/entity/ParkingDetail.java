@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -16,19 +17,23 @@ public class ParkingDetail {
 	private int id;
 
 	@Column(name = "parking_details_uuid")
-	private byte[] parkingDetailUuid;
+	private UUID parkingDetailUuid;
 
 	@Column(name = "trans_code")
 	private int transCode;
 
-	@Column()
+	@Column(name = "amount")
 	private int amount;
 
-	@Column()
+	@Column(name = "balance")
 	private int balance;
 
-	@Column()
+	@Column(name = "memo")
 	private String memo;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parking_id")
+	private Parking parking;
 
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
@@ -38,22 +43,12 @@ public class ParkingDetail {
 
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parking_id")
-	private Parking parking;
-
 	@Builder
-	public ParkingDetail(int id, byte[] parkingDetailUuid, int transCode, int amount, int balance, String memo, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Parking parking) {
-		this.id = id;
-		this.parkingDetailUuid = parkingDetailUuid;
+	public ParkingDetail(int transCode, int amount, int balance, String memo, Parking parking) {
 		this.transCode = transCode;
 		this.amount = amount;
 		this.balance = balance;
 		this.memo = memo;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
 		this.parking = parking;
 	}
 }

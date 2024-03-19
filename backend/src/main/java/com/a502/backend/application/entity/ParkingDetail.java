@@ -1,5 +1,6 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "parking_details")
-public class ParkingDetail {
+public class ParkingDetail extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "parking_details_id")
@@ -18,6 +19,11 @@ public class ParkingDetail {
 
 	@Column(name = "parking_details_uuid")
 	private UUID parkingDetailUuid;
+	@PrePersist
+	public void initUUID() {
+		if (parkingDetailUuid == null)
+			parkingDetailUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "trans_code")
 	private int transCode;
@@ -35,14 +41,6 @@ public class ParkingDetail {
 	@JoinColumn(name = "parking_id")
 	private Parking parking;
 
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 	@Builder
 	public ParkingDetail(int transCode, int amount, int balance, String memo, Parking parking) {
 		this.transCode = transCode;

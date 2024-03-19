@@ -1,6 +1,7 @@
 package com.a502.backend.application.entity;
 
 import com.a502.backend.global.code.StockCode;
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_buys")
-public class StockBuy {
+public class StockBuy extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "stock_buy_id")
@@ -24,6 +25,11 @@ public class StockBuy {
 	@Column(name = "stock_buy_uuid")
 	@UuidGenerator
 	private UUID stockBuyUuid;
+	@PrePersist
+	public void initUUID() {
+		if (stockBuyUuid == null)
+			stockBuyUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "price")
 	private int price;
@@ -45,18 +51,6 @@ public class StockBuy {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	@CreationTimestamp
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@UpdateTimestamp
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@ColumnDefault("false")
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@Builder
 	public StockBuy(int price, int cntTotal, Stock stock, User user) {

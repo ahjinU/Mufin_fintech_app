@@ -1,5 +1,6 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "alerts")
-public class Alert {
+public class Alert extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "alert_id")
@@ -23,6 +24,11 @@ public class Alert {
 
 	@Column(name = "alert_uuid")
 	private UUID alertUuid;
+	@PrePersist
+	public void initUUID() {
+		if (alertUuid == null)
+			alertUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "type")
 	private String type;
@@ -33,12 +39,6 @@ public class Alert {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@Builder
 	public Alert(String type, int type_id, User user) {

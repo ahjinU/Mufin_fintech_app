@@ -1,6 +1,7 @@
 package com.a502.backend.application.entity;
 
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "cash_details")
-public class CashDetail {
+public class CashDetail extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "cash_detail_id")
@@ -23,6 +24,11 @@ public class CashDetail {
 
 	@Column(name = "cash_detail_uuid")
 	private UUID cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
+	@PrePersist
+	public void initUUID() {
+		if (cashDetailUuid == null)
+			cashDetailUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "type")
 	private String type;
@@ -41,12 +47,6 @@ public class CashDetail {
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@Builder
 	public CashDetail(String type, int amount, User user) {

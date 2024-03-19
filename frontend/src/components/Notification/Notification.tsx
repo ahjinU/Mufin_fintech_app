@@ -37,7 +37,7 @@ export default function Notification({
   return (
     <div
       className={`w-full h-auto ${
-        index % 2 === 0 ? 'bg-custom-light-sky' : 'bg-custom-white'
+        index % 2 === 0 ? 'bg-custom-light-gray' : 'bg-custom-white'
       } flex gap-[0.5rem] flex-col py-[1rem]`}
     >
       <div className="w-full flex flex-row h-[3rem] items-center">

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -20,7 +21,7 @@ public class Savings {
 	private int id;
 
 	@Column(name = "saving_uuid")
-	private byte[] savingUuid;
+	private UUID savingUuid;
 
 	@Column(name = "interest")
 	private double interest;
@@ -31,6 +32,10 @@ public class Savings {
 	@Column(name = "name")
 	private String name;
 
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User parent;
+
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
@@ -40,20 +45,11 @@ public class Savings {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-
 	@Builder
-	public Savings(int id, byte[] savingUuid, double interest, int period, String name, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, User user) {
-		this.id = id;
-		this.savingUuid = savingUuid;
+	public Savings(double interest, int period, String name, User parent) {
 		this.interest = interest;
 		this.period = period;
 		this.name = name;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
-		this.user = user;
+		this.parent = parent;
 	}
 }

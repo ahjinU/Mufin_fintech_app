@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,10 +20,14 @@ public class LoanRefusal {
 	private int id;
 
 	@Column(name = "loan_refusal_uuid")
-	private byte[] loanRefusalUuid;
+	private UUID loanRefusalUuid;
 
-	@Column()
+	@Column(name = "reason")
 	private String reason;
+
+	@OneToOne
+	@JoinColumn(name = "loan_id")
+	private Loan loan;
 
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
@@ -32,19 +37,9 @@ public class LoanRefusal {
 
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
-
-	@OneToOne()
-	@JoinColumn(name = "loan_id")
-	private Loan loan;
-
 	@Builder
-	public LoanRefusal(int id, byte[] loanRefusalUuid, String reason, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Loan loan) {
-		this.id = id;
-		this.loanRefusalUuid = loanRefusalUuid;
+	public LoanRefusal(String reason, Loan loan) {
 		this.reason = reason;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
 		this.loan = loan;
 	}
 }

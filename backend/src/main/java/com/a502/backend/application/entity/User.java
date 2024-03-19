@@ -28,7 +28,6 @@ public class User {
 
 	@Column(name = "user_uuid")
 	private UUID userUuid;
-
 	@PrePersist
 	public void initUUID() {
 		if (userUuid == null)
@@ -66,10 +65,6 @@ public class User {
 	@Column(name = "failed")
 	private Short failed;
 
-	@ColumnDefault("false")
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
-
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
 	private User parent;
@@ -86,6 +81,9 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<StockHolding> stockHoldings = new ArrayList<>();
 
+	@ColumnDefault("false")
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
 	@Builder
 	public User(String name, String email, String password, String gender, String address, String address2, int type, String telephone, LocalDateTime birth, User parent) {
 		this.name = name;

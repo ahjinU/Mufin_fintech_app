@@ -6,10 +6,10 @@ import com.a502.backend.application.entity.User;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,9 +23,15 @@ public class StockSellsService {
         return stockSellsRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_NOT_EXIST));
     }
 
-    public List<StockSell> getSellList(int id){
-        return stockSellsRepository.getSellList(id);
-    }
+//    public List<StockSell> getSellList(int id){
+//        return stockSellsRepository.getSellList(id);
+//    }
+
+	public List<StockSell> getSellOrderList(int id, int cnt, LocalDateTime localDateTime) {
+		return stockSellsRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(id, cnt, localDateTime);
+	}
+
+	;
 
     @Transactional
     public StockSell save(User user, Stock stock, int price, int cntTotal){

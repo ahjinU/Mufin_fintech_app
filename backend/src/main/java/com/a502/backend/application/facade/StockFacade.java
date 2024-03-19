@@ -14,10 +14,10 @@ import com.a502.backend.domain.stock.*;
 import com.a502.backend.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,20 +37,21 @@ public class StockFacade {
     private final ParkingDetailsService parkingDetailsService;
 
 
-    /**
-     * 매수 거래 신청 메서드
-     * @param userId 매수 신청한 userId
-     * @param name 주식 이름
-     * @param price 주식 가격
-     * @param cnt_total 주식 개수
-     */
-    @Transactional
-    public void stockBuy(int userId, String name, int price, int cnt_total){
-        User user = userService.findById(userId);
-        Stock stock = stocksService.findByName(name);
+	/**
+	 * 매수 거래 신청 메서드
+	 *
+	 * @param userId    매수 신청한 userId
+	 * @param name      주식 이름
+	 * @param price     주식 가격
+	 * @param cnt_total 주식 개수
+	 */
+	@Transactional
+	public void stockBuy(int userId, String name, int price, int cnt_total) {
+		User user = userService.findById(userId);
+		Stock stock = stocksService.findByName(name);
 
-        stockDetailsService.validStockPrice(stock, price);
-        parkingService.validParkingBalance(user, price * cnt_total);
+		stockDetailsService.validStockPrice(stock, price);
+		parkingService.validParkingBalance(user, price * cnt_total);
 
         StockBuy stockBuy = stockBuysService.save(user, stock, price, cnt_total);
         List<StockSell> list = stockSellsService.findTransactionList(stock, price);
@@ -121,28 +122,32 @@ public class StockFacade {
 
 
 
-    // 주가 실시간 조회
-    public List<StockOrderList> enter(String name){
-        // db에서 요청 받은 이름으로 주식 정보 조회
-        Stock stock = stocksService.findByName(name);
-        // 주식 id
-        int id = stock.getId();
-        // 매도 / 매수 주문 리스트
-        List<StockOrderList> stockOrderList = new ArrayList<>();
-        // 주식 id에 해당하는 매수 주문 리스트 조회
-        List<StockBuy> sellList = stockBuysService.getBuyList(id);
-        for(int i = 0 ; i<sellList.size(); i++){
-            StockOrderList sellOrder = new StockOrderList();
-            sellOrder.builder().sellOrderCnt(sellList.get(i).getCntNot()).price(sellList.get(i).getPrice());
-            stockOrderList.add(sellOrder);
-        }
-        // 주식 id에 해당하는 매도 주문 리스트 조회
-        List<StockSell> buyList = stockSellsService.getSellList(id);
-        for(int i = 0 ; i<buyList.size(); i++){
-            StockOrderList buyOrder = new StockOrderList();
-            buyOrder.builder().buyOrderCnt(buyList.get(i).getCntNot()).price(buyList.get(i).getPrice());
-            stockOrderList.add(buyOrder);
-        }
-        return stockOrderList;
-    }
+	// 주가 실시간 조회
+	public List<StockOrderList> enter(String name) {
+		// db에서 요청 받은 이름으로 주식 정보 조회
+		Stock stock = stocksService.findByName(name);
+		// 주식 id
+		int id = stock.getId();
+		// 매도 / 매수 주문 리스트
+		List<StockOrderList> stockOrderList = new ArrayList<>();
+		// 주식 id에 해당하는 매도 주문 리스트 조회
+		List<StockSell> buyList = stockSellsService.getSellOrderList(id, 0, LocalDate.now().atStartOfDay());
+		for (StockSell stockSell : buyList) {
+			stockOrderList.add(StockOrderList.builder()
+					.buyOrderCnt(stockSell.getCntNot())
+					.price(stockSell.getPrice())
+					.build()
+			);
+		}
+		// 주식 id에 해당하는 매수 주문 리스트 조회
+		List<StockBuy> sellList = stockBuysService.getBuyOrderList(id, 0, LocalDate.now().atStartOfDay());
+		for (StockBuy stockBuy : sellList) {
+			stockOrderList.add(StockOrderList.builder()
+					.sellOrderCnt(stockBuy.getCntNot())
+					.price(stockBuy.getPrice())
+					.build()
+			);
+		}
+		return stockOrderList;
+	}
 }

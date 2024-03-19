@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,10 +30,12 @@ public class StockBuysService {
         return stockBuysRepository.save(new StockBuy(price, cntTotal, stock, user));
     }
 
-    public List<StockBuy> getBuyList(int id){
-        return stockBuysRepository.getBuyList(id);
+//    public List<StockBuy> getBuyList(int id){
+//        return stockBuysRepository.getBuyList(id);
+//    }
+    public List<StockBuy> getBuyOrderList(int id, int cnt , LocalDateTime localDateTime){
+        return stockBuysRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(id,cnt,localDateTime);
     }
-
     public List<StockBuy> findTransactionList(Stock stock, int price){
         return stockBuysRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
     }

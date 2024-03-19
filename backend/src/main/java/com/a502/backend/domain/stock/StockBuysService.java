@@ -27,6 +27,10 @@ public class StockBuysService {
         return stockBuysRepository.save(new StockBuy(price, cntTotal, stock, user));
     }
 
+    public List<StockBuy> getBuyList(int id){
+        return stockBuysRepository.getBuyList(id);
+    }
+
     public List<StockBuy> findTransactionList(Stock stock, int price){
         return stockBuysRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
     }

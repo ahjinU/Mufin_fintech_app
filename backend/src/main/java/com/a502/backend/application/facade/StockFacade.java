@@ -55,6 +55,18 @@ public class StockFacade {
         }
     }
 
+    public void enter(String name){
+        // db에서 요청 받은 이름으로 주식 정보 조회
+        Stock stock = stocksService.findByName(name);
+        // 주식 id
+        int id = stock.getId();
+        // 주식 id에 해당하는 매수 주문 리스트 조회
+        List<StockBuy> sellList = stockBuysService.getBuyList(id);
+        // 주식 id에 해당하는 매도 주문 리스트 조회
+        List<StockSell> buyList = stockSellsService.getSellList(id);
+
+    }
+
 
 
     /**

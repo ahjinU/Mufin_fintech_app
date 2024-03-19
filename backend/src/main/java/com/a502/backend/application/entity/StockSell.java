@@ -1,12 +1,15 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.code.StockCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,13 +18,13 @@ import java.time.LocalDateTime;
 public class StockSell {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "sotck_sell_id")
+	@Column(name = "stock_sell_id")
 	private int id;
 
 	@Column(name = "stock_sell_uuid")
-	private byte[] stockSellUuid;
+	private UUID stockSellUuid;
 
-	@Column()
+	@Column(name = "price")
 	private int price;
 
 	@Column(name = "cnt_total")
@@ -33,14 +36,6 @@ public class StockSell {
 	@Column()
 	private int status;
 
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "stock_id")
@@ -50,17 +45,21 @@ public class StockSell {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
+
+	@Column(name = "modified_at")
+	private LocalDateTime modifiedAt;
+
+	@ColumnDefault("false")
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
 	@Builder
-	public StockSell(int id, byte[] stockSellUuid, int price, int cntTotal, int cntNot, int status, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock, User user) {
-		this.id = id;
-		this.stockSellUuid = stockSellUuid;
+	public StockSell(int price, int cntTotal, Stock stock, User user) {
 		this.price = price;
 		this.cntTotal = cntTotal;
-		this.cntNot = cntNot;
-		this.status = status;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
+		this.cntNot = cntTotal;
+		this.status = StockCode.STOCK_STATUS_NEW;
 		this.stock = stock;
 		this.user = user;
 	}

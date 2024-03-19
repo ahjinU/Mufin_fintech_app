@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -20,7 +21,7 @@ public class Account {
 	private int id;
 
 	@Column(name = "account_uuid")
-	private byte[] accountUuid;
+	private UUID accountUuid;
 
 	@Column(name = "account_number")
 	private String accountNumber;
@@ -52,9 +53,6 @@ public class Account {
 	@Column(name = "incorrect_cnt")
 	private int incorrectCount;
 
-	@Column(name = "is_deleted")
-	private Boolean isDeleted;
-
 	@ManyToOne
 	@JoinColumn(name = "saving_id")
 	private Savings savings;
@@ -63,10 +61,11 @@ public class Account {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@Column(name = "is_deleted")
+	private Boolean isDeleted;
+
 	@Builder
-	public Account(int id, byte[] accountUuid, String accountNumber, int balance, String state, int interestAmount, String type, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, int password, int incorrectCount, Boolean isDeleted, Savings savings, User user) {
-		this.id = id;
-		this.accountUuid = accountUuid;
+	public Account(String accountNumber, int balance, String state, int interestAmount, String type, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, int password, int incorrectCount, User user) {
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.state = state;
@@ -77,8 +76,6 @@ public class Account {
 		this.paymentCycle = paymentCycle;
 		this.password = password;
 		this.incorrectCount = incorrectCount;
-		this.isDeleted = isDeleted;
-		this.savings = savings;
 		this.user = user;
 	}
 }

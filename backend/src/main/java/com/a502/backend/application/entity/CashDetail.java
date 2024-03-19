@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -21,13 +22,13 @@ public class CashDetail {
 	private int id;
 
 	@Column(name = "cash_detail_uuid")
-	private byte[] cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
+	private UUID cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
 
 	@Column(name = "type")
 	private String type;
+
+	@Column(name = "amount")
+	private int amount;
 
 	@ManyToOne
 	@JoinColumn(name = "memo_id")
@@ -37,23 +38,20 @@ public class CashDetail {
 	@JoinColumn(name = "receipt_id")
 	private Receipt receipt;
 
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
+
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-	@ManyToOne
-	@JoinColumn(name = "account_id", nullable = false)
-	private Account account;
-
 	@Builder
-
-	public CashDetail(int id, byte[] cashDetailUuid, LocalDateTime createdAt, String type, Memo memo, Receipt receipt, boolean isDeleted, Account account) {
-		this.id = id;
-		this.cashDetailUuid = cashDetailUuid;
-		this.createdAt = createdAt;
+	public CashDetail(String type, int amount, User user) {
 		this.type = type;
-		this.memo = memo;
-		this.receipt = receipt;
-		this.isDeleted = isDeleted;
-		this.account = account;
+		this.amount = amount;
+		this.user = user;
 	}
 }

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -23,5 +25,13 @@ public class StockBuysService {
     @Transactional
     public StockBuy save(int price, int cntTotal, Stock stock, User user){
         return stockBuysRepository.save(new StockBuy(price, cntTotal, stock, user));
+    }
+
+    public List<StockBuy> findTransactionList(Stock stock, int price){
+        return stockBuysRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
+    }
+
+    public void stockBuy(StockBuy stockBuy, int cnt){
+
     }
 }

@@ -27,6 +27,10 @@ public class Parking {
 	@Column(name = "interest")
 	private double interest;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
+	private User user;
+
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
@@ -36,10 +40,6 @@ public class Parking {
 	@ColumnDefault("false")
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
-	private User user;
 
 	@Builder
 	public Parking(int balance, int interest, User user) {

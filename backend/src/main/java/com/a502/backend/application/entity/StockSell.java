@@ -1,11 +1,9 @@
 package com.a502.backend.application.entity;
 
 import com.a502.backend.global.code.StockCode;
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
@@ -15,7 +13,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_sells")
-public class StockSell {
+public class StockSell extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "stock_sell_id")
@@ -23,6 +21,11 @@ public class StockSell {
 
 	@Column(name = "stock_sell_uuid")
 	private UUID stockSellUuid;
+	@PrePersist
+	public void initUUID() {
+		if (stockSellUuid == null)
+			stockSellUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "price")
 	private int price;
@@ -30,12 +33,12 @@ public class StockSell {
 	@Column(name = "cnt_total")
 	private int cntTotal;
 
+	@Setter
 	@Column(name = "cnt_not")
 	private int cntNot;
 
-	@Column()
+	@Column(name = "status")
 	private int status;
-
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "stock_id")
@@ -45,15 +48,6 @@ public class StockSell {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@ColumnDefault("false")
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 	@Builder
 	public StockSell(int price, int cntTotal, Stock stock, User user) {
 		this.price = price;

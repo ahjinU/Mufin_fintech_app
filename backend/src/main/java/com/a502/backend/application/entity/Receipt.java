@@ -1,5 +1,6 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "receipts")
-public class Receipt {
+public class Receipt extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "receipt_id")
@@ -22,6 +23,11 @@ public class Receipt {
 
 	@Column(name = "receipt_uuid")
 	private UUID receiptUuid;
+	@PrePersist
+	public void initUUID() {
+		if (receiptUuid == null)
+			receiptUuid = UUID.randomUUID();
+	}
 
 	@OneToOne
 	@JoinColumn(name = "memo_id")
@@ -33,12 +39,6 @@ public class Receipt {
 
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ReceiptDetail> receiptDetails;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@Builder
 	public Receipt(Memo memo, User user) {

@@ -38,7 +38,13 @@ public class StockController {
 	@PostMapping("/buy")
 	public ResponseEntity<ApiResponse<Void>> stockBuy(int userId, String name, int price, int cnt_total) {
 		stockFacade.stockBuy(userId, name, price, cnt_total);
-		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_DOMAIN_METHOD));
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_BUY));
+	}
+
+	@PostMapping("/sell")
+	public ResponseEntity<ApiResponse<Void>> stockSell(int userId, String name, int price, int cnt_total) {
+		stockFacade.stockSell(userId, name, price, cnt_total);
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_SELL));
 	}
 }
 

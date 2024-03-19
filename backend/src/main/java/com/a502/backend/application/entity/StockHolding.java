@@ -1,11 +1,9 @@
 package com.a502.backend.application.entity;
 
 import com.a502.backend.domain.stock.StockHoldingsId;
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
@@ -15,17 +13,24 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_holdings")
-public class StockHolding {
+public class StockHolding extends BaseEntity {
 
 	@EmbeddedId
 	private StockHoldingsId id;
 
 	@Column(name = "stock_holding_uuid")
 	private UUID stockHoldingUuid;
+	@PrePersist
+	public void initUUID() {
+		if (stockHoldingUuid == null)
+			stockHoldingUuid = UUID.randomUUID();
+	}
 
+	@Setter
 	@Column(name = "cnt")
 	private int cnt;
 
+	@Setter
 	@Column(name = "total")
 	private int total;
 
@@ -39,15 +44,6 @@ public class StockHolding {
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@ColumnDefault("false")
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 	@Builder
 	public StockHolding(int cnt, int total, Stock stock, User user) {
 		this.cnt = cnt;

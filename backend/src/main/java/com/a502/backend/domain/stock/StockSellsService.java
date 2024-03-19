@@ -17,11 +17,11 @@ import java.util.List;
 @Service
 public class StockSellsService {
 
-	private final StockSellsRepository stockSellsRepository;
+    private final StockSellsRepository stockSellsRepository;
 
-	public StockSell findById(int id) {
-		return stockSellsRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_NOT_EXIST));
-	}
+    public StockSell findById(int id){
+        return stockSellsRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_NOT_EXIST));
+    }
 
 //    public List<StockSell> getSellList(int id){
 //        return stockSellsRepository.getSellList(id);
@@ -33,17 +33,21 @@ public class StockSellsService {
 
 	;
 
-	@Transactional
-	public StockSell save(User user, Stock stock, int price, int cntTotal) {
-		return stockSellsRepository.save(new StockSell(price, cntTotal, stock, user));
-	}
+    @Transactional
+    public StockSell save(User user, Stock stock, int price, int cntTotal){
+        return stockSellsRepository.save(new StockSell(price, cntTotal, stock, user));
+    }
 
-	public List<StockSell> findTransactionList(Stock stock, int price) {
-		return stockSellsRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
-	}
+    public List<StockSell> findTransactionList(Stock stock, int price){
+        return stockSellsRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
+    }
 
-	public void stockSell(StockSell stocksell, int cnt) {
-	}
-
+    @Transactional
+    public void stockSell(StockSell stocksell, int cnt){
+        int cntNot = stocksell.getCntNot();
+        if (cntNot - cnt < 0)
+            throw BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_STOCK_IS_NOT_ENOUGH);
+        stocksell.setCntNot(cntNot - cnt);
+    }
 
 }

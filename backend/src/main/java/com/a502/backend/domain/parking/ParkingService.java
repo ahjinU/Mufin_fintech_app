@@ -28,4 +28,10 @@ public class ParkingService {
         if (parking.getBalance() < balance)
             throw BusinessException.of(ErrorCode.API_ERROR_PARKING_NOT_ENOUGH_BALANCE);
     }
+
+    @Transactional
+    public void updateParkingBalance(User user, int balance){
+        Parking parking = findByUser(user);
+        parking.setBalance(balance);
+    }
 }

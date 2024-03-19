@@ -1,5 +1,6 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "parkings")
-public class Parking {
+public class Parking extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "parking_id")
@@ -20,7 +21,13 @@ public class Parking {
 
 	@Column(name = "parking_uuid")
 	private UUID parkingUuid;
+	@PrePersist
+	public void initUUID() {
+		if (parkingUuid == null)
+			parkingUuid = UUID.randomUUID();
+	}
 
+	@Setter
 	@Column(name = "balance")
 	private int balance;
 
@@ -30,16 +37,6 @@ public class Parking {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@ColumnDefault("false")
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@Builder
 	public Parking(int balance, int interest, User user) {

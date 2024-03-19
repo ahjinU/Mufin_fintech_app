@@ -1,5 +1,6 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "account_details")
-public class AccountDetail {
+public class AccountDetail extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "account_detail_id")
@@ -21,6 +22,12 @@ public class AccountDetail {
 
 	@Column(name = "account_detail_uuid")
 	private UUID accountDetailUuid;
+	@PrePersist
+	public void initUUID() {
+		if (accountDetailUuid == null)
+			accountDetailUuid = UUID.randomUUID();
+	}
+
 
 	@Column(name = "type")
 	private String type;
@@ -54,16 +61,6 @@ public class AccountDetail {
 	@ManyToOne
 	@JoinColumn(name = "memo_id")
 	private Memo memo;
-
-	@Column(name = "created_at")
-	@Temporal(TemporalType.TIMESTAMP)
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@Builder
 	public AccountDetail(String type, int amount, int balance, String counterpartyName, String state, String counterpartyAccount, Account account, int code) {

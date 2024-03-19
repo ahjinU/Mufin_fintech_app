@@ -20,6 +20,7 @@ import DealList from './DealList/DealList';
 import OtherInfoElement from './OtherInfoElement/OtherInfoElement';
 import MoneyInfoElement from './MoneyInfoElement/MoneyInfoElement';
 import AlertConfirmModal from './AlertConfirmModal/AlertConfirmModal';
+import Notification from './Notification/Notification';
 
 export {
   Button,
@@ -44,4 +45,5 @@ export {
   OtherInfoElement,
   MoneyInfoElement,
   AlertConfirmModal,
+  Notification,
 };

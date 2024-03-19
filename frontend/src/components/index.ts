@@ -16,6 +16,10 @@ import Tag from './Tag/Tag';
 import AgreeBottomSheet from './AgreeBottomSheet/AgreeBottomSheet';
 import Select from './Select/Select';
 import ProgressBar from './ProgressBar/ProgressBar';
+import DealList from './DealList/DealList';
+import OtherInfoElement from './OtherInfoElement/OtherInfoElement';
+import MoneyInfoElement from './MoneyInfoElement/MoneyInfoElement';
+import AlertConfirmModal from './AlertConfirmModal/AlertConfirmModal';
 
 export {
   Button,
@@ -36,4 +40,8 @@ export {
   AgreeBottomSheet,
   Select,
   ProgressBar,
+  DealList,
+  OtherInfoElement,
+  MoneyInfoElement,
+  AlertConfirmModal,
 };

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -21,7 +22,7 @@ public class Stock {
 	private int id;
 
 	@Column(name = "stock_uuid")
-	private byte[] stockUuid;
+	private UUID stockUuid;
 
 	@Column(name = "name")
 	private String name;
@@ -48,16 +49,7 @@ public class Stock {
 	private List<StockHolding> stockHoldings = new ArrayList<>();
 
 	@Builder
-	public Stock(int id, byte[] stockUuid, String name, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, List<StockSell> stockSells, List<StockBuy> stockBuys, List<StockHolding> stockHoldings, List<StockDetail> stockDetails) {
-		this.id = id;
-		this.stockUuid = stockUuid;
+	public Stock(String name) {
 		this.name = name;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
-		this.stockSells = stockSells;
-		this.stockBuys = stockBuys;
-		this.stockHoldings = stockHoldings;
-		this.stockDetails = stockDetails;
 	}
 }

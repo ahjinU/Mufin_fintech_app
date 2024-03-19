@@ -2,7 +2,6 @@ package com.a502.backend.domain.stock;
 
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.entity.StockBuy;
-import com.a502.backend.application.entity.StockSell;
 import com.a502.backend.application.entity.User;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
@@ -30,5 +29,13 @@ public class StockBuysService {
 
     public List<StockBuy> getBuyList(int id){
         return stockBuysRepository.getBuyList(id);
+    }
+
+    public List<StockBuy> findTransactionList(Stock stock, int price){
+        return stockBuysRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
+    }
+
+    public void stockBuy(StockBuy stockBuy, int cnt){
+
     }
 }

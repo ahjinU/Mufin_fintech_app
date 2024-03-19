@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -20,10 +21,7 @@ public class Receipt {
 	private int id;
 
 	@Column(name = "receipt_uuid")
-	private byte[] receiptUuid;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
+	private UUID receiptUuid;
 
 	@OneToOne
 	@JoinColumn(name = "memo_id")
@@ -33,20 +31,18 @@ public class Receipt {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
-
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ReceiptDetail> receiptDetails;
 
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
+
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
+
 	@Builder
-	public Receipt(int id, byte[] receiptUuid, LocalDateTime createdAt, Memo memo, User user, boolean isDeleted, List<ReceiptDetail> receiptDetails) {
-		this.id = id;
-		this.receiptUuid = receiptUuid;
-		this.createdAt = createdAt;
+	public Receipt(Memo memo, User user) {
 		this.memo = memo;
 		this.user = user;
-		this.isDeleted = isDeleted;
-		this.receiptDetails = receiptDetails;
 	}
 }

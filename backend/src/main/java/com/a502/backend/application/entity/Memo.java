@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -19,7 +20,7 @@ public class Memo {
 	private int id;
 
 	@Column(name = "memo_uuid")
-	private byte[] memoUuid;
+	private UUID memoUuid;
 
 	@Column(name = "content")
 	private String content;
@@ -37,13 +38,8 @@ public class Memo {
 	private Boolean isDeleted;
 
 	@Builder
-	public Memo(int id, byte[] memoUuid, String content, String category, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
-		this.id = id;
-		this.memoUuid = memoUuid;
+	public Memo(String content, String category) {
 		this.content = content;
 		this.category = category;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
 	}
 }

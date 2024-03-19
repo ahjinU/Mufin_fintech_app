@@ -4,6 +4,12 @@ import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.stock.StockBuysService;
 import com.a502.backend.domain.stock.StockSellsService;
 import com.a502.backend.domain.stock.StocksService;
+import com.a502.backend.application.entity.Stock;
+import com.a502.backend.application.entity.StockBuy;
+import com.a502.backend.application.entity.StockSell;
+import com.a502.backend.application.entity.User;
+import com.a502.backend.domain.parking.ParkingService;
+import com.a502.backend.domain.stock.*;
 import com.a502.backend.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,25 +26,67 @@ import java.util.List;
 @Service
 public class StockFacade {
 
-    UserService userService;
-    StocksService stocksService;
-    StockBuysService stockBuysService;
-    StockSellsService stockSellsService;
+    private final UserService userService;
+    private final StocksService stocksService;
+    private final StockBuysService stockBuysService;
+    private final StockSellsService stockSellsService;
+    private final ParkingService parkingService;
+    private final StockDetailsService stockDetailsService;
+    private final StockHoldingsService stockHoldingsService;
 
 
-
+    /**
+     * 매수 거래 신청 메서드
+     * @param userId 매수 신청한 userId
+     * @param name 주식 이름
+     * @param price 주식 가격
+     * @param cnt_total 주식 개수
+     */
     @Transactional
     public void stockBuy(int userId, String name, int price, int cnt_total){
         User user = userService.findById(userId);
         Stock stock = stocksService.findByName(name);
 
-        // parking 통장에 유효한 돈이 있는지 체크
+        stockDetailsService.validStockPrice(stock, price);
+        parkingService.validParkingBalance(user, price * cnt_total);
 
+        StockBuy stockBuy = stockBuysService.save(price, cnt_total, stock, user);
+        List<StockSell> list = stockSellsService.findTransactionList(stock, price);
 
-        // stock buy 주문 넣기
-        stockBuysService.save(price, cnt_total, stock, user);
+        if (list == null) return;
 
-        // 주문 넣은 후 거래 할 수 있는 매도 주문이 있는지 확인
+        for(StockSell stockSell : list){
+            if (cnt_total == 0) break;
+            cnt_total -= transaction(stockBuy, stockSell);
+        }
+    }
+
+    /**
+     * 매도-매수 거래, 거래 이후 정보 수정 메서드
+     * @param stockBuy 매수 거래
+     * @param stockSell 매도 거래
+     * @return 최종 거래 개수
+     */
+    @Transactional
+    public int transaction(StockBuy stockBuy, StockSell stockSell){
+        int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
+        /**
+         * 1. parking Detail :  파킹통장 거래내역 추가
+         * 2. Stock Detail : 해당 주식 가격 변경
+         * 3. StockSells / StockBuys : 해당 거래 ID 수정 ( cnt 만큼 차감 후 상태 변환 )
+         * 4. StockHoldings ( seller / buyer ) : 보유 주식 수정
+         * 5. WebSocket 연결 이후 주식 값 update 해주기
+         */
+        return transCnt;
+    }
+
+    @Transactional
+    public void stockSell(int userId, String name, int price, int cnt_total){
+        User user = userService.findById(userId);
+        Stock stock = stocksService.findByName(name);
+
+        stockDetailsService.validStockPrice(stock, price);
+        stockHoldingsService.validStockHolding(user, stock, cnt_total);
 
     }
 
@@ -65,16 +113,5 @@ public class StockFacade {
             stockOrderList.add(buyOrder);
         }
         return stockOrderList;
-    }
-
-
-    @Transactional
-    public void transactionBuy(StockBuy stockBuy, StockSell stockSell){
-        // 거래하기
-        // stockSell 에서 주식 id, price 가 똑같은 사람들의 리스트를 가져온다.
-        // 개수를 매칭하면서 거래를 성사 시킨다.
-        // stock details : 변경 주식 가격 추가 하기
-        // stock sell : 살 수 있는 주식 있는지 검사하고 있으면 거래 하기
-        // parking 통장 거래내역 수정 ( 매도자/매수자 통장에 둘다 )
     }
 }

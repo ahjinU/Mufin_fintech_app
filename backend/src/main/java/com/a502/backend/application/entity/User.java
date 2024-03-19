@@ -1,10 +1,8 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,7 +18,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -61,9 +59,8 @@ public class User {
 	@Column(name = "birth")
 	private LocalDateTime birth;
 
-	@ColumnDefault("0")
 	@Column(name = "failed")
-	private Short failed;
+	private int failed;
 
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
@@ -81,9 +78,6 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<StockHolding> stockHoldings = new ArrayList<>();
 
-	@ColumnDefault("false")
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 	@Builder
 	public User(String name, String email, String password, String gender, String address, String address2, int type, String telephone, LocalDateTime birth, User parent) {
 		this.name = name;

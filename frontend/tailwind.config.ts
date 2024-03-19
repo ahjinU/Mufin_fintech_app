@@ -30,6 +30,15 @@ const config: Config = {
         'custom-red-with-opacity': 'rgba(205, 38, 38, 0.2)',
         'custom-blue-with-opacity': 'rgba(89, 105, 255, 0.2)',
       },
+      animation: {
+        'border-blink': 'blink 1s infinite',
+      },
+      keyframes: {
+        blink: {
+          '0%, 100%': { borderColor: 'transparent' },
+          '50%': { borderColor: '#7868e6' },
+        },
+      },
     },
   },
   plugins: [require('tailwind-scrollbar-hide')],

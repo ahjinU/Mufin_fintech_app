@@ -10,7 +10,7 @@ interface GuideAccordionProps {
   children: React.ReactElement;
 }
 
-export default function GuideAccordionContent({
+export default function GuideAccordion({
   icon,
   title,
   children,
@@ -18,14 +18,14 @@ export default function GuideAccordionContent({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
+    <div>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full h-[5.8rem] px-[2rem] flex justify-between items-center bg-custom-purple ${
           isOpen ? 'rounded-t-[2rem]' : 'rounded-[2rem]'
         }`}
       >
-        <div className="flex items-center">
+        <div className="flex items-center gap-[0.5rem]">
           <Image
             src={icon}
             width={30}
@@ -44,10 +44,10 @@ export default function GuideAccordionContent({
         )}
       </button>
       <div className={`w-full ${isOpen ? 'visible' : 'hidden'}`}>
-        <div className="pb-[2rem] px-[2rem] rounded-b-[2rem] bg-custom-purple h-fit">
+        <div className="pb-[2rem] px-[2rem] rounded-b-[2rem] bg-custom-purple h-fit text-custom-white custom-light-text">
           {children}
         </div>
       </div>
-    </>
+    </div>
   );
 }

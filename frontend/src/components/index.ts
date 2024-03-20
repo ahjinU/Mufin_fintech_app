@@ -1,31 +1,33 @@
+import AdBox from './AdBox/AdBox';
+import AgreeBottomSheet from './AgreeBottomSheet/AgreeBottomSheet';
+import AlertConfirmModal from './AlertConfirmModal/AlertConfirmModal';
+import BackButton from './BackButton/BackButton';
 import Button from './Button/Button';
+import ComplexInput from './ComplexInput/ComplexInput';
+import DealList from './DealList/DealList';
+import FlexBox from './FlexBox/FlexBox';
+import GuideAccordion from './GuideAccordion/GuideAccordion';
+import GuideText from './GuideText/GuideText';
+import Header from './Header/Header';
+import ImageUploadBox from './ImageUploadBox/ImageUploadBox';
 import NavBar from './NavBar/NavBar';
-import NavText from './NavText/NavText';
 import NavButton from './NavButton/NavButton';
+import NavText from './NavText/NavText';
 import SmallButton from './SmallButton/SmallButton';
 import TinyButton from './TinyButton/TinyButton';
 import Input from './Input/Input';
-import AdBox from './AdBox/AdBox';
-import ComplexInput from './ComplexInput/ComplexInput';
 import Tab from './Tab/Tab';
-import GuideText from './GuideText/GuideText';
-import GuideAccordion from './GuideAccordion/GuideAccordion';
 import BottomSheet from './BottomSheet/BottomSheet';
-import BackButton from './BackButton/BackButton';
 import Tag from './Tag/Tag';
-import AgreeBottomSheet from './AgreeBottomSheet/AgreeBottomSheet';
 import Select from './Select/Select';
 import ProgressBar from './ProgressBar/ProgressBar';
-import DealList from './DealList/DealList';
 import OtherInfoElement from './OtherInfoElement/OtherInfoElement';
 import MoneyInfoElement from './MoneyInfoElement/MoneyInfoElement';
-import AlertConfirmModal from './AlertConfirmModal/AlertConfirmModal';
 import Notification from './Notification/Notification';
 import SubGuideText from './SubGuideText/SubGuideText';
-import ImageUploadBox from './ImageUploadBox/ImageUploadBox';
-import Header from './Header/Header';
 
 export {
+  FlexBox,
   Button,
   NavBar,
   NavText,

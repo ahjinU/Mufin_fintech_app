@@ -28,7 +28,7 @@ export default function Tab({ tabs }: TabProps) {
         {tabs.map(({ label }, index) => {
           return (
             <button
-              className={`w-full border-b-[0.2rem] ${
+              className={`w-full border-b-[0.2rem] custom-semibold-text ${
                 activeIndex === index
                   ? 'border-custom-purple'
                   : 'border-custom-light-gray'

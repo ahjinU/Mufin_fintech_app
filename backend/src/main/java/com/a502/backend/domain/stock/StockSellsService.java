@@ -1,5 +1,6 @@
 package com.a502.backend.domain.stock;
 
+import com.a502.backend.application.entity.Code;
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.entity.StockSell;
 import com.a502.backend.application.entity.User;
@@ -34,8 +35,8 @@ public class StockSellsService {
 	;
 
     @Transactional
-    public StockSell save(User user, Stock stock, int price, int cntTotal){
-        return stockSellsRepository.save(new StockSell(price, cntTotal, stock, user));
+    public StockSell save(User user, Stock stock, int price, int cntTotal, Code code){
+        return stockSellsRepository.save(new StockSell(price, cntTotal, stock, user, code));
     }
 
     public List<StockSell> findTransactionList(Stock stock, int price){

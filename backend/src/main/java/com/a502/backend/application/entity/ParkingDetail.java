@@ -25,8 +25,11 @@ public class ParkingDetail extends BaseEntity {
 			parkingDetailUuid = UUID.randomUUID();
 	}
 
-	@Column(name = "trans_code")
-	private int transCode;
+	@Column(name = "counterparty_name")
+	private String counterpartyName;
+
+	@Column(name = "cnt")
+	private int cnt;
 
 	@Column(name = "amount")
 	private int amount;
@@ -34,19 +37,22 @@ public class ParkingDetail extends BaseEntity {
 	@Column(name = "balance")
 	private int balance;
 
-	@Column(name = "memo")
-	private String memo;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parking_id")
 	private Parking parking;
 
+	// 이자, 매도, 매수
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "code_id")
+	private Code code;
+
 	@Builder
-	public ParkingDetail(int transCode, int amount, int balance, String memo, Parking parking) {
-		this.transCode = transCode;
+	public ParkingDetail(String counterpartyName, int cnt, int amount, int balance, Parking parking, Code code) {
+		this.counterpartyName = counterpartyName;
+		this.cnt = cnt;
 		this.amount = amount;
 		this.balance = balance;
-		this.memo = memo;
 		this.parking = parking;
+		this.code = code;
 	}
 }

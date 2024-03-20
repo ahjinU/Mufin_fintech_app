@@ -30,20 +30,18 @@ public class Alert extends BaseEntity {
 			alertUuid = UUID.randomUUID();
 	}
 
-	@Column(name = "type")
-	private String type;
-
-	@Column(name = "type_id")
-	private int type_id;
-
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	//  AL001 적금, AL002 적금만기, AL003 대출요청
+	@ManyToOne
+	@JoinColumn(name = "code_id")
+	private Code code;
+
 	@Builder
-	public Alert(String type, int type_id, User user) {
-		this.type = type;
-		this.type_id = type_id;
+	public Alert(User user,Code code) {
 		this.user = user;
+		this.code = code;
 	}
 }

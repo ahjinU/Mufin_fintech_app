@@ -16,28 +16,32 @@ public class ParkingDetailsService {
         return parkingDetailsRepository.findTopByParkingOrderByCreatedAtDesc(parking);
     }
 
-    public ParkingDetail saveStockBuy(StockBuy stockBuy, Parking parking, int cnt){
+    public ParkingDetail saveStockBuy(StockBuy stockBuy, Parking parking, int cnt, Code code){
         ParkingDetail last = getLastDetail(parking);
+        // 거래 주식회사 이름
+        String counterpartyName = stockBuy.getStock().getName();
         int amount = -stockBuy.getPrice() * cnt;
         return parkingDetailsRepository.save(ParkingDetail.builder()
                 .parking(parking)
                 .amount(amount)
                 .balance(last.getBalance() + amount)
-                .transCode(StockCode.PARKING_TRANSCODE_BUY)
-                .memo("매수 " + stockBuy.getStock().getName() + " " + cnt + "주")
+                .counterpartyName(counterpartyName)
+                .code(code)
                 .build()
         );
     }
 
-    public ParkingDetail saveStockSell(StockSell stockSell, Parking parking, int cnt){
+    public ParkingDetail saveStockSell(StockSell stockSell, Parking parking, int cnt, Code code){
         ParkingDetail last = getLastDetail(parking);
+        // 거래 주식회사 이름
+        String counterpartyName = stockSell.getStock().getName();
         int amount = stockSell.getPrice() * cnt;
         return parkingDetailsRepository.save(ParkingDetail.builder()
                 .parking(parking)
                 .amount(amount)
                 .balance(last.getBalance() + amount)
-                .transCode(StockCode.PARKING_TRANSCODE_SELL)
-                .memo("매도 " + stockSell.getStock().getName() + " " + cnt + "주")
+                .counterpartyName(counterpartyName)
+                .code(code)
                 .build()
         );
     }

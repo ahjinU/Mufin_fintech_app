@@ -6,13 +6,15 @@ import com.a502.backend.application.entity.StockSell;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import java.util.List;
 import java.util.Optional;
 
 interface StockBuysRepository extends JpaRepository<StockBuy, Integer> {
-	@Query(value = "SELECT * FROM stock_buys WHERE created_at = CURRENT_DATE AND stock_buy_id = :id AND cnt_not > 0", nativeQuery = true)
-	List<StockBuy> getBuyList(int id);
+	// 주식 하나당 매도 주문 들어온 것 리스트 조회
+	List<StockBuy> findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(int id, int cnt , LocalDateTime localDateTime);
     Optional<List<StockBuy>> findAllByStockAndPriceOrderByCreatedAtAsc(Stock stock, int price);
 }

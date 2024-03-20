@@ -21,6 +21,9 @@ import OtherInfoElement from './OtherInfoElement/OtherInfoElement';
 import MoneyInfoElement from './MoneyInfoElement/MoneyInfoElement';
 import AlertConfirmModal from './AlertConfirmModal/AlertConfirmModal';
 import Notification from './Notification/Notification';
+import SubGuideText from './SubGuideText/SubGuideText';
+import ImageUploadBox from './ImageUploadBox/ImageUploadBox';
+import Header from './Header/Header';
 
 export {
   Button,
@@ -46,4 +49,7 @@ export {
   MoneyInfoElement,
   AlertConfirmModal,
   Notification,
+  Header,
+  SubGuideText,
+  ImageUploadBox,
 };

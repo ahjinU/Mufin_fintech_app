@@ -1,10 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 export const MswComponent = () => {
+  let isInitiated = useRef<boolean>(false);
+
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development' && !isInitiated.current) {
+      isInitiated.current = true; // server.listen()이나 worker.start() 두 번 실행되는 거 막기
+
       if (typeof window === 'undefined') {
         (async () => {
           const { server } = await import('@/mocks/server');
@@ -17,7 +21,7 @@ export const MswComponent = () => {
         })();
       }
     }
-  });
+  }, []);
 
   return null;
 };

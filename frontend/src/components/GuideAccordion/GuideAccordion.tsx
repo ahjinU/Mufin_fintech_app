@@ -10,7 +10,7 @@ interface GuideAccordionProps {
   children?: React.ReactElement;
 }
 
-export default function GuideAccordionContent({
+export default function GuideAccordion({
   icon,
   title,
   children,

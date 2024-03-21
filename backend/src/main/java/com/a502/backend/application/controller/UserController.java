@@ -31,7 +31,7 @@ import static com.a502.backend.global.response.ResponseCode.*;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("api/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -74,8 +74,6 @@ public class UserController {
     @PostMapping("/signup/telephone")
     public ResponseEntity<ApiResponse<String>> checkTelephone(@Valid @RequestBody TelephoneDto telephone, HttpServletResponse response) {
 
-        System.out.println("[UserController] telephone: " + telephone);
-
         UUID temporaryUserUuid = userService.checkDupleTelephone(telephone.getTelephone());
 
         Cookie uuidCookie = createCookie("authenicationOnlyTelephone", temporaryUserUuid.toString());
@@ -89,8 +87,6 @@ public class UserController {
 
     @PostMapping("/signup/email")
     public ResponseEntity<ApiResponse<String>> checkEmail(@Valid @RequestBody EmailDto email, HttpServletResponse response, HttpServletRequest request) {
-
-        System.out.println("[UserController] email: " + email);
 
         // 쿠키에서 temporaryUserUuid 값을 찾음
         Cookie authenicationOnlyTelephoneCookie = getCookieByName(request, "authenicationOnlyTelephone");
@@ -107,8 +103,6 @@ public class UserController {
 
     @PostMapping("/signup/parent")
     public ResponseEntity<ApiResponse<String>> signup(@Valid @RequestBody SignUpDto signUpDto, HttpServletRequest request) {
-
-        System.out.println("[UserController] signup: " + signUpDto.toString());
 
         // 이메일까지 완료된 쿠키인지 확인
         Cookie temporaryUserCookie = getCookieByName(request, "temporaryUserUuid");

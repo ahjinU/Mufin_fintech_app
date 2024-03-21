@@ -1,5 +1,5 @@
 import { GuideAccordion, FlexBox, OtherInfoElement, Tab } from '@/components';
-import { StockLineChart } from '../_components/StockLineChart';
+import { StockLineChart } from './_components/StockLineChart';
 
 export default function Company() {
   return (

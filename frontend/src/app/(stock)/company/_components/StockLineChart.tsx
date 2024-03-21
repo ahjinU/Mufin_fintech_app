@@ -53,13 +53,12 @@ export function StockLineChart() {
       offsetX: -13,
       formatter: (
         value: number,
-        { dataPointIndex, w }: { dataPointIndex: number; w: any },
+        { dataPointIndex }: { dataPointIndex: number },
       ) => {
         if (
           value === series[0].data[minValueIndex] &&
           dataPointIndex === minValueIndex
         ) {
-          console.log(w);
           return '최저 ' + value;
         } else if (
           value === series[0].data[maxValueIndex] &&

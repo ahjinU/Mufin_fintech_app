@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
-import { MswComponent } from './_component/msw.component';
+import { MSWComponent } from './_component/MSWComponent';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-custom-black-with-opacity">
-        <MswComponent />
+        <MSWComponent />
         <div className="w-[36rem] min-h-[64rem] mx-auto bg-custom-white">
           {children}
         </div>

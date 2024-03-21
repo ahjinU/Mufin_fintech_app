@@ -44,6 +44,9 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+//	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+	implementation 'org.webjars:sockjs-client:1.5.1'
 }
 
 tasks.named('test') {

@@ -10,6 +10,7 @@ import com.a502.backend.domain.user.dto.TelephoneDto;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.response.ApiResponse;
+import com.a502.backend.global.response.ResponseCode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -67,7 +68,7 @@ public class UserController {
         // response header에 jwt token에 넣어줌
        // response.addCookie();
 
-        return ResponseEntity.ok().headers(httpHeaders).body("success!");
+        return ResponseEntity.ok().headers(httpHeaders).body(API_SUCCESS_LOGIN);
     }
 
     @PostMapping("/signup/telephone")
@@ -115,7 +116,7 @@ public class UserController {
         userService.signup(temporaryUserCookie.getValue(), signUpDto);
 
 
-        ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_USER_CHECK_EMAIL);
+        ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_SIGNUP);
         return ResponseEntity.ok(apiResponse);
     }
 

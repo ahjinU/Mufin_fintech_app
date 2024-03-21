@@ -43,8 +43,8 @@ export default function GuideAccordion({
           <ChevronDownIcon className="size-[2rem] fill-custom-medium-gray" />
         )}
       </button>
-      <div className={`w-full ${isOpen ? 'visible' : 'hidden'}`}>
-        <div className="mt-[-0.1rem] pb-[2rem] px-[2rem] rounded-b-[2rem] bg-custom-purple h-fit custom-light-text text-custom-white">
+      <div className={`w-full relative ${isOpen ? 'visible' : 'hidden'}`}>
+        <div className="absolute mt-[-0.1rem] pb-[2rem] px-[2rem] rounded-b-[2rem] bg-custom-purple h-fit custom-light-text text-custom-white">
           {children}
         </div>
       </div>

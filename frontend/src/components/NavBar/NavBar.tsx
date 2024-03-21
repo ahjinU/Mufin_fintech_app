@@ -32,6 +32,7 @@ const setIndex = (path: string) => {
       return 2;
     case '/stock':
     case '/stock/list':
+    case '/stock/rank':
       return 3;
     case '/menus':
       return 4;

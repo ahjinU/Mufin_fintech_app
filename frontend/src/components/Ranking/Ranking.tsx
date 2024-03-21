@@ -5,7 +5,7 @@ interface RankingProps {
   mode: 'HIGHLIGHT' | 'GENERAL';
   rank: number;
   name: string;
-  chocochip: string;
+  chocochip: number;
 }
 
 export default function Ranking({ mode, rank, name, chocochip }: RankingProps) {
@@ -25,7 +25,7 @@ export default function Ranking({ mode, rank, name, chocochip }: RankingProps) {
     case 'GENERAL':
     default:
       backgroundClass =
-        'w-full h-[2.2rem] pb-2 border-b border-custom-medium-gray bg-transparaent';
+        'w-[95%] h-[2.2rem] pb-2 border-b border-custom-medium-gray bg-transparaent';
       nameClass = 'custom-medium-text text-custom-dark-gray';
       chocochipClass = 'custom-light-text text-custom-dark-gray';
   }
@@ -34,14 +34,14 @@ export default function Ranking({ mode, rank, name, chocochip }: RankingProps) {
 
   switch (rank) {
     case 1:
-      rankIcon = 'http://localhost:3000/images/icon-first-rank.png';
+      rankIcon = '/images/icon-first-rank.png';
       break;
     case 2:
-      rankIcon = 'http://localhost:3000/images/icon-second-rank.png';
+      rankIcon = '/images/icon-second-rank.png';
       break;
     case 3:
     default:
-      rankIcon = 'http://localhost:3000/images/icon-third-rank.png';
+      rankIcon = '/images/icon-third-rank.png';
   }
 
   return (

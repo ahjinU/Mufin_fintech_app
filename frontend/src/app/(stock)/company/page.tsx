@@ -1,5 +1,6 @@
 import { GuideAccordion, FlexBox, OtherInfoElement, Tab } from '@/components';
 import { StockLineChart } from './_components/StockLineChart';
+import { StockCandleChart } from './_components/StockCandleChart';
 
 export default function Company() {
   return (
@@ -34,7 +35,7 @@ export default function Company() {
       <Tab
         tabs={[
           { label: '선 차트', component: <StockLineChart /> },
-          { label: '봉 차트', component: undefined },
+          { label: '봉 차트', component: <StockCandleChart /> },
         ]}
       />
     </main>

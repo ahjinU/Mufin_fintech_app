@@ -22,6 +22,9 @@ public class CashDetail extends BaseEntity {
 	@Column(name = "cash_detail_id")
 	private int id;
 
+	@Column(name = "trans_at")
+	private LocalDateTime transAt;
+
 	@Column(name = "cash_detail_uuid")
 	private UUID cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
 	@PrePersist

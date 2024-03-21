@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,11 +51,14 @@ public class User extends BaseEntity {
 	@Column(name = "address2")
 	private String address2;
 
+	@Column(name = "type")
+	private int type;
+
 	@Column(name = "telephone")
 	private String telephone;
 
 	@Column(name = "birth")
-	private LocalDateTime birth;
+	private LocalDate birth;
 
 	@Column(name = "failed")
 	private int failed;
@@ -75,22 +79,21 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "user")
 	private List<StockHolding> stockHoldings = new ArrayList<>();
 
-	// U001부모, U002아이
-	@ManyToOne
-	@JoinColumn(name = "code_id")
-	private Code code;
-
 	@Builder
-	public User(String name, String email, String password, String gender, String address, String address2, String telephone, LocalDateTime birth, User parent, Code code) {
+	public User(String name, String email, String password, String gender, String address, String address2, int type, String telephone, LocalDate birth, User parent) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.gender = gender;
 		this.address = address;
 		this.address2 = address2;
+		this.type = type;
 		this.telephone = telephone;
 		this.birth = birth;
 		this.parent = parent;
-		this.code = code;
+	}
+
+	public boolean checkPassword(String password) {
+		return this.password.equals(password);
 	}
 }

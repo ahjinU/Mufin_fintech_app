@@ -4,6 +4,7 @@ import com.a502.backend.application.entity.Code;
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.entity.StockSell;
 import com.a502.backend.application.entity.User;
+import com.a502.backend.global.code.StockCode;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,8 @@ public class StockSellsService {
         if (cntNot - cnt < 0)
             throw BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_STOCK_IS_NOT_ENOUGH);
         stocksell.setCntNot(cntNot - cnt);
+        if (cntNot - cnt == 0)
+            stocksell.setStatus(StockCode.STOCK_STATUS_DONE);
     }
 
 }

@@ -49,5 +49,8 @@ public class StockBuysService {
         if (cntNot - cnt < 0)
             throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_STOCK_IS_NOT_ENOUGH);
         stockBuy.setCntNot(cntNot - cnt);
+		// 로직 추가할 것
+//        if (cntNot - cnt == 0)
+//            stockBuy.setStatus(StockCode.STOCK_STATUS_DONE);
     }
 }

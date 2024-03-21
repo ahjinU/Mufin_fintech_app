@@ -58,16 +58,16 @@ public class StockController {
 
 	// 주식별 주가 기간 조회(선그래프)
 	@PostMapping("/price/history/line")
-	public ResponseEntity<?> getStockGraphInfosByLine(@RequestBody StockPriceHistoryRequest request) {
+	public ResponseEntity<ApiResponse<List<StockPriceHistoryByLine>>> getStockGraphInfosByLine(@RequestBody StockPriceHistoryRequest request) {
 		List<StockPriceHistoryByLine> result = stockFacade.getStockGraphInfosByLine(request.getName(), request.getPeriod());
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_PRICE_HISTORY_LINE));
 	}
 
 	// 주식별 주가 기간 조회(봉그래프)
 	@PostMapping("/price/history/bar")
-	public ResponseEntity<?> getStockGraphInfosByBar(@RequestBody StockPriceHistoryRequest request) {
+	public ResponseEntity<ApiResponse<List<StockPriceHistoryByBar>>> getStockGraphInfosByBar(@RequestBody StockPriceHistoryRequest request) {
 		List<StockPriceHistoryByBar> result = stockFacade.getStockGraphInfosByBar(request.getName(), request.getPeriod());
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_PRICE_HISTORY_BAR));
 	}
 }
 

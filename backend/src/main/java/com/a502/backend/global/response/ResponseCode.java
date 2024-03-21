@@ -19,9 +19,11 @@ public enum ResponseCode {
 
     // Stock
     API_SUCCESS_STOCK_BUY("S001", "성공적으로 매수 주문했습니다."),
-    API_SUCCESS_STOCK_SELL("S001", "성공적으로 매도 주문했습니다."),
+    API_SUCCESS_STOCK_SELL("S002", "성공적으로 매도 주문했습니다."),
+    API_SUCCESS_STOCK_PRICE_HISTORY_BAR("S003", "기간별 주가 조회(봉 그래프)에 성공하였습니다."),
+    API_SUCCESS_STOCK_PRICE_HISTORY_LINE("S004", "기간별 주가 조회(선 그래프)에 성공하였습니다.");
 
-    ;
+
     private final String code;
     private final String message;
 }

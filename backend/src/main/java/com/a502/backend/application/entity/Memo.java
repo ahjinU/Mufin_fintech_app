@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Data
-@EqualsAndHashCode(callSuper=false)
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "memos")
 public class Memo extends BaseEntity {

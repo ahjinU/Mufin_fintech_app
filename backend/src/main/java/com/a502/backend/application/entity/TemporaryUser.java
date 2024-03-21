@@ -7,8 +7,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@Data
-@EqualsAndHashCode(callSuper=false)
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "temporary_users")
 public class TemporaryUser  extends BaseEntity {

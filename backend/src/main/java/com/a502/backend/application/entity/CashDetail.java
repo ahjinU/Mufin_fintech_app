@@ -10,8 +10,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Data
-@EqualsAndHashCode(callSuper=false)
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "cash_details")
 public class CashDetail extends BaseEntity {

@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
-@EqualsAndHashCode(callSuper=false)
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User extends BaseEntity {

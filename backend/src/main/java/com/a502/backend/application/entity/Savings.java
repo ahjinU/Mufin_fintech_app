@@ -9,8 +9,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Data
-@EqualsAndHashCode(callSuper=false)
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "savings")
 public class Savings extends BaseEntity {

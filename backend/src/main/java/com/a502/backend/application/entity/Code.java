@@ -7,9 +7,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-//@Getter
-@Data
-@EqualsAndHashCode(callSuper=false)
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "codes")
 public class Code {

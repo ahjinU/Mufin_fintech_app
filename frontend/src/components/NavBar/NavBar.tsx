@@ -1,11 +1,18 @@
-'use client'
+'use client';
 
 import Link from 'next/link';
-import { HomeIcon, Squares2X2Icon, CalendarIcon, ChartBarIcon, Bars3Icon } from '@heroicons/react/24/solid'
+import {
+  HomeIcon,
+  Squares2X2Icon,
+  CalendarIcon,
+  ChartBarIcon,
+  Bars3Icon,
+} from '@heroicons/react/24/solid';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface NavBarProps {
-  mode: 'CHILD' | 'PARENT' ;
+  mode: 'CHILD' | 'PARENT';
 }
 
 interface itemProp {
@@ -13,43 +20,66 @@ interface itemProp {
   icon: React.ReactElement;
   path: string;
   label: string;
-} 
+}
+
+const setIndex = (path: string) => {
+  switch (path) {
+    case '/':
+      return 0;
+    case '/pay':
+      return 1;
+    case '/calendar':
+      return 2;
+    case '/stock':
+    case '/stock/list':
+    case '/stock/rank':
+      return 3;
+    case '/menus':
+      return 4;
+    default:
+      return 0;
+  }
+};
 
 export default function NavBar({ mode }: NavBarProps) {
-  let items : itemProp[];
+  const path = usePathname();
 
-  const [ selectIndex, setSelectedIndex ] = useState(0)
+  console.log(path);
+
+  let items: itemProp[];
+
+  const [selectIndex, setSelectedIndex] = useState(setIndex(path));
 
   switch (mode) {
     case 'CHILD':
       items = [
         {
-          id : 0,
-          icon: <HomeIcon className= 'h-[2.4rem] w-[2.4rem] 4'/>,
+          id: 0,
+          icon: <HomeIcon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
           label: '홈',
         },
         {
           id: 1,
-          icon: <Squares2X2Icon className= 'h-[2.4rem] w-[2.4rem] 4'/>,
+          icon: <Squares2X2Icon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
           label: '결제',
         },
         {
           id: 2,
-          icon: <CalendarIcon className= 'h-[2.4rem] w-[2.4rem] 4'/>,
+          icon: <CalendarIcon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
           label: '가계부',
         },
         {
           id: 3,
-          icon: <ChartBarIcon className= 'h-[2.4rem] w-[2.4rem] 4'/>,
-          path: '/',
+          icon: <ChartBarIcon className="h-[2.4rem] w-[2.4rem] 4" />,
+          path: '/stock',
           label: '날씨주식',
         },
         {
           id: 4,
-          icon: <Bars3Icon className= 'h-[2.4rem] w-[2.4rem] 4'/>,
+          icon: <Bars3Icon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
           label: '전체',
         },
@@ -59,25 +89,25 @@ export default function NavBar({ mode }: NavBarProps) {
       items = [
         {
           id: 0,
-          icon: <HomeIcon className= 'h-[2.4rem] w-[2.4rem] 4'/>,
+          icon: <HomeIcon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
           label: '결제',
         },
         {
           id: 1,
-          icon: <Squares2X2Icon className= 'h-[2.4rem] w-[2.4rem] 4'/>,
+          icon: <Squares2X2Icon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
           label: '송금',
         },
         {
           id: 2,
-          icon: <CalendarIcon className= 'h-[2.4rem] w-[2.4rem] 4'/>,
+          icon: <CalendarIcon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
           label: '가계부',
         },
         {
           id: 3,
-          icon: <Bars3Icon className= 'h-[2.4rem] w-[2.4rem] 4'/>,
+          icon: <Bars3Icon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
           label: '전체',
         },
@@ -86,22 +116,28 @@ export default function NavBar({ mode }: NavBarProps) {
   }
 
   return (
-    <div className= {`fixed bottom-0 w-full h-[6rem] rounded-[1.6rem] rounded-b-[0rem] bg-custom-white flex items-center justify-center`}>
-      { 
-        items.map(({ icon, path, label }, index) => (
+    <div
+      className={`w-full absolute bottom-0 h-[6rem] rounded-[1.6rem] rounded-b-[0rem] bg-custom-white flex items-center justify-center`}
+    >
+      {items.map(({ icon, path, label }, index) => (
         <Link
-          className= {` w-full h-[3.7rem] text-custom-black custom-semibold-text bg-custom-white flex items-center justify-center`} 
-          href={ path } 
-          key={ index }
+          className={` w-full h-[3.7rem] text-custom-black custom-semibold-text bg-custom-white flex items-center justify-center`}
+          href={path}
+          key={index}
           onClick={() => setSelectedIndex(index)}
         >
-        <div className= {`flex flex-col items-center ${selectIndex===index ? 'text-custom-purple' : 'text-custom-medium-gray'}`}>
-          { icon }
-          <span className= 'mt-[0.1rem] text-[10px]'>{ label }</span>
-        </div>
+          <div
+            className={`flex flex-col items-center ${
+              selectIndex === index
+                ? 'text-custom-purple'
+                : 'text-custom-medium-gray'
+            }`}
+          >
+            {icon}
+            <span className="mt-[0.1rem] text-[10px]">{label}</span>
+          </div>
         </Link>
-        )) 
-      }
+      ))}
     </div>
   );
 }

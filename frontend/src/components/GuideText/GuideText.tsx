@@ -1,16 +1,18 @@
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 
 interface GuideTextProps {
-  text: string;
+  text: React.ReactNode | string;
 }
 
 export default function GuideText({ text, ...props }: GuideTextProps) {
   return (
-    <p className="flex gap-[0.5rem]" {...props}>
+    <div
+      className="flex gap-[0.5rem] items-center custom-light-text
+       text-custom-black leading-[1.4rem]"
+      {...props}
+    >
       <InformationCircleIcon className="w-[2rem] h-[2rem] text-custom-purple" />
-      <span className="custom-light-text text-custom-black leading-[2rem]">
-        {text}
-      </span>
-    </p>
+      {text}
+    </div>
   );
 }

@@ -75,9 +75,7 @@ export default function Rank() {
   return (
     <div>
       <Header>
-        <h1 className="custom-bold-text">
-          <BackButton label={'날씨 주식 랭킹'} link={'/stock'} />
-        </h1>
+        <BackButton label={'날씨 주식 랭킹'} link={'/stock'} />
       </Header>
       <div className="px-[1rem] flex flex-col gap-[1rem]">
         <FlexBox

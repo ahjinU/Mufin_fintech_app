@@ -69,7 +69,7 @@ export default function MainStockList({ data }: { data: WeatherType }) {
             className="custom-medium-text text-custom-dark-gray 
           cursor-pointer flex w-full items-center justify-center h-[0rem] mt-3"
           >
-            <Link href={'./'}>
+            <Link href={'/stock/rank'}>
               {'랭킹 확인하러 가기 '}
               <span className="text-custom-med-gray">&gt;</span>
             </Link>

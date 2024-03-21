@@ -8,7 +8,7 @@ export default function CompanyLayout({
   return (
     <section className="flex flex-col gap-[1rem]">
       <Header>
-        <BackButton label="바람막이 회사" link="/" />
+        <BackButton label="바람막이 회사" />
       </Header>
       {children}
     </section>

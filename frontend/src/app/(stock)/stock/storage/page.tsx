@@ -70,7 +70,7 @@ export default function StockStroage() {
   return (
     <div>
       <Header>
-        <BackButton label={'내 초코칩 보관함'} link={'/stock'} />
+        <BackButton label={'내 초코칩 보관함'} />
       </Header>
       <div className="flex flex-col px-[1rem] gap-[1rem]">
         <FlexBox

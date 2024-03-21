@@ -75,13 +75,14 @@ export default function Rank() {
   return (
     <div>
       <Header>
-        <BackButton label={'날씨 주식 랭킹'} link={'/stock'} />
+        <BackButton label={'날씨 주식 랭킹'} />
       </Header>
       <div className="px-[1rem] flex flex-col gap-[1rem]">
         <FlexBox
           isDivided={false}
           topChildren={
             <MoneyInfoElement
+              link="/stock/storage"
               imageSrc={'/images/icon-all-cookies.png'}
               leftExplainText={'내 모든 초코칩'}
               leftHighlightText={'21,000,970 초코칩'}

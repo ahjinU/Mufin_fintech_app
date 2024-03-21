@@ -25,10 +25,6 @@ public class StockSellsService {
         return stockSellsRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_NOT_EXIST));
     }
 
-//    public List<StockSell> getSellList(int id){
-//        return stockSellsRepository.getSellList(id);
-//    }
-
 	public List<StockSell> getSellOrderList(int id, int cnt, LocalDateTime localDateTime) {
 		return stockSellsRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(id, cnt, localDateTime);
 	}
@@ -50,8 +46,9 @@ public class StockSellsService {
         if (cntNot - cnt < 0)
             throw BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_STOCK_IS_NOT_ENOUGH);
         stocksell.setCntNot(cntNot - cnt);
-        if (cntNot - cnt == 0)
-            stocksell.setStatus(StockCode.STOCK_STATUS_DONE);
+        // 로직 추가할 것
+//        if (cntNot - cnt == 0)
+//            stocksell.setStatus(StockCode.STOCK_STATUS_DONE);
     }
 
 }

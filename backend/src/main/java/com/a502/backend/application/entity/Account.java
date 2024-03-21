@@ -48,7 +48,7 @@ public class Account extends BaseEntity {
 	private int paymentCycle;
 
 	@Column(name = "password")
-	private String password;
+	private int password;
 
 	@Column(name = "incorrect_cnt")
 	private int incorrectCount;

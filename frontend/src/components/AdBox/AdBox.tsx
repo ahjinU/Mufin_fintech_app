@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 interface AdBoxProps {
-  mode: 'INTERACTIVE' | 'STATIC';
+  mode: 'INTERACTIVE' | 'STATIC' | 'WEATHER';
   subText: string;
   title: string;
   icon?: string;
@@ -28,10 +28,16 @@ export default function AdBox({
 
   const adContent = (
     <div
-      className={`w-full h-[8.4rem] px-[1rem] rounded-[2rem] flex justify-start items-center bg-custom-purple`}
+      className={`w-full h-[8.4rem] px-[1rem] rounded-[2rem] flex justify-start items-center ${
+        mode === 'WEATHER' ? 'bg-custom-light-gray' : 'bg-custom-purple'
+      } `}
     >
       {iconContent}
-      <div className="ml-[0.8rem] text-custom-white">
+      <div
+        className={`ml-[0.8rem] ${
+          mode === 'WEATHER' ? 'text-custom-black' : 'text-custom-white'
+        } `}
+      >
         <div className="custom-light-text">{subText}</div>
         <div className="custom-semibold-text">{title}</div>
       </div>

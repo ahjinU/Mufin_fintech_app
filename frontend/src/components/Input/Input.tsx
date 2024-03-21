@@ -13,7 +13,7 @@ interface InputProps {
   onChange?: () => void;
 }
 
-export default function DealList({
+export default function Input({
   width = 'w-full',
   height = 'h-[4.4rem]',
   reset = true,

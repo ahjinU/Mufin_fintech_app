@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 interface StocksRepository extends JpaRepository<Stock,Integer> {
-    Stock findByName(String name);
+    Optional<Stock> findByName(String name);
     List<Stock> findAllBy();
 
 }

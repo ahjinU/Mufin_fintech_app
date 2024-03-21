@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Data
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "parkings")

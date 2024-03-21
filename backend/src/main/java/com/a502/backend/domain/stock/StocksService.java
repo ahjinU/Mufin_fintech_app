@@ -20,7 +20,7 @@ public class StocksService {
     }
 
     public Stock findByName(String name){
-        return stocksRepository.findByName(name);
+        return stocksRepository.findByName(name).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_STOCK_NOT_EXIST));
     }
 
     public Stock save(String name, String imageUrl){

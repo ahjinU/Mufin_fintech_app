@@ -24,7 +24,7 @@ public class WeatherService{
 
         int connTimeout = 5000;
         int readTimeout = 3000;
-        String apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=37.56667&lon=126.97806&appid=e13e21fafd8d125d652d773982d07080"+"&units=metric";
+        String apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=37.56667&lon=126.97806&appid="+"&units=metric";
 //        String apiUrll = "https://api.openweathermap.org/data/2.5/weather?lat=37.56667&lon=126.97806&appid="+apiKey;
         System.out.println("apiKey" + apiKey);
 //        System.out.println(apiUrl);

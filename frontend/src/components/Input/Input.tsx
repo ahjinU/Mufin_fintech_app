@@ -8,6 +8,7 @@ interface InputProps {
   height?: string;
   reset?: boolean;
   placeholder?: string;
+  name?: string;
   value?: string | number;
   setValue?: Function;
   onChange?: () => void;
@@ -18,6 +19,7 @@ export default function Input({
   height = 'h-[4.4rem]',
   reset = true,
   placeholder,
+  name,
   value,
   setValue,
   onChange,
@@ -58,6 +60,7 @@ export default function Input({
         }`}
         {...props}
         placeholder={inputPlaceholder}
+        name={name}
         value={inputValue}
         ref={inputRef}
         onChange={handleChange}

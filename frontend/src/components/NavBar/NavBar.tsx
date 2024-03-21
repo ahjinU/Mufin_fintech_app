@@ -9,6 +9,7 @@ import {
   Bars3Icon,
 } from '@heroicons/react/24/solid';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface NavBarProps {
   mode: 'CHILD' | 'PARENT';
@@ -21,10 +22,33 @@ interface itemProp {
   label: string;
 }
 
+const setIndex = (path: string) => {
+  switch (path) {
+    case '/':
+      return 0;
+    case '/pay':
+      return 1;
+    case '/calendar':
+      return 2;
+    case '/stock':
+    case '/stock/list':
+    case '/stock/rank':
+      return 3;
+    case '/menus':
+      return 4;
+    default:
+      return 0;
+  }
+};
+
 export default function NavBar({ mode }: NavBarProps) {
+  const path = usePathname();
+
+  console.log(path);
+
   let items: itemProp[];
 
-  const [selectIndex, setSelectedIndex] = useState(0);
+  const [selectIndex, setSelectedIndex] = useState(setIndex(path));
 
   switch (mode) {
     case 'CHILD':
@@ -50,7 +74,7 @@ export default function NavBar({ mode }: NavBarProps) {
         {
           id: 3,
           icon: <ChartBarIcon className="h-[2.4rem] w-[2.4rem] 4" />,
-          path: '/',
+          path: '/stock',
           label: '날씨주식',
         },
         {

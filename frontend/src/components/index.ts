@@ -24,6 +24,7 @@ import Notification from './Notification/Notification';
 import SubGuideText from './SubGuideText/SubGuideText';
 import ImageUploadBox from './ImageUploadBox/ImageUploadBox';
 import Header from './Header/Header';
+import FlexBox from './FlexBox/FlexBox';
 
 export {
   Button,
@@ -52,4 +53,5 @@ export {
   Header,
   SubGuideText,
   ImageUploadBox,
+  FlexBox,
 };

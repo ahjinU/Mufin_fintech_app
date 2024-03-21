@@ -3,15 +3,15 @@ import {
   GuideAccordion,
   MoneyInfoElement,
   OtherInfoElement,
+  FlexBox,
 } from '@/components';
-import FlexBox from '@/components/FlexBox/FlexBox';
 
-export default function MainStockList() {
+export default function MainMyStock() {
   return (
     <div className="p-[1.2rem] flex flex-col gap-[1rem]">
       <AdBox
         icon="/images/icon-dollar.png"
-        mode={'INTERACTIVE'}
+        mode={'STATIC'}
         subText={'자스민은 아래 두 가지 방법으로 관리할 수 있어요!'}
         title={'요술램프 또는 주식 투자로 관리해 보세요'}
       />
@@ -39,7 +39,9 @@ export default function MainStockList() {
             <div className="custom-light-text whitespace-pre-line">
               <p>내 주식 가격은</p>
               <p>첫째, 사람들의 구매와 판매에 의해 실시간으로 결정돼요!</p>
-              <p>둘째, 매일 주식 시장이 열릴 때 날씨로 인한 변동이 있어요!</p>
+              <p>
+                둘째, 매일 주식 시장이 열릴 때 서울 날씨로 인한 변동이 있어요!
+              </p>
             </div>
           </div>
         </div>
@@ -67,14 +69,32 @@ export default function MainStockList() {
           />
         }
         bottomChildren={
-          <OtherInfoElement
-            imageSrc={'/images/icon-dollar.png'}
-            leftExplainText={'2주'}
-            leftHighlightText={'우산회사'}
-            state={'DOWN'}
-            rightExplainText={'-205,400자스민(-53.2%)'}
-            rightHighlightText={'181,000초코칩'}
-          />
+          <div className="flex flex-col gap-[1rem]">
+            <OtherInfoElement
+              imageSrc={'/images/icon-dollar.png'}
+              leftExplainText={'2주'}
+              leftHighlightText={'우산회사'}
+              state={'DOWN'}
+              rightExplainText={'-205,400자스민(-53.2%)'}
+              rightHighlightText={'181,000초코칩'}
+            />
+            <OtherInfoElement
+              imageSrc={'/images/icon-dollar.png'}
+              leftExplainText={'2주'}
+              leftHighlightText={'우산회사'}
+              state={'DOWN'}
+              rightExplainText={'-205,400자스민(-53.2%)'}
+              rightHighlightText={'181,000초코칩'}
+            />
+            <OtherInfoElement
+              imageSrc={'/images/icon-dollar.png'}
+              leftExplainText={'2주'}
+              leftHighlightText={'우산회사'}
+              state={'DOWN'}
+              rightExplainText={'-205,400자스민(-53.2%)'}
+              rightHighlightText={'181,000초코칩'}
+            />
+          </div>
         }
       />
     </div>

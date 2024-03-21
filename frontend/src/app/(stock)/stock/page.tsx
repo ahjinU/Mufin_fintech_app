@@ -1,7 +1,35 @@
 import { Header, Tab } from '@/components';
-import MainStockList from './_components/MainStockList';
+import MainMyStock from './_components/Main/MainMyStock';
+import MainStockList from './_components/Main/MainStockList';
 
-export default function Stock() {
+export interface WeatherType {
+  temp: number;
+  description: number;
+}
+
+export default async function Stock() {
+  const url = `${process.env.REACT_APP_WEATHER_API}?q=Seoul&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
+
+  let myStockData: WeatherType = {
+    temp: 0,
+    description: 0,
+  };
+
+  const fetchWeather = async () => {
+    const data = await fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        return data;
+      });
+    myStockData = {
+      temp: parseFloat((data.main.temp - 273.15).toFixed(2)),
+      description: data.weather[0].id,
+    };
+  };
+
+  await fetchWeather();
+
   return (
     <div>
       <Header>
@@ -11,11 +39,11 @@ export default function Stock() {
         tabs={[
           {
             label: '주식목록',
-            component: <MainStockList />,
+            component: <MainStockList data={myStockData} />,
           },
           {
             label: '내 잔고',
-            component: <MainStockList />,
+            component: <MainMyStock />,
           },
         ]}
       />

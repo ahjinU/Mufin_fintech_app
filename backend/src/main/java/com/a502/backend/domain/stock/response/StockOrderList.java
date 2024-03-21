@@ -1,4 +1,4 @@
-package com.a502.backend.application.entity;
+package com.a502.backend.domain.stock.response;
 
 import lombok.*;
 

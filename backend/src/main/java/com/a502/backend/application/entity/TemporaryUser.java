@@ -2,15 +2,12 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "temporary_users")
 public class TemporaryUser  extends BaseEntity {

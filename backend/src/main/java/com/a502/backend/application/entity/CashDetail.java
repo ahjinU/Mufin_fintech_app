@@ -3,17 +3,14 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "cash_details")
 public class CashDetail extends BaseEntity {

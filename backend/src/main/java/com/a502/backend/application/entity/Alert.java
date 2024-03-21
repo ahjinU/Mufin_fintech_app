@@ -2,10 +2,7 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
@@ -13,7 +10,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "alerts")
 public class Alert extends BaseEntity {

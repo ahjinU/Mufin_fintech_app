@@ -29,7 +29,6 @@ import java.util.List;
 public class StockController {
 	private final SimpMessageSendingOperations sendingOperations;
 	private final StockFacade stockFacade;
-	private Stock stock;
 
 	// 해당 주식 정보 조회
 	@MessageMapping("/orders/{name}")

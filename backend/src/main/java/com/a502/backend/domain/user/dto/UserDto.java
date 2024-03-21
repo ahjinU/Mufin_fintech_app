@@ -1,9 +1,9 @@
 package com.a502.backend.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Getter
 @Setter

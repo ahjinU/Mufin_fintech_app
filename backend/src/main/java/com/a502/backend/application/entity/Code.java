@@ -9,6 +9,7 @@ import lombok.*;
 @Entity
 //@Getter
 @Data
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "codes")
 public class Code {

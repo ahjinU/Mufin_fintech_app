@@ -1,8 +1,8 @@
 package com.a502.backend.application.entity;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Getter
 @NoArgsConstructor

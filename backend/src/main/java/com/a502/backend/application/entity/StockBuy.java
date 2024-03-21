@@ -41,10 +41,6 @@ public class StockBuy extends BaseEntity {
 	@Column(name = "cnt_not")
 	private int cntNot;
 
-	@Setter
-	@Column(name = "status")
-	private int status;
-
 	@ManyToOne
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
@@ -53,14 +49,18 @@ public class StockBuy extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@ManyToOne
+	@JoinColumn(name = "code_id")
+	private Code code;
+
 	@Builder
-	public StockBuy(int price, int cntTotal, Stock stock, User user) {
+	public StockBuy(int price, int cntTotal, Stock stock, User user, Code code) {
 		this.price = price;
 		this.cntTotal = cntTotal;
 		this.cntNot = cntTotal;
-		this.status = StockCode.STOCK_STATUS_TRANS;
 		this.stock = stock;
 		this.user = user;
+		this.code = code;
 	}
 
 }

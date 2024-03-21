@@ -30,9 +30,6 @@ public class CashDetail extends BaseEntity {
 			cashDetailUuid = UUID.randomUUID();
 	}
 
-	@Column(name = "type")
-	private String type;
-
 	@Column(name = "amount")
 	private int amount;
 
@@ -48,10 +45,19 @@ public class CashDetail extends BaseEntity {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
+
+	@ManyToOne
+	@JoinColumn(name = "code_id")
+	private Code code;
+
 	@Builder
-	public CashDetail(String type, int amount, User user) {
-		this.type = type;
+	public CashDetail(int amount, User user, Category category, Code code) {
 		this.amount = amount;
 		this.user = user;
+		this.category = category;
+		this.code = code;
 	}
 }

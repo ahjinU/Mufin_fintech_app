@@ -28,11 +28,6 @@ public class Receipt extends BaseEntity {
 		if (receiptUuid == null)
 			receiptUuid = UUID.randomUUID();
 	}
-
-	@OneToOne
-	@JoinColumn(name = "memo_id")
-	private Memo memo;
-
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -41,8 +36,7 @@ public class Receipt extends BaseEntity {
 	private List<ReceiptDetail> receiptDetails;
 
 	@Builder
-	public Receipt(Memo memo, User user) {
-		this.memo = memo;
+	public Receipt(User user) {
 		this.user = user;
 	}
 }

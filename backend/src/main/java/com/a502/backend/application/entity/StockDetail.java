@@ -43,17 +43,21 @@ public class StockDetail extends BaseEntity {
 	@Column(name = "lower_limit_price")
 	private int lowerLimitPrice;
 
+	@Column(name = "start_price")
+	private int startPrice;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 
 	@Builder
-	public StockDetail(int price, int highestPrice, int lowestPrice, int upperLimitPrice, int lowerLimitPrice, Stock stock) {
+	public StockDetail(int price, int highestPrice, int lowestPrice, int upperLimitPrice, int lowerLimitPrice, int startPrice, Stock stock) {
 		this.price = price;
 		this.highestPrice = highestPrice;
 		this.lowestPrice = lowestPrice;
 		this.upperLimitPrice = upperLimitPrice;
 		this.lowerLimitPrice = lowerLimitPrice;
+		this.startPrice = startPrice;
 		this.stock = stock;
 	}
 }

@@ -1,10 +1,6 @@
 package com.a502.backend.domain.stock;
 
-import com.a502.backend.application.entity.Stock;
-import com.a502.backend.application.entity.StockBuy;
-import com.a502.backend.application.entity.StockSell;
-import com.a502.backend.application.entity.User;
-import com.a502.backend.global.code.StockCode;
+import com.a502.backend.application.entity.*;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +23,14 @@ public class StockBuysService {
     }
 
     @Transactional
-    public StockBuy save(User user, Stock stock, int price, int cntTotal){
-        return stockBuysRepository.save(new StockBuy(price, cntTotal, stock, user));
+    public StockBuy save(User user, Stock stock, int price, int cntTotal, Code code){
+        return stockBuysRepository.save(StockBuy.builder()
+                .price(price)
+                .cntTotal(cntTotal)
+                .stock(stock)
+                .price(price)
+                .code(code)
+                .build());
     }
 
 //    public List<StockBuy> getBuyList(int id){
@@ -47,7 +49,8 @@ public class StockBuysService {
         if (cntNot - cnt < 0)
             throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_STOCK_IS_NOT_ENOUGH);
         stockBuy.setCntNot(cntNot - cnt);
-        if (cntNot - cnt == 0)
-            stockBuy.setStatus(StockCode.STOCK_STATUS_DONE);
+		// 로직 추가할 것
+//        if (cntNot - cnt == 0)
+//            stockBuy.setStatus(StockCode.STOCK_STATUS_DONE);
     }
 }

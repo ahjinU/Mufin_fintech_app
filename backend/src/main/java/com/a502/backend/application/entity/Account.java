@@ -35,14 +35,8 @@ public class Account extends BaseEntity {
 	@Column(name = "balance")
 	private int balance;
 
-	@Column(name = "state")
-	private String state;
-
 	@Column(name = "interestAmount")
 	private int interestAmount; //이자수령액
-
-	@Column(name = "type")
-	private String type;
 
 	@Column(name = "payment_amount")
 	private int paymentAmount;
@@ -54,7 +48,7 @@ public class Account extends BaseEntity {
 	private int paymentCycle;
 
 	@Column(name = "password")
-	private String password;
+	private int password;
 
 	@Column(name = "incorrect_cnt")
 	private int incorrectCount;
@@ -67,19 +61,26 @@ public class Account extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@ManyToOne
+	@JoinColumn(name = "status_code_id")
+	private Code statusCode;
+
+	@ManyToOne
+	@JoinColumn(name = "type_code_id")
+	private Code typeCode;
 
 	@Builder
-	public Account(String accountNumber, int balance, String state, int interestAmount, String type, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, String password, int incorrectCount, User user) {
+	public Account(String accountNumber, int balance, int interestAmount, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, String password, int incorrectCount, User user, Code statusCode, Code typeCode) {
 		this.accountNumber = accountNumber;
 		this.balance = balance;
-		this.state = state;
 		this.interestAmount = interestAmount;
-		this.type = type;
 		this.paymentAmount = paymentAmount;
 		this.paymentDate = paymentDate;
 		this.paymentCycle = paymentCycle;
 		this.password = password;
 		this.incorrectCount = incorrectCount;
 		this.user = user;
+		this.statusCode = statusCode;
+		this.typeCode = typeCode;
 	}
 }

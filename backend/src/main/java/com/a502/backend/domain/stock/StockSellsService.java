@@ -1,5 +1,6 @@
 package com.a502.backend.domain.stock;
 
+import com.a502.backend.application.entity.Code;
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.entity.StockSell;
 import com.a502.backend.application.entity.User;
@@ -24,10 +25,6 @@ public class StockSellsService {
         return stockSellsRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_NOT_EXIST));
     }
 
-//    public List<StockSell> getSellList(int id){
-//        return stockSellsRepository.getSellList(id);
-//    }
-
 	public List<StockSell> getSellOrderList(int id, int cnt, LocalDateTime localDateTime) {
 		return stockSellsRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(id, cnt, localDateTime);
 	}
@@ -35,8 +32,8 @@ public class StockSellsService {
 	;
 
     @Transactional
-    public StockSell save(User user, Stock stock, int price, int cntTotal){
-        return stockSellsRepository.save(new StockSell(price, cntTotal, stock, user));
+    public StockSell save(User user, Stock stock, int price, int cntTotal, Code code){
+        return stockSellsRepository.save(new StockSell(price, cntTotal, stock, user, code));
     }
 
     public List<StockSell> findTransactionList(Stock stock, int price){
@@ -49,8 +46,9 @@ public class StockSellsService {
         if (cntNot - cnt < 0)
             throw BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_STOCK_IS_NOT_ENOUGH);
         stocksell.setCntNot(cntNot - cnt);
-        if (cntNot - cnt == 0)
-            stocksell.setStatus(StockCode.STOCK_STATUS_DONE);
+        // 로직 추가할 것
+//        if (cntNot - cnt == 0)
+//            stocksell.setStatus(StockCode.STOCK_STATUS_DONE);
     }
 
 }

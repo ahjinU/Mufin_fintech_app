@@ -31,7 +31,7 @@ public class StockController {
 	@MessageMapping("/orders/{name}")
 	public void enter(@DestinationVariable String name) {
 		List<StockOrderList> result = stockFacade.enter(name);
-		sendingOperations.convertAndSend("/sub/stock/" + name, result);
+		sendingOperations.convertAndSend("/sub/orders/" + name, result);
 	}
 
 

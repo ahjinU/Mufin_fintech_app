@@ -163,6 +163,4 @@ public class StockDetailsService {
         }
         return result;
     }
-
-
 }

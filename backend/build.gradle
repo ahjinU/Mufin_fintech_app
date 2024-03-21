@@ -37,8 +37,6 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 	implementation 'org.webjars:stomp-websocket:2.3.4'
 	implementation 'org.webjars:sockjs-client:1.5.1'
 }

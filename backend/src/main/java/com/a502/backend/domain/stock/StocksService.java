@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class StocksService {
@@ -20,4 +22,16 @@ public class StocksService {
     public Stock findByName(String name){
         return stocksRepository.findByName(name);
     }
+
+    public Stock save(String name, String imageUrl){
+        return stocksRepository.save(Stock.builder()
+                .name(name)
+                .imageUrl(imageUrl)
+                .build());
+    }
+
+    public List<Stock> findAllList(){
+        return stocksRepository.findAllBy();
+    }
+
 }

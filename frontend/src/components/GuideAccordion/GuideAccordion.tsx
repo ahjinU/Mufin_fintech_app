@@ -7,10 +7,10 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 interface GuideAccordionProps {
   icon: string;
   title: string;
-  children: React.ReactElement;
+  children?: React.ReactElement;
 }
 
-export default function GuideAccordionContent({
+export default function GuideAccordion({
   icon,
   title,
   children,
@@ -18,14 +18,14 @@ export default function GuideAccordionContent({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
+    <div>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full h-[5.8rem] px-[2rem] flex justify-between items-center bg-custom-purple ${
+        className={`w-full h-[5.8rem] px-[1.5rem] flex justify-between items-center bg-custom-purple ${
           isOpen ? 'rounded-t-[2rem]' : 'rounded-[2rem]'
         }`}
       >
-        <div className="flex items-center">
+        <div className="flex items-center gap-[1rem]">
           <Image
             src={icon}
             width={30}
@@ -43,11 +43,11 @@ export default function GuideAccordionContent({
           <ChevronDownIcon className="size-[2rem] fill-custom-medium-gray" />
         )}
       </button>
-      <div className={`w-full ${isOpen ? 'visible' : 'hidden'}`}>
-        <div className="pb-[2rem] px-[2rem] rounded-b-[2rem] bg-custom-purple h-fit">
+      <div className={`w-full ${isOpen ? 'visible' : 'hidden'} relative`}>
+        <div className="pb-[2rem] px-[2rem] rounded-b-[2rem] bg-custom-purple h-fit absolute left-0 right-0">
           {children}
         </div>
       </div>
-    </>
+    </div>
   );
 }

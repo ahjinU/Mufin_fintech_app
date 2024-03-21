@@ -6,14 +6,16 @@ import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class CodeService {
-	CodeRepository codeRepository;
+	private final CodeRepository codeRepository;
 
-	public Code findById(String id){
-		return codeRepository.findById(id).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_NO_AUTHORIZATION));
+	public Code findById(String id) {
+		return codeRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_NO_AUTHORIZATION));
+	}
+
+	public void save(String id, String name) {
+			codeRepository.save(Code.builder().id(id).name(name).build());
 	}
 }

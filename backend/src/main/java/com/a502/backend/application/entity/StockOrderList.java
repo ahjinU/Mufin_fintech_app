@@ -1,13 +1,11 @@
 package com.a502.backend.application.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@ToString
 public class StockOrderList {
 	private int price;
 	private int buyOrderCnt;
@@ -18,14 +16,5 @@ public class StockOrderList {
 		this.price = price;
 		this.buyOrderCnt = buyOrderCnt;
 		this.sellOrderCnt = sellOrderCnt;
-	}
-
-	@Override
-	public String toString() {
-		return "StockOrderList{" +
-				"price=" + price +
-				", buyOrderCnt=" + buyOrderCnt +
-				", sellOrderCnt=" + sellOrderCnt +
-				'}';
 	}
 }

@@ -28,10 +28,6 @@ public class AccountDetail extends BaseEntity {
 			accountDetailUuid = UUID.randomUUID();
 	}
 
-
-	@Column(name = "type")
-	private String type;
-
 	@Column(name = "amount")
 	private int amount;
 
@@ -40,12 +36,6 @@ public class AccountDetail extends BaseEntity {
 
 	@Column(name = "counterparty_name")
 	private String counterpartyName;
-
-	@Column(name = "state")
-	private String state;
-
-	@Column(name = "code_id")
-	private int code;
 
 	@Column(name = "counterparty_account")
 	private String counterpartyAccount;
@@ -62,15 +52,29 @@ public class AccountDetail extends BaseEntity {
 	@JoinColumn(name = "memo_id")
 	private Memo memo;
 
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
+
+	// ADT001대출, ADT002적금, ADT003결제, ADT004계좌이체, ADT005용돈
+	@ManyToOne
+	@JoinColumn(name = "account_datail_type_id")
+	private Code accountDetailTypeCode;
+
+	// ADS001거래 완료 / ADS002거래 취소
+	@ManyToOne
+	@JoinColumn(name = "account_detail_status_id")
+	private Code accountDetailStatusCode;
+
 	@Builder
-	public AccountDetail(String type, int amount, int balance, String counterpartyName, String state, String counterpartyAccount, Account account, int code) {
-		this.type = type;
+	public AccountDetail(int amount, int balance, String counterpartyName, String counterpartyAccount, Account account, Category category, Code accountDetailTypeCode, Code accountDetailStatusCode) {
 		this.amount = amount;
 		this.balance = balance;
 		this.counterpartyName = counterpartyName;
-		this.state = state;
 		this.counterpartyAccount = counterpartyAccount;
 		this.account = account;
-		this.code = code;
+		this.category = category;
+		this.accountDetailTypeCode = accountDetailTypeCode;
+		this.accountDetailStatusCode = accountDetailStatusCode;
 	}
 }

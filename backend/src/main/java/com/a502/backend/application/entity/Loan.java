@@ -47,9 +47,6 @@ public class Loan extends BaseEntity {
 	@Column(name = "payment_now_cnt")
 	private int paymentNowCnt;
 
-	@Column(name = "status_code")
-	private int statusCode;
-
 	@Column(name = "overdue_cnt")
 	private int overdueCnt;
 
@@ -65,15 +62,20 @@ public class Loan extends BaseEntity {
 	@JoinColumn(name = "loan_conversation_id")
 	private LoanConversation loanConversation;
 
+	// L001심사중, L002진행, L003거절 ,L004상환완료
+	@ManyToOne
+	@JoinColumn(name = "code_id")
+	private Code code;
+
 	@Builder
-	public Loan(String name, int amount, int paymentDate, String penalty, int paymentTotalCnt, User child, User parent) {
+	public Loan(String name, int amount, int paymentDate, String penalty, int paymentTotalCnt, User child, User parent, Code code) {
 		this.name = name;
 		this.amount = amount;
 		this.paymentDate = paymentDate;
 		this.penalty = penalty;
 		this.paymentTotalCnt = paymentTotalCnt;
-//		this.statusCode = statusCode; // default "심사중"
 		this.child = child;
 		this.parent = parent;
+		this.code = code;
 	}
 }

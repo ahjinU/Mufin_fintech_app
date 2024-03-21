@@ -12,6 +12,7 @@ import com.a502.backend.application.entity.User;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.stock.*;
 import com.a502.backend.domain.user.UserService;
+import com.a502.backend.global.code.CodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,8 +36,7 @@ public class StockFacade {
     private final StockDetailsService stockDetailsService;
     private final StockHoldingsService stockHoldingsService;
     private final ParkingDetailsService parkingDetailsService;
-
-
+	private final CodeService codeService;
 	/**
 	 * 매수 거래 신청 메서드
 	 *
@@ -53,7 +53,10 @@ public class StockFacade {
 		stockDetailsService.validStockPrice(stock, price);
 		parkingService.validParkingBalance(user, price * cnt_total);
 
-        StockBuy stockBuy = stockBuysService.save(user, stock, price, cnt_total);
+		// S001 => 거래중
+		Code code = codeService.findById("S001");
+
+        StockBuy stockBuy = stockBuysService.save(user, stock, price, cnt_total, code);
         List<StockSell> list = stockSellsService.findTransactionList(stock, price);
 
         if (list == null) return;
@@ -79,8 +82,9 @@ public class StockFacade {
 
         stockDetailsService.validStockPrice(stock, price);
         stockHoldingsService.validStockHolding(user, stock, cnt_total);
-
-        StockSell stockSell = stockSellsService.save(user, stock, price, cnt_total);
+		// S001 => 거래중
+		Code code = codeService.findById("S001");
+        StockSell stockSell = stockSellsService.save(user, stock, price, cnt_total, code);
         List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
 
         if (list == null) return;
@@ -105,9 +109,10 @@ public class StockFacade {
     @Transactional
     public int transaction(StockBuy stockBuy, StockSell stockSell){
         int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
+		Code code = codeService.findById("S002");
 
-        ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt);
-        ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt);
+        ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt, code);
+        ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt, code);
 
         parkingService.updateParkingBalance(stockSell.getUser(), detailSell.getBalance());
         parkingService.updateParkingBalance(stockBuy.getUser(), detailBuy.getBalance());
@@ -121,7 +126,11 @@ public class StockFacade {
     }
 
 
-
+	/**
+	 * 매도-매수 주문량 조회 메서드
+	 * @param name 주식명
+	 * @return 주가별 매도, 매수 주문 수량
+	 */
 	// 주가 실시간 조회
 	public List<StockOrderList> enter(String name) {
 		// db에서 요청 받은 이름으로 주식 정보 조회

@@ -33,6 +33,9 @@ public class Stock extends BaseEntity {
 	@Column(name = "name")
 	private String name;
 
+	@Column(name = "image_url")
+	private String imageUrl;
+
 	@OneToMany(mappedBy = "stock")
 	private List<StockSell> stockSells = new ArrayList<>();
 
@@ -46,7 +49,8 @@ public class Stock extends BaseEntity {
 	private List<StockHolding> stockHoldings = new ArrayList<>();
 
 	@Builder
-	public Stock(String name) {
+	public Stock(String name, String imageUrl) {
 		this.name = name;
+		this.imageUrl = imageUrl;
 	}
 }

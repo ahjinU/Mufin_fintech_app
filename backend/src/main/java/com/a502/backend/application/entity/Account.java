@@ -54,7 +54,7 @@ public class Account extends BaseEntity {
 	private int paymentCycle;
 
 	@Column(name = "password")
-	private int password;
+	private String password;
 
 	@Column(name = "incorrect_cnt")
 	private int incorrectCount;
@@ -69,7 +69,7 @@ public class Account extends BaseEntity {
 
 
 	@Builder
-	public Account(String accountNumber, int balance, String state, int interestAmount, String type, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, int password, int incorrectCount, User user) {
+	public Account(String accountNumber, int balance, String state, int interestAmount, String type, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, String password, int incorrectCount, User user) {
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.state = state;

@@ -6,21 +6,19 @@ export const authOptions = {
     CredentialsProvider({
       name: 'credentials',
       credentials: {
-        email: { label: 'username', type: 'text' },
+        email: { label: 'email', type: 'text' },
         password: { label: 'password', type: 'password' },
       },
 
       async authorize(credentials) {
-        const { username, password } = credentials;
-
         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/user/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email: username,
-            password: password,
+            email: credentials?.email,
+            password: credentials?.password,
           }),
         })
           .then((response) => {
@@ -52,6 +50,9 @@ export const authOptions = {
   },
   session: {
     jwt: true,
+  },
+  pages: {
+    signIn: '/signin',
   },
 };
 export default NextAuth(authOptions);

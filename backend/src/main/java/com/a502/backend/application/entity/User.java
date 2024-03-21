@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,7 +58,7 @@ public class User extends BaseEntity {
 	private String telephone;
 
 	@Column(name = "birth")
-	private LocalDateTime birth;
+	private LocalDate birth;
 
 	@Column(name = "failed")
 	private int failed;
@@ -79,7 +80,7 @@ public class User extends BaseEntity {
 	private List<StockHolding> stockHoldings = new ArrayList<>();
 
 	@Builder
-	public User(String name, String email, String password, String gender, String address, String address2, int type, String telephone, LocalDateTime birth, User parent) {
+	public User(String name, String email, String password, String gender, String address, String address2, int type, String telephone, LocalDate birth, User parent) {
 		this.name = name;
 		this.email = email;
 		this.password = password;

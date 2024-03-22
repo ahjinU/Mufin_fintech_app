@@ -1,7 +1,7 @@
 spring:
   config:
     import:
-#      - secret/application-secret.yml
+      - secret/application-secret.yml
 
 
   jpa:
@@ -14,12 +14,8 @@ spring:
         show_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  redis:
-    port: 6379
-    host: j10a502.p.ssafy.io
-    password: ssafy
+
 jwt:
   header: Authorization
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   token-validity-in-seconds: 86400
-

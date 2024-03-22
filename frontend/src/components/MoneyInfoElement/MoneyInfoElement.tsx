@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import {
   ChevronRightIcon,
@@ -6,6 +8,7 @@ import {
 } from '@heroicons/react/24/solid';
 import TinyButton from '../TinyButton/TinyButton';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface MoneyInfoElementProps {
   imageSrc: string;
@@ -63,13 +66,19 @@ export default function MoneyInfoElement({
   stockPrice,
   link,
 }: MoneyInfoElementProps) {
+  const router = useRouter();
   const RightButton: React.FC = () => {
     if (buttonOption === 'RIGHT_ARROW')
       return (
         <ChevronRightIcon className="w-[1.6rem] h-[1.6rem] text-custom-medium-gray cursor-pointer" />
       );
     if (buttonOption === 'TINY_BUTTON' && tinyButtonLabel)
-      return <TinyButton label={tinyButtonLabel} />;
+      return (
+        <TinyButton
+          label={tinyButtonLabel}
+          onClick={() => link && router.push(link)}
+        />
+      );
     if (buttonOption === 'RATE') return <RateShow />;
     if (buttonOption === 'STOCK_DOWN' && stockPrice)
       return <StockDownShow stockDownPrice={stockPrice} />;

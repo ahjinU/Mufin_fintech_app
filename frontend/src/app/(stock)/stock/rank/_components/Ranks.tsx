@@ -1,14 +1,10 @@
-import Ranking from '@/components/Ranking/Ranking';
+import { Ranking } from '@/components';
 import Image from 'next/image';
-import { RankType } from '../page';
+import useStore from '../../_store';
 
-export default function Ranks({
-  ranks,
-  myRank,
-}: {
-  ranks: RankType[];
-  myRank: RankType;
-}) {
+export default function Ranks() {
+  const { ranks, myRank } = useStore.getState();
+
   return (
     <div className="mt-[-1.2rem] flex flex-col gap-[0.5rem]">
       <div className="flex flex-col gap-[0.5rem]">

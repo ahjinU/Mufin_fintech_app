@@ -1,19 +1,18 @@
-'use client';
-
 import {
   AdBox,
   ComplexInput,
   FlexBox,
   GuideText,
-  NavText,
   OtherInfoElement,
 } from '@/components';
-import { WeatherType } from '../page';
+import { DataType } from '../page';
+import { commaNum } from '@/utils/commaNum';
+import useStockStore from '../_store';
 import MainRanking from './MainRanking';
 import Link from 'next/link';
 
-const WeatherDescript = (id: number) => {
-  switch (id / 100) {
+const toWeatherDescript = (id: number) => {
+  switch (Math.floor(id / 100)) {
     case 2:
       return '천둥이 쳐요';
     case 3:
@@ -27,16 +26,17 @@ const WeatherDescript = (id: number) => {
   }
 };
 
-export default function MainStockList({ data }: { data: WeatherType }) {
+export default function MainStockList({ data }: { data: DataType }) {
+  const { temp, description, stocks } = data;
+  const { ranks, myRank } = useStockStore.getState();
+
   return (
     <div className="p-[1.2rem] flex flex-col gap-[1rem] overflow-y-hidden">
       <AdBox
         icon={`/images/icon-weather.png`}
         mode={'WEATHER'}
         subText={'오늘의 날씨는?'}
-        title={`현재 기온은 ${data?.temp}°C로 ${WeatherDescript(
-          data?.description,
-        )}`}
+        title={`현재 기온은 ${temp}°C로 ${toWeatherDescript(description)}`}
       />
       <AdBox
         icon="/images/icon-dollar.png"
@@ -48,7 +48,7 @@ export default function MainStockList({ data }: { data: WeatherType }) {
         text={
           <div>
             <span>
-              실제 주식 시간은 오전 9시부터 오후 3시이며, <br />
+              실제 주식 시간은 낮 12시부터 오후 7시이며, <br />
               날씨에 따른 주가 변화는 자스민에만 있는 서비스입니다.
             </span>
           </div>
@@ -58,10 +58,10 @@ export default function MainStockList({ data }: { data: WeatherType }) {
         isDivided={true}
         topChildren={
           <MainRanking
-            leftExplainText={'김라딘'}
+            leftExplainText={`${ranks[0]?.childName}`}
             leftHighlightText={'실시간 랭킹 1위'}
-            rightExplainText={'내 실시간 랭킹은? 427위'}
-            rightHighlightText={'999,999,990자스민'}
+            rightExplainText={`내 실시간 랭킹은? ${myRank?.rank}위`}
+            rightHighlightText={`${commaNum(myRank?.balance)}자스민`}
           />
         }
         bottomChildren={
@@ -81,30 +81,19 @@ export default function MainStockList({ data }: { data: WeatherType }) {
           isDivided={false}
           topChildren={
             <div className="flex flex-col gap-[1rem]">
-              <OtherInfoElement
-                imageSrc={'/images/icon-dollar.png'}
-                leftExplainText={'오늘 거래량 3,210주'}
-                leftHighlightText={'우산회사'}
-                state={'DOWN'}
-                rightExplainText={'-53.2%'}
-                rightHighlightText={'181,000초코칩'}
-              />
-              <OtherInfoElement
-                imageSrc={'/images/icon-dollar.png'}
-                leftExplainText={'오늘 거래량 3,210주'}
-                leftHighlightText={'우산회사'}
-                state={'UP'}
-                rightExplainText={'53.2%'}
-                rightHighlightText={'181,000초코칩'}
-              />
-              <OtherInfoElement
-                imageSrc={'/images/icon-dollar.png'}
-                leftExplainText={'오늘 거래량 3,210주'}
-                leftHighlightText={'우산회사'}
-                state={'UP'}
-                rightExplainText={'53.2%'}
-                rightHighlightText={'181,000초코칩'}
-              />
+              {stocks?.map(({ name, price, transCnt, incomeRatio }, index) => {
+                return (
+                  <OtherInfoElement
+                    key={`stocks-${index}`}
+                    imageSrc={'/images/icon-dollar.png'}
+                    leftExplainText={`오늘 거래량 ${commaNum(transCnt)}주`}
+                    leftHighlightText={name}
+                    state={`${incomeRatio < 0 ? 'DOWN' : 'UP'}`}
+                    rightExplainText={`${commaNum(incomeRatio)}%`}
+                    rightHighlightText={`${commaNum(price)}초코칩`}
+                  />
+                );
+              })}
             </div>
           }
         />

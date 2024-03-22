@@ -1,14 +1,12 @@
 package com.a502.backend.application.entity;
 
-import com.a502.backend.global.entity.BaseEntity;
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity

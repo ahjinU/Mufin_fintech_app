@@ -72,6 +72,7 @@ export default function MainMyStock() {
             leftHighlightText={`${commaNum(totalPrice)}초코칩`}
             buttonOption={'TINY_BUTTON'}
             tinyButtonLabel={'상세'}
+            link="/stock/list"
           />
         }
         bottomChildren={

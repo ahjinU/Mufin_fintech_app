@@ -1,7 +1,7 @@
 import { Header, Tab } from '@/components';
 import MainMyStock from './_components/MainMyStock';
 import MainStockList from './_components/MainStockList';
-import { MyStockType, RankType, StockAllType } from './_types';
+import { StockAllType } from './_types';
 import {
   getRankingMine,
   getRankingTotal,
@@ -17,42 +17,29 @@ export interface DataType {
   description: number;
   stocks: StockAllType[];
 }
-let mainTabData: DataType = {
-  temp: 0,
-  description: 0,
-  stocks: [],
-};
 
 export default async function Stock() {
   const { updateRanks, updateMyRank, updateMyParking, updateMyStock } =
     useStockStore.getState();
 
-  const dataStorage = async () => {
-    const ranks = await getRankingTotal();
-    updateRanks(ranks?.data.ranks);
-    const myRank = await getRankingMine();
-    updateMyRank(myRank?.data);
-    const myStocks = await postStockMine();
-    updateMyStock(myStocks?.data);
-    const myParking = await postParkingAccount();
-    updateMyParking(myParking?.data);
+  const ranks = await getRankingTotal();
+  updateRanks(ranks?.data.ranks);
+  const myRank = await getRankingMine();
+  updateMyRank(myRank?.data);
+  const myStocks = await postStockMine();
+  updateMyStock(myStocks?.data);
+  const myParking = await postParkingAccount();
+  updateMyParking(myParking?.data);
+
+  const stocks = await postStocksAll();
+  const weatherRes = await fetch(url, { cache: 'no-cache' });
+  const weather = await weatherRes.json();
+
+  const mainTabData = {
+    temp: parseFloat((weather.main.temp - 273.15).toFixed(2)),
+    description: weather.weather[0].id,
+    stocks: stocks.data.stock,
   };
-
-  const dataFetch = async () => {
-    const stocks = await postStocksAll();
-    const weatherRes = await fetch(url, { cache: 'no-cache' });
-    const weather = await weatherRes.json();
-
-    mainTabData = {
-      temp: parseFloat((weather.main.temp - 273.15).toFixed(2)),
-      description: weather.weather[0].id,
-      stocks: stocks.data.stock,
-    };
-
-    await dataStorage();
-  };
-
-  await dataFetch();
 
   return (
     <div>

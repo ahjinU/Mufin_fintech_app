@@ -40,9 +40,7 @@ export default async function StockStroage() {
             <MoneyInfoElement
               imageSrc={'/images/icon-my-chocochips.png'}
               leftExplainText={'내 초코칩 보관함'}
-              leftHighlightText={`${
-                balanceToday && commaNum(balanceToday)
-              }초코칩`}
+              leftHighlightText={`${commaNum(balanceToday)}초코칩`}
               buttonOption={'RATE'}
             />
           }
@@ -50,9 +48,7 @@ export default async function StockStroage() {
             <OtherInfoElement
               leftExplainText={`이자로 ${ratio}%를 더 받아요`}
               leftHighlightText={`내일 내 초코칩`}
-              rightHighlightText={`${
-                balanceTmrw && commaNum(balanceTmrw)
-              }초코칩`}
+              rightHighlightText={`${commaNum(balanceTmrw)}초코칩`}
               rightExplainText={`+${ratio}초코칩`}
               state={'DOWN'}
             />

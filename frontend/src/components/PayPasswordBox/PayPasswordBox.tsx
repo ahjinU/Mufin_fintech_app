@@ -11,17 +11,17 @@ interface PayPasswordBoxProps {
 }
 
 const imageArray = [
-  'http://localhost:3000/images/icon-5.svg',
-  'http://localhost:3000/images/icon-4.svg',
-  'http://localhost:3000/images/icon-1.svg',
+  'http://localhost:3000/images/icon-5.png',
+  'http://localhost:3000/images/icon-4.png',
+  'http://localhost:3000/images/icon-1.png',
   'delete',
-  'http://localhost:3000/images/icon-6.svg',
-  'http://localhost:3000/images/icon-2.svg',
-  'http://localhost:3000/images/icon-0.svg',
-  'http://localhost:3000/images/icon-8.svg',
-  'http://localhost:3000/images/icon-7.svg',
-  'http://localhost:3000/images/icon-3.svg',
-  'http://localhost:3000/images/icon-9.svg',
+  'http://localhost:3000/images/icon-6.png',
+  'http://localhost:3000/images/icon-2.png',
+  'http://localhost:3000/images/icon-0.png',
+  'http://localhost:3000/images/icon-8.png',
+  'http://localhost:3000/images/icon-7.png',
+  'http://localhost:3000/images/icon-3.png',
+  'http://localhost:3000/images/icon-9.png',
   'confirm',
 ];
 

@@ -5,8 +5,13 @@ import {
   OtherInfoElement,
   FlexBox,
 } from '@/components';
+import { commaNum } from '@/utils/commaNum';
+import useStockStore from '../_store';
 
 export default function MainMyStock() {
+  const { myStock, MyParking } = useStockStore.getState();
+  const { myStockList, totalPrice } = myStock;
+
   return (
     <div className="p-[1.2rem] flex flex-col gap-[1rem]">
       <AdBox
@@ -52,8 +57,9 @@ export default function MainMyStock() {
           <MoneyInfoElement
             imageSrc={'/images/icon-my-chocochips.png'}
             leftExplainText={'내 초코칩 저장소'}
-            leftHighlightText={'1,724,900초코칩'}
+            leftHighlightText={`${commaNum(MyParking.balanceToday)}초코칩`}
             buttonOption={'RIGHT_ARROW'}
+            link="/stock/storage"
           />
         }
       />
@@ -62,38 +68,30 @@ export default function MainMyStock() {
         topChildren={
           <MoneyInfoElement
             imageSrc={'/images/icon-stock.png'}
-            leftExplainText={'내 초코칩 저장소'}
-            leftHighlightText={'380,700초코칩'}
+            leftExplainText={'내 주식 평가'}
+            leftHighlightText={`${commaNum(totalPrice)}초코칩`}
             buttonOption={'TINY_BUTTON'}
             tinyButtonLabel={'상세'}
+            link="/stock/list"
           />
         }
         bottomChildren={
           <div className="flex flex-col gap-[1rem]">
-            <OtherInfoElement
-              imageSrc={'/images/icon-dollar.png'}
-              leftExplainText={'2주'}
-              leftHighlightText={'우산회사'}
-              state={'DOWN'}
-              rightExplainText={'-205,400자스민(-53.2%)'}
-              rightHighlightText={'181,000초코칩'}
-            />
-            <OtherInfoElement
-              imageSrc={'/images/icon-dollar.png'}
-              leftExplainText={'2주'}
-              leftHighlightText={'우산회사'}
-              state={'DOWN'}
-              rightExplainText={'-205,400자스민(-53.2%)'}
-              rightHighlightText={'181,000초코칩'}
-            />
-            <OtherInfoElement
-              imageSrc={'/images/icon-dollar.png'}
-              leftExplainText={'2주'}
-              leftHighlightText={'우산회사'}
-              state={'DOWN'}
-              rightExplainText={'-205,400자스민(-53.2%)'}
-              rightHighlightText={'181,000초코칩'}
-            />
+            {myStockList?.map(
+              ({ cnt, name, incomeRatio, totalPriceCur, income }, index) => {
+                return (
+                  <OtherInfoElement
+                    key={`myStock-${index}`}
+                    imageSrc={'/images/icon-dollar.png'}
+                    leftExplainText={`${cnt}주`}
+                    leftHighlightText={`${name}`}
+                    state={`${incomeRatio >= 0 ? 'UP' : 'DOWN'}`}
+                    rightExplainText={`${income}초코칩(${incomeRatio}%)`}
+                    rightHighlightText={`${commaNum(totalPriceCur)}초코칩`}
+                  />
+                );
+              },
+            )}
           </div>
         }
       />

@@ -24,17 +24,6 @@ export const MyStock: Story = {
   },
 };
 
-export const CompanyStock: Story = {
-  args: {
-    imageSrc: 'http://localhost:3000/images/icon-dollar.png',
-    leftExplainText: '거래량 3,210주',
-    leftHighlightText: '눈오리 회사',
-    rightExplainText: '-2,400(-13.2%)',
-    rightHighlightText: '20,460 자스민',
-    state: 'DOWN',
-  },
-};
-
 export const Book: Story = {
   args: {
     imageSrc: 'http://localhost:3000/images/icon-dollar.png',

@@ -22,8 +22,8 @@ public class SchedulerFacade {
     private final StockBuysService stockBuysService;
     private final StockSellsService stockSellsService;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
-//    @Scheduled(cron = "${schedule.cron.start}")
+//    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "${schedule.cron.start}")
     public void marketStart() {
         try {
             Weather weather = weatherService.weatherApi();

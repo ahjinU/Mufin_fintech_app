@@ -4,10 +4,12 @@ import com.a502.backend.application.entity.Code;
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.entity.StockDetail;
 import com.a502.backend.application.entity.User;
+import com.a502.backend.domain.numberimg.NumberImageService;
 import com.a502.backend.domain.stock.StockDetailsService;
 import com.a502.backend.domain.stock.StocksService;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
+import com.a502.backend.global.common.S3FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class InitFacade {
     private final CodeService codeService;
     private final StocksService stocksService;
     private final StockDetailsService stockDetailsService;
+    private final S3FileUploader s3FileUploader;
+    private final NumberImageService numberImageService;
     public void run() throws IOException {
 //        User user = userService.save("gkstmf1403@ssafy.com", "ssafy");
 //        System.out.println(user.toString());
@@ -61,10 +65,6 @@ public class InitFacade {
 //        codeService.save("L003","거절");
 //        codeService.save("L004","상환완료");
 
-//        stocksService.save("바람개비", "image_url");
-//        stocksService.save("우비", "image_url1");
-//        stocksService.save("아이스크림", "image_url2");
-//        stocksService.save("눈오리", "image_url3");
 
 
 //        List<Stock> stocks = stocksService.findAllList();
@@ -73,5 +73,36 @@ public class InitFacade {
 //            stockDetailsService.save(10000, 10000, 10000, 20000, 10000, 10000, stock);
 //        }
 
+//        initStock();
+//        saveKeypadImage();
+    }
+
+    /**
+     * 주식 종목을 초기화 메서드
+     * @throws IOException
+     */
+    private void initStock() throws IOException {
+        String image = s3FileUploader.uploadFile("images/" + "stock/"+ "wind" + ".png");
+        stocksService.save("바람개비", image);
+        image = s3FileUploader.uploadFile("images/" + "stock/"+ "rain" + ".png");
+        stocksService.save("우비", image);
+        image = s3FileUploader.uploadFile("images/" + "stock/"+ "icecream" + ".png");
+        stocksService.save("아이스크림", image);
+        image = s3FileUploader.uploadFile("images/" + "stock/"+ "snow" + ".png");
+        stocksService.save("눈오리", image);
+
+    }
+
+    /**
+     * 비밀번호 키패드 이미지 초기화 메서드
+     * @throws IOException
+     */
+    private void initKeypadImage() throws IOException{
+//        for (int i = 0; i < 10; i++) {
+//            String image = s3FileUploader.uploadFile("images/"+ "keypad" + i + ".png");
+//            numberImageService.saveImage(image);
+//        }
+        String image = s3FileUploader.uploadFile("images/" + "shinchan"+ ".png");
+        numberImageService.saveImage(image);
     }
 }

@@ -5,13 +5,6 @@ services:
     ports:
       - "8081:8080"
     container_name: jasmin
-    volumes:
-      - /etc/letsencrypt/live/mufin.life/keystore.p12:/etc/ssl/certs/keystore.p12
-    environment:
-      SERVER_PORT: 8080
-      SERVER_SSL_KEYSTORE: "/etc/ssl/certs/keystore.p12"
-      SERVER_SSL_KEYSTORE_PASSWORD: "ssafy"
-      SERVER_SSL_KEYSTORE_TYPE: "PKCS12"
 #    environment:
 #      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
 #      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User extends BaseEntity {
@@ -51,8 +51,9 @@ public class User extends BaseEntity {
 	@Column(name = "address2")
 	private String address2;
 
-	@Column(name = "type")
-	private int type;
+	@ManyToOne
+	@JoinColumn(name = "type_code_id")
+	private Code typeCode;
 
 	@Column(name = "telephone")
 	private String telephone;
@@ -80,14 +81,14 @@ public class User extends BaseEntity {
 	private List<StockHolding> stockHoldings = new ArrayList<>();
 
 	@Builder
-	public User(String name, String email, String password, String gender, String address, String address2, int type, String telephone, LocalDate birth, User parent) {
+	public User(String name, String email, String password, String gender, String address, String address2, Code typeCode, String telephone, LocalDate birth, User parent) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.gender = gender;
 		this.address = address;
 		this.address2 = address2;
-		this.type = type;
+		this.typeCode = typeCode;
 		this.telephone = telephone;
 		this.birth = birth;
 		this.parent = parent;
@@ -96,4 +97,9 @@ public class User extends BaseEntity {
 	public boolean checkPassword(String password) {
 		return this.password.equals(password);
 	}
+
+    public void addParent(User parent, Code code) {
+		this.typeCode = code;
+		this.parent = parent;
+    }
 }

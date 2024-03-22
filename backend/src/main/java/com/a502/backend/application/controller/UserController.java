@@ -36,7 +36,7 @@ import static com.a502.backend.global.response.ResponseCode.*;
 
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -47,7 +47,7 @@ public class UserController {
     private final JwtUtil jwtUtil;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    @PostMapping("/auth/signin")
+    @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
         System.out.println("[controller /login]: "+loginDto.toString());
 

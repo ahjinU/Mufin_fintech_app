@@ -81,7 +81,7 @@ public class JwtFilter extends GenericFilterBean {
         if(path.equals("/api/user/signup/parent/check/email")) {
             return true;
         }
-        if(path.equals("/api/auth/signin")) {
+        if(path.equals("/api/user/login")) {
             return true;
         }
 

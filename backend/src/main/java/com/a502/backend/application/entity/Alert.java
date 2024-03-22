@@ -1,12 +1,9 @@
 package com.a502.backend.application.entity;
 
-import com.a502.backend.global.entity.BaseEntity;
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity

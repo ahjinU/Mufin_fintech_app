@@ -1,12 +1,10 @@
 package com.a502.backend.application.entity;
 
 import com.a502.backend.domain.stock.StockHoldingsId;
-import com.a502.backend.global.entity.BaseEntity;
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity

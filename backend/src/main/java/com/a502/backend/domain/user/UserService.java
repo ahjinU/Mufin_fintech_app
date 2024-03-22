@@ -100,23 +100,29 @@ public class UserService implements UserDetailsService {
       /*
         System.out.println("[service] email: "+username);
        */
+        System.out.println("[UserService] /loadUserByUsername:");
 
         User findMember = userRepository.findByEmail(username)
                 .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
 
+        System.out.println("[UserService] findUser:"+findMember.toString());
+
         CustomUserDetails cU = new CustomUserDetails(findMember);
-        System.out.println(cU.toString());
+        System.out.println("[UserService] CustomUserDetails:"+cU.toString());
         return new CustomUserDetails(findMember);
     }
 
 
     public UUID checkDupleTelephone(String telephone) {
+        System.out.println("[UserService] /checkDupleTelephone telephone:"+telephone);
 
         findUserByTelephone(telephone);
 
         TemporaryUser newUser = TemporaryUser.builder()
                 .telephone(telephone)
                 .build();
+
+        System.out.println("[UserService] TemporaryUser:"+newUser.toString());
 
         TemporaryUser temporaryUser = temporaryUserRepository.save(newUser);
 
@@ -125,8 +131,10 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void checkDupleEmail(String temporaryUserUuidString, String email) {
+        System.out.println("[UserService] checkDupleEmail");
 
         UUID uuid = convertToUuid(temporaryUserUuidString);
+        System.out.println("[UserService] uuid: "+uuid.toString());
 
         findUserByEmail(email);
 

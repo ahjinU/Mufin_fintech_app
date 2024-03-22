@@ -4,6 +4,7 @@ import com.a502.backend.application.config.dto.CustomUserDetails;
 import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.config.generator.JwtProvider;
 import com.a502.backend.application.config.generator.JwtUtil;
+import com.a502.backend.domain.user.UserRepository;
 import com.a502.backend.domain.user.dto.EmailDto;
 import com.a502.backend.domain.user.dto.LoginDto;
 import com.a502.backend.domain.user.dto.SignUpDto;
@@ -64,31 +65,37 @@ public class UserController {
     @PostMapping("/signup/child/check/telephone")
     public ResponseEntity checkChildTelephone(@Valid @RequestBody TelephoneDto telephone,HttpServletResponse response) {
 
+        System.out.println("[UserController]: ");
+
         return checkTelephoneAndRespond(telephone.getTelephone(), response);
     }
 
     @PostMapping("/signup/parent/check/telephone")
     public ResponseEntity<ApiResponse<String>> checkParentTelephone(@Valid @RequestBody TelephoneDto telephone, HttpServletResponse response) {
 
+        System.out.println("[UserController]: ");
         return checkTelephoneAndRespond(telephone.getTelephone(), response);
     }
 
     @PostMapping("/signup/parent/check/email")
     public ResponseEntity<ApiResponse<String>> checkParentEmail(@Valid @RequestBody EmailDto email,HttpServletRequest request, HttpServletResponse response) {
 
-        System.out.println("[controller]");
-        System.out.println(email.toString());
+        System.out.println("[UserController]: /signup/parent/check/email"+email.toString());
+
         return checkEmailAndRespond(email.getEmail(), request, response);
     }
 
     @PostMapping("/signup/child/check/email")
     public ResponseEntity<ApiResponse<String>> checkChildEmail(@Valid @RequestBody EmailDto email, HttpServletRequest request, HttpServletResponse response) {
 
+        System.out.println("[UserController]: /signup/child/check/email"+email.toString());
         return checkEmailAndRespond(email.getEmail(), request, response);
     }
 
     @PostMapping("/signup/parent")
     public ResponseEntity<ApiResponse<String>> signupParent(@Valid @RequestBody SignUpDto signUpDto, HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("[UserController ]: /signup/parent"+signUpDto.toString());
 
         return signup(signUpDto,null,request,response);
     }
@@ -107,6 +114,15 @@ public class UserController {
 
        return signup(signUpDto,parentEmail,request,response);
     }
+
+    /*public User userFindByEmail(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName(); // Username 추출
+
+        User user = UserRepository.findByEmail(email);
+
+        return user;
+    }*/
 
 
     public  Cookie getCookieByName(HttpServletRequest request, String name) {

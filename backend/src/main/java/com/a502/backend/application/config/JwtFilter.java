@@ -36,6 +36,7 @@ public class JwtFilter extends GenericFilterBean {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
         try {
+            System.out.println("[JwtFilter] 경로확인");
             System.out.println(httpServletRequest.getServletPath());
             // 로그인 경로의 요청에 대해서는 JWT 검증을 생략
             if (isLoginRequest(httpServletRequest.getServletPath()) || isSignupRequest(httpServletRequest.getServletPath())) {
@@ -43,16 +44,25 @@ public class JwtFilter extends GenericFilterBean {
                 return;
             }
 
+            System.out.println("[JwtFilter] 검증이 필요한 경로");
+
             // 1. Request Header에서 JWT 토큰 추출
             String token = resolveToken(httpServletRequest);
 
+            System.out.println("[JwtFilter] 토큰: "+token);
+
             // 2. validateToken으로 토큰 유효성 검사
             if (token != null && jwtTokenProvider.validateToken(token)) {
+                System.out.println("[JwtFilter] 유효한 토큰");
                 // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                System.out.println("[JwtFilter] authentication: "+authentication);
+                System.out.println("[JwtFilter] a");
+                System.out.println("[JwtFilter] a");
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 // 토큰 검증 실패
+                System.out.println("[JwtFilter] 토큰 검증 실패");
                 throw BusinessException.of(API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND);
             }
 
@@ -63,18 +73,24 @@ public class JwtFilter extends GenericFilterBean {
         }
     }
     private boolean isSignupRequest(String path) {
+        System.out.println("[JwtFilter] : 회원가입인지 경로 확인");
 
-        if(path.equals("/api/user/signup/parent/check/telephone"))
+        if(path.equals("/api/user/signup/parent/check/telephone")) {
             return true;
-        if(path.equals("/api/user/signup/parent/check/email"))
+        }
+        if(path.equals("/api/user/signup/parent/check/email")) {
             return true;
-        if(path.equals("/api/user/signup/parent"))
+        }
+        if(path.equals("/api/user/signup/parent")) {
             return true;
+        }
 
         return false;
     }
 
     private boolean isLoginRequest(String path) {
+        System.out.println("[JwtFilter] : 로그인인지 경로 확인");
+
         return path.equals("/api/user/login");
     }
     // Request Header에서 토큰 정보 추출

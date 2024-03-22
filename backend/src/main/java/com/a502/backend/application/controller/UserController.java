@@ -48,6 +48,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
+        System.out.println("[controller /login]: "+loginDto.toString());
 
         JWTokenDto jwt = userService.login(loginDto);
 

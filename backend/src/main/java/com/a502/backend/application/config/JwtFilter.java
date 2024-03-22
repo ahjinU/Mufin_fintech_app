@@ -30,13 +30,15 @@ public class JwtFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        System.out.println("[JwtFilter]진입");
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
         try {
+            System.out.println(httpServletRequest.getServletPath());
             // 로그인 경로의 요청에 대해서는 JWT 검증을 생략
-            if (isLoginRequest(httpServletRequest) || isSignupRequest(httpServletRequest)) {
+            if (isLoginRequest(httpServletRequest.getServletPath()) || isSignupRequest(httpServletRequest.getServletPath())) {
                 chain.doFilter(request, response);
                 return;
             }
@@ -60,19 +62,20 @@ public class JwtFilter extends GenericFilterBean {
             httpServletResponse.sendError(ErrorCode.API_ERROR_USER_ACCESSTOKEN_EXPIRED.getStatus(), e.getMessage());
         }
     }
-    private boolean isSignupRequest(HttpServletRequest request) {
-        if(request.getServletPath().equals("/api/user/signup/parent/check/telephone"))
+    private boolean isSignupRequest(String path) {
+
+        if(path.equals("/api/user/signup/parent/check/telephone"))
             return true;
-        if(request.getServletPath().equals("/api/user/signup/parent/check/email"))
+        if(path.equals("/api/user/signup/parent/check/email"))
             return true;
-        if(request.getServletPath().equals("/api/user/signup/parent"))
+        if(path.equals("/api/user/signup/parent"))
             return true;
 
         return false;
     }
 
-    private boolean isLoginRequest(HttpServletRequest request) {
-        return request.getServletPath().equals("/api/user/login");
+    private boolean isLoginRequest(String path) {
+        return path.equals("/api/user/login");
     }
     // Request Header에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {

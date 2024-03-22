@@ -71,22 +71,25 @@ public class UserService implements UserDetailsService {
     public JWTokenDto login(LoginDto loginDto) {
 
         /*
-            System.out.println("[UserService] 아이디/패스워드: "+loginDto.toString());
-            System.out.println("[UserService] 1. authenticationToken 확인");
-            System.out.println("[UserService] 2. authenticationToken: "+authenticationToken);
-            System.out.println("[UserService] 4. authentication:"+authentication.toString());
-            System.out.println("[Controller] 5. 액세스 토큰 생성!");
-            System.out.println("[Controller] 6. 액세스 토큰: "+jwt.getAccessToken());
 
          */
+        System.out.println("[UserService] 아이디/패스워드: "+loginDto.toString());
+        System.out.println("[UserService] 1. authenticationToken 확인");
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
+        System.out.println("[UserService] 2. authenticationToken: "+authenticationToken);
+
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        System.out.println("[UserService] 4. authentication:"+authentication.toString());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         JWTokenDto jwt = jwtUtil.generateToken(authentication);
+        System.out.println("[Controller] 6. 액세스 토큰: "+jwt.getAccessToken());
+        System.out.println(jwt.toString());
 
         return jwt;
     }

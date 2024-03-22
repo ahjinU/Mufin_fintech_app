@@ -9,10 +9,7 @@ import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -22,7 +19,12 @@ public class RankService {
 
     public List<RankingDetail> getRankingList(){
         Ranking rank = (Ranking) redisUtils.getData("ranks");
-        return rank.getRanking();
+
+        List<RankingDetail> result = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            result.add(rank.getRanking().get(i));
+        }
+        return result;
     }
 
     public RankingDetail getRanking(User user){
@@ -37,6 +39,7 @@ public class RankService {
 
     public void addRankingList(List<RankingDetail> ranks){
         redisUtils.deleteData("ranks");
-        redisUtils.setData("ranks", ranks, 1000L * 60 * 60 * 24);
+
+        redisUtils.setData("ranks", "String", 1000L * 60 * 60 * 24);
     }
 }

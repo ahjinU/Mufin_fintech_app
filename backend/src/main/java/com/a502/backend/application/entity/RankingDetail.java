@@ -11,5 +11,6 @@ import org.springframework.data.redis.core.TimeToLive;
 public class RankingDetail {
     String childName;
     int balance;
+    @Setter
     int rank;
 }

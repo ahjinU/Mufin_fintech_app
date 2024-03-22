@@ -14,11 +14,13 @@ public class RedisUtils {
     }
 
     public void setData(String key, Object value ,Long expiredTime){
-        redisTemplate.opsForValue().set(key, value, expiredTime, TimeUnit.MILLISECONDS);
+        redisTemplate.opsForList().rightPush(key, value);
+//        redisTemplate.opsForList().
+//        redisTemplate.opsForList().set(key, value, expiredTime, TimeUnit.MILLISECONDS);
     }
 
     public Object getData(String key){
-        return redisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForList().getOperations().opsForValue().get("ranks");
     }
 
     public void deleteData(String key){

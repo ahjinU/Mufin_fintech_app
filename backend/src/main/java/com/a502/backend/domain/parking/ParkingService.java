@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -20,6 +22,11 @@ public class ParkingService {
 
     public Parking findByUser(User user){
         return parkingRepository.findByUser(user).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_PARKING_NOT_EXIST));
+    }
+
+    @Transactional
+    public List<Parking> findAllList(){
+        return parkingRepository.findAll();
     }
 
     @Transactional

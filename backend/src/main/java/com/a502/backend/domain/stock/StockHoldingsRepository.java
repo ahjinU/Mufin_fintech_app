@@ -5,6 +5,9 @@ import com.a502.backend.application.entity.StockHolding;
 import com.a502.backend.application.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 interface StockHoldingsRepository extends JpaRepository<StockHolding, StockHoldingsId> {
 
+    List<StockHolding> findAllByUser(User user);
 }

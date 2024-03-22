@@ -10,6 +10,7 @@ interface InputProps {
   placeholder?: string;
   name?: string;
   value?: string | number;
+  disabled?: boolean;
   setValue?: Function;
   onChange?: () => void;
 }
@@ -23,6 +24,7 @@ export default function Input({
   value,
   setValue,
   onChange,
+  disabled,
   ...props
 }: InputProps) {
   const [inputPlaceholder, setInputPlaceholder] = useState(placeholder || '');
@@ -55,14 +57,15 @@ export default function Input({
       }}
     >
       <input
-        className={`w-full outline-none  text-[1.6rem] custom-semibold-text text-custom-black ${
+        className={`w-full outline-none text-[1.6rem] custom-semibold-text text-custom-black ${
           typeof value === 'number' && 'text-right'
-        }`}
+        } ${disabled === true && 'bg-custom-white'}`}
         {...props}
         placeholder={inputPlaceholder}
         name={name}
         value={inputValue}
         ref={inputRef}
+        disabled={disabled}
         onChange={handleChange}
         onFocus={() => setInputPlaceholder('')}
       />

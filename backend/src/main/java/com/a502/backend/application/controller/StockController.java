@@ -3,14 +3,11 @@ package com.a502.backend.application.controller;
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.facade.StockFacade;
 import com.a502.backend.domain.stock.request.StockPriceHistoryRequest;
-import com.a502.backend.domain.stock.response.PriceAndStockOrderList;
-import com.a502.backend.domain.stock.response.StockPriceHistoryByBar;
-import com.a502.backend.domain.stock.response.StockPriceHistoryByLine;
+import com.a502.backend.domain.stock.response.*;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -59,14 +56,35 @@ public class StockController {
 	@PostMapping("/price/history/line")
 	public ResponseEntity<ApiResponse<List<StockPriceHistoryByLine>>> getStockGraphInfosByLine(@RequestBody StockPriceHistoryRequest request) {
 		List<StockPriceHistoryByLine> result = stockFacade.getStockGraphInfosByLine(request.getName(), request.getPeriod());
-		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_PRICE_HISTORY_LINE));
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_PRICE_HISTORY_LINE, result));
 	}
 
 	// 주식별 주가 기간 조회(봉그래프)
 	@PostMapping("/price/history/bar")
 	public ResponseEntity<ApiResponse<List<StockPriceHistoryByBar>>> getStockGraphInfosByBar(@RequestBody StockPriceHistoryRequest request) {
 		List<StockPriceHistoryByBar> result = stockFacade.getStockGraphInfosByBar(request.getName(), request.getPeriod());
-		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_PRICE_HISTORY_BAR));
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_PRICE_HISTORY_BAR, result));
+	}
+
+	// 전체 주식 정보 조회
+	@PostMapping("/all")
+	public ResponseEntity<ApiResponse<TotalStockListResponse>> getAllStock() {
+		TotalStockListResponse result = stockFacade.getTotalStockList();
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_GET_ALL_INFO, result));
+	}
+
+	// 보유 주식 정보 조회
+	@PostMapping("/mine")
+	public ResponseEntity<ApiResponse<MyStockListResponse>> getMyStocks() {
+		MyStockListResponse result = stockFacade.getMyStockList();
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_MINE, result));
+	}
+
+	// 미체결 주식 정보 조회
+	@PostMapping("/order/wait")
+	public ResponseEntity<ApiResponse<MyWaitingStockOrderResponse>> getMyWaitingStockOrders() {
+		MyWaitingStockOrderResponse result = stockFacade.getMyWaitingStockOrder();
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_GET_WAITING_INFO, result));
 	}
 }
 

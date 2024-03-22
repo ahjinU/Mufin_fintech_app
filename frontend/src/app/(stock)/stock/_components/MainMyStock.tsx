@@ -54,6 +54,7 @@ export default function MainMyStock() {
             leftExplainText={'내 초코칩 저장소'}
             leftHighlightText={'1,724,900초코칩'}
             buttonOption={'RIGHT_ARROW'}
+            link="/stock/storage"
           />
         }
       />
@@ -62,7 +63,7 @@ export default function MainMyStock() {
         topChildren={
           <MoneyInfoElement
             imageSrc={'/images/icon-stock.png'}
-            leftExplainText={'내 초코칩 저장소'}
+            leftExplainText={'내 주식 평가'}
             leftHighlightText={'380,700초코칩'}
             buttonOption={'TINY_BUTTON'}
             tinyButtonLabel={'상세'}

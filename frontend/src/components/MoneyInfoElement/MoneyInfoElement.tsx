@@ -5,6 +5,7 @@ import {
   ArrowTrendingUpIcon,
 } from '@heroicons/react/24/solid';
 import TinyButton from '../TinyButton/TinyButton';
+import Link from 'next/link';
 
 interface MoneyInfoElementProps {
   imageSrc: string;
@@ -19,6 +20,7 @@ interface MoneyInfoElementProps {
     | 'NO';
   tinyButtonLabel?: string;
   stockPrice?: string;
+  link?: string;
 }
 
 function RateShow() {
@@ -59,6 +61,7 @@ export default function MoneyInfoElement({
   buttonOption,
   tinyButtonLabel,
   stockPrice,
+  link,
 }: MoneyInfoElementProps) {
   const RightButton: React.FC = () => {
     if (buttonOption === 'RIGHT_ARROW')
@@ -74,23 +77,34 @@ export default function MoneyInfoElement({
       return <StockUpShow stockUpPrice={stockPrice} />;
   };
 
-  return (
-    <section className="w-full flex justify-between items-center">
-      <div className="w-full flex gap-[1rem] items-center">
-        <Image
-          src={imageSrc}
-          width={42}
-          height={42}
-          alt={leftExplainText}
-          className="w-[4.2rem] h-[4.2rem]"
-        />
-
-        <div className="flex flex-col justify-between">
-          <span className="custom-medium-text">{leftExplainText}</span>
-          <span className="custom-semibold-text">{leftHighlightText}</span>
+  function Content() {
+    return (
+      <section className="w-full flex justify-between items-center">
+        <div className="w-full flex gap-[1rem] items-center">
+          <Image
+            src={imageSrc}
+            width={42}
+            height={42}
+            alt={leftExplainText}
+            className="w-[4.2rem] h-[4.2rem]"
+          />
+          <div className="flex flex-col justify-between">
+            <span className="custom-medium-text">{leftExplainText}</span>
+            <span className="custom-semibold-text">{leftHighlightText}</span>
+          </div>
         </div>
-      </div>
-      <RightButton />
+        <RightButton />
+      </section>
+    );
+  }
+
+  return buttonOption === 'RIGHT_ARROW' && link ? (
+    <Link href={link}>
+      <Content />
+    </Link>
+  ) : (
+    <section className="w-full flex justify-between items-center">
+      <Content />
     </section>
   );
 }

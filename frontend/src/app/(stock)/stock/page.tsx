@@ -1,6 +1,6 @@
 import { Header, Tab } from '@/components';
-import MainMyStock from './_components/Main/MainMyStock';
-import MainStockList from './_components/Main/MainStockList';
+import MainMyStock from './_components/MainMyStock';
+import MainStockList from './_components/MainStockList';
 
 export interface WeatherType {
   temp: number;

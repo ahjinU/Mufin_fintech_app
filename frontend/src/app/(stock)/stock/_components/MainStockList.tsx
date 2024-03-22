@@ -8,7 +8,7 @@ import {
   NavText,
   OtherInfoElement,
 } from '@/components';
-import { WeatherType } from '../../page';
+import { WeatherType } from '../page';
 import MainRanking from './MainRanking';
 import Link from 'next/link';
 

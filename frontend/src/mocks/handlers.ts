@@ -170,4 +170,70 @@ export const handlers = [
       },
     });
   }),
+
+  http.get('/parking/history', () => {
+    return HttpResponse.json({
+      data: {
+        transactions: [
+          {
+            transName: '우산 회사',
+            amount: 18000,
+            type: '이자',
+            cnt: 1,
+            price: 18000,
+            ratio: 0.02,
+            date: '2024-03-22',
+          },
+          {
+            transName: '선글라스 회사',
+            amount: 20000,
+            type: '매수',
+            cnt: 2,
+            price: 10000,
+            ratio: 0.02,
+            date: '2024-03-22',
+          },
+          {
+            transName: '눈오리 회사',
+            amount: 15000,
+            type: '매도',
+            cnt: 1,
+            price: 15000,
+            ratio: 0.02,
+            date: '2024-03-22',
+          },
+        ],
+      },
+    });
+  }),
+
+  http.post('/stock/order/wait', () => {
+    return HttpResponse.json({
+      data: {
+        transactions: [
+          {
+            transName: '우산회사',
+            amount: 18000,
+            type: '매수',
+            cnt: 2,
+            price: 9000,
+          },
+          {
+            transName: '우산회사',
+            amount: 12000,
+            type: '매도',
+            cnt: 1,
+            price: 12000,
+          },
+          {
+            transName: '우산회사',
+            amount: 22000,
+            type: '매수',
+            cnt: 3,
+            price: 11000,
+          },
+        ],
+      },
+    });
+  }),
 ];

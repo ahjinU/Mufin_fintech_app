@@ -1,5 +1,3 @@
-import { StockAllType } from '../_types';
-
 const commonUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const postStocksAll = async () => {
@@ -39,6 +37,22 @@ export const postStockMine = async () => {
 
 export const postParkingAccount = async () => {
   const res = await fetch(`${commonUrl}/parking/account`, {
+    method: 'POST',
+    cache: 'no-cache',
+  });
+  return await res.json();
+};
+
+export const getParkingAccount = async () => {
+  const res = await fetch(`${commonUrl}/parking/history`, {
+    method: 'GET',
+    cache: 'no-cache',
+  });
+  return await res.json();
+};
+
+export const postStockOrderWait = async () => {
+  const res = await fetch(`${commonUrl}/stock/order/wait`, {
     method: 'POST',
     cache: 'no-cache',
   });

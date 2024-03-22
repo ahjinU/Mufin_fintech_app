@@ -1,11 +1,11 @@
 import { FlexBox, OtherInfoElement } from '@/components';
-import { TransactionType } from '../page';
 import { commaNum } from '@/utils/commaNum';
+import { TransactionType } from '../../_types';
 
 export default function StorageList({ list }: { list: TransactionType[] }) {
   return (
     <div className="flex flex-col gap-[0.5rem] py-[0.5rem]">
-      {list.map(
+      {list?.map(
         ({ type, transName, date, amount, ratio, cnt, price }, index) => {
           return type === '이자' ? (
             <FlexBox
@@ -18,7 +18,7 @@ export default function StorageList({ list }: { list: TransactionType[] }) {
                   leftExplainText={`보관함 이자`}
                   leftHighlightText={`${transName}`}
                   rightExplainText={`(${ratio}%)`}
-                  rightHighlightText={`${commaNum(amount)}초코칩`}
+                  rightHighlightText={`${amount && commaNum(amount)}초코칩`}
                   state={'DOWN'}
                 />
               }
@@ -33,9 +33,9 @@ export default function StorageList({ list }: { list: TransactionType[] }) {
                 <OtherInfoElement
                   leftExplainText={`${type} ${cnt}주`}
                   leftHighlightText={`${transName}`}
-                  rightExplainText={`${commaNum(price)}초코칩`}
-                  rightHighlightText={`${commaNum(amount)}초코칩`}
-                  state={`${type === '매도' ? 'UP' : 'DOWN'}`}
+                  rightExplainText={`${price && commaNum(price)}초코칩`}
+                  rightHighlightText={`${amount && commaNum(amount)}초코칩`}
+                  state={`${type === '매수' ? 'UP' : 'DOWN'}`}
                 />
               }
             />

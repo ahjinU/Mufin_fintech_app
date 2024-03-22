@@ -75,7 +75,8 @@ const option = {
             color: '#fff',
             background: '#cd2626',
           },
-          text: `최고: ${getMaxMinValueIndex(series)[0]}초코칩`,
+          text: `최고: ${getMaxMinValueIndex(series)[0]}`,
+          offsetX: -6,
         },
       },
       {
@@ -87,8 +88,20 @@ const option = {
             color: '#fff',
             background: '#5969ff',
           },
-          text: `최저: ${getMaxMinValueIndex(series)[1]}초코칩`,
+          text: `최저: ${getMaxMinValueIndex(series)[1]}`,
+          offsetX: -6,
           offsetY: 19,
+        },
+      },
+      {
+        y: series[0].data[series[0].data.length - 1].y[3],
+        borderColor: '#0be881',
+        label: {
+          borderColor: '#0be881',
+          style: {
+            color: '#fff',
+            background: '#0be881',
+          },
         },
       },
     ],

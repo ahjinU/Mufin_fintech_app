@@ -19,7 +19,8 @@
     "react": "^18",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@mswjs/http-middleware": "^0.9.2",

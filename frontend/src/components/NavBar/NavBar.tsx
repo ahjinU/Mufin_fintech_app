@@ -45,8 +45,6 @@ const setIndex = (path: string) => {
 export default function NavBar({ mode }: NavBarProps) {
   const path = usePathname();
 
-  console.log(path);
-
   let items: itemProp[];
 
   const [selectIndex, setSelectedIndex] = useState(setIndex(path));

@@ -1,34 +1,58 @@
 import { Header, Tab } from '@/components';
 import MainMyStock from './_components/MainMyStock';
 import MainStockList from './_components/MainStockList';
+import { MyStockType, RankType, StockAllType } from './_types';
+import {
+  getRankingMine,
+  getRankingTotal,
+  postParkingAccount,
+  postStockMine,
+  postStocksAll,
+} from './_apis';
+import useStockStore from './_store';
+const url = `${process.env.REACT_APP_WEATHER_API}?q=Seoul&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
 
-export interface WeatherType {
+export interface DataType {
   temp: number;
   description: number;
+  stocks: StockAllType[];
 }
+let mainTabData: DataType = {
+  temp: 0,
+  description: 0,
+  stocks: [],
+};
 
 export default async function Stock() {
-  const url = `${process.env.REACT_APP_WEATHER_API}?q=Seoul&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
+  const { updateRanks, updateMyRank, updateMyParking, updateMyStock } =
+    useStockStore.getState();
 
-  let myStockData: WeatherType = {
-    temp: 0,
-    description: 0,
+  const dataStorage = async () => {
+    const ranks = await getRankingTotal();
+    updateRanks(ranks?.data.ranks);
+    const myRank = await getRankingMine();
+    updateMyRank(myRank?.data);
+    const myStocks = await postStockMine();
+    updateMyStock(myStocks?.data);
+    const myParking = await postParkingAccount();
+    updateMyParking(myParking?.data);
   };
 
-  const fetchWeather = async () => {
-    const data = await fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        return data;
-      });
-    myStockData = {
-      temp: parseFloat((data.main.temp - 273.15).toFixed(2)),
-      description: data.weather[0].id,
+  const dataFetch = async () => {
+    const stocks = await postStocksAll();
+    const weatherRes = await fetch(url, { cache: 'no-cache' });
+    const weather = await weatherRes.json();
+
+    mainTabData = {
+      temp: parseFloat((weather.main.temp - 273.15).toFixed(2)),
+      description: weather.weather[0].id,
+      stocks: stocks.data.stock,
     };
+
+    await dataStorage();
   };
 
-  await fetchWeather();
+  await dataFetch();
 
   return (
     <div>
@@ -39,7 +63,7 @@ export default async function Stock() {
         tabs={[
           {
             label: '주식목록',
-            component: <MainStockList data={myStockData} />,
+            component: <MainStockList data={mainTabData} />,
           },
           {
             label: '내 잔고',

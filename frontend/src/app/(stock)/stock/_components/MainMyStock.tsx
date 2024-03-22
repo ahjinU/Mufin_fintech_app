@@ -13,7 +13,7 @@ export default function MainMyStock() {
   const { myStockList, totalPrice } = myStock;
 
   return (
-    <div className="p-[1.2rem] flex flex-col gap-[1rem]">
+    <div className="p-[1.5rem] flex flex-col gap-[1rem]">
       <AdBox
         icon="/images/icon-dollar.png"
         mode={'STATIC'}

@@ -15,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -67,6 +64,12 @@ public class StockController {
 	public ResponseEntity<ApiResponse<List<StockPriceHistoryByBar>>> getStockGraphInfosByBar(@RequestBody StockPriceHistoryRequest request) {
 		List<StockPriceHistoryByBar> result = stockFacade.getStockGraphInfosByBar(request.getName(), request.getPeriod());
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_PRICE_HISTORY_BAR));
+	}
+
+	@GetMapping("ranking/mine")
+	public void getRanking(int userId){
+
+//		sendingOperations.convertAndSend("/sub/ranks/" + , result);
 	}
 }
 

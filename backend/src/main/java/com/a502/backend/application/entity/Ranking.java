@@ -1,11 +1,26 @@
-//package com.a502.backend.application.entity;
-//
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.Table;
-//import lombok.Data;
-//
-//@Entity
-//@Data
-//@Table(name = "ranking")
-//public class Ranking {
-//}
+package com.a502.backend.application.entity;
+
+
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
+
+import java.util.List;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+@RedisHash(value = "ranking")
+public class Ranking {
+
+    @Id
+    int id;
+
+    List<RankingDetail> ranking;
+
+    @TimeToLive
+    private long ttl;
+
+}

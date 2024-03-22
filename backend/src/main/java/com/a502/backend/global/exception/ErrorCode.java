@@ -18,6 +18,9 @@ public enum ErrorCode {
     API_ERROR_EMAIL_DUPLICATION_EXIST(409, "U004", "이미 해당 이메일을 사용 중 입니다."),
     API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND(401, "U005", "쿠키가 만료되었습니다."),
     API_ERROR_TEMPORARY_UUID_NOT_EXIST(410, "U006", "존재하지 않는 UUID입니다."),
+    API_ERROR_USER_ACCESSTOKEN_EXPIRED(401, "U007", "Access Token이 만료되었습니다."),
+    API_ERROR_USER_DELETE(410, "U007", "탈퇴한 회원입니다."),
+
 
 
     // Account

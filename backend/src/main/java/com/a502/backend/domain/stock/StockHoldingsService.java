@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -52,5 +54,10 @@ public class StockHoldingsService {
         validStockHolding(user, stock, cnt);
         stockHolding.setCnt(stockHoldingCnt + cnt);
         stockHolding.setTotal(stockHoldingTotal + cnt * price);
+    }
+
+    // 유저가 가진 주식 조회
+    public List<StockHolding> findAllByUser(User user){
+        return stockHoldingsRepository.findAllByUser(user).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_STOCK_HOLDING_NOT_EXIST));
     }
 }

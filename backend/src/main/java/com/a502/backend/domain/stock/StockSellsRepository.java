@@ -1,7 +1,9 @@
 package com.a502.backend.domain.stock;
 
+import com.a502.backend.application.entity.Code;
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.entity.StockSell;
+import com.a502.backend.application.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
@@ -13,4 +15,7 @@ interface StockSellsRepository extends JpaRepository<StockSell, Integer> {
 	List<StockSell> findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(int id, int cnt, LocalDateTime localDateTime);
 
 	Optional<List<StockSell>> findAllByStockAndPriceOrderByCreatedAtAsc(Stock stock, int price);
+
+	// 미체결 매도 주문 조회
+	Optional<List<StockSell>> findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(User user, Code code, LocalDateTime localDateTime, int cnt);
 }

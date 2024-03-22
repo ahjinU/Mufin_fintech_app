@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import { Tag } from '@/components';
 
 const smooth: 'smooth' = 'smooth';
 
@@ -53,8 +54,9 @@ export function StockLineChart() {
       offsetX: -13,
       formatter: (
         value: number,
-        { dataPointIndex }: { dataPointIndex: number },
+        { dataPointIndex, w }: { dataPointIndex: number; w: any },
       ) => {
+        console.log(w);
         if (
           value === series[0].data[minValueIndex] &&
           dataPointIndex === minValueIndex
@@ -84,7 +86,7 @@ export function StockLineChart() {
     grid: { show: false },
     yaxis: {
       show: false,
-      min: Math.min(...series[0].data) - 5,
+      min: Math.min(...series[0].data),
     },
     xaxis: {
       labels: {
@@ -112,13 +114,26 @@ export function StockLineChart() {
   };
 
   return (
-    <section className="mx-auto p-[1rem]">
+    <section className="mx-auto pt-[1rem]">
       <ApexChart
         type="line"
         options={option}
         series={series}
         height={300}
-        width={310}
+        width={336}
+      />
+
+      <Tag
+        tags={[
+          {
+            label: '3개월',
+            onClick: () => {},
+          },
+          {
+            label: '6개월',
+            onClick: () => {},
+          },
+        ]}
       />
     </section>
   );

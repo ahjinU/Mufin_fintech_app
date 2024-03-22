@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import { Tag } from '@/components';
 import { series, getMaxMinValueIndex } from './data';
 
 const datetime: 'datetime' = 'datetime';
@@ -106,7 +107,6 @@ const option = {
       },
     ],
   },
-
   tooltip: {
     custom: ({ w, dataPointIndex }: { w: any; dataPointIndex: number }) => {
       return (
@@ -136,13 +136,30 @@ const option = {
 
 export function StockCandleChart() {
   return (
-    <section className="mx-auto p-[1rem]">
+    <section className="mx-auto pt-[1rem]">
       <ApexChart
         type="candlestick"
         options={option}
         series={series}
         height={300}
-        width={310}
+        width={336}
+      />
+
+      <Tag
+        tags={[
+          {
+            label: '1일',
+            onClick: () => {},
+          },
+          {
+            label: '4일',
+            onClick: () => {},
+          },
+          {
+            label: '1주',
+            onClick: () => {},
+          },
+        ]}
       />
     </section>
   );

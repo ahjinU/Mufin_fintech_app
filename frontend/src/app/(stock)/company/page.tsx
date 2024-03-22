@@ -1,6 +1,13 @@
-import { GuideAccordion, FlexBox, OtherInfoElement, Tab } from '@/components';
+import {
+  GuideAccordion,
+  FlexBox,
+  OtherInfoElement,
+  Tab,
+  Button,
+} from '@/components';
 import { StockLineChart } from './_components/StockLineChart';
 import { StockCandleChart } from './_components/StockCandleChart';
+import { StockCall } from './_components/StockCall';
 
 export default function Company() {
   return (
@@ -38,6 +45,10 @@ export default function Company() {
           { label: '봉 차트', component: <StockCandleChart /> },
         ]}
       />
+
+      <StockCall />
+
+      <Button label="구매하기" mode="ACTIVE" />
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import { Tag } from '@/components';
 
 const smooth: 'smooth' = 'smooth';
 
@@ -14,7 +15,7 @@ const series: StockData[] = [
   {
     name: '바람막이 회사',
     data: [
-      30, 32, 31, 35, 36, 39, 40, 42, 40, 40, 39, 38, 40, 42, 45, 49, 50, 54,
+      27, 32, 31, 35, 36, 39, 40, 42, 40, 40, 39, 38, 40, 42, 45, 49, 50, 54,
       52, 51, 45, 40, 35, 38, 40, 41, 40, 40, 38, 35, 31, 28, 27, 29, 30, 35,
       45, 48, 50, 52, 55, 56, 57, 58, 59, 60, 59, 55, 48, 49, 47, 46, 48, 49,
       50, 51, 52, 53, 55, 60,
@@ -53,8 +54,9 @@ export function StockLineChart() {
       offsetX: -13,
       formatter: (
         value: number,
-        { dataPointIndex }: { dataPointIndex: number },
+        { dataPointIndex, w }: { dataPointIndex: number; w: any },
       ) => {
+        console.log(w);
         if (
           value === series[0].data[minValueIndex] &&
           dataPointIndex === minValueIndex
@@ -84,7 +86,7 @@ export function StockLineChart() {
     grid: { show: false },
     yaxis: {
       show: false,
-      min: Math.min(...series[0].data) - 5,
+      min: Math.min(...series[0].data),
     },
     xaxis: {
       labels: {
@@ -95,8 +97,8 @@ export function StockLineChart() {
       tooltip: {
         enabled: false,
       },
-      min: -5,
-      max: 65,
+      min: -8,
+      max: 60,
     },
     tooltip: {
       x: {
@@ -112,13 +114,26 @@ export function StockLineChart() {
   };
 
   return (
-    <section className="mx-auto p-[1rem]">
+    <section className="mx-auto pt-[1rem]">
       <ApexChart
         type="line"
         options={option}
         series={series}
         height={300}
-        width={310}
+        width={336}
+      />
+
+      <Tag
+        tags={[
+          {
+            label: '3개월',
+            onClick: () => {},
+          },
+          {
+            label: '6개월',
+            onClick: () => {},
+          },
+        ]}
       />
     </section>
   );

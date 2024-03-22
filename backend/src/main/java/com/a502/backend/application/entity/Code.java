@@ -7,8 +7,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-//@Getter
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "codes")
 public class Code {

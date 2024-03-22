@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class StockBuysService {
     private final StockBuysRepository stockBuysRepository;
@@ -53,4 +52,9 @@ public class StockBuysService {
 //        if (cntNot - cnt == 0)
 //            stockBuy.setStatus(StockCode.STOCK_STATUS_DONE);
     }
+
+    public void setMarketEnd(){
+
+    }
+
 }

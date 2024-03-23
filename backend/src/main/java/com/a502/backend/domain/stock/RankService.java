@@ -1,12 +1,10 @@
 package com.a502.backend.domain.stock;
 
-import com.a502.backend.application.entity.Ranking;
 import com.a502.backend.application.entity.RankingDetail;
 import com.a502.backend.application.entity.User;
-import com.a502.backend.global.common.RedisUtils;
-import com.a502.backend.global.error.BusinessException;
-import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,32 +12,51 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class RankService {
-    private final RedisUtils redisUtils;
-    private final RankingRepository rankingRepository;
 
-    public List<RankingDetail> getRankingList(){
-        Ranking rank = (Ranking) redisUtils.getData("ranks");
+    private final RedisTemplate<String, String> redisTemplate;
+    private final String RANKING_KEY = "ranking";
 
-        List<RankingDetail> result = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            result.add(rank.getRanking().get(i));
-        }
-        return result;
+    public void deleteRanking(){
+        redisTemplate.delete(RANKING_KEY);
+    }
+    public void addUserScore(User user, double score) {
+        redisTemplate.opsForZSet().add(RANKING_KEY, user.getName(), score);
     }
 
-    public RankingDetail getRanking(User user){
-        Ranking rank = (Ranking) redisUtils.getData("ranks");
-
-        for(RankingDetail detail: rank.getRanking()){
-            if (detail.getChildName().equals(user.getName()))
-                return detail;
-        }
-        throw BusinessException.of(ErrorCode.API_ERROR_STOCK_HOLDING_NOT_EXIST);
+    public Set<ZSetOperations.TypedTuple<String>> getTop10Users() {
+        return redisTemplate.opsForZSet().reverseRangeWithScores(RANKING_KEY, 0, 9);
     }
 
-    public void addRankingList(List<RankingDetail> ranks){
-        redisUtils.deleteData("ranks");
+    public double getUserScore(User user) {
+        return redisTemplate.opsForZSet().score(RANKING_KEY, user.getName());
+    }
 
-        redisUtils.setData("ranks", "String", 1000L * 60 * 60 * 24);
+    public Long getUserRank(User user) {
+        return redisTemplate.opsForZSet().reverseRank(RANKING_KEY, user.getName());
+    }
+
+    public List<RankingDetail> getTop10UserRankings() {
+        Set<ZSetOperations.TypedTuple<String>> top10UsersWithScores = getTop10Users();
+        List<RankingDetail> userRankings = new ArrayList<>();
+        int rank = 1;
+        int prevRank = 1;
+        int prevBalance = 0;
+        for (ZSetOperations.TypedTuple<String> userWithScore : top10UsersWithScores) {
+            if (prevBalance == 0)
+                prevBalance = userWithScore.getScore().intValue();
+            int balance = userWithScore.getScore().intValue();
+            int curRank = (balance == prevBalance) ? prevRank : rank;
+            RankingDetail userRanking = RankingDetail.builder()
+                    .childName(userWithScore.getValue())
+                    .rank(curRank)
+                    .balance(balance)
+                    .build();
+            userRankings.add(userRanking);
+
+            prevBalance = balance;
+            prevRank = curRank;
+            rank++;
+        }
+        return userRankings;
     }
 }

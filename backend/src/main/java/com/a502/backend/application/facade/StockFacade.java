@@ -4,10 +4,7 @@ import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.parking.ParkingDetailsService;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.stock.*;
-import com.a502.backend.domain.stock.response.PriceAndStockOrderList;
-import com.a502.backend.domain.stock.response.StockOrderList;
-import com.a502.backend.domain.stock.response.StockPriceHistoryByBar;
-import com.a502.backend.domain.stock.response.StockPriceHistoryByLine;
+import com.a502.backend.domain.stock.response.*;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +35,7 @@ public class StockFacade {
 	private final StockHoldingsService stockHoldingsService;
 	private final ParkingDetailsService parkingDetailsService;
 	private final CodeService codeService;
-
+	private final RankService rankService;
 	/**
 	 * 매수 거래 신청 메서드
 	 *
@@ -67,6 +65,7 @@ public class StockFacade {
 		}
 
 		stockDetailsService.updateStockDetail(stock, price);
+		makeRankList();
 	}
 
 	/**
@@ -96,6 +95,7 @@ public class StockFacade {
 		}
 
 		stockDetailsService.updateStockDetail(stock, price);
+		makeRankList();
 	}
 
 	/**
@@ -248,5 +248,59 @@ public class StockFacade {
 			}
 		}
 		return result;
+	}
+
+
+	/**
+	 * Ranking 갱신 메서드
+	 */
+	public void makeRankList() {
+		HashMap<String, Integer> stockPriceList = stockDetailsService.getStockPriceList(stocksService.findAllList());
+		List<Parking> parkingList = parkingService.findAllList();
+
+		rankService.deleteRanking();
+		for (Parking parking : parkingList) {
+			List<StockHolding> stockHoldingList = stockHoldingsService.getStockHolding(parking.getUser());
+			int balance = parking.getBalance();
+			for (StockHolding stockHolding : stockHoldingList) {
+				balance += stockHolding.getCnt() * stockPriceList.get(stockHolding.getStock().getName());
+			}
+			rankService.addUserScore(parking.getUser(), balance);
+		}
+	}
+
+	/**
+	 * 랭킹 1 ~ 10위 조회 메서드
+	 * @return 랭킹 정보 리스트
+	 */
+	public RankingResponse getRanknigList(){
+		List<RankingDetail> rankingList = rankService.getTop10UserRankings();
+		return RankingResponse.of(rankingList);
+	}
+
+	/**
+	 * 회원 랭킹 조회 메서드
+	 *
+	 * 10위권 이하의 회원 : 동점자 처리X 순위 반영
+	 * 10위권 이상의 회원 : 동점자 처리 순위 반영
+	 * @param userId 회원 id
+	 * @return 랭킹 정보
+	 */
+	public RankingDetail getRanking(int userId){
+		User user = userService.findById(userId);
+		int rank = Math.toIntExact(rankService.getUserRank(user));
+		int balance = (int) rankService.getUserScore(user);
+
+		List<RankingDetail> rankingList = rankService.getTop10UserRankings();
+		for(RankingDetail detail : rankingList){
+			if (detail.getChildName().equals(user.getName()))
+				return detail;
+		}
+
+		return RankingDetail.builder()
+				.rank(rank)
+				.balance(balance)
+				.childName(user.getName())
+				.build();
 	}
 }

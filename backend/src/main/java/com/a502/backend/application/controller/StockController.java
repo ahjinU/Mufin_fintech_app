@@ -1,9 +1,11 @@
 package com.a502.backend.application.controller;
 
+import com.a502.backend.application.entity.RankingDetail;
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.facade.StockFacade;
 import com.a502.backend.domain.stock.request.StockPriceHistoryRequest;
 import com.a502.backend.domain.stock.response.PriceAndStockOrderList;
+import com.a502.backend.domain.stock.response.RankingResponse;
 import com.a502.backend.domain.stock.response.StockPriceHistoryByBar;
 import com.a502.backend.domain.stock.response.StockPriceHistoryByLine;
 import com.a502.backend.global.response.ApiResponse;
@@ -66,10 +68,16 @@ public class StockController {
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_PRICE_HISTORY_BAR));
 	}
 
-	@GetMapping("ranking/mine")
-	public void getRanking(int userId){
+	@GetMapping("ranking/user")
+	public ResponseEntity<ApiResponse<RankingDetail>> getRanking(int userId){
+		RankingDetail result = stockFacade.getRanking(userId);
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_RANKING_USER, result));
+	}
 
-//		sendingOperations.convertAndSend("/sub/ranks/" + , result);
+	@GetMapping("ranking/total")
+	public ResponseEntity<ApiResponse<RankingResponse>> getRankingList(){
+		RankingResponse result = stockFacade.getRanknigList();
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_RANKING_LIST, result));
 	}
 }
 

@@ -74,7 +74,7 @@ public class InitFacade {
 //        }
 
 //        initStock();
-//        saveKeypadImage();
+//        initKeypadImage();
     }
 
     /**
@@ -98,11 +98,25 @@ public class InitFacade {
      * @throws IOException
      */
     private void initKeypadImage() throws IOException{
-//        for (int i = 0; i < 10; i++) {
-//            String image = s3FileUploader.uploadFile("images/"+ "keypad" + i + ".png");
-//            numberImageService.saveImage(image);
-//        }
-        String image = s3FileUploader.uploadFile("images/" + "shinchan"+ ".png");
-        numberImageService.saveImage(image);
+        for (int i = 0; i < 10; i++) {
+            String image = s3FileUploader.uploadFile("images/"+ "icon-" + i + ".png");
+            numberImageService.saveImage(image);
+        }
     }
 }
+
+
+/**
+ * 처음 비밀번호 등록할 때
+ * 결제 키패드 주기 -> (value :키패드 순서 & key : 유저 email) 에 넣기
+ * 비밀번호 입력 후 -> 비밀번호 해석
+ * 저장
+ *
+ *
+ * 결제
+ * 결제 키패드 주기 -> (value :키패드 순서 & key : 유저 email) 에 넣기
+ * 비밀번호 입력 후 -> 비밀번호 해석
+ * 비밀번호 일치하는지 확인
+ * :일치 Good 오류 회수 0 으로 초기화 후 pass
+ * :불일치 -> 다시 결제 키패드 주거나 cnt==5 이면 계좌 정지
+ */

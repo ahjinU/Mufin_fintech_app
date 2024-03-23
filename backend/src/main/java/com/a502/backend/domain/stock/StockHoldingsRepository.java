@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-interface StockHoldingsRepository extends JpaRepository<StockHolding, StockHoldingsId> {
+import java.util.List;
+import java.util.Optional;
 
-    List<StockHolding> findAllByUser(User user);
+interface StockHoldingsRepository extends JpaRepository<StockHolding, StockHoldingsId> {
+    Optional<List<StockHolding>> findAllByUser(User user);
 }

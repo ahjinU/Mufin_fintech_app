@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Transactional(readOnly = true)
@@ -65,7 +64,6 @@ public class StockFacade {
 		}
 
 		stockDetailsService.updateStockDetail(stock, price);
-		makeRankList();
 	}
 
 	/**
@@ -95,7 +93,6 @@ public class StockFacade {
 		}
 
 		stockDetailsService.updateStockDetail(stock, price);
-		makeRankList();
 	}
 
 	/**
@@ -148,26 +145,15 @@ public class StockFacade {
 		// 주식 id에 해당하는 매도 주문 리스트 조회
 		List<StockSell> buyList = stockSellsService.getSellOrderList(id, 0, LocalDate.now().atStartOfDay());
 		for (StockSell stockSell : buyList) {
-			stockOrderList.add(StockOrderList.builder()
-					.buyOrderCnt(stockSell.getCntNot())
-					.price(stockSell.getPrice())
-					.build()
-			);
+			stockOrderList.add(StockOrderList.builder().buyOrderCnt(stockSell.getCntNot()).price(stockSell.getPrice()).build());
 		}
 		// 주식 id에 해당하는 매수 주문 리스트 조회
 		List<StockBuy> sellList = stockBuysService.getBuyOrderList(id, 0, LocalDate.now().atStartOfDay());
 		for (StockBuy stockBuy : sellList) {
-			stockOrderList.add(StockOrderList.builder()
-					.sellOrderCnt(stockBuy.getCntNot())
-					.price(stockBuy.getPrice())
-					.build()
-			);
+			stockOrderList.add(StockOrderList.builder().sellOrderCnt(stockBuy.getCntNot()).price(stockBuy.getPrice()).build());
 		}
 
-		return PriceAndStockOrderList.builder()
-				.price(price)
-				.stockOrderList(stockOrderList)
-				.build();
+		return PriceAndStockOrderList.builder().price(price).stockOrderList(stockOrderList).build();
 	}
 
 	// 주가 기간별 정보 조회(선그래프)
@@ -182,10 +168,7 @@ public class StockFacade {
 		List<StockPriceHistoryByLine> result = new ArrayList<>();
 
 		for (StockDetail sd : stockDetailsList) {
-			StockPriceHistoryByLine history = StockPriceHistoryByLine.builder()
-					.price(sd.getPrice())
-					.date(sd.getCreatedAt().toLocalDate())
-					.build();
+			StockPriceHistoryByLine history = StockPriceHistoryByLine.builder().price(sd.getPrice()).date(sd.getCreatedAt().toLocalDate()).build();
 			result.add(history);
 		}
 
@@ -210,13 +193,7 @@ public class StockFacade {
 
 		if (period == 1) {
 			for (StockDetail sd : stockDetailsList) {
-				StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder()
-						.price(sd.getPrice())
-						.highestPrice(sd.getHighestPrice())
-						.lowestPrice(sd.getLowestPrice())
-						.createdAt(sd.getCreatedAt().toLocalDate())
-						.startPrice(sd.getStartPrice())
-						.build();
+				StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder().price(sd.getPrice()).highestPrice(sd.getHighestPrice()).lowestPrice(sd.getLowestPrice()).createdAt(sd.getCreatedAt().toLocalDate()).startPrice(sd.getStartPrice()).build();
 				result.add(priceHistoryByBar);
 			}
 		} else {
@@ -236,18 +213,127 @@ public class StockFacade {
 					lowestPrice = stockDetailsList.get(i).getLowestPrice();
 				// 시작하는 날 기준으로 시작가 보내주기
 				if (i % period == period - 1 || i == stockDetailsList.size() - 1) {
-					StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder()
-							.createdAt(createdAt)
-							.price(price)
-							.startPrice(stockDetailsList.get(i).getStartPrice())
-							.lowestPrice(lowestPrice)
-							.highestPrice(highestPrice)
-							.build();
+					StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder().createdAt(createdAt).price(price).startPrice(stockDetailsList.get(i).getStartPrice()).lowestPrice(lowestPrice).highestPrice(highestPrice).build();
 					result.add(priceHistoryByBar);
 				}
 			}
 		}
 		return result;
+	}
+
+	public TotalStockListResponse getTotalStockList() {
+		List<TotalStockList> totalStockList = new ArrayList<>();
+		// 주식 이름
+		List<Stock> totalStock = stocksService.findAllList();
+		for (Stock stock : totalStock) {
+			// 일별 주식 정보(오늘 기준)
+			StockDetail stockDetail = stockDetailsService.getLastDetail(stock);
+			// 주식명
+			String name = stock.getName();
+			// 현재가
+			int price = stockDetail.getPrice();
+			// 수익률 ((현재가 - 시가) / 시가) * 100
+			int startPrice = stockDetail.getStartPrice();
+			double incomeRatio = Math.round(((float) (price - startPrice) / startPrice) * 10000) / 100.0;
+			// 오늘 거래량
+			List<StockBuy> stockBuyList = stockBuysService.getTodayTransactions(stock, LocalDate.now().atStartOfDay());
+			int transCnt = 0;
+			for (StockBuy sb : stockBuyList) {
+				transCnt += (sb.getCntTotal() - sb.getCntNot());
+			}
+			/////////// 이미지 url 추가하기	///////////
+			TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).build();
+
+			totalStockList.add(stockInfo);
+		}
+		return TotalStockListResponse.builder().stock(totalStockList).build();
+	}
+
+	// 보유 주식 조회
+	public MyStockListResponse getMyStockList() {
+		List<MyStockList> myStockLists = new ArrayList<>();
+		// 내 주식 전체 평가 손익
+		int totalIncome = 0;
+		// 내 전체 주식 평가
+		int totalPrice = 0;
+		User user = userService.userFindByEmail();
+		List<StockHolding> stockHoldingList = stockHoldingsService.findAllByUser(user);
+		for (StockHolding sh : stockHoldingList) {
+			Stock stock = stocksService.findById(sh.getStock().getId());
+			StockDetail stockDetail = stockDetailsService.getLastDetail(stock);
+			// 주식 이름
+			String name = stock.getName();
+			// 주식 갯수
+			int cnt = sh.getCnt();
+			// 총 매수가
+			int totalPriceAvg = sh.getTotal();
+			// 현재가
+			int priceCur = stockDetail.getPrice();
+			// 현재 주식 평가총액
+			int totalPriceCur = sh.getCnt() * priceCur;
+			// 평균단가
+			int priceAvg = totalPriceAvg / sh.getCnt();
+			// 손익
+			int income = totalPriceCur - totalPriceAvg;
+			// 손익률
+			double incomeRatio = Math.round(((float) income / priceCur) * 10000) / 100.0;
+			totalIncome += income;
+			totalPrice += totalPriceCur;
+			myStockLists.add(MyStockList.builder().name(name).cnt(cnt).income(income).incomeRatio(incomeRatio).priceAvg(priceAvg).priceCur(priceCur).totalPriceAvg(totalPriceAvg).totalPriceCur(totalPriceCur).build());
+		}
+		return MyStockListResponse.builder().myStockList(myStockLists).totalIncome(totalIncome).totalPrice(totalPrice).build();
+	}
+
+	// 미체결 주식 조회
+	public MyWaitingStockOrderResponse getMyWaitingStockOrder() {
+		User user = userService.userFindByEmail();
+		Code code = codeService.findById("S001");
+		// 미체결 매수 리스트
+		List<StockBuy> stockBuyList = stockBuysService.getWaitingStockOrders(user, code, LocalDate.now().atStartOfDay(), 0);
+		// 미체결 매도 리스트
+		List<StockSell> stockSellList = stockSellsService.getWaitingStockOrders(user, code, LocalDate.now().atStartOfDay(), 0);
+
+		List<MyWaitingStockOrder> myWaitingStockOrders = new ArrayList<>();
+		for (StockBuy sb : stockBuyList) {
+			// 주식 이름
+			String transName = stocksService.findById(sb.getStock().getId()).getName();
+			// 1주당 주문 금액
+			int price = sb.getPrice();
+			// 미체결수
+			int cnt = sb.getCntNot();
+			// 총 주문금액
+			int amount = price * cnt;
+			// 거래 종류(매도/매수)
+			String type = "매수";
+			myWaitingStockOrders.add(MyWaitingStockOrder.builder()
+					.transName(transName)
+					.amount(amount)
+					.type(type)
+					.cnt(cnt)
+					.price(price)
+					.build());
+		}
+
+		for (StockSell ss : stockSellList) {
+			// 주식 이름
+			String transName = stocksService.findById(ss.getStock().getId()).getName();
+			// 1주당 주문 금액
+			int price = ss.getPrice();
+			// 미체결수
+			int cnt = ss.getCntNot();
+			// 총 주문금액
+			int amount = price * cnt;
+			// 거래 종류(매도/매수)
+			String type = "매도";
+			myWaitingStockOrders.add(MyWaitingStockOrder.builder()
+					.transName(transName)
+					.amount(amount)
+					.type(type)
+					.cnt(cnt)
+					.price(price)
+					.build());
+		}
+		return MyWaitingStockOrderResponse.builder().transaction(myWaitingStockOrders).build();
 	}
 
 
@@ -260,7 +346,7 @@ public class StockFacade {
 
 		rankService.deleteRanking();
 		for (Parking parking : parkingList) {
-			List<StockHolding> stockHoldingList = stockHoldingsService.getStockHolding(parking.getUser());
+			List<StockHolding> stockHoldingList = stockHoldingsService.findAllByUser(parking.getUser());
 			int balance = parking.getBalance();
 			for (StockHolding stockHolding : stockHoldingList) {
 				balance += stockHolding.getCnt() * stockPriceList.get(stockHolding.getStock().getName());

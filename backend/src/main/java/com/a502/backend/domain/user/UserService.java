@@ -3,16 +3,15 @@ package com.a502.backend.domain.user;
 import com.a502.backend.application.config.dto.CustomUserDetails;
 import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.config.generator.JwtUtil;
-import com.a502.backend.domain.user.dto.LoginDto;
-import com.a502.backend.domain.user.dto.SignUpDto;
 import com.a502.backend.application.entity.TemporaryUser;
 import com.a502.backend.application.entity.User;
+import com.a502.backend.domain.user.dto.LoginDto;
+import com.a502.backend.domain.user.dto.SignUpDto;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,35 +28,35 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final JwtUtil jwtUtil;
-    private final TemporaryUserRepository temporaryUserRepository;
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
+	private final ModelMapper modelMapper;
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+	private final JwtUtil jwtUtil;
+	private final TemporaryUserRepository temporaryUserRepository;
 
-    @Transactional
-    public UUID signup(String temporaryUserUuid, SignUpDto signUpDto) {
-        System.out.println("[UserService] 회원가입: " + signUpDto.toString());
+	@Transactional
+	public UUID signup(String temporaryUserUuid, SignUpDto signUpDto) {
+		System.out.println("[UserService] 회원가입: " + signUpDto.toString());
 
-        UUID uuid = convertToUuid(temporaryUserUuid);
+		UUID uuid = convertToUuid(temporaryUserUuid);
 
-        TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
-                .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
+		TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
+				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
 
-        findUserByTelephone(temporaryUser.getTelephone());
-        findUserByEmail(temporaryUser.getEmail());
+		findUserByTelephone(temporaryUser.getTelephone());
+		findUserByEmail(temporaryUser.getEmail());
 
-        User user = convertToUserEntity(signUpDto, temporaryUser);
-        userRepository.save(user);
+		User user = convertToUserEntity(signUpDto, temporaryUser);
+		userRepository.save(user);
 
-        temporaryUserRepository.delete(temporaryUser);
+		temporaryUserRepository.delete(temporaryUser);
 
-        return user.getUserUuid();
+		return user.getUserUuid();
 
-    }
+	}
 
-    public JWTokenDto login(LoginDto loginDto) {
+	public JWTokenDto login(LoginDto loginDto) {
 
         /*
             System.out.println("[UserService] 아이디/패스워드: "+loginDto.toString());
@@ -68,103 +67,112 @@ public class UserService implements UserDetailsService {
             System.out.println("[Controller] 6. 액세스 토큰: "+jwt.getAccessToken());
 
          */
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+		UsernamePasswordAuthenticationToken authenticationToken =
+				new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        JWTokenDto jwt = jwtUtil.generateToken(authentication);
+		JWTokenDto jwt = jwtUtil.generateToken(authentication);
 
-        return jwt;
-    }
+		return jwt;
+	}
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
       /*
         System.out.println("[service] email: "+username);
        */
 
-        User findMember = userRepository.findByEmail(username)
-                .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+		User findMember = userRepository.findByEmail(username)
+				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
 
-        CustomUserDetails cU = new CustomUserDetails(findMember);
-        return new CustomUserDetails(findMember);
-    }
+		CustomUserDetails cU = new CustomUserDetails(findMember);
+		return new CustomUserDetails(findMember);
+	}
 
 
-    public UUID checkDupleTelephone(String telephone) {
-        System.out.println("[UserService/번호중복] 전화번호: " + telephone);
+	public UUID checkDupleTelephone(String telephone) {
+		System.out.println("[UserService/번호중복] 전화번호: " + telephone);
 
-        findUserByTelephone(telephone);
+		findUserByTelephone(telephone);
 
-        TemporaryUser newUser = TemporaryUser.builder()
-                .telephone(telephone)
-                .build();
+		TemporaryUser newUser = TemporaryUser.builder()
+				.telephone(telephone)
+				.build();
 
-        TemporaryUser temporaryUser = temporaryUserRepository.save(newUser);
+		TemporaryUser temporaryUser = temporaryUserRepository.save(newUser);
 
-        return temporaryUser.getTemporaryUserUuid();
-    }
+		return temporaryUser.getTemporaryUserUuid();
+	}
 
-    @Transactional
-    public void checkDupleEmail(String temporaryUserUuidString, String email) {
-        System.out.println("[UserService/이메일중복] 이메일: " + email);
+	@Transactional
+	public void checkDupleEmail(String temporaryUserUuidString, String email) {
+		System.out.println("[UserService/이메일중복] 이메일: " + email);
 
-        UUID uuid = convertToUuid(temporaryUserUuidString);
+		UUID uuid = convertToUuid(temporaryUserUuidString);
 
-        findUserByEmail(email);
+		findUserByEmail(email);
 
-        TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
-                .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
+		TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
+				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
 
-        temporaryUser.updateEmail(email);
-    }
+		temporaryUser.updateEmail(email);
+	}
 
-    private UUID convertToUuid(String temporaryUserUuid) {
-        UUID uuid = null;
+	private UUID convertToUuid(String temporaryUserUuid) {
+		UUID uuid = null;
 
-        try {
-            uuid = UUID.fromString(temporaryUserUuid);
-        } catch (IllegalArgumentException e) {
-            throw BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST);
-        }
+		try {
+			uuid = UUID.fromString(temporaryUserUuid);
+		} catch (IllegalArgumentException e) {
+			throw BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST);
+		}
 
-        return uuid;
-    }
+		return uuid;
+	}
 
-    private User convertToUserEntity(SignUpDto signUpDto, TemporaryUser temporaryUser) {
+	private User convertToUserEntity(SignUpDto signUpDto, TemporaryUser temporaryUser) {
 
-        String encodedPassword = passwordEncoder.encode(signUpDto.getPassword());
+		String encodedPassword = passwordEncoder.encode(signUpDto.getPassword());
 
-        return User.builder()
-                .name(signUpDto.getName()) // SignUpDto에 name 필드가 있다고 가정
-                .email(temporaryUser.getEmail())
-                .password(encodedPassword)
-                .gender(signUpDto.getGender())
-                .address(signUpDto.getAddress())
-                .address2(signUpDto.getAddress2())
-                .telephone(temporaryUser.getTelephone())
-                .birth(LocalDate.parse(signUpDto.getBirth())) // ISO 날짜 포맷으로 변경
-                .build();
-    }
+		return User.builder()
+				.name(signUpDto.getName()) // SignUpDto에 name 필드가 있다고 가정
+				.email(temporaryUser.getEmail())
+				.password(encodedPassword)
+				.gender(signUpDto.getGender())
+				.address(signUpDto.getAddress())
+				.address2(signUpDto.getAddress2())
+				.telephone(temporaryUser.getTelephone())
+				.birth(LocalDate.parse(signUpDto.getBirth())) // ISO 날짜 포맷으로 변경
+				.build();
+	}
 
-    private void findUserByTelephone(String telephone) {
-        userRepository.findByTelephone(telephone).ifPresent(user -> {
-            throw BusinessException.of(ErrorCode.API_ERROR_TELEPHONE_DUPLICATION_EXIST);
-        });
-    }
+	private void findUserByTelephone(String telephone) {
+		userRepository.findByTelephone(telephone).ifPresent(user -> {
+			throw BusinessException.of(ErrorCode.API_ERROR_TELEPHONE_DUPLICATION_EXIST);
+		});
+	}
 
-    private void findUserByEmail(String email) {
-        userRepository.findByEmail(email).ifPresent(user -> {
-            throw BusinessException.of(ErrorCode.API_ERROR_EMAIL_DUPLICATION_EXIST);
-        });
-    }
-    public User findById(int id) {
-        return userRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
-    }
+	private void findUserByEmail(String email) {
+		userRepository.findByEmail(email).ifPresent(user -> {
+			throw BusinessException.of(ErrorCode.API_ERROR_EMAIL_DUPLICATION_EXIST);
+		});
+	}
 
+	public User findById(int id) {
+		return userRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+	}
+
+	public User userFindByEmail() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName(); // Username 추출
+
+		User user = userRepository.findByEmail(email).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+
+		return user;
+	}
 
 }

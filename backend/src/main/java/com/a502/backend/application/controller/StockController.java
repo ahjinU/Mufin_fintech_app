@@ -68,13 +68,13 @@ public class StockController {
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_PRICE_HISTORY_BAR));
 	}
 
-	@GetMapping("ranking/user")
-	public ResponseEntity<ApiResponse<RankingDetail>> getRanking(int userId){
+	@GetMapping("/ranking/user")
+	public ResponseEntity<ApiResponse<RankingDetail>> getRanking(@RequestParam(value = "userId") int userId){
 		RankingDetail result = stockFacade.getRanking(userId);
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_RANKING_USER, result));
 	}
 
-	@GetMapping("ranking/total")
+	@GetMapping("/ranking/total")
 	public ResponseEntity<ApiResponse<RankingResponse>> getRankingList(){
 		RankingResponse result = stockFacade.getRanknigList();
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_RANKING_LIST, result));

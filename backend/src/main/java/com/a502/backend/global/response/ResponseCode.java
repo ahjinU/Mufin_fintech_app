@@ -16,6 +16,9 @@ public enum ResponseCode {
     API_SUCCESS_LOGIN("U003","로그인 되었습니다."),
     API_SUCCESS_SIGNUP("U004","회원가입 되었습니다."),
 
+    // account
+    API_SUCCESS_ACCOUNT_EXIST("A001", "존재하는 계좌입니다."),
+    API_SUCCESS_ACCOUNT_IS_SUFFICIENT("A002", "정상적으로 출금이 가능합니다."),
 
     // Stock
     API_SUCCESS_STOCK_BUY("S001", "성공적으로 매수 주문했습니다."),

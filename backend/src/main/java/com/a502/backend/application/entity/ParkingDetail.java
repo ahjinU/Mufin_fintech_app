@@ -36,6 +36,9 @@ public class ParkingDetail extends BaseEntity {
 	@Column(name = "balance")
 	private int balance;
 
+	@Column(name="ratio")
+	private double ratio;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parking_id")
 	private Parking parking;
@@ -46,11 +49,12 @@ public class ParkingDetail extends BaseEntity {
 	private Code code;
 
 	@Builder
-	public ParkingDetail(String counterpartyName, int cnt, int amount, int balance, Parking parking, Code code) {
+	public ParkingDetail(String counterpartyName, int cnt, int amount, int balance, double ratio, Parking parking, Code code) {
 		this.counterpartyName = counterpartyName;
 		this.cnt = cnt;
 		this.amount = amount;
 		this.balance = balance;
+		this.ratio = ratio;
 		this.parking = parking;
 		this.code = code;
 	}

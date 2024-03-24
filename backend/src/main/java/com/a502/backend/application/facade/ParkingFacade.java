@@ -25,7 +25,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
-@RequestMapping("/api/parking")
 public class ParkingFacade {
 	private final ParkingDetailsService parkingDetailsService;
 	private final ParkingService parkingService;
@@ -33,7 +32,6 @@ public class ParkingFacade {
 	private final CodeService codeService;
 
 	// 파킹통장 내역 조회
-	@PostMapping("/history")
 	public ParkingDetailListResponse getParkingDetails() {
 		User user = userService.userFindByEmail();
 		Parking parking = parkingService.findByUser(user);

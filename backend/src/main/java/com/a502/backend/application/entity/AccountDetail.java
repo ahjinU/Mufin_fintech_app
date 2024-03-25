@@ -22,6 +22,12 @@ public class AccountDetail extends BaseEntity {
 	@Column(name = "account_detail_uuid")
 	private UUID accountDetailUuid;
 
+	@PrePersist
+	public void initUUID() {
+		if (accountDetailUuid == null)
+			accountDetailUuid = UUID.randomUUID();
+	}
+
 	@Column(name = "amount")
 	private int amount;
 
@@ -72,9 +78,4 @@ public class AccountDetail extends BaseEntity {
 		this.accountDetailStatusCode = accountDetailStatusCode;
 	}
 
-	@PrePersist
-	public void initUUID() {
-		if (accountDetailUuid == null)
-			accountDetailUuid = UUID.randomUUID();
-	}
 }

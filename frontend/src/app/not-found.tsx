@@ -3,8 +3,11 @@
 import Lottie from 'react-lottie-player';
 import lottieJson from '../../public/lotties/404.json';
 import { Button } from '@/components';
+import { useRouter } from 'next/navigation';
 
 export default function NotFound() {
+  const router = useRouter();
+
   return (
     <div className="relative w-[36rem] h-[64rem] pt-[5rem]">
       <section className="w-full mx-auto flex flex-col gap-[1rem]">
@@ -20,7 +23,11 @@ export default function NotFound() {
       </section>
 
       <div className="w-full absolute p-[1rem] left-0 bottom-0">
-        <Button mode="ACTIVE" label="홈으로 이동하기" />
+        <Button
+          mode="ACTIVE"
+          label="홈으로 이동하기"
+          onClick={() => router.push('/')}
+        />
       </div>
     </div>
   );

@@ -22,4 +22,13 @@ public class CodeService {
 	public void save(String id, String name) {
 			codeRepository.save(Code.builder().id(id).name(name).build());
 	}
+
+	public Code findStatusCode(String codeName) {
+		return codeRepository.findByName(codeName)
+				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_CODE_NOT_EXIST));
+	}
+	public Code findTypeCode(String codeName) {
+		return codeRepository.findByName(codeName)
+				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_CODE_NOT_EXIST));
+	}
 }

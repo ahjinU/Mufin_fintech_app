@@ -10,7 +10,7 @@ const DayList = ({ list }: { list: Date[] }) => {
   }
 
   return (
-    <div className="px-[1.2rem] flex flex-col w-full items-center gap-[0.5rem]">
+    <div className="px-[1.2rem] flex flex-col w-full items-center">
       {cal?.map((day, index) => (
         <div className="flex flex-row w-full h-[4.5rem]" key={`cal-${index}`}>
           {day?.map((day, index) => (

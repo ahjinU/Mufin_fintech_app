@@ -23,9 +23,9 @@ const Day = (props: DayProps) => {
         <p className="text-[2rem]">.</p>
       </div>
       {day && format(day, 'd')}
-      <div className="flex w-full flex-col leading-[1rem] t items-center">
-        <p className="text-[1rem]">{day && format(day, 'd')}</p>
-        <p className="text-[1rem]">{day && format(day, 'd')}</p>
+      <div className="flex w-full flex-col leading-[1rem] mt-[-0.3rem] items-center">
+        <p className="text-[0.8rem]">-20,000</p>
+        <p className="text-[0.8rem]">+30,000</p>
       </div>
     </div>
   );

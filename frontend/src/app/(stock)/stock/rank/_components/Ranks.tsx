@@ -28,7 +28,7 @@ export default function Ranks() {
               mode={'GENERAL'}
               rank={rank.rank}
               name={rank.childName}
-              chocochip={rank.balance}
+              chocochip={commaNum(rank.balance)}
               key={index}
             />
           );
@@ -45,7 +45,7 @@ export default function Ranks() {
           mode={'HIGHLIGHT'}
           rank={myRank.rank}
           name={myRank.childName}
-          chocochip={myRank.balance}
+          chocochip={commaNum(myRank.balance)}
         />
       </div>
     </div>

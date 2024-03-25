@@ -13,7 +13,7 @@ public class StockConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	// //클라이언트에서 websocket에 접속하는 endpoint를 등록
 	public void registerStompEndpoints(StompEndpointRegistry registry){
-		registry.addEndpoint("/ws-connection").setAllowedOriginPatterns("*")
+		registry.addEndpoint("/api/ws-connection").setAllowedOriginPatterns("*")
 			.withSockJS();
 	}
 

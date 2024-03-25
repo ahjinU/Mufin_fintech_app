@@ -45,7 +45,6 @@ public class User extends BaseEntity {
 	@Column(name = "address2")
 	private String address2;
 
-
 	@Column(name = "telephone")
 	private String telephone;
 

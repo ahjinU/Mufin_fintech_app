@@ -1,10 +1,8 @@
 package com.a502.backend.application.facade;
 
-import com.a502.backend.application.entity.Code;
-import com.a502.backend.application.entity.Stock;
-import com.a502.backend.application.entity.StockDetail;
-import com.a502.backend.application.entity.User;
+import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.numberimg.NumberImageService;
+import com.a502.backend.domain.payment.AccountService;
 import com.a502.backend.domain.stock.StockDetailsService;
 import com.a502.backend.domain.stock.StocksService;
 import com.a502.backend.domain.user.UserService;
@@ -28,11 +26,37 @@ public class InitFacade {
     private final StockDetailsService stockDetailsService;
     private final S3FileUploader s3FileUploader;
     private final NumberImageService numberImageService;
+    private final AccountService accountService;
+
+    private final SchedulerFacade schedulerFacade;
     public void run() throws IOException {
+
+//        List<Stock> stocks = stocksService.findAllList();
+//
+//        for(Stock stock : stocks){
+//            stockDetailsService.save(10000, 10000, 10000, 20000, 10000, 10000, stock);
+//        }
+
+        initCode();
+//        initStock();
+//        initKeypadImage();
+
+    }
+
+    /**
+     * 유저 추가 메서드
+     * @param email 회원 이메일
+     * @param password 회원 비밀번호
+     */
+    private void addUser(String email, String password){
 //        User user = userService.save("gkstmf1403@ssafy.com", "ssafy");
 //        System.out.println(user.toString());
-//        user.setName("한슬");
+    }
 
+    /**
+     * 상태 코드를 초기화 메서드
+     */
+    private void initCode() {
         codeService.save("PD001","이자");
         codeService.save("PD002","매도");
         codeService.save("PD003","매수");
@@ -64,17 +88,6 @@ public class InitFacade {
         codeService.save("L002","진행중");
         codeService.save("L003","거절");
         codeService.save("L004","상환완료");
-
-
-
-//        List<Stock> stocks = stocksService.findAllList();
-//
-//        for(Stock stock : stocks){
-//            stockDetailsService.save(10000, 10000, 10000, 20000, 10000, 10000, stock);
-//        }
-
-//        initStock();
-//        saveKeypadImage();
     }
 
     /**
@@ -82,15 +95,15 @@ public class InitFacade {
      * @throws IOException
      */
     private void initStock() throws IOException {
-        String image = s3FileUploader.uploadFile("images/" + "stock/"+ "wind" + ".png");
-        stocksService.save("바람개비", image);
-        image = s3FileUploader.uploadFile("images/" + "stock/"+ "rain" + ".png");
-        stocksService.save("우비", image);
-        image = s3FileUploader.uploadFile("images/" + "stock/"+ "icecream" + ".png");
-        stocksService.save("아이스크림", image);
-        image = s3FileUploader.uploadFile("images/" + "stock/"+ "snow" + ".png");
-        stocksService.save("눈오리", image);
-
+//        String image = s3FileUploader.uploadFile("images/" + "stock/"+ "wind" + ".png");
+        String images = s3FileUploader.uploadFile("images/"+ "icon-" + 0 + ".png");
+        stocksService.save("바람개비", images);
+//        image = s3FileUploader.uploadFile("images/" + "stock/"+ "rain" + ".png");
+        stocksService.save("우산", images);
+//        image = s3FileUploader.uploadFile("images/" + "stock/"+ "icecream" + ".png");
+        stocksService.save("아이스크림", images);
+//        image = s3FileUploader.uploadFile("images/" + "stock/"+ "snow" + ".png");
+        stocksService.save("눈오리", images);
     }
 
     /**
@@ -98,11 +111,9 @@ public class InitFacade {
      * @throws IOException
      */
     private void initKeypadImage() throws IOException{
-//        for (int i = 0; i < 10; i++) {
-//            String image = s3FileUploader.uploadFile("images/"+ "keypad" + i + ".png");
-//            numberImageService.saveImage(image);
-//        }
-        String image = s3FileUploader.uploadFile("images/" + "shinchan"+ ".png");
-        numberImageService.saveImage(image);
+        for (int i = 0; i < 10; i++) {
+            String image = s3FileUploader.uploadFile("images/"+ "icon-" + i + ".png");
+            numberImageService.saveImage(image);
+        }
     }
 }

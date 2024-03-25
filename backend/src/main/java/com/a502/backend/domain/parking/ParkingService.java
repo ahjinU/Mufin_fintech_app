@@ -35,6 +35,11 @@ public class ParkingService {
     }
 
     @Transactional
+    public List<Parking> findAllList(){
+        return parkingRepository.findAll();
+    }
+
+    @Transactional
     public void validParkingBalance(User user, int balance) {
         Parking parking = findByUser(user);
         if (parking.getBalance() < balance)

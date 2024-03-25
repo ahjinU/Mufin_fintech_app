@@ -9,6 +9,6 @@ import java.util.Optional;
 
 interface StocksRepository extends JpaRepository<Stock,Integer> {
     Optional<Stock> findByName(String name);
-    List<Stock> findAllBy();
+    List<Stock> findAll();
 
 }

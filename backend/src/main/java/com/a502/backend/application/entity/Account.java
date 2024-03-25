@@ -4,6 +4,7 @@ import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,7 +40,7 @@ public class Account extends BaseEntity {
 	private int paymentAmount;
 
 	@Column(name = "payment_date")
-	private int paymentDate; //월 납입일
+	private int paymentDate;
 
 	@Column(name = "payment_cycle")
 	private int paymentCycle;

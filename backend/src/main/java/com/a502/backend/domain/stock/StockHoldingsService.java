@@ -57,6 +57,11 @@ public class StockHoldingsService {
         stockHolding.setTotal(stockHoldingTotal + cnt * price);
     }
 
+    // 유저가 가진 주식 조회
+    public List<StockHolding> findAllByUser(User user){
+        return stockHoldingsRepository.findAllByUser(user).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_STOCK_HOLDING_NOT_EXIST));
+    }
+
 
     public void save(StockHolding stockHolding) {
         stockHoldingsRepository.save(stockHolding);

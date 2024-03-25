@@ -40,18 +40,18 @@ public class StockController {
 	@PostMapping("/buy")
 	public ResponseEntity<ApiResponse<Void>> stockBuy(int userId, String name, int price, int cnt_total) {
 		// 주식 매수 주문 넣을 때마다 sub/orders/name 으로 데이터 보내주기
+		stockFacade.stockBuy(userId, name, price, cnt_total);
 		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(name);
 		sendingOperations.convertAndSend("/sub/orders/" + name, result);
-		stockFacade.stockBuy(userId, name, price, cnt_total);
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_BUY));
 	}
 
 	@PostMapping("/sell")
 	public ResponseEntity<ApiResponse<Void>> stockSell(int userId, String name, int price, int cnt_total) {
 		// 주식 매도 주문 넣을 때마다 sub/orders/name 으로 데이터 보내주기
+		stockFacade.stockSell(userId, name, price, cnt_total);
 		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(name);
 		sendingOperations.convertAndSend("/sub/orders/" + name, result);
-		stockFacade.stockSell(userId, name, price, cnt_total);
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_SELL));
 	}
 

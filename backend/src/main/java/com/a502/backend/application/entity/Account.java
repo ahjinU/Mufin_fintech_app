@@ -81,4 +81,16 @@ public class Account extends BaseEntity {
 		this.statusCode = statusCode;
 		this.typeCode = typeCode;
 	}
+
+	public void updateCode(Code code){
+		this.statusCode = code;
+	}
+
+	public int updateIncorectCnt(int cnt){
+		return this.incorrectCount = cnt;
+	}
+
+	public void updatePassword(String password){
+		this.password = password;
+	}
 }

@@ -15,6 +15,10 @@ public class CodeService {
 		return codeRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_NO_AUTHORIZATION));
 	}
 
+	public Code findByName(String name){
+		return codeRepository.findByName(name).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_NO_AUTHORIZATION));
+	}
+
 	public void save(String id, String name) {
 			codeRepository.save(Code.builder().id(id).name(name).build());
 	}

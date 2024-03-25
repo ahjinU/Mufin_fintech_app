@@ -24,8 +24,12 @@ public enum ErrorCode {
     API_ERROR_ACCOUNT_NOT_EXIST(400, "A001", "존재하지 않는 계좌 입니다."),
     API_ERROR_ACCOUNT_IS_STOPPED(422, "A002","거래가 정지된 계좌입니다."),
     API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE(422, "A003", "잔액이 부족해 출금이 불가능합니다."),
+    API_ERROR_ACCOUNT_IS_NOT_YOURS(400, "A004", "접근권한이 없는 계좌입니다."),
     // AccountDetil
     API_ERROR_ACCOUNT_DETAIL_NOT_EXIST(400, "AD01", "존재하지 않는 계좌 거래 내역 입니다."),
+
+    // Keypad
+    API_ERROR_KEYPAD_TIMEOUT(400, "K001", "키패드 요청 시간이 만료되었습니다."),
 
     // Alert
     API_ERROR_ALERT_NOT_EXIST(400, "AL01", "존재하지 않는 알림 입니다."),

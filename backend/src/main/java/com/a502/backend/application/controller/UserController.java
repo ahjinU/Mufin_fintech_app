@@ -3,6 +3,10 @@ package com.a502.backend.application.controller;
 import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.config.generator.JwtProvider;
 import com.a502.backend.application.config.generator.JwtUtil;
+import com.a502.backend.application.entity.User;
+import com.a502.backend.application.facade.KeypadFacade;
+import com.a502.backend.domain.numberimg.request.KeyPadRequest;
+import com.a502.backend.domain.numberimg.response.KeypadListResponse;
 import com.a502.backend.domain.user.dto.EmailDto;
 import com.a502.backend.domain.user.dto.LoginDto;
 import com.a502.backend.domain.user.dto.SignUpDto;
@@ -11,6 +15,7 @@ import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
+import com.amazonaws.Response;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,7 +41,7 @@ import static com.a502.backend.global.response.ResponseCode.*;
 public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
-
+    private final KeypadFacade keypadFacade;
 
     private final JwtProvider tokenProvider;
     private final JwtUtil jwtUtil;
@@ -149,4 +154,10 @@ public class UserController {
         return cookie;
     }
 
+    @PostMapping("/keypad/image")
+    public ResponseEntity<ApiResponse<KeypadListResponse>> getKeypadList(int userId, KeyPadRequest request){
+        KeypadListResponse response = keypadFacade.getKeypadList(userId, request);
+        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_KEYPAD_LIST, response));
+
+    }
 }

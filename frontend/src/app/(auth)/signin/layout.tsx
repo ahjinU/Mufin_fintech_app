@@ -8,7 +8,7 @@ export default function Layout({
   return (
     <div className="min-h-screen px-[1.2rem] bg-custom-white">
       <div className="flex items-center w-full h-[5.6rem]">
-        <BackButton label="로그인" link="/" />
+        <BackButton label="로그인" />
       </div>
       {children}
     </div>

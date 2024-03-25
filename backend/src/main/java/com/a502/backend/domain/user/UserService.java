@@ -90,9 +90,6 @@ public class UserService implements UserDetailsService {
 
     public JWTokenDto login(LoginDto loginDto) {
 
-        /*
-
-         */
         System.out.println("[UserService] 아이디/패스워드: "+loginDto.toString());
         System.out.println("[UserService] 1. authenticationToken 확인");
 
@@ -178,7 +175,6 @@ public class UserService implements UserDetailsService {
     private User convertToUserEntity(SignUpDto signUpDto, TemporaryUser temporaryUser, User parent) {
 
         String encodedPassword = passwordEncoder.encode(signUpDto.getPassword());
-        Code parentCode = codeService.findTypeCode("부모");
 
         User registUser =  User.builder()
                 .name(signUpDto.getName()) // SignUpDto에 name 필드가 있다고 가정
@@ -188,13 +184,11 @@ public class UserService implements UserDetailsService {
                 .address(signUpDto.getAddress())
                 .address2(signUpDto.getAddress2())
                 .telephone(temporaryUser.getTelephone())
-                .typeCode(parentCode)
                 .birth(LocalDate.parse(signUpDto.getBirth())) // ISO 날짜 포맷으로 변경
                 .build();
 
         if(parent!=null){
-            Code childCode = codeService.findTypeCode("아이");
-            registUser.addParent(parent,childCode); // 찾은 부모 사용자를 설정
+            registUser.addParent(parent); // 찾은 부모 사용자를 설정
         }
 
         return registUser;
@@ -218,6 +212,8 @@ public class UserService implements UserDetailsService {
     public User userFindByEmail(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName(); // Username 추출
+
+        System.out.println("email: "+email);
 
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));

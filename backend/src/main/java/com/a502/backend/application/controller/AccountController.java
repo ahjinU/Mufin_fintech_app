@@ -36,6 +36,7 @@ public class AccountController {
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<DepositWithdrawalAccountDto>> login(@Valid @RequestBody String password) {
 
+        System.out.println("[AccountController]: create");
 
         DepositWithdrawalAccountDto account = accountService.createDepositWithdrawalAccount(password);
 

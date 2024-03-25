@@ -30,7 +30,7 @@ public class Account extends BaseEntity {
 	private String accountNumber;
 
 	@Column(name = "balance")
-	private AtomicInteger balance;
+	private int balance;
 
 	@Column(name = "interestAmount")
 	private int interestAmount; //이자수령액
@@ -67,7 +67,7 @@ public class Account extends BaseEntity {
 	private Code typeCode;
 
 	@Builder
-	public Account(String accountNumber, AtomicInteger balance, int interestAmount, int paymentAmount, int paymentDate, int paymentCycle, String password, int incorrectCount, User user, Code statusCode, Code typeCode) {
+	public Account(String accountNumber, int balance, int interestAmount, int paymentAmount, int paymentDate, int paymentCycle, String password, int incorrectCount, User user, Code statusCode, Code typeCode) {
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.interestAmount = interestAmount;

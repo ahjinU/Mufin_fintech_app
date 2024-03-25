@@ -16,6 +16,9 @@ public enum ResponseCode {
 	API_SUCCESS_LOGIN("U003", "로그인 되었습니다."),
 	API_SUCCESS_SIGNUP("U004", "회원가입 되었습니다."),
 
+    // account
+    API_SUCCESS_ACCOUNT_EXIST("A001", "존재하는 계좌입니다."),
+    API_SUCCESS_ACCOUNT_IS_SUFFICIENT("A002", "정상적으로 출금이 가능합니다."),
 
 	// Stock
 	API_SUCCESS_STOCK_BUY("S001", "성공적으로 매수 주문했습니다."),
@@ -25,6 +28,8 @@ public enum ResponseCode {
 	API_SUCCESS_STOCK_MINE("S005","보유 주식 정보 조회에 성공했습니다."),
 	API_SUCCESS_STOCK_GET_ALL_INFO("S006", "전체 주식 정보 조회에 성공했습니다."),
 	API_SUCCESS_STOCK_GET_WAITING_INFO("S007", "미체결 주식 정보 조회에 성공했습니다."),
+    API_SUCCESS_RANKING_USER("S005", "회원 랭킹조회에 성공했습니다."),
+    API_SUCCESS_RANKING_LIST("S006", "1 ~ 10위 랭킹 조회에 성공했습니다."),
 
 	// ParkingDetail
 	API_SUCCESS_PARKING_DETAILS_GET("PD001","성공적으로 파킹통장 내역을 조회하였습니다."),

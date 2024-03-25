@@ -6,6 +6,7 @@ import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class StocksService {
     }
 
     public List<Stock> findAllList(){
-        return stocksRepository.findAllBy();
+        return stocksRepository.findAll();
     }
 
 }

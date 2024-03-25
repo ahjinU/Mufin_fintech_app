@@ -64,17 +64,16 @@ public class PayFacade {
 		String accountNumberOut = transferMoneyRequest.getAccountNumberOut();
 		int amount = transferMoneyRequest.getAmount();
 		String transType = transferMoneyRequest.getTransType();
+		System.out.println(accountNumberIn + "," + accountNumberOut + "," + amount + "," + transType);
 
 		Account accountOut = accountService.findByAccountNumber(accountNumberOut);
 		Account accountIn = accountService.findByAccountNumber(accountNumberIn);
 
-		AtomicInteger balanceOut = new AtomicInteger(accountOut.getBalance());
-		AtomicInteger balanceIn = new AtomicInteger(accountIn.getBalance());
-
 		// 송금처리
-		int afterBalanceOut = balanceOut.addAndGet(-amount);
-		int afterBalanceIn = balanceIn.addAndGet(+amount);
-
+		int afterBalanceOut = accountOut.getBalance() - amount;
+		int afterBalanceIn = accountIn.getBalance() + amount;
+		System.out.println(afterBalanceIn);
+		System.out.println(afterBalanceOut);
 		// 거래내역 저장
 		// 송금 하는 사람
 		accountDetailService.save(AccountDetail.builder()
@@ -97,6 +96,5 @@ public class PayFacade {
 				.counterpartyAccount(accountOut.getAccountNumber())
 				.counterpartyName(accountOut.getUser().getName())
 				.build());
-
 	}
 }

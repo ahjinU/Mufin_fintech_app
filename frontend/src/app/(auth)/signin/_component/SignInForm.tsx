@@ -52,7 +52,7 @@ export default function SignInForm() {
   return (
     <div>
       <p>안녕하세요, {session.user.name}님!</p>
-      <Button label="로그아웃" mode="ACTIVE" onClick={() => signOut} />
+      <Button label="로그아웃" mode="ACTIVE" onClick={() => signOut()} />
     </div>
   );
 }

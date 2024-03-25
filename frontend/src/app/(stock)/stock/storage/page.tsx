@@ -22,11 +22,13 @@ export default async function StockStroage() {
   const { MyParking } = useStockStore.getState();
   const { balanceToday, ratio, balanceTmrw } = MyParking;
 
-  const storageRes = await getParkingAccount();
-  const parkingList = storageRes?.data.transactions;
+  // const storageRes = await getParkingAccount();
+  // const parkingList = storageRes?.data.transactions;
+  const parkingList: TransactionType[] = [];
 
-  const waitStocksRes = await postStockOrderWait();
-  const waitStockLSist = waitStocksRes?.data.transactions;
+  // const waitStocksRes = await postStockOrderWait();
+  // const waitStockList = waitStocksRes?.data.transactions;
+  const waitStockList: TransactionType[] = [];
 
   return (
     <div>
@@ -66,7 +68,7 @@ export default async function StockStroage() {
               },
               {
                 label: '미체결 주식',
-                component: <PendingList list={waitStockLSist} />,
+                component: <PendingList list={waitStockList} />,
               },
             ]}
           />

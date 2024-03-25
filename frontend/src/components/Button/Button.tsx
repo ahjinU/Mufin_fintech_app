@@ -4,7 +4,12 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-export default function Button({ mode, label, ...props }: ButtonProps) {
+export default function Button({
+  mode,
+  label,
+  onClick,
+  ...props
+}: ButtonProps) {
   let backgroundColor: string;
   switch (mode) {
     case 'ACTIVE':
@@ -23,6 +28,7 @@ export default function Button({ mode, label, ...props }: ButtonProps) {
   return (
     <button
       className={`w-full h-[4.4rem] rounded-lg text-custom-white custom-semibold-text ${backgroundColor}`}
+      onClick={onClick}
       {...props}
     >
       {label}

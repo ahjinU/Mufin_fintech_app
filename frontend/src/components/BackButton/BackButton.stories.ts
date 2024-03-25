@@ -11,9 +11,6 @@ const meta = {
     label: {
       description: '버튼의 텍스트입니다.',
     },
-    link: {
-      description: '이전 페이지 라우트입니다.',
-    },
   },
 } satisfies Meta<typeof BackButton>;
 
@@ -23,6 +20,5 @@ type Story = StoryObj<typeof meta>;
 export const Main: Story = {
   args: {
     label: '회원가입',
-    link: '/',
   },
 };

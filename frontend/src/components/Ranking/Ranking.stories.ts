@@ -31,7 +31,7 @@ export const HighlightTopRank: Story = {
     mode: 'HIGHLIGHT',
     rank: 1,
     name: '김라딘',
-    chocochip: '999,999,990',
+    chocochip: 999999990,
   },
 };
 
@@ -40,7 +40,7 @@ export const Highlight: Story = {
     mode: 'HIGHLIGHT',
     rank: 472,
     name: '윤지니',
-    chocochip: '21,000,970',
+    chocochip: 21000970,
   },
 };
 
@@ -49,6 +49,6 @@ export const General: Story = {
     mode: 'GENERAL',
     rank: 10,
     name: '김지니',
-    chocochip: '990,999,990',
+    chocochip: 990999990,
   },
 };

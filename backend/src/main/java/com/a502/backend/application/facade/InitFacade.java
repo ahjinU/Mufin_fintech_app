@@ -109,11 +109,9 @@ public class InitFacade {
      * @throws IOException
      */
     private void initKeypadImage() throws IOException{
-//        for (int i = 0; i < 10; i++) {
-//            String image = s3FileUploader.uploadFile("images/"+ "keypad" + i + ".png");
-//            numberImageService.saveImage(image);
-//        }
-        String image = s3FileUploader.uploadFile("images/" + "shinchan"+ ".png");
-        numberImageService.saveImage(image);
+        for (int i = 0; i < 10; i++) {
+            String image = s3FileUploader.uploadFile("images/"+ "icon-" + i + ".png");
+            numberImageService.saveImage(image);
+        }
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -38,6 +40,17 @@ public class StockDetailsService {
         stockDetail.setPrice(price);
         stockDetail.setHighestPrice(Math.max(stockDetail.getHighestPrice(), price));
         stockDetail.setLowestPrice(Math.min(stockDetail.getLowestPrice(), price));
+    }
+
+    @Transactional
+    public HashMap<String, Integer> getStockPriceList(List<Stock> stocks){
+        HashMap<String, Integer> hashList = new HashMap<>();
+
+        for(Stock stock: stocks){
+            StockDetail detail = getLastDetail(stock);
+            hashList.put(stock.getName(), detail.getPrice());
+        }
+        return hashList;
     }
 
     public StockDetail save(int price, int highestPrice, int lowestPrice, int upperLimitPrice, int lowerLimitPrice, int startPrice, Stock stock) {

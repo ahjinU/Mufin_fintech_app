@@ -231,8 +231,7 @@ public class StockFacade {
 					y.add(price);
 					StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder()
 							.x(Timestamp.valueOf(createdAt))
-							.y(y)
-							.build();
+							.y(y).build();
 					result.add(priceHistoryByBar);
 				}
 			}

@@ -1,6 +1,12 @@
-import { ComplexInput, Header, MoneyShow, Tab } from '@/components';
+import {
+  ComplexInput,
+  FlexBox,
+  Header,
+  MoneyShow,
+  OtherInfoElement,
+} from '@/components';
 import Calendar from './_components/Calendar';
-const url = `${process.env.REACT_APP_WEATHER_API}?q=Seoul&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
+import { commaNum } from '@/utils/commaNum';
 
 export default async function Book() {
   return (
@@ -14,10 +20,36 @@ export default async function Book() {
           <MoneyShow
             mode={'DIVIDED'}
             text={['지출', '수입']}
-            money={['-92000', '19000']}
+            money={[commaNum(-92000), commaNum(-92000)]}
             unit={'원'}
           />
         </ComplexInput>
+        <FlexBox
+          isDivided={false}
+          mode="LIST"
+          date="5일 오늘"
+          topChildren={
+            <OtherInfoElement
+              leftExplainText={'화장품'}
+              leftHighlightText={'씨제이올리브영 주식회사'}
+              money={`${commaNum(3000)}원`}
+              state={'UP'}
+            />
+          }
+        />
+        <FlexBox
+          isDivided={false}
+          mode="LIST"
+          date="5일 오늘"
+          topChildren={
+            <OtherInfoElement
+              leftExplainText={'화장품'}
+              leftHighlightText={'씨제이올리브영 주식회사'}
+              money={`${commaNum(3000)}원`}
+              state={'UP'}
+            />
+          }
+        />
       </div>
     </div>
   );

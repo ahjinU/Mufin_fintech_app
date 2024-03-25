@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-const useStore = create<Model>((set) => ({
+const useBookStore = create<Model>((set) => ({
   isMonth: true,
   updateIsMonth: () => set((state) => ({ isMonth: !state.isMonth })),
 
@@ -16,4 +16,4 @@ export interface Model {
   updateCurrentMonth: (month: Date) => void;
 }
 
-export default useStore;
+export default useBookStore;

@@ -14,8 +14,6 @@ import {
 const useDate = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  console.log(currentMonth);
-
   const calculateDateRange = () => {
     const monthStart = startOfMonth(currentMonth); // 이번달 시작 날짜 예) 1일
     const monthEnd = endOfMonth(monthStart); //이번달 끝 날짜 예) 31일

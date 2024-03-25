@@ -3,12 +3,11 @@
 import React, { useEffect } from 'react';
 import { addDays, addMonths, format, subMonths } from 'date-fns';
 import useDate from '@/utils/date';
-import Image from 'next/image';
 import DateList from './DateList';
 import DayList from './DayList';
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
 
-const Calendar = () => {
+export default function Calendar() {
   const { currentMonth, setCurrentMonth, calculateDateRange } = useDate();
   const { startDate, endDate } = calculateDateRange();
 
@@ -46,6 +45,4 @@ const Calendar = () => {
       <DayList list={days} />
     </div>
   );
-};
-
-export default Calendar;
+}

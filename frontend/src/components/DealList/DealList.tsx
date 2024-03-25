@@ -29,13 +29,13 @@ export default function DealList({ mode, deals, ...props }: DealListProps) {
         ? deals.map(({ name, count, totalPrice }) => {
             return (
               <>
-                <div className="col-span-4 text-[1.6rem] font-normal pl-[0.3rem]">
+                <div className="col-span-4 text-[1.6rem] font-normal pl-[0.3rem] text-custom-black">
                   <p>{name}</p>
                 </div>
-                <div className="text-[1.6rem] font-normal text-center">
+                <div className="text-[1.6rem] font-normal text-center text-custom-black">
                   <p>{count}</p>
                 </div>
-                <div className="col-span-2 text-[1.6rem] font-normal text-right pr-[0.5rem]">
+                <div className="col-span-2 text-[1.6rem] font-normal text-right pr-[0.5rem] text-custom-black">
                   <p>{totalPrice}원</p>
                 </div>
               </>

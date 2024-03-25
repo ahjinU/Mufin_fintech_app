@@ -32,20 +32,24 @@ export default function OtherInfoElement({
           />
         )}
         <div className="flex flex-col justify-between">
-          <span className="custom-semibold-text">{leftHighlightText}</span>
-          <span className="custom-medium-text">{leftExplainText}</span>
+          <span className="custom-medium-text">{leftHighlightText}</span>
+          <span className="custom-light-text">{leftExplainText}</span>
         </div>
       </div>
 
       {money ? (
-        <span className="min-w-fit custom-semibold-text text-custom-purple">
+        <span
+          className={`min-w-fit custom-medium-text ${
+            state === 'UP' ? 'text-custom-purple' : 'text-custom-black'
+          }`}
+        >
           {state === 'UP' ? '+ ' + money : '- ' + money}
         </span>
       ) : (
         <div className="min-w-fit flex flex-col justify-between items-end">
-          <span className="custom-semibold-text">{rightHighlightText}</span>
+          <span className="custom-medium-text">{rightHighlightText}</span>
           <span
-            className={`custom-medium-text ${
+            className={`custom-light-text ${
               state === 'UP' ? 'text-custom-red' : 'text-custom-blue'
             }`}
           >

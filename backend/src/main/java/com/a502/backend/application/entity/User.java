@@ -84,6 +84,11 @@ public class User extends BaseEntity {
 	}
 
 	public boolean checkPassword(String password) {
+
 		return this.password.equals(password);
 	}
+
+    public void addParent(User parent) {
+		this.parent = parent;
+    }
 }

@@ -34,7 +34,7 @@ public class JwtProvider {
         System.out.println("[provider/getAuthenication] accessToken: "+accessToken);
         // Jwt 토큰 복호화
         Claims claims = parseClaims(accessToken);
-        System.out.println("[Claims]"+claims.toString());
+        System.out.println("[provider] claim: "+claims.toString());
 
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");

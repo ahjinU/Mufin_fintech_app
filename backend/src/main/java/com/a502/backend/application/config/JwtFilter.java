@@ -32,8 +32,18 @@ public class JwtFilter extends GenericFilterBean {
             throws IOException, ServletException {
         System.out.println("[JwtFilter]진입");
 
+        // /api/로 시작하는 경로의 요청에 대해서는 필터 로직을 수행하지 않음
+
+
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
+        if (httpServletRequest.getRequestURI().startsWith("api/stock/price/history/bar")) {
+            System.out.println("[JwtFilter] /api/ 경로에 대해서는 필터 로직을 수행하지 않음");
+            chain.doFilter(request, response);
+            return;
+        }
 
         try {
             System.out.println("[JwtFilter] 경로확인");

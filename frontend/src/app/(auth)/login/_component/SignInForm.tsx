@@ -1,10 +1,11 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { ComplexInput, Input, Button } from '@/components';
 
 export default function SignInForm() {
+  const { data: session } = useSession();
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -33,17 +34,25 @@ export default function SignInForm() {
     }
   };
 
+  if (!session) {
+    return (
+      <form onSubmit={handleSubmit} className="flex flex-col gap-[1rem]">
+        <ComplexInput label="이메일" mode="NONE">
+          <Input placeholder="이메일을 입력해주세요" name="email" />
+        </ComplexInput>
+        <ComplexInput isMsg label="비밀번호" message={message} mode="ERROR">
+          <Input placeholder="비밀번호를 입력해주세요" name="password" />
+        </ComplexInput>
+        <div className="my-[1.2rem]">
+          <Button label="로그인" mode="ACTIVE" />
+        </div>
+      </form>
+    );
+  }
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-[1rem]">
-      <ComplexInput label="이메일" mode="NONE">
-        <Input placeholder="이메일을 입력해주세요" name="email" />
-      </ComplexInput>
-      <ComplexInput isMsg label="비밀번호" message={message} mode="ERROR">
-        <Input placeholder="비밀번호를 입력해주세요" name="password" />
-      </ComplexInput>
-      <div className="my-[1.2rem]">
-        <Button label="로그인" mode="ACTIVE" />
-      </div>
-    </form>
+    <div>
+      <p>안녕하세요, {session.user.name}님!</p>
+      <Button label="로그아웃" mode="ACTIVE" onClick={() => signOut} />
+    </div>
   );
 }

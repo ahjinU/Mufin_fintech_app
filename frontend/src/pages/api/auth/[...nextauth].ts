@@ -29,8 +29,9 @@ export const authOptions: NextAuthOptions = {
           );
 
           if (res.ok) {
-            const user = res.json();
+            const user = await res.json();
             console.log('로그인되었다!', user);
+            console.log(res.headers)
             return user;
           } else {
             console.log('사용자가 잘못한듯');
@@ -38,7 +39,6 @@ export const authOptions: NextAuthOptions = {
           }
         } catch (error) {
           console.log('아 몬가 잘못됨', error);
-          // throw new Error('Failed to sign in');
         }
       },
     }),

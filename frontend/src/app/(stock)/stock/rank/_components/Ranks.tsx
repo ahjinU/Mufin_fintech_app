@@ -1,6 +1,7 @@
 import { Ranking } from '@/components';
 import Image from 'next/image';
 import useStore from '../../_store';
+import { commaNum } from '@/utils/commaNum';
 
 export default function Ranks() {
   const { ranks, myRank } = useStore.getState();
@@ -14,7 +15,7 @@ export default function Ranks() {
               mode={'HIGHLIGHT'}
               rank={rank.rank}
               name={rank.childName}
-              chocochip={rank.balance}
+              chocochip={commaNum(rank.balance)}
               key={index}
             />
           );

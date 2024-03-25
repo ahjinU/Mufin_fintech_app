@@ -1,4 +1,5 @@
 import { HttpResponse, http } from 'msw';
+import line from './services/stock/line';
 
 export const handlers = [
   http.get('/api/user', ({ request }) => {
@@ -236,4 +237,6 @@ export const handlers = [
       },
     });
   }),
+
+  line,
 ];

@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface CodeRepository extends JpaRepository<Code, String> {
 	Optional<Code> findById(String id);
 
-	Code findByName(String name);
+	Optional<Code> findByName(String name);
 }

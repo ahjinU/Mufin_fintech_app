@@ -4,11 +4,14 @@ import com.a502.backend.application.config.dto.CustomUserDetails;
 import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.config.generator.JwtUtil;
 import com.a502.backend.application.entity.Code;
+import com.a502.backend.domain.account.AccountService;
+import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.user.dto.LoginDto;
 import com.a502.backend.domain.user.dto.SignUpDto;
 import com.a502.backend.application.entity.TemporaryUser;
 import com.a502.backend.application.entity.User;
 import com.a502.backend.global.code.CodeRepository;
+import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -34,38 +37,55 @@ import java.util.UUID;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtUtil jwtUtil;
     private final TemporaryUserRepository temporaryUserRepository;
-    private final CodeRepository codeRepository;
+    private final CodeService codeService;
+    private final ParkingService parkingService;
 
     @Transactional
     public UUID signup(String temporaryUserUuid, SignUpDto signUpDto, String parentName) {
-        System.out.println("[UserService] 회원가입: " + signUpDto.toString());
+        System.out.println("[UserService] 회원가입: " + temporaryUserUuid+"/"+signUpDto.toString());
 
 
         UUID uuid = convertToUuid(temporaryUserUuid);
+        TemporaryUser temporaryUser = findTemporaryUser(uuid);
+
+        checkDupleUser(temporaryUser);
+
+        User parent = findUser(parentName);
+        User user = convertToUserEntity(signUpDto, temporaryUser, parent);
+
+        userRepository.save(user);
+        temporaryUserRepository.delete(temporaryUser);
+
+        //"아이"라면 파킹통장 생성 후 주식 초기화
+        if(parent!=null)
+            parkingService.createParkingAccount(user);
+
+        return user.getUserUuid();
+
+    }
+
+    private TemporaryUser findTemporaryUser(UUID uuid) {
 
         TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
                 .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
 
+        return temporaryUser;
+    }
+
+    private void checkDupleUser(TemporaryUser temporaryUser) {
         findUserByTelephone(temporaryUser.getTelephone());
         findUserByEmail(temporaryUser.getEmail());
+    }
 
+    private User findUser(String parentName) {
+        Optional<User> option =  userRepository.findByEmail(parentName);
 
-        User parent = userRepository.findByEmail(parentName)
-                .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
+        User parent = option.orElse(null);
 
-
-        User user = convertToUserEntity(signUpDto, temporaryUser, parent);
-
-        userRepository.save(user);
-
-        temporaryUserRepository.delete(temporaryUser);
-
-        return user.getUserUuid();
-
+        return parent;
     }
 
     public JWTokenDto login(LoginDto loginDto) {
@@ -159,7 +179,7 @@ public class UserService implements UserDetailsService {
     private User convertToUserEntity(SignUpDto signUpDto, TemporaryUser temporaryUser, User parent) {
 
         String encodedPassword = passwordEncoder.encode(signUpDto.getPassword());
-        Code parentCode = codeRepository.findByName("부모");
+        Code parentCode = codeService.findTypeCode("부모");
 
         User registUser =  User.builder()
                 .name(signUpDto.getName()) // SignUpDto에 name 필드가 있다고 가정
@@ -174,7 +194,7 @@ public class UserService implements UserDetailsService {
                 .build();
 
         if(parent!=null){
-            Code childCode = codeRepository.findByName("아이");
+            Code childCode = codeService.findTypeCode("아이");
             registUser.addParent(parent,childCode); // 찾은 부모 사용자를 설정
         }
 
@@ -194,6 +214,15 @@ public class UserService implements UserDetailsService {
     }
     public User findById(int id) {
         return userRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+    }
+
+    public User userFindByEmail(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName(); // Username 추출
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+
     }
 
 

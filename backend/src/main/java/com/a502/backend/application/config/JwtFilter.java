@@ -39,8 +39,8 @@ public class JwtFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        if (httpServletRequest.getRequestURI().startsWith("api/stock/price/history/bar")) {
-            System.out.println("[JwtFilter] /api/ 경로에 대해서는 필터 로직을 수행하지 않음");
+        if (httpServletRequest.getRequestURI().startsWith("ws-connection")) {
+            System.out.println("[JwtFilter] /ws-connection 경로에 대해서는 필터 로직을 수행하지 않음");
             chain.doFilter(request, response);
             return;
         }

@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -198,12 +200,13 @@ public class StockFacade {
 
 		if (period == 1) {
 			for (StockDetail sd : stockDetailsList) {
+				long x = sd.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 				List<Integer> y = new ArrayList<>();
 				y.add(sd.getStartPrice());
 				y.add(sd.getHighestPrice());
 				y.add(sd.getLowestPrice());
 				y.add(sd.getPrice());
-				StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder().x(Timestamp.valueOf(sd.getCreatedAt())).y(y).build();
+				StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder().x(x).y(y).build();
 				result.add(priceHistoryByBar);
 			}
 		} else {
@@ -229,8 +232,9 @@ public class StockFacade {
 					y.add(highestPrice);
 					y.add(lowestPrice);
 					y.add(price);
+					long x = createdAt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 					StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder()
-							.x(Timestamp.valueOf(createdAt))
+							.x(x)
 							.y(y).build();
 					result.add(priceHistoryByBar);
 				}
@@ -321,6 +325,7 @@ public class StockFacade {
 			int cnt = sb.getCntNot();
 			// 총 주문금액
 			int amount = price * cnt;
+			System.out.println(transName);
 			// 거래 종류(매도/매수)
 			String type = "매수";
 			myWaitingStockOrders.add(MyWaitingStockOrder.builder()

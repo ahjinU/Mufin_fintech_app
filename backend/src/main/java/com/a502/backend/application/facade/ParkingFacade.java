@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,20 +39,29 @@ public class ParkingFacade {
 		List<ParkingDetailList> result = new ArrayList<>();
 
 		for (ParkingDetail pd : parkingDetail) {
+			double ratio = 0;
+			int cnt = 0;
+			int price = 0;
 			// 주식명
 			String transName = pd.getCounterpartyName();
 			// 타입(이자,매도,매수)
 			String type = codeService.findById(pd.getCode().getId()).getName();
-			// 체결 수
-			int cnt = pd.getCnt();
-			// 가격
-			int price = pd.getAmount() / cnt;
-			// 파킹통장 이자율
-			double ratio = pd.getRatio();
+			// 이자인 경우
+			if (type.equals("이자")) {
+				// 파킹통장 이자율
+				ratio = pd.getRatio();
+				System.out.println(ratio);
+			} else {
+				// 체결 수
+				cnt = pd.getCnt();
+				// 가격
+				price = pd.getAmount() / cnt;
+			}
 			// 날짜
 			LocalDate date = pd.getCreatedAt().toLocalDate();
 
 			result.add(ParkingDetailList.builder()
+					.amount(pd.getAmount())
 					.transName(transName)
 					.type(type)
 					.cnt(cnt)

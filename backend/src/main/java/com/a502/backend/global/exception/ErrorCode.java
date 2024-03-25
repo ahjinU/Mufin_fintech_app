@@ -25,6 +25,8 @@ public enum ErrorCode {
 
     // Account
     API_ERROR_ACCOUNT_NOT_EXIST(400, "A001", "존재하지 않는 계좌 입니다."),
+    API_ERROR_CODE_NOT_EXIST(400, "A001", "존재하지 않는 코드 입니다."),
+    API_ERROR_NOT_CREATED(500, "A001", "계좌 생성에 실패하였습니다."),
 
     // AccountDetil
     API_ERROR_ACCOUNT_DETAIL_NOT_EXIST(400, "AD01", "존재하지 않는 계좌 거래 내역 입니다."),

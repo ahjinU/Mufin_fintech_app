@@ -23,7 +23,6 @@ public abstract class BaseEntity {
     private LocalDateTime updatedAt;
 
     @ColumnDefault("false")
-    @Column
     private boolean isDeleted;
 
 }

@@ -45,9 +45,6 @@ public class User extends BaseEntity {
 	@Column(name = "address2")
 	private String address2;
 
-	@Column(name = "type")
-	private int type;
-
 	@Column(name = "telephone")
 	private String telephone;
 
@@ -74,14 +71,13 @@ public class User extends BaseEntity {
 	private List<StockHolding> stockHoldings = new ArrayList<>();
 
 	@Builder
-	public User(String name, String email, String password, String gender, String address, String address2, int type, String telephone, LocalDate birth, User parent) {
+	public User(String name, String email, String password, String gender, String address, String address2, String telephone, LocalDate birth, User parent) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.gender = gender;
 		this.address = address;
 		this.address2 = address2;
-		this.type = type;
 		this.telephone = telephone;
 		this.birth = birth;
 		this.parent = parent;

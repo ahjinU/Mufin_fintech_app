@@ -14,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +37,7 @@ public class StockFacade {
 	private final ParkingDetailsService parkingDetailsService;
 	private final CodeService codeService;
 	private final RankService rankService;
+
 	/**
 	 * 매수 거래 신청 메서드
 	 *
@@ -186,14 +189,21 @@ public class StockFacade {
 		int highestPrice = Integer.MIN_VALUE;
 		// 최저가
 		int lowestPrice = Integer.MAX_VALUE;
+		// 시작가
+		int startPrice = 0;
 		// 등록일
-		LocalDate createdAt = LocalDate.now();
+		LocalDateTime createdAt = LocalDateTime.now();
 		// 종가
 		int price = 0;
 
 		if (period == 1) {
 			for (StockDetail sd : stockDetailsList) {
-				StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder().price(sd.getPrice()).highestPrice(sd.getHighestPrice()).lowestPrice(sd.getLowestPrice()).createdAt(sd.getCreatedAt().toLocalDate()).startPrice(sd.getStartPrice()).build();
+				List<Integer> y = new ArrayList<>();
+				y.add(sd.getStartPrice());
+				y.add(sd.getHighestPrice());
+				y.add(sd.getLowestPrice());
+				y.add(sd.getPrice());
+				StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder().x(Timestamp.valueOf(sd.getCreatedAt())).y(y).build();
 				result.add(priceHistoryByBar);
 			}
 		} else {
@@ -202,7 +212,7 @@ public class StockFacade {
 				if (i % period == 0) {
 					highestPrice = Integer.MIN_VALUE;
 					lowestPrice = Integer.MAX_VALUE;
-					createdAt = stockDetailsList.get(i).getCreatedAt().toLocalDate();
+					createdAt = stockDetailsList.get(i).getCreatedAt();
 					price = stockDetailsList.get(i).getPrice();
 				}
 				// 최고가 갱신
@@ -213,7 +223,16 @@ public class StockFacade {
 					lowestPrice = stockDetailsList.get(i).getLowestPrice();
 				// 시작하는 날 기준으로 시작가 보내주기
 				if (i % period == period - 1 || i == stockDetailsList.size() - 1) {
-					StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder().createdAt(createdAt).price(price).startPrice(stockDetailsList.get(i).getStartPrice()).lowestPrice(lowestPrice).highestPrice(highestPrice).build();
+					List<Integer> y = new ArrayList<>();
+					startPrice = stockDetailsList.get(i).getStartPrice();
+					y.add(startPrice);
+					y.add(highestPrice);
+					y.add(lowestPrice);
+					y.add(price);
+					StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder()
+							.x(Timestamp.valueOf(createdAt))
+							.y(y)
+							.build();
 					result.add(priceHistoryByBar);
 				}
 			}
@@ -357,28 +376,30 @@ public class StockFacade {
 
 	/**
 	 * 랭킹 1 ~ 10위 조회 메서드
+	 *
 	 * @return 랭킹 정보 리스트
 	 */
-	public RankingResponse getRanknigList(){
+	public RankingResponse getRanknigList() {
 		List<RankingDetail> rankingList = rankService.getTop10UserRankings();
 		return RankingResponse.of(rankingList);
 	}
 
 	/**
 	 * 회원 랭킹 조회 메서드
-	 *
+	 * <p>
 	 * 10위권 이하의 회원 : 동점자 처리X 순위 반영
 	 * 10위권 이상의 회원 : 동점자 처리 순위 반영
+	 *
 	 * @param userId 회원 id
 	 * @return 랭킹 정보
 	 */
-	public RankingDetail getRanking(int userId){
+	public RankingDetail getRanking(int userId) {
 		User user = userService.findById(userId);
 		int rank = Math.toIntExact(rankService.getUserRank(user));
 		int balance = (int) rankService.getUserScore(user);
 
 		List<RankingDetail> rankingList = rankService.getTop10UserRankings();
-		for(RankingDetail detail : rankingList){
+		for (RankingDetail detail : rankingList) {
 			if (detail.getChildName().equals(user.getName()))
 				return detail;
 		}

@@ -83,6 +83,9 @@ public enum ErrorCode {
     // Saving
     API_ERROR_SAVING_NOT_EXIST(400, "SV01", "존재하지 않는 적금 상품입니다."),
 
+    // Ranking
+    API_ERROR_RANKING_LIST_FAIL(400, "R001", "랭킹 정보를 불러오는데 실패했습니다."),
+    API_ERROR_RANKING_CHILD_NOT_EXIST(400, "R002", "랭킹 정보에 회원 정보와 일치하는 사람이 없습니다.")
     ;
     private final int status;
     private final String code;

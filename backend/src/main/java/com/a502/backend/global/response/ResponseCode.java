@@ -28,6 +28,8 @@ public enum ResponseCode {
 	API_SUCCESS_STOCK_MINE("S005","보유 주식 정보 조회에 성공했습니다."),
 	API_SUCCESS_STOCK_GET_ALL_INFO("S006", "전체 주식 정보 조회에 성공했습니다."),
 	API_SUCCESS_STOCK_GET_WAITING_INFO("S007", "미체결 주식 정보 조회에 성공했습니다."),
+    API_SUCCESS_RANKING_USER("S005", "회원 랭킹조회에 성공했습니다."),
+    API_SUCCESS_RANKING_LIST("S006", "1 ~ 10위 랭킹 조회에 성공했습니다."),
 
 	// ParkingDetail
 	API_SUCCESS_PARKING_DETAILS_GET("PD001","성공적으로 파킹통장 내역을 조회하였습니다."),

@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
@@ -217,6 +218,26 @@ public class UserService implements UserDetailsService {
 
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+
+    }
+
+    public void save(String telephone, String email, String name, String password, String gender, String address, String address2, User parent) throws IOException {
+
+        User registUser = User.builder()
+                .telephone(telephone)
+                .email(email)
+                .name(name)
+                .password(password)
+                .gender(gender)
+                .address(address)
+                .address(address2)
+                .birth(LocalDate.now())
+                .build();
+
+        if(parent!=null){
+            registUser.addParent(parent); // 찾은 부모 사용자를 설정
+        }
+        userRepository.save(registUser);
 
     }
 

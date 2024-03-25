@@ -6,6 +6,7 @@ import com.a502.backend.application.entity.Savings;
 import com.a502.backend.application.entity.User;
 import com.a502.backend.domain.account.dto.DepositWithdrawalAccountDto;
 import com.a502.backend.domain.parking.ParkingService;
+import com.a502.backend.domain.user.UserRepository;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -25,6 +27,8 @@ public class AccountService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserService userService;
 	private final ParkingService parkingService;
+	private final UserRepository userRepository;
+
 
 	public Account findByAccountNumber(String accountNumber) {
 		List<Account> accounts = accountRepository.findByAccountNumber(accountNumber).
@@ -124,5 +128,28 @@ public class AccountService {
 
 		// 생성된 부분들을 하이픈(-)으로 연결
 		return prefix + "-" + middle1 + "-" + middle2 + "-" + end;
+	}
+
+	/**
+	 * test용(테스트 후 지우기)
+	 */
+	public void createInit(int id, String password){
+
+		Optional<User> user = userRepository.findById(id);
+		String encodedPassword = passwordEncoder.encode(password);
+		String accountNumber = generateAccountNumber(false);
+		Code typeCode = codeService.findTypeCode("입출금");
+		Code statusCode = codeService.findTypeCode("정상");
+
+		Account account = Account.builder()
+				.password(encodedPassword)
+				.accountNumber(accountNumber)
+				.balance(0)
+				.user(user.get())
+				.typeCode(typeCode)
+				.statusCode(statusCode)
+				.build();
+
+		Account createdAccount = saveAccount(account);
 	}
 }

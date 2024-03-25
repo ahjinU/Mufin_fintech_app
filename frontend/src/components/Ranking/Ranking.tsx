@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { SparklesIcon } from '@heroicons/react/24/solid';
+import { commaNum } from '@/utils/commaNum';
 
 interface RankingProps {
   mode: 'HIGHLIGHT' | 'GENERAL';
@@ -61,7 +62,7 @@ export default function Ranking({ mode, rank, name, chocochip }: RankingProps) {
         <p className={nameClass}>{name}</p>
       </div>
       <div className="flex items-center">
-        <p className={chocochipClass}>{chocochip}초코칩</p>
+        <p className={chocochipClass}>{commaNum(chocochip)}초코칩</p>
         {topRank ? (
           <SparklesIcon className="size-[2rem] fill-custom-light-purple" />
         ) : null}

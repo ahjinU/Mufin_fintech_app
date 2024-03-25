@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import {
   ChevronRightIcon,
@@ -5,6 +7,8 @@ import {
   ArrowTrendingUpIcon,
 } from '@heroicons/react/24/solid';
 import TinyButton from '../TinyButton/TinyButton';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface MoneyInfoElementProps {
   imageSrc: string;
@@ -19,6 +23,7 @@ interface MoneyInfoElementProps {
     | 'NO';
   tinyButtonLabel?: string;
   stockPrice?: string;
+  link?: string;
 }
 
 function RateShow() {
@@ -59,14 +64,21 @@ export default function MoneyInfoElement({
   buttonOption,
   tinyButtonLabel,
   stockPrice,
+  link,
 }: MoneyInfoElementProps) {
+  const router = useRouter();
   const RightButton: React.FC = () => {
     if (buttonOption === 'RIGHT_ARROW')
       return (
         <ChevronRightIcon className="w-[1.6rem] h-[1.6rem] text-custom-medium-gray cursor-pointer" />
       );
     if (buttonOption === 'TINY_BUTTON' && tinyButtonLabel)
-      return <TinyButton label={tinyButtonLabel} />;
+      return (
+        <TinyButton
+          label={tinyButtonLabel}
+          onClick={() => link && router.push(link)}
+        />
+      );
     if (buttonOption === 'RATE') return <RateShow />;
     if (buttonOption === 'STOCK_DOWN' && stockPrice)
       return <StockDownShow stockDownPrice={stockPrice} />;
@@ -74,23 +86,34 @@ export default function MoneyInfoElement({
       return <StockUpShow stockUpPrice={stockPrice} />;
   };
 
-  return (
-    <section className="w-full flex justify-between items-center">
-      <div className="w-full flex gap-[1rem] items-center">
-        <Image
-          src={imageSrc}
-          width={42}
-          height={42}
-          alt={leftExplainText}
-          className="w-[4.2rem] h-[4.2rem]"
-        />
-
-        <div className="flex flex-col justify-between">
-          <span className="custom-medium-text">{leftExplainText}</span>
-          <span className="custom-semibold-text">{leftHighlightText}</span>
+  function Content() {
+    return (
+      <section className="w-full flex justify-between items-center">
+        <div className="w-full flex gap-[1rem] items-center">
+          <Image
+            src={imageSrc}
+            width={42}
+            height={42}
+            alt={leftExplainText}
+            className="w-[4.2rem] h-[4.2rem]"
+          />
+          <div className="flex flex-col justify-between">
+            <span className="custom-medium-text">{leftExplainText}</span>
+            <span className="custom-semibold-text">{leftHighlightText}</span>
+          </div>
         </div>
-      </div>
-      <RightButton />
+        <RightButton />
+      </section>
+    );
+  }
+
+  return buttonOption === 'RIGHT_ARROW' && link ? (
+    <Link href={link}>
+      <Content />
+    </Link>
+  ) : (
+    <section className="w-full flex justify-between items-center">
+      <Content />
     </section>
   );
 }

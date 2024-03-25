@@ -31,4 +31,24 @@
     font-weight: 200;
     font-size: 1.2rem;
   }
+
+  .tooltip {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    font-size: 1.2rem;
+  }
+  .tooltip-date {
+    margin-bottom: 1rem;
+  }
+  .tooltip-red {
+    color: #cd2626;
+  }
+  .tooltip-blue {
+    color: #5969ff;
+  }
+  .tooltip-bold {
+    margin-left: 0.5rem;
+    font-weight: 600;
+  }
 }

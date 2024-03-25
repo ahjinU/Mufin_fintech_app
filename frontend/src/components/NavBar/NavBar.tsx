@@ -33,6 +33,7 @@ const setIndex = (path: string) => {
     case '/stock':
     case '/stock/list':
     case '/stock/rank':
+    case '/stock/storage':
       return 3;
     case '/menus':
       return 4;
@@ -43,8 +44,6 @@ const setIndex = (path: string) => {
 
 export default function NavBar({ mode }: NavBarProps) {
   const path = usePathname();
-
-  console.log(path);
 
   let items: itemProp[];
 
@@ -117,7 +116,7 @@ export default function NavBar({ mode }: NavBarProps) {
 
   return (
     <div
-      className={`w-full absolute bottom-0 h-[6rem] rounded-[1.6rem] rounded-b-[0rem] bg-custom-white flex items-center justify-center`}
+      className={`w-full absolute bottom-0 h-[6rem] rounded-[1.6rem] rounded-b-[0rem] border border-custom-light-gray bg-custom-white flex items-center justify-center`}
     >
       {items.map(({ icon, path, label }, index) => (
         <Link

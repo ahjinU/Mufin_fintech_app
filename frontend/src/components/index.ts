@@ -25,6 +25,8 @@ import OtherInfoElement from './OtherInfoElement/OtherInfoElement';
 import MoneyInfoElement from './MoneyInfoElement/MoneyInfoElement';
 import Notification from './Notification/Notification';
 import SubGuideText from './SubGuideText/SubGuideText';
+import MoneyShow from './MoneyShow/MoneyShow';
+import Ranking from './Ranking/Ranking';
 
 export {
   FlexBox,
@@ -54,4 +56,6 @@ export {
   Header,
   SubGuideText,
   ImageUploadBox,
+  MoneyShow,
+  Ranking,
 };

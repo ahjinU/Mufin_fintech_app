@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         // /api/** 경로에 대해서는 모든 요청을 허가
-                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/**").permitAll()
                         // 해당 API에 대해서는 인증된 사용자만 요청을 허가
                         .requestMatchers("user/sign-up/child").authenticated()
                         // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정 (이 부분은 조건에 따라 조정 필요)

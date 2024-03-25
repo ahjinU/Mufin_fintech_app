@@ -2,6 +2,7 @@ package com.a502.backend.application.facade;
 
 import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.numberimg.NumberImageService;
+import com.a502.backend.domain.payment.AccountService;
 import com.a502.backend.domain.stock.StockDetailsService;
 import com.a502.backend.domain.stock.StocksService;
 import com.a502.backend.domain.user.UserService;
@@ -25,6 +26,7 @@ public class InitFacade {
     private final StockDetailsService stockDetailsService;
     private final S3FileUploader s3FileUploader;
     private final NumberImageService numberImageService;
+    private final AccountService accountService;
 
     private final SchedulerFacade schedulerFacade;
     public void run() throws IOException {
@@ -35,7 +37,7 @@ public class InitFacade {
 //            stockDetailsService.save(10000, 10000, 10000, 20000, 10000, 10000, stock);
 //        }
 
-//        initCode();
+        initCode();
 //        initStock();
 //        initKeypadImage();
 
@@ -93,15 +95,15 @@ public class InitFacade {
      * @throws IOException
      */
     private void initStock() throws IOException {
-        String image = s3FileUploader.uploadFile("images/" + "stock/"+ "wind" + ".png");
-        stocksService.save("바람개비", image);
-        image = s3FileUploader.uploadFile("images/" + "stock/"+ "rain" + ".png");
-        stocksService.save("우비", image);
-        image = s3FileUploader.uploadFile("images/" + "stock/"+ "icecream" + ".png");
-        stocksService.save("아이스크림", image);
-        image = s3FileUploader.uploadFile("images/" + "stock/"+ "snow" + ".png");
-        stocksService.save("눈오리", image);
-
+//        String image = s3FileUploader.uploadFile("images/" + "stock/"+ "wind" + ".png");
+        String images = s3FileUploader.uploadFile("images/"+ "icon-" + 0 + ".png");
+        stocksService.save("바람개비", images);
+//        image = s3FileUploader.uploadFile("images/" + "stock/"+ "rain" + ".png");
+        stocksService.save("우산", images);
+//        image = s3FileUploader.uploadFile("images/" + "stock/"+ "icecream" + ".png");
+        stocksService.save("아이스크림", images);
+//        image = s3FileUploader.uploadFile("images/" + "stock/"+ "snow" + ".png");
+        stocksService.save("눈오리", images);
     }
 
     /**

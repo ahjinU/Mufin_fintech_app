@@ -3,6 +3,7 @@ package com.a502.backend.application.controller;
 import com.a502.backend.application.facade.PayFacade;
 import com.a502.backend.domain.payment.request.MyAccount;
 import com.a502.backend.domain.payment.request.RecipientAccount;
+import com.a502.backend.domain.payment.request.TransferMoneyRequest;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,12 @@ public class PayController {
 	public ResponseEntity<ApiResponse<Void>> checkMyAccount(@RequestBody MyAccount myAccount) {
 		payFacade.checkMyAccount(myAccount);
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_ACCOUNT_IS_SUFFICIENT));
+	}
+
+	// 송금
+	@PostMapping("/account")
+	public ResponseEntity<ApiResponse<Void>> transferMoney(@RequestBody TransferMoneyRequest transferMoneyRequest){
+		payFacade.transferMoney(transferMoneyRequest);
+		return null;
 	}
 }

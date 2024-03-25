@@ -5,12 +5,3 @@ services:
     ports:
       - "8081:8080"
     container_name: jasmin
-
-  front:
-    image: slcloe/jasminfront
-    ports:
-      - "3000:3000"
-    container_name: jasumin
-    environment:
-      REACT_APP_WEATHER_API_KEY : ${REACT_APP_WEATHER_API_KEY}
-      REACT_APP_WEATHER_API : ${REACT_APP_WEATHER_API}

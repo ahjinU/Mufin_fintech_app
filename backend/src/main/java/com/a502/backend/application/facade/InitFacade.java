@@ -2,6 +2,7 @@ package com.a502.backend.application.facade;
 
 import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.numberimg.NumberImageService;
+import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.payment.AccountService;
 import com.a502.backend.domain.stock.StockDetailsService;
 import com.a502.backend.domain.stock.StocksService;
@@ -27,6 +28,7 @@ public class InitFacade {
     private final S3FileUploader s3FileUploader;
     private final NumberImageService numberImageService;
     private final AccountService accountService;
+    private  final ParkingService parkngService;
 
     private final SchedulerFacade schedulerFacade;
     public void run() throws IOException {
@@ -116,4 +118,38 @@ public class InitFacade {
             numberImageService.saveImage(image);
         }
     }
+
+    /**
+     * 주식 초기화 메서드
+     * @throws IOException
+     */
+    private void initStocks() throws IOException {
+        stocksService.save("아이스크림 회사", "이미지1");
+        stocksService.save("우산 회사", "이미지2");
+        stocksService.save("눈오리 회사", "이미지3");
+        stocksService.save("썬글라스 회사", "이미지4");
+        stocksService.save("마스크 회사", "이미지5");
+        stocksService.save("바람막이 회사", "이미지6");
+    }
+
+    private void initUser() throws IOException {
+
+        userService.save("010-1111-1111","ssafy","은평","1234","여","몰루1","몰루2",null);
+        userService.save("010-2222-2222","mom","은평","1234","여","몰루1","몰루2",null);
+        userService.save("010-3333-3333","dad","한슬","1234","여","몰루1","몰루2",null);
+        userService.save("010-4444-4444","child1","지나","1234","여","몰루1","몰루2", userService.findById(1));
+        userService.save("010-4444-4444","child2","수민","1234","여","몰루1","몰루2", userService.findById(2));
+    }
+
+    private void initAccount() throws IOException {
+        accountService.createInit(1,"1234");
+        accountService.createInit(2,"1234");
+    }
+
+    private void initParking() throws IOException {
+        parkngService.createParkingAccount(userService.findById(1));
+        parkngService.createParkingAccount(userService.findById(2));
+
+    }
+
 }

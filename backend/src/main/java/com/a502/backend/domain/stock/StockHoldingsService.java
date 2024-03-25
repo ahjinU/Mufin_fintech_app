@@ -17,6 +17,7 @@ import java.util.List;
 @Service
 public class StockHoldingsService {
     private final StockHoldingsRepository stockHoldingsRepository;
+    private final StocksService stocksService;
 
     public StockHolding findById(User user, Stock stock){
         return stockHoldingsRepository.findById(StockHoldingsId.builder()
@@ -60,4 +61,10 @@ public class StockHoldingsService {
     public List<StockHolding> findAllByUser(User user){
         return stockHoldingsRepository.findAllByUser(user).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_STOCK_HOLDING_NOT_EXIST));
     }
+
+
+    public void save(StockHolding stockHolding) {
+        stockHoldingsRepository.save(stockHolding);
+    }
+
 }

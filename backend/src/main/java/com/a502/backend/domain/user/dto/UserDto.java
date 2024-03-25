@@ -34,12 +34,7 @@ public class UserDto {
     private String address2;
 
     @NotNull
-    private int type;
-
-    @NotNull
     @Size(min = 2, max = 3)
     private String gender;
-
-
 
 }

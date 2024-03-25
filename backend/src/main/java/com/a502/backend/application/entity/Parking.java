@@ -36,7 +36,7 @@ public class Parking extends BaseEntity {
 	private User user;
 
 	@Builder
-	public Parking(int balance, int interest, User user) {
+	public Parking(int balance, double interest, User user) {
 		this.balance = balance;
 		this.interest = interest;
 		this.user = user;

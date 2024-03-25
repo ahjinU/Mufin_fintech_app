@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 interface StocksRepository extends JpaRepository<Stock,Integer> {
     Optional<Stock> findByName(String name);
     List<Stock> findAllBy();

@@ -10,11 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
 public class StockHoldingsService {
     private final StockHoldingsRepository stockHoldingsRepository;
+    private final StocksService stocksService;
 
     public StockHolding findById(User user, Stock stock){
         return stockHoldingsRepository.findById(StockHoldingsId.builder()
@@ -52,5 +55,10 @@ public class StockHoldingsService {
         validStockHolding(user, stock, cnt);
         stockHolding.setCnt(stockHoldingCnt + cnt);
         stockHolding.setTotal(stockHoldingTotal + cnt * price);
+    }
+
+
+    public void save(StockHolding stockHolding) {
+        stockHoldingsRepository.save(stockHolding);
     }
 }

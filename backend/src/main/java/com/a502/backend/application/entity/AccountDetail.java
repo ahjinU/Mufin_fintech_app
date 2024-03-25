@@ -2,7 +2,10 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
@@ -18,11 +21,6 @@ public class AccountDetail extends BaseEntity {
 
 	@Column(name = "account_detail_uuid")
 	private UUID accountDetailUuid;
-	@PrePersist
-	public void initUUID() {
-		if (accountDetailUuid == null)
-			accountDetailUuid = UUID.randomUUID();
-	}
 
 	@Column(name = "amount")
 	private int amount;
@@ -72,5 +70,11 @@ public class AccountDetail extends BaseEntity {
 		this.category = category;
 		this.accountDetailTypeCode = accountDetailTypeCode;
 		this.accountDetailStatusCode = accountDetailStatusCode;
+	}
+
+	@PrePersist
+	public void initUUID() {
+		if (accountDetailUuid == null)
+			accountDetailUuid = UUID.randomUUID();
 	}
 }

@@ -12,6 +12,7 @@ interface InputProps {
   value?: string | number;
   disabled?: boolean;
   setValue?: Function;
+  isRight?: boolean;
   onChange?: () => void;
 }
 
@@ -25,10 +26,11 @@ export default function Input({
   setValue,
   onChange,
   disabled,
+  isRight,
   ...props
 }: InputProps) {
   const [inputPlaceholder, setInputPlaceholder] = useState(placeholder || '');
-  const [inputValue, setInputValue] = useState(value || '');
+  const [inputValue, setInputValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleReset = () => {
@@ -58,7 +60,7 @@ export default function Input({
     >
       <input
         className={`w-full outline-none text-[1.6rem] custom-semibold-text text-custom-black ${
-          typeof value === 'number' && 'text-right'
+          isRight && 'text-right'
         } ${disabled === true && 'bg-custom-white'}`}
         {...props}
         placeholder={inputPlaceholder}

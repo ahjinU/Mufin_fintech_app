@@ -26,6 +26,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.a502.backend.application.config.constant.JwtConstant.GRANT_TYPE;
@@ -59,7 +61,9 @@ public class UserController {
 
         httpHeaders.add(HEADER_STRING, GRANT_TYPE + " " + jwt.getAccessToken());
 
-        return ResponseEntity.ok().headers(httpHeaders).body("success!");
+        ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_LOGIN);
+        return ResponseEntity.ok(apiResponse);
+
     }
 
     @PostMapping("/signup/child/check/telephone")

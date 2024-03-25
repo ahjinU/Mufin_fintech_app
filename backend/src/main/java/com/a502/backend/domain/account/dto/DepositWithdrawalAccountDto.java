@@ -3,6 +3,8 @@ package com.a502.backend.domain.account.dto;
 import com.a502.backend.application.entity.Account;
 import lombok.*;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Getter
 @Setter
 @Builder
@@ -10,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 public class DepositWithdrawalAccountDto {
     private String accountNumber; // 계좌번호
-    private int balance; // 잔고
+    private AtomicInteger balance; // 잔고
     private int interestAmount; // 이자율
 
     // 계좌 엔터티로부터 DTO 생성을 위한 정적 메소드

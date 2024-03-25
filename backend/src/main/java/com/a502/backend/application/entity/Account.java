@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @Getter
@@ -26,49 +27,47 @@ public class Account extends BaseEntity {
 	}
 
 	@Column(name = "account_number")
-	private String accountNumber; //계좌번호
-	//입출금 계좌: 5021-@@@@-@@-@@@@
-	//적금 계좌: 5022-@@@@-@@-@@@@
+	private String accountNumber;
 
 	@Column(name = "balance")
-	private int balance; //잔고 0으로 셋팅
+	private AtomicInteger balance;
 
 	@Column(name = "interestAmount")
-	private int interestAmount; //(입출금) 0, (적금)그때 오는 이자율로
+	private int interestAmount; //이자수령액
 
-	@Column(name = "payment_amount") //(적금통장) 초기에 0으로 셋
-	private int paymentAmount; //월 납입액
+	@Column(name = "payment_amount")
+	private int paymentAmount;
 
 	@Column(name = "payment_date")
 	private int paymentDate; //월 납입일
 
-	@Column(name = "payment_cycle") //0으로 셋
-	private int paymentCycle; //납입회차
+	@Column(name = "payment_cycle")
+	private int paymentCycle;
 
 	@Column(name = "password")
-	private String password; //비밀번호
+	private String password;
 
 	@Column(name = "incorrect_cnt")
-	private int incorrectCount; //비밀번호 틀린 횟수 초기 생성시에는 0으로 셋
+	private int incorrectCount;
 
 	@ManyToOne
 	@JoinColumn(name = "saving_id")
-	private Savings savings; // 적금 상품
+	private Savings savings;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private User user; // 계좌 주인
+	private User user;
 
 	@ManyToOne
 	@JoinColumn(name = "status_code_id")
-	private Code statusCode; //001~004 (만기, 정상, 해지, 정지)로 초기 생성시에는 정상으로 셋
+	private Code statusCode;
 
 	@ManyToOne
 	@JoinColumn(name = "type_code_id")
-	private Code typeCode; // 입출금, 적금으로 요청시 오는 코드로 셋
+	private Code typeCode;
 
 	@Builder
-	public Account(String accountNumber, int balance, int interestAmount, int paymentAmount, int paymentDate, int paymentCycle, String password, int incorrectCount, User user, Code statusCode, Code typeCode) {
+	public Account(String accountNumber, AtomicInteger balance, int interestAmount, int paymentAmount, int paymentDate, int paymentCycle, String password, int incorrectCount, User user, Code statusCode, Code typeCode) {
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.interestAmount = interestAmount;

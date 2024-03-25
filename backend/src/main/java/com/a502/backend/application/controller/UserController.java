@@ -62,7 +62,8 @@ public class UserController {
         httpHeaders.add(HEADER_STRING, GRANT_TYPE + " " + jwt.getAccessToken());
 
         ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_LOGIN);
-        return ResponseEntity.ok(apiResponse);
+
+        return ResponseEntity.ok().headers(httpHeaders).body(apiResponse);
 
     }
 

@@ -5,6 +5,7 @@ import com.a502.backend.application.entity.Code;
 import com.a502.backend.application.entity.Savings;
 import com.a502.backend.application.entity.User;
 import com.a502.backend.domain.account.dto.DepositWithdrawalAccountDto;
+import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeRepository;
 import com.a502.backend.global.code.CodeService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.Random;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,8 @@ public class AccountService {
     private final CodeService codeService;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final ParkingService parkingService;
+
 
     // 입출금 계좌 생성 메소드
     public DepositWithdrawalAccountDto createDepositWithdrawalAccount(String password) {
@@ -41,7 +45,7 @@ public class AccountService {
         Account account = Account.builder()
                 .password(encodedPassword)
                 .accountNumber(accountNumber)
-                .balance(0)
+                .balance(new AtomicInteger(0))
                 .user(user)
                 .typeCode(typeCode)
                 .statusCode(statusCode)
@@ -74,7 +78,7 @@ public class AccountService {
         Account account = Account.builder()
                 .password(encodedPassword)
                 .accountNumber(accountNumber)
-                .balance(0)
+                .balance(new AtomicInteger(0))
                 .user(user)
                 .typeCode(typeCode)
                 .statusCode(statusCode)

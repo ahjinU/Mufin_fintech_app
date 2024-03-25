@@ -4,20 +4,18 @@ import com.a502.backend.application.config.dto.CustomUserDetails;
 import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.config.generator.JwtUtil;
 import com.a502.backend.application.entity.Code;
-import com.a502.backend.domain.account.AccountService;
-import com.a502.backend.domain.parking.ParkingService;
-import com.a502.backend.domain.user.dto.LoginDto;
-import com.a502.backend.domain.user.dto.SignUpDto;
 import com.a502.backend.application.entity.TemporaryUser;
 import com.a502.backend.application.entity.User;
+import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.global.code.CodeRepository;
 import com.a502.backend.global.code.CodeService;
+import com.a502.backend.domain.user.dto.LoginDto;
+import com.a502.backend.domain.user.dto.SignUpDto;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,6 +33,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -42,6 +41,7 @@ public class UserService implements UserDetailsService {
     private final TemporaryUserRepository temporaryUserRepository;
     private final CodeService codeService;
     private final ParkingService parkingService;
+
 
     @Transactional
     public UUID signup(String temporaryUserUuid, SignUpDto signUpDto, String parentName) {
@@ -120,7 +120,6 @@ public class UserService implements UserDetailsService {
       /*
         System.out.println("[service] email: "+username);
        */
-        System.out.println("[UserService] /loadUserByUsername:");
 
         User findMember = userRepository.findByEmail(username)
                 .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
@@ -149,9 +148,9 @@ public class UserService implements UserDetailsService {
         return temporaryUser.getTemporaryUserUuid();
     }
 
-    @Transactional
-    public void checkDupleEmail(String temporaryUserUuidString, String email) {
-        System.out.println("[UserService] checkDupleEmail");
+	@Transactional
+	public void checkDupleEmail(String temporaryUserUuidString, String email) {
+		System.out.println("[UserService/이메일중복] 이메일: " + email);
 
         UUID uuid = convertToUuid(temporaryUserUuidString);
         System.out.println("[UserService] uuid: "+uuid.toString());

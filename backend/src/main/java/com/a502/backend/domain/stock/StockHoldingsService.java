@@ -61,4 +61,5 @@ public class StockHoldingsService {
     public void save(StockHolding stockHolding) {
         stockHoldingsRepository.save(stockHolding);
     }
+
 }

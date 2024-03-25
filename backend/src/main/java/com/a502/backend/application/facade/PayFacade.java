@@ -3,6 +3,7 @@ package com.a502.backend.application.facade;
 import com.a502.backend.application.entity.Account;
 import com.a502.backend.application.entity.User;
 import com.a502.backend.domain.payment.AccountService;
+import com.a502.backend.domain.payment.request.MyAccount;
 import com.a502.backend.domain.payment.request.RecipientAccount;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
@@ -31,7 +32,9 @@ public class PayFacade {
 
 	// 송금하는 사람 유효성 체크
 	@Transactional
-	public void checkMyAccount(String accountNumberOut, int amount) {
+	public void checkMyAccount(MyAccount myAccount) {
+		String accountNumberOut = myAccount.getAccountNumberOut();
+		int amount = myAccount.getAmount();
 		Account account = accountService.findByAccountNumber(accountNumberOut);
 		// 계좌가 존재하지 않는 경우
 		if (account.isDeleted())
@@ -40,7 +43,10 @@ public class PayFacade {
 		if (account.getStatusCode().getName().equals("정지"))
 			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_IS_STOPPED);
 		// 계좌 잔액이 적은 경우
-		if(account.getBalance() <amount)
-			throw  BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE);
+		if (account.getBalance().addAndGet(-amount) < 0)
+			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE);
+		// 비밀번호 오류 수가 5회인 경우
+		if (account.getIncorrectCount() == 5)
+			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_IS_STOPPED);
 	}
 }

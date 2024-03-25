@@ -29,9 +29,7 @@ public class PayController {
 	// 출금 계좌 유효성 체크
 	@PostMapping("/withdraw")
 	public ResponseEntity<ApiResponse<Void>> checkMyAccount(@RequestBody MyAccount myAccount) {
-		String accountNumber = myAccount.getAccountNumberOut();
-		int amount = myAccount.getAmount();
-		payFacade.checkMyAccount(accountNumber, amount);
+		payFacade.checkMyAccount(myAccount);
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_ACCOUNT_IS_SUFFICIENT));
 	}
 }

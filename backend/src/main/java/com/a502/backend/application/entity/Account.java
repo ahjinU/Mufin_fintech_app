@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @Getter
@@ -29,7 +30,7 @@ public class Account extends BaseEntity {
 	private String accountNumber;
 
 	@Column(name = "balance")
-	private int balance;
+	private AtomicInteger balance;
 
 	@Column(name = "interestAmount")
 	private int interestAmount; //이자수령액
@@ -66,7 +67,7 @@ public class Account extends BaseEntity {
 	private Code typeCode;
 
 	@Builder
-	public Account(String accountNumber, int balance, int interestAmount, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, String password, int incorrectCount, User user, Code statusCode, Code typeCode) {
+	public Account(String accountNumber, AtomicInteger balance, int interestAmount, int paymentAmount, LocalDateTime paymentDate, int paymentCycle, String password, int incorrectCount, User user, Code statusCode, Code typeCode) {
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.interestAmount = interestAmount;

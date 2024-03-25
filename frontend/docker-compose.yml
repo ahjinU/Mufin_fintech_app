@@ -1,0 +1,10 @@
+services:
+  front:
+    image: slcloe/jasminfront
+    ports:
+    container_name: jasumin
+    environment:
+      REACT_APP_WEATHER_API_KEY: ${REACT_APP_WEATHER_API_KEY}
+      REACT_APP_WEATHER_API: ${REACT_APP_WEATHER_API}
+      NEXT_PUBLIC_API_MOCKING: ${NEXT_PUBLIC_API_MOCKING}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}

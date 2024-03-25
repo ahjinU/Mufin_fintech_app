@@ -22,23 +22,24 @@ export default async function Stock() {
   const { updateRanks, updateMyRank, updateMyParking, updateMyStock } =
     useStockStore.getState();
 
-  const ranks = await getRankingTotal();
-  updateRanks(ranks?.data.ranks);
-  const myRank = await getRankingMine();
-  updateMyRank(myRank?.data);
-  const myStocks = await postStockMine();
-  updateMyStock(myStocks?.data);
-  const myParking = await postParkingAccount();
-  updateMyParking(myParking?.data);
+  // const ranks = await getRankingTotal();
+  // updateRanks(ranks?.data);
+  // const myRank = await getRankingMine();
+  // updateMyRank(myRank?.data);
+  // const myStocks = await postStockMine();
+  // updateMyStock(myStocks?.data);
+  // const myParking = await postParkingAccount();
+  // updateMyParking(myParking?.data);
 
-  const stocks = await postStocksAll();
+  // const stocks = await postStocksAll();
   const weatherRes = await fetch(url, { cache: 'no-cache' });
   const weather = await weatherRes.json();
 
   const mainTabData = {
     temp: parseFloat((weather.main.temp - 273.15).toFixed(2)),
     description: weather.weather[0].id,
-    stocks: stocks.data.stock,
+    // stocks: stocks.data.stock,
+    stocks: [],
   };
 
   return (

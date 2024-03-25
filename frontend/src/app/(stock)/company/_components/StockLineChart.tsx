@@ -1,37 +1,35 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import { useState, useEffect } from 'react';
 import { Tag } from '@/components';
+import { getStockLineData } from '../_apis';
+const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const smooth: 'smooth' = 'smooth';
+const easeout: 'easeout' = 'easeout';
 
 interface StockData {
-  name: string;
-  data: number[];
+  date: Date;
+  price: number;
 }
 
-const series: StockData[] = [
-  {
-    name: '바람막이 회사',
-    data: [
-      27, 32, 31, 35, 36, 39, 40, 42, 40, 40, 39, 38, 40, 42, 45, 49, 50, 54,
-      52, 51, 45, 40, 35, 38, 40, 41, 40, 40, 38, 35, 31, 28, 27, 29, 30, 35,
-      45, 48, 50, 52, 55, 56, 57, 58, 59, 60, 59, 55, 48, 49, 47, 46, 48, 49,
-      50, 51, 52, 53, 55, 60,
-    ],
-    // data: Array.from({ length: 180 }, (v, i) => i),
-  },
-];
-
-const maxValueIndex = series[0].data.findIndex(
-  (num) => num === Math.max(...series[0].data),
-);
-const minValueIndex = series[0].data.findIndex(
-  (num) => num === Math.min(...series[0].data),
-);
-
 export function StockLineChart() {
+  // ApexCharts에 넘겨야 하는 series형식은 배열 내에 하나의 객체를 넘기는 법
+  // 서버에서 date도 넘겨주지만 필요 없음.
+  const [data, setData] = useState<number[]>([0]);
+  const [period, setPeriod] = useState<number>(30);
+  const maxValueIndex = data.findIndex((num) => num === Math.max(...data));
+  const minValueIndex = data.findIndex((num) => num === Math.min(...data));
+
+  useEffect(() => {
+    (async function () {
+      const data = await getStockLineData('바람막이', period);
+      const prices = data.data.map((dataObj: StockData) => dataObj.price);
+      setData(prices);
+    })();
+  }, [period]);
+
   const option = {
     chart: {
       id: 'stockLineChart',
@@ -40,36 +38,14 @@ export function StockLineChart() {
       },
       fontFamily: 'pretendard, sans-serif',
       animations: {
+        easing: easeout,
+        dynamicAnimation: {
+          enabled: true,
+          speed: 600,
+        },
+      },
+      zoom: {
         enabled: false,
-      },
-    },
-    dataLabels: {
-      enabled: true,
-      style: {
-        fontSize: '10px',
-      },
-      background: {
-        enabled: false,
-      },
-      offsetX: -13,
-      formatter: (
-        value: number,
-        { dataPointIndex, w }: { dataPointIndex: number; w: any },
-      ) => {
-        console.log(w);
-        if (
-          value === series[0].data[minValueIndex] &&
-          dataPointIndex === minValueIndex
-        ) {
-          return '최저 ' + value;
-        } else if (
-          value === series[0].data[maxValueIndex] &&
-          dataPointIndex === maxValueIndex
-        ) {
-          return '최고 ' + value;
-        } else {
-          return '';
-        }
       },
     },
     stroke: {
@@ -85,8 +61,18 @@ export function StockLineChart() {
     },
     grid: { show: false },
     yaxis: {
-      show: false,
-      min: Math.min(...series[0].data),
+      opposite: true,
+      show: true,
+      tickAmount: 3,
+      labels: {
+        style: {
+          colors: '#d4d4d8',
+          fontSize: '10px',
+        },
+        formatter: (value: number) => value.toFixed(0),
+        offsetX: -5,
+      },
+      min: Math.min(...data),
     },
     xaxis: {
       labels: {
@@ -97,8 +83,8 @@ export function StockLineChart() {
       tooltip: {
         enabled: false,
       },
-      min: -8,
-      max: 60,
+      min: 0,
+      max: period,
     },
     tooltip: {
       x: {
@@ -111,6 +97,37 @@ export function StockLineChart() {
         show: false,
       },
     },
+    annotations: {
+      yaxis: [
+        {
+          y: data[maxValueIndex],
+          borderColor: '#cd2626',
+          label: {
+            borderColor: '#cd2626',
+            style: {
+              color: '#fff',
+              background: '#cd2626',
+            },
+            text: `최고: ${data[maxValueIndex]}`,
+            offsetX: -6,
+          },
+        },
+        {
+          y: data[minValueIndex],
+          borderColor: '#5969ff',
+          label: {
+            borderColor: '#5969ff',
+            style: {
+              color: '#fff',
+              background: '#5969ff',
+            },
+            text: `최저: ${data[minValueIndex]}`,
+            offsetX: -6,
+            offsetY: 19,
+          },
+        },
+      ],
+    },
   };
 
   return (
@@ -118,7 +135,7 @@ export function StockLineChart() {
       <ApexChart
         type="line"
         options={option}
-        series={series}
+        series={[{ name: '바람막이', data }]}
         height={300}
         width={336}
       />
@@ -126,12 +143,12 @@ export function StockLineChart() {
       <Tag
         tags={[
           {
-            label: '3개월',
-            onClick: () => {},
+            label: '1개월',
+            onClick: () => setPeriod(30),
           },
           {
-            label: '6개월',
-            onClick: () => {},
+            label: '2개월',
+            onClick: () => setPeriod(60),
           },
         ]}
       />

@@ -13,7 +13,7 @@ interface InputProps {
   disabled?: boolean;
   setValue?: Function;
   isRight?: boolean;
-  onChange?: () => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function Input({
@@ -41,7 +41,7 @@ export default function Input({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
-    onChange && onChange();
+    onChange && onChange(e);
     setValue && setValue(newValue);
   };
 

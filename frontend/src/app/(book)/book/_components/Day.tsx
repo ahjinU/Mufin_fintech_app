@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import { format, getMonth } from 'date-fns';
 import Link from 'next/link';
+import useBookStore from '../_store';
 
 type DayProps = {
   children?: React.ReactNode;
@@ -10,6 +13,7 @@ type DayProps = {
 
 const Day = (props: DayProps) => {
   const { day } = props;
+  const { updateSelectDate } = useBookStore();
 
   const koreanDate =
     day && encodeURIComponent(`${format(day, 'yyyy년 M월 d일')}`);
@@ -23,7 +27,13 @@ const Day = (props: DayProps) => {
       <div className="flex w-full flex-col leading-[1rem] items-center">
         <p className="text-[2rem]">.</p>
       </div>
-      <Link className="cursor-pointer" href={`/book/${koreanDate}`}>
+      <Link
+        className="cursor-pointer"
+        onClick={() => {
+          day && updateSelectDate(day);
+        }}
+        href={`/book/${koreanDate}`}
+      >
         {day && format(day, 'd')}
       </Link>
       <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center">

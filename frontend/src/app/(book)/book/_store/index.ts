@@ -6,6 +6,10 @@ const useBookStore = create<Model>((set) => ({
 
   currentMonth: new Date(),
   updateCurrentMonth: (month) => set(() => ({ currentMonth: month })),
+
+  selectedDate: new Date(),
+  updateSelectDate: (date) => set(() =>({ selectedDate: date}))
+
 }));
 
 export interface Model {
@@ -14,6 +18,9 @@ export interface Model {
 
   currentMonth: Date;
   updateCurrentMonth: (month: Date) => void;
+
+  selectedDate: Date;
+  updateSelectDate: (date: Date) => void;
 }
 
 export default useBookStore;

@@ -19,7 +19,7 @@ export default function BookListLayout({
       <Header>
         <BackButton label={params.date && decodeURIComponent(params.date)} />
       </Header>
-      <div className="pb-[6rem]">{children}</div>
+      <div className="pb-[6rem] h-full">{children}</div>
     </>
   );
 }

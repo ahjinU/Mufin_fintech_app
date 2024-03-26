@@ -1,6 +1,68 @@
+'use client';
+
 import { MoneyShow } from '@/components';
+import { useState, useEffect, useRef } from 'react';
+import SockJS from 'sockjs-client';
+import { Stomp, CompatClient } from '@stomp/stompjs';
+
+const name = '바람개비';
+
+interface OrderData {
+  price: number;
+  buyOrderCnt: number;
+  sellOrderCnt: number;
+}
+
+interface StockData {
+  price: number;
+  stockOrderList: OrderData[];
+}
 
 export function StockCall() {
+  const [data, setData] = useState<StockData>({
+    price: 0,
+    stockOrderList: [
+      {
+        price: 0,
+        buyOrderCnt: 0,
+        sellOrderCnt: 0,
+      },
+    ],
+  });
+
+  const client = useRef<CompatClient | null>(null);
+
+  const connectHandler = () => {
+    const socket = new SockJS('https://mufin.life/api/ws-connection', null, {
+      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+    });
+    client.current = Stomp.over(function () {
+      return socket;
+    });
+
+    client.current?.connect(
+      {},
+      () => {
+        client.current?.send(`/pub/orders/${name}`, {});
+        client.current?.subscribe(`/sub/orders/${name}`, (message: any) => {
+          // 기존 봉 차트에 데이터 추가
+          // setData((prev) => {
+          //   return prev
+          //     ? {...prev, JSON.parse(message.body)}
+          //     : null;
+          // });
+          setData(JSON.parse(message.body));
+        });
+      },
+      {},
+    );
+  };
+
+  useEffect(() => {
+    connectHandler();
+    return () => client.current?.disconnect();
+  }, []);
+
   return (
     <section className="flex flex-col gap-[1rem]">
       <h3 className="custom-semibold-text">호가</h3>

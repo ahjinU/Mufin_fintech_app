@@ -28,7 +28,7 @@ const setIndex = (path: string) => {
       return 0;
     case '/pay':
       return 1;
-    case '/calendar':
+    case '/book':
       return 2;
     case '/stock':
     case '/stock/list':
@@ -67,7 +67,7 @@ export default function NavBar({ mode }: NavBarProps) {
         {
           id: 2,
           icon: <CalendarIcon className="h-[2.4rem] w-[2.4rem] 4" />,
-          path: '/',
+          path: '/book',
           label: '가계부',
         },
         {

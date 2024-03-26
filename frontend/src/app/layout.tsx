@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import './globals.css';
 import { MSWComponent } from './_component/MSWComponent';
+import AuthContext from '@/context/AuthContext';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,10 +16,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-custom-black-with-opacity">
-        <MSWComponent />
-        <div className="w-[36rem] min-h-[64rem] mx-auto bg-custom-white relative">
-          {children}
-        </div>
+        <AuthContext>
+          <MSWComponent />
+          <div className="w-[36rem] min-h-[64rem] mx-auto bg-custom-white">
+            {children}
+          </div>
+        </AuthContext>
       </body>
     </html>
   );

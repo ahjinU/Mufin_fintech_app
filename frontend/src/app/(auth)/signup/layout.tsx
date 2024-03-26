@@ -2,8 +2,10 @@ import { Header, BackButton } from '@/components';
 
 export default function Layout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <div className="min-h-screen bg-custom-white">

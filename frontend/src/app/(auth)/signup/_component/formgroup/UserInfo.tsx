@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { ComplexInput, Input, Button } from '@/components';
+import DateInput from '../input/DateInput';
 
-export default function SignUpForm1() {
+export default function UserInfo() {
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
   const [gender, setGender] = useState('');
@@ -37,9 +38,13 @@ export default function SignUpForm1() {
         </div>
       </ComplexInput>
       <ComplexInput label="생년월일" mode="NONE">
-        <div className="flex justify-between items-center"></div>
+        <div className="flex justify-between items-center">
+          <DateInput name="year" onChange={() => {}} />
+          <DateInput name="month" onChange={() => {}} />
+          <DateInput name="day" onChange={() => {}} />
+        </div>
       </ComplexInput>
-      <div className="my-[1.2rem]">
+      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
         <Button label="다음" mode="ACTIVE" onClick={goNext} />
       </div>
     </div>

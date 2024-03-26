@@ -12,7 +12,8 @@ interface InputProps {
   value?: string | number;
   disabled?: boolean;
   setValue?: Function;
-  onChange?: () => void;
+  isRight?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function Input({
@@ -25,10 +26,11 @@ export default function Input({
   setValue,
   onChange,
   disabled,
+  isRight,
   ...props
 }: InputProps) {
   const [inputPlaceholder, setInputPlaceholder] = useState(placeholder || '');
-  const [inputValue, setInputValue] = useState(value || '');
+  const [inputValue, setInputValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleReset = () => {
@@ -39,7 +41,7 @@ export default function Input({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
-    onChange && onChange();
+    onChange && onChange(e);
     setValue && setValue(newValue);
   };
 
@@ -58,7 +60,7 @@ export default function Input({
     >
       <input
         className={`w-full outline-none text-[1.6rem] custom-semibold-text text-custom-black ${
-          typeof value === 'number' && 'text-right'
+          isRight && 'text-right'
         } ${disabled === true && 'bg-custom-white'}`}
         {...props}
         placeholder={inputPlaceholder}

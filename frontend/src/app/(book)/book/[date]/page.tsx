@@ -13,14 +13,15 @@ import {
 import { commaNum } from '@/utils/commaNum';
 import ListDeal from './ListDeal';
 import Link from 'next/link';
-import { useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import useBookStore from '../_store';
 
 export default function BookList() {
   const url = usePathname();
   const encodedDate: string = url.split('/').pop() || '';
   const decodedDate: string = decodeURIComponent(encodedDate);
-  console.log(decodedDate);
+  // console.log(decodedDate);
+  const { selectedDate } = useBookStore();
   return (
     <div>
       <div className="p-[1.2rem] flex flex-col gap-[1rem]">
@@ -36,11 +37,11 @@ export default function BookList() {
           unit={'원'}
         />
         <div className="w-full flex items-end justify-end pr-[1rem]">
-          <Link href={`/post`}>
+          <Link href={`/book/${encodedDate}/post`}>
             <TinyButton label={'직접 추가'} />
           </Link>
         </div>
-        <Link className="cursor-pointer" href="./">
+        <Link className="cursor-pointer" href={`/book/${encodedDate}/detail`}>
           <FlexBox
             isDivided={false}
             mode="LIST"

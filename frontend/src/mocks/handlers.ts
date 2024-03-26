@@ -1,5 +1,6 @@
 import { HttpResponse, http } from 'msw';
 import line from './services/stock/line';
+import candle from './services/stock/candle';
 
 export const handlers = [
   http.get('/api/user', ({ request }) => {
@@ -161,6 +162,7 @@ export const handlers = [
     });
   }),
 
+  // 초코칩 정보
   http.post('/parking/account', () => {
     return HttpResponse.json({
       data: {
@@ -239,4 +241,5 @@ export const handlers = [
   }),
 
   line,
+  candle,
 ];

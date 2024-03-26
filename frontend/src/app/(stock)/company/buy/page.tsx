@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import {
   GuideText,
@@ -10,11 +10,21 @@ import {
   Button,
 } from '@/components';
 import { StockBuySell } from '../_components/StockBuySell';
+import { getChocoChipPocketData } from '../_apis';
+import { commaNum } from '@/utils/commaNum';
 
 export default function Buy() {
   const [price, setPrice] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
   const totalPrice = price * quantity;
+  const [chocoChipPocket, setChocoChipPocket] = useState<number>(0);
+
+  useEffect(() => {
+    (async function () {
+      const data = await getChocoChipPocketData();
+      setChocoChipPocket(data.data.balanceToday);
+    })();
+  }, []);
 
   return (
     <main className="p-[1.2rem] flex flex-col gap-[1rem]">
@@ -25,7 +35,7 @@ export default function Buy() {
         topChildren={
           <MoneyInfoElement
             imageSrc="/images/icon-dollar.png"
-            leftHighlightText="1,724,900 자스민"
+            leftHighlightText={`${commaNum(chocoChipPocket)} 초코칩`}
             leftExplainText="내 초코칩 보관함"
             buttonOption="RIGHT_ARROW"
           ></MoneyInfoElement>

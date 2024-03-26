@@ -1,4 +1,4 @@
-import { HttpResponse, http, DefaultBodyType } from 'msw';
+import { HttpResponse, http } from 'msw';
 
 interface RequestBodyType {
   name: string;

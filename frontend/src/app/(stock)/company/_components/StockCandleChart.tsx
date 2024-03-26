@@ -1,12 +1,10 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState, useEffect, useRef } from 'react';
-import SockJS from 'sockjs-client';
-import { Stomp, CompatClient } from '@stomp/stompjs';
+import { useState, useEffect } from 'react';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 import { Tag } from '@/components';
-import { series } from './data';
+import { getStockCandleData } from '../_apis';
 import { getMaxMinValueIndex } from '../_utils';
 
 const datetime: 'datetime' = 'datetime';
@@ -22,29 +20,15 @@ export function StockCandleChart() {
   const [data, setData] = useState<StockCandleData[]>([
     { x: Date.now(), y: [0, 0, 0, 0] },
   ]);
-  const client = useRef<CompatClient | null>(null);
-
-  const connectHandler = () => {
-    const socket = new SockJS('https://mufin.life/ws-connection');
-    client.current = Stomp.over(socket);
-
-    client.current.connect({}, () => {
-      client.current?.subscribe(`/sub/orders/`, (message) => {
-        console.log(message);
-
-        // 기존 봉 차트에 데이터 추가
-        // setData((prev) => {
-        //   return prev
-        //     ? {...prev, JSON.parse(message.body)}
-        //     : null;
-        // });
-      });
-    });
-  };
+  const [period, setPeriod] = useState<number>(0);
+  const series = [{ data }];
 
   useEffect(() => {
-    connectHandler();
-  }, []);
+    (async function () {
+      const data = await getStockCandleData('바람막이', period);
+      setData(data.data);
+    })();
+  }, [period]);
 
   const option = {
     chart: {
@@ -149,11 +133,13 @@ export function StockCandleChart() {
       custom: ({ w, dataPointIndex }: { w: any; dataPointIndex: number }) => {
         return (
           "<article class='tooltip'>" +
-          `<span class='tooltip-date'>${w.config.series[0].data[
-            dataPointIndex
-          ].x.getFullYear()}년 ${
-            w.config.series[0].data[dataPointIndex].x.getMonth() + 1
-          }월 ${w.config.series[0].data[dataPointIndex].x.getDate()}일</span>` +
+          `<span class='tooltip-date'>${new Date(
+            w.config.series[0].data[dataPointIndex].x,
+          ).getFullYear()}년 ${
+            new Date(w.config.series[0].data[dataPointIndex].x).getMonth() + 1
+          }월 ${new Date(
+            w.config.series[0].data[dataPointIndex].x,
+          ).getDate()}일</span>` +
           `<span>시가: <strong class='tooltip-bold'>${w.config.series[0].data[
             dataPointIndex
           ].y[0].toFixed(0)}초코칩</strong></span>` +
@@ -186,15 +172,15 @@ export function StockCandleChart() {
         tags={[
           {
             label: '1일',
-            onClick: () => {},
+            onClick: () => setPeriod(1),
           },
           {
             label: '4일',
-            onClick: () => {},
+            onClick: () => setPeriod(4),
           },
           {
             label: '1주',
-            onClick: () => {},
+            onClick: () => setPeriod(7),
           },
         ]}
       />

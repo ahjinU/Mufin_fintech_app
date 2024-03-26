@@ -4,6 +4,7 @@ import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.parking.ParkingDetailsService;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.stock.*;
+import com.a502.backend.domain.stock.request.StockTransactionRequest;
 import com.a502.backend.domain.stock.response.*;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
@@ -41,21 +42,20 @@ public class StockFacade {
 	/**
 	 * 매수 거래 신청 메서드
 	 *
-	 * @param userId    매수 신청한 userId
-	 * @param name      주식 이름
-	 * @param price     주식 가격
-	 * @param cnt_total 주식 개수
+	 * @param request
 	 */
 	@Transactional
-	public void stockBuy(int userId, String name, int price, int cnt_total) {
-		User user = userService.findById(userId);
+	public void stockBuy(StockTransactionRequest request) {
+		String name = request.getName();
+		int price = request.getPrice();
+		int cnt_total = request.getCnt_total();
+		User user = userService.userFindByEmail();
 		Stock stock = stocksService.findByName(name);
 
 		stockDetailsService.validStockPrice(stock, price);
 		parkingService.validParkingBalance(user, price * cnt_total);
 
-		// S001 => 거래중
-		Code code = codeService.findById("S001");
+		Code code = codeService.findByName("거래중");
 
 		StockBuy stockBuy = stockBuysService.save(user, stock, price, cnt_total, code);
 		List<StockSell> list = stockSellsService.findTransactionList(stock, price);
@@ -72,20 +72,20 @@ public class StockFacade {
 	/**
 	 * 매도 거래 신청 메서드
 	 *
-	 * @param userId    매수 신청한 userId
-	 * @param name      주식 이름
-	 * @param price     주식 가격
-	 * @param cnt_total 주식 개수
+	 * @param request
 	 */
 	@Transactional
-	public void stockSell(int userId, String name, int price, int cnt_total) {
-		User user = userService.findById(userId);
+	public void stockSell(StockTransactionRequest request) {
+		String name = request.getName();
+		int price = request.getPrice();
+		int cnt_total = request.getCnt_total();
+		User user = userService.userFindByEmail();
 		Stock stock = stocksService.findByName(name);
 
 		stockDetailsService.validStockPrice(stock, price);
 		stockHoldingsService.validStockHolding(user, stock, cnt_total);
-		// S001 => 거래중
-		Code code = codeService.findById("S001");
+
+		Code code = codeService.findByName("거래중");
 		StockSell stockSell = stockSellsService.save(user, stock, price, cnt_total, code);
 		List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
 
@@ -112,7 +112,7 @@ public class StockFacade {
 	@Transactional
 	public int transaction(StockBuy stockBuy, StockSell stockSell) {
 		int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
-		Code code = codeService.findById("S002");
+		Code code = codeService.findByName("완료");
 
 		ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt, code);
 		ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt, code);

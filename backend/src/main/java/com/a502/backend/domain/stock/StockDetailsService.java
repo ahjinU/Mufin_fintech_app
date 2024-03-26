@@ -83,7 +83,8 @@ public class StockDetailsService {
 
         for(Stock stock : stocks){
             StockDetail stockDetail = getLastDetail(stock);
-            int startPrice = (int) (stockDetail.getPrice() * ratioDif[i++]);
+            int price = (stockDetail == null) ? 10000 : stockDetail.getPrice();
+            int startPrice = (int) (price * ratioDif[i++]);
 
             saveInit(startPrice,startPrice - 1000 , startPrice + 1000, stock);
         }
@@ -177,6 +178,7 @@ public class StockDetailsService {
                 result[3] += StockCode.STOCK_PRICE_LV3;
                 break;
         }
+
         return result;
     }
 

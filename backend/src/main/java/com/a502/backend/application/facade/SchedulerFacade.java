@@ -22,7 +22,7 @@ public class SchedulerFacade {
     private final StockDetailsService stockDetailsService;
     private final StocksService stocksService;
 
-    @Scheduled(cron = "${schedule.cron.test}")
+//    @Scheduled(cron = "${schedule.cron.test}")
 //    @Scheduled(cron = "${schedule.cron.start}")
     public void marketStart() {
         try {

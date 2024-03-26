@@ -39,7 +39,7 @@ public class InitFacade {
 //            stockDetailsService.save(10000, 10000, 10000, 20000, 10000, 10000, stock);
 //        }
 
-        initCode();
+//        initCode();
 //        initStock();
 //        initKeypadImage();
 

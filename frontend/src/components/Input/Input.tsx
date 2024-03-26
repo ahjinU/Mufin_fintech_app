@@ -65,7 +65,7 @@ export default function Input({
         {...props}
         placeholder={inputPlaceholder}
         name={name}
-        value={inputValue}
+        value={inputValue || ''}
         ref={inputRef}
         disabled={disabled}
         onChange={handleChange}

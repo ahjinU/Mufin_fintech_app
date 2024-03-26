@@ -21,6 +21,9 @@ public enum ResponseCode {
     API_SUCCESS_ACCOUNT_IS_SUFFICIENT("A002", "정상적으로 출금이 가능합니다."),
     API_SUCCESS_ACCOUNT_CREATE("AT001","계좌생성 완료했습니다."),
 
+	//receipt
+	API_SUCCESS_CONVERT_IMAGE("R001","영수증 분석을 완료햐였습니다."),
+
    	// Stock
 	API_SUCCESS_STOCK_BUY("S001", "성공적으로 매수 주문했습니다."),
 	API_SUCCESS_STOCK_SELL("S002", "성공적으로 매도 주문했습니다."),

@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 import {
   FlexBox,
   MoneyInfoElement,
@@ -6,7 +10,11 @@ import {
 } from '@/components';
 import { StockBuySell } from '../_components/StockBuySell';
 
-export default async function Buy() {
+export default function Sell() {
+  const [price, setPrice] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(0);
+  const totalPrice = price * quantity;
+
   return (
     <main className="p-[1.2rem] flex flex-col gap-[1rem]">
       <FlexBox
@@ -35,7 +43,12 @@ export default async function Buy() {
         }
       />
 
-      <StockBuySell mode="SELL" />
+      <StockBuySell
+        mode="SELL"
+        handlePrice={setPrice}
+        handleQuantity={setQuantity}
+        totalPrice={totalPrice}
+      />
 
       <Button mode="ACTIVE" label="확인" />
     </main>

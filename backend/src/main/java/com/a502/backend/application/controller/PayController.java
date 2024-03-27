@@ -38,6 +38,6 @@ public class PayController {
 	@PostMapping("/account")
 	public ResponseEntity<ApiResponse<Void>> transferMoney(@RequestBody TransferMoneyRequest transferMoneyRequest){
 		payFacade.transferMoney(transferMoneyRequest);
-		return null;
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_PAY_TRANSFER));
 	}
 }

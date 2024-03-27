@@ -21,4 +21,9 @@ interface AccountRepository extends JpaRepository<Account, Integer> {
 	Optional<List<Account>> findByAccountNumber(String accountNumber);
 
 	boolean existsByAccountNumber(String accountNumber);
+
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Transactional
+	@Query("select a from Account a where a.user = :user and a.typeCode.id = 'AT001' and a.statusCode.id = 'AS002' order by a.createdAt desc")
+	Optional <Account> findByUser(User user);
 }

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { NavBar } from '@/components';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -8,12 +7,18 @@ export const metadata: Metadata = {
 
 export default function LoanApplyLayout({
   children,
-}: Readonly<{
+  modal,
+}: {
   children: React.ReactNode;
-}>) {
+  modal: React.ReactNode;
+}) {
+  console.log(modal);
   return (
     <>
-      <div className="pb-[3rem]">{children}</div>
+      <div className="pb-[3rem]">
+        {children}
+        {modal}
+      </div>
     </>
   );
 }

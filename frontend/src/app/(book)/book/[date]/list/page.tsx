@@ -11,8 +11,8 @@ import {
   TinyButton,
 } from '@/components';
 import { commaNum } from '@/utils/commaNum';
-import ListDeal from '../_components/ListDeal';
 import Link from 'next/link';
+import ListDeal from '../_components/ListDeal';
 export default function BookList() {
   const details = [
     {

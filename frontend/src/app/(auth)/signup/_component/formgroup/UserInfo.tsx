@@ -4,7 +4,13 @@ import { useState } from 'react';
 import { ComplexInput, Input, Button } from '@/components';
 import DateInput from './DateInput';
 
-export default function UserInfo() {
+type UserInfoPageProps = {
+  previous: () => void;
+  next: (data: any) => void;
+  userInfo: {};
+};
+
+export default function UserInfo({ next }: UserInfoPageProps) {
   const [info, setInfo] = useState({ name: '', year: '', month: '', day: '' });
   const [gender, setGender] = useState('');
   const [message, setMessage] = useState('');
@@ -14,7 +20,12 @@ export default function UserInfo() {
   };
 
   const goNext = () => {
-    console.log(gender, info.name);
+    const data = {
+      name: info.name,
+      gender: gender,
+      birth: info.year + '-' + info.month + '-' + info.day,
+    };
+    next(data);
   };
 
   return (

@@ -8,6 +8,8 @@ import com.a502.backend.domain.stock.request.StockTransactionRequest;
 import com.a502.backend.domain.stock.response.*;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
+import com.a502.backend.global.error.BusinessException;
+import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -53,7 +55,10 @@ public class StockFacade {
 		Stock stock = stocksService.findByName(name);
 
 		stockDetailsService.validStockPrice(stock, price);
-		parkingService.validParkingBalance(user, price * cnt_total);
+		int price1 = parkingService.getParkingBalance(user, price * cnt_total);
+		int price2 = stockBuysService.getStockBuyWaitingList(user, stock, codeService.findByName("거래중"));
+		if (price1 - price2 < price)
+			throw BusinessException.of(ErrorCode.API_ERROR_PARKING_NOT_ENOUGH_BALANCE);
 
 		Code code = codeService.findByName("거래중");
 
@@ -83,7 +88,12 @@ public class StockFacade {
 		Stock stock = stocksService.findByName(name);
 
 		stockDetailsService.validStockPrice(stock, price);
-		stockHoldingsService.validStockHolding(user, stock, cnt_total);
+		int cnt1 = stockHoldingsService.getStockHolding(user, stock);
+		int cnt2 = stockSellsService.getStockSellWaitingList(user, stock, codeService.findByName("거래중"));
+		log.info("cnt1 : {}" , cnt1);
+		log.info("cnt2 : {}" , cnt2);
+		if (cnt1 - cnt2 < cnt_total)
+			throw BusinessException.of(ErrorCode.API_ERROR_STOCK_HOLDING_NOT_EXIST);
 
 		Code code = codeService.findByName("거래중");
 		StockSell stockSell = stockSellsService.save(user, stock, price, cnt_total, code);
@@ -114,14 +124,15 @@ public class StockFacade {
 		int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
 		Code code = codeService.findByName("완료");
 
-		ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt, code);
-		ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt, code);
+		ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt, codeService.findByName("매도"));
+		ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt, codeService.findByName("매수"));
 
 		parkingService.updateParkingBalance(stockSell.getUser(), detailSell.getBalance());
 		parkingService.updateParkingBalance(stockBuy.getUser(), detailBuy.getBalance());
 
-		stockSellsService.stockSell(stockSell, transCnt);
-		stockBuysService.stockBuy(stockBuy, transCnt);
+
+		stockSellsService.stockSell(stockSell, transCnt, code);
+		stockBuysService.stockBuy(stockBuy, transCnt, code);
 
 		stockHoldingsService.stockSell(stockSell.getUser(), stockSell.getStock(), transCnt, stockSell.getPrice());
 		stockHoldingsService.stockBuy(stockBuy.getUser(), stockBuy.getStock(), transCnt, stockBuy.getPrice());
@@ -409,4 +420,6 @@ public class StockFacade {
 				.childName(user.getName())
 				.build();
 	}
+
+
 }

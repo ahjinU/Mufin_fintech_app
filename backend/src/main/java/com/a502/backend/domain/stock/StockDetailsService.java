@@ -31,7 +31,7 @@ public class StockDetailsService {
 		StockDetail stockDetail = getLastDetail(stock);
 		if (stockDetail.getLowerLimitPrice() > price
 				|| stockDetail.getUpperLimitPrice() < price)
-			throw BusinessException.of(ErrorCode.API_ERROR_STOCK_NOT_EXIST);
+			throw BusinessException.of(ErrorCode.API_ERROR_STOCK_PRICE_OUT_OF_RANGE);
 	}
 
     @Transactional

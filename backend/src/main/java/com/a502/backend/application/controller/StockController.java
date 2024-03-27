@@ -39,7 +39,7 @@ public class StockController {
 	}
 
 	@PostMapping("/buy")
-	public ResponseEntity<ApiResponse<Void>> stockBuy(StockTransactionRequest request) {
+	public ResponseEntity<ApiResponse<Void>> stockBuy(@RequestBody StockTransactionRequest request) {
 		// 주식 매수 주문 넣을 때마다 sub/orders/name 으로 데이터 보내주기
 		stockFacade.stockBuy(request);
 		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(request.getName());
@@ -48,7 +48,7 @@ public class StockController {
 	}
 
 	@PostMapping("/sell")
-	public ResponseEntity<ApiResponse<Void>> stockSell(StockTransactionRequest request) {
+	public ResponseEntity<ApiResponse<Void>> stockSell(@RequestBody StockTransactionRequest request) {
 		// 주식 매도 주문 넣을 때마다 sub/orders/name 으로 데이터 보내주기
 		stockFacade.stockSell(request);
 		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(request.getName());

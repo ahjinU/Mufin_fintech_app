@@ -46,16 +46,6 @@ public class InitFacade {
     }
 
     /**
-     * 유저 추가 메서드
-     * @param email 회원 이메일
-     * @param password 회원 비밀번호
-     */
-    private void addUser(String email, String password){
-//        User user = userService.save("gkstmf1403@ssafy.com", "ssafy");
-//        System.out.println(user.toString());
-    }
-
-    /**
      * 상태 코드를 초기화 메서드
      */
     private void initCode() {
@@ -97,15 +87,14 @@ public class InitFacade {
      * @throws IOException
      */
     private void initStock() throws IOException {
-//        String image = s3FileUploader.uploadFile("images/" + "stock/"+ "wind" + ".png");
-        String images = s3FileUploader.uploadFile("images/"+ "icon-" + 0 + ".png");
-        stocksService.save("바람개비", images);
-//        image = s3FileUploader.uploadFile("images/" + "stock/"+ "rain" + ".png");
-        stocksService.save("우산", images);
-//        image = s3FileUploader.uploadFile("images/" + "stock/"+ "icecream" + ".png");
-        stocksService.save("아이스크림", images);
-//        image = s3FileUploader.uploadFile("images/" + "stock/"+ "snow" + ".png");
-        stocksService.save("눈오리", images);
+        String image = s3FileUploader.uploadFile("images/" + "stock/"+ "vane" + ".png");
+        stocksService.save("바람개비", image);
+        image = s3FileUploader.uploadFile("images/" + "stock/"+ "umbrella" + ".png");
+        stocksService.save("우산", image);
+        image = s3FileUploader.uploadFile("images/" + "stock/"+ "icecream" + ".png");
+        stocksService.save("아이스크림", image);
+        image = s3FileUploader.uploadFile("images/" + "stock/"+ "duck" + ".png");
+        stocksService.save("눈오리", image);
     }
 
     /**

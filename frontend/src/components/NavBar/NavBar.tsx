@@ -22,7 +22,7 @@ interface itemProp {
   label: string;
 }
 
-const setIndex = (path: string) => {
+const setIndex = (path: string | null) => {
   switch (path) {
     case '/':
       return 0;

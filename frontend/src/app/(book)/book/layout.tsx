@@ -13,7 +13,7 @@ export default function BookLayout({
 }>) {
   return (
     <>
-      <div className="pb-[6rem] h-screen">{children}</div>
+      <div className="pb-[6rem]">{children}</div>
       <NavBar mode={'CHILD'} />
     </>
   );

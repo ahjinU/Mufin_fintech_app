@@ -32,7 +32,7 @@ const Day = (props: DayProps) => {
         onClick={() => {
           day && updateSelectDate(day);
         }}
-        href={`/book/${koreanDate}`}
+        href={`/book/${koreanDate}/list`}
       >
         {day && format(day, 'd')}
       </Link>

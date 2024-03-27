@@ -1,9 +1,10 @@
 'use client';
 
 interface DealType {
-  name: string | number;
-  count: string | number;
-  totalPrice: string | number;
+  item: string;
+  cnt: number;
+  price: number;
+  total: number;
 }
 
 interface DealListProps {
@@ -22,17 +23,17 @@ export default function ListDeal({ deals }: DealListProps) {
       <div className="col-span-2 text-[1rem] text-custom-medium-gray flex items-center justify-end border-b  pr-[0.5rem]  mb-[0.3rem]">
         지출금액
       </div>
-      {deals.map(({ name, count, totalPrice }, index) => {
+      {deals.map(({ item, cnt, total }, index) => {
         return (
           <>
             <div className="col-span-4 text-[1.2rem] font-normal pl-[0.3rem] text-custom-dark-gray">
-              <p>{name}</p>
+              <p>{item}</p>
             </div>
             <div className="text-[1.2rem] font-normal text-center text-custom-dark-gray">
-              <p>{count}</p>
+              <p>{cnt}</p>
             </div>
             <div className="col-span-2 text-[1.2rem] font-normal text-right pr-[0.5rem] text-custom-dark-gray">
-              <p>{totalPrice}원</p>
+              <p>{total}원</p>
             </div>
           </>
         );

@@ -3,9 +3,10 @@
 import { Input } from '..';
 
 interface DealType {
-  name: string | number;
-  count: string | number;
-  totalPrice: string | number;
+  item: string;
+  cnt: number;
+  price: number;
+  total: number;
 }
 
 interface DealListProps {
@@ -25,53 +26,57 @@ export default function DealList({ mode, deals, ...props }: DealListProps) {
       <div className="col-span-2 custom-medium-text text-custom-dark-gray flex items-center justify-end border-b  pr-[0.5rem]  mb-[0.3rem]">
         지출금액
       </div>
-      {mode === 'READONLY'
-        ? deals.map(({ name, count, totalPrice }) => {
+      {mode === 'READONLY' ? (
+        <>
+          {deals.map(({ item, cnt, total }) => {
             return (
               <>
-                <div className="col-span-4 text-[1.6rem] font-normal pl-[0.3rem]">
-                  <p>{name}</p>
+                <div className="col-span-4 text-[1.6rem] font-normal pl-[0.3rem] text-custom-black">
+                  <p>{item}</p>
                 </div>
-                <div className="text-[1.6rem] font-normal text-center">
-                  <p>{count}</p>
+                <div className="text-[1.6rem] font-normal text-center text-custom-black">
+                  <p>{cnt}</p>
                 </div>
-                <div className="col-span-2 text-[1.6rem] font-normal text-right pr-[0.5rem]">
-                  <p>{totalPrice}원</p>
-                </div>
-              </>
-            );
-          })
-        : deals.map(({ name, count, totalPrice }) => {
-            return (
-              <>
-                <div className="col-span-4 text-[1.6rem] font-normal  flex items-center max-h-[3.5rem]">
-                  <Input
-                    reset={false}
-                    width="w-[99%]"
-                    height="h-[50%]"
-                    value={name}
-                  />
-                </div>
-                <div className="text-[1.6rem] font-normal text-center flex items-center max-h-[3.5rem]">
-                  <Input
-                    reset={false}
-                    width="w-[97%]"
-                    height="h-[50%]"
-                    value={count}
-                  />
-                </div>
-                <div className="col-span-2 text-[1.6rem] font-normal flex items-center justify-end max-h-[3.5rem]">
-                  <Input
-                    reset={false}
-                    width="w-[100%]"
-                    height="h-[50%]"
-                    value={totalPrice}
-                  />
-                  원
+                <div className="col-span-2 text-[1.6rem] font-normal text-right pr-[0.5rem] text-custom-black">
+                  <p>{total}원</p>
                 </div>
               </>
             );
           })}
+        </>
+      ) : (
+        deals.map(({ item, cnt, total }) => {
+          return (
+            <>
+              <div className="col-span-4 text-[1.6rem] font-normal  flex items-center max-h-[3.5rem]">
+                <Input
+                  reset={false}
+                  width="w-[99%]"
+                  height="h-[50%]"
+                  value={item}
+                />
+              </div>
+              <div className="text-[1.6rem] font-normal text-center flex items-center max-h-[3.5rem]">
+                <Input
+                  reset={false}
+                  width="w-[97%]"
+                  height="h-[50%]"
+                  value={cnt}
+                />
+              </div>
+              <div className="col-span-2 text-[1.6rem] font-normal flex items-center justify-end max-h-[3.5rem]">
+                <Input
+                  reset={false}
+                  width="w-[100%]"
+                  height="h-[50%]"
+                  value={total}
+                />
+                원
+              </div>
+            </>
+          );
+        })
+      )}
     </div>
   );
 }

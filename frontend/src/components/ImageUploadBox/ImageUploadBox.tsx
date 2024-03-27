@@ -6,14 +6,21 @@ import { CameraIcon } from '@heroicons/react/24/solid';
 
 interface ImageUploadBoxProps {
   text: string;
+  image: File | null;
+  setImage: (image: File) => void;
 }
 
-export default function ImageUploadBox({ text: label }: ImageUploadBoxProps) {
-  const [image, setImage] = useState<File | null>(null);
+export default function ImageUploadBox({
+  text: label,
+  image,
+  setImage,
+}: ImageUploadBoxProps) {
+  const [inputImage, setInputImage] = useState<File | null>(image);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImage = e.target.files && e.target.files[0];
     if (selectedImage) {
+      setInputImage(selectedImage);
       setImage(selectedImage);
     }
   };
@@ -33,7 +40,7 @@ export default function ImageUploadBox({ text: label }: ImageUploadBoxProps) {
       className="flex justify-center items-center w-full h-[15.2rem]
       border-dashed border-[0.2rem] border-custom-medium-gray"
     >
-      {image ? (
+      {inputImage ? (
         <div className="flex flex-col justify-evenly items-center gap-2 m-4">
           <label
             htmlFor="imageUploadInput"
@@ -43,7 +50,7 @@ export default function ImageUploadBox({ text: label }: ImageUploadBoxProps) {
             {ImageUploadInput}
           </label>
           <Image
-            src={URL.createObjectURL(image)}
+            src={URL.createObjectURL(inputImage)}
             width={200}
             height={200}
             alt="업로드 이미지"

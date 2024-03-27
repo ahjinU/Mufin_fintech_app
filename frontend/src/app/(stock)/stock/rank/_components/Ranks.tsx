@@ -1,10 +1,10 @@
 import { Ranking } from '@/components';
 import Image from 'next/image';
-import useStore from '../../_store';
+import useStockStore from '../../_store';
 import { commaNum } from '@/utils/commaNum';
 
 export default function Ranks() {
-  const { ranks, myRank } = useStore.getState();
+  const { ranks, myRank } = useStockStore.getState();
 
   return (
     <div className="mt-[-1.2rem] flex flex-col gap-[0.5rem]">

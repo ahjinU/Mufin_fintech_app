@@ -1,7 +1,14 @@
 package com.a502.backend.domain.allowance;
 
+import com.a502.backend.application.entity.Receipt;
+import com.a502.backend.domain.allowance.response.OrderItem;
+import com.a502.backend.domain.allowance.response.PaymentInfo;
+import com.a502.backend.domain.allowance.response.ReceiptDto;
+import com.a502.backend.domain.allowance.response.StoreInfo;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,7 +22,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,14 +38,67 @@ public class AllowanceService {
     String secretKey;
 
     public void convert(MultipartFile file) {
+        String response;
         try {
-            String response = postFileForConversion(file);
+            response = postFileForConversion(file);
             System.out.println("response: ");
             System.out.println(response);
             System.out.println("===================");
         } catch (Exception e) {
             throw BusinessException.of(ErrorCode.API_ERROR_RECEIPT_FAIL_CONVERT_TO_TEXT);
         }
+        ReceiptDto receipt;
+
+        try {
+            receipt = parseReceipt(response);
+            // 여기서 receipt 객체 사용
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(receipt.toString());
+
+
+    }
+
+    public static ReceiptDto parseReceipt(String jsonInput) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(jsonInput);
+
+        // 가게 정보 추출
+        JsonNode storeInfoNode = rootNode.path("storeInfo");
+        StoreInfo storeInfo = StoreInfo.builder()
+                .name(storeInfoNode.path("name").asText())
+                .address(storeInfoNode.path("address").asText())
+                .tel(storeInfoNode.path("tel").asText())
+                .build();
+
+        // 결제 정보 추출
+        JsonNode paymentInfoNode = rootNode.path("paymentInfo");
+        PaymentInfo paymentInfo = PaymentInfo.builder()
+                .date(paymentInfoNode.path("date").asText())
+                .time(paymentInfoNode.path("time").asText())
+                .price(paymentInfoNode.path("price").asInt())
+                .build();
+
+        // 주문 항목 추출
+        JsonNode orderItemsNode = rootNode.path("orderItems");
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (JsonNode itemNode : orderItemsNode) {
+            OrderItem item = OrderItem.builder()
+                    .name(itemNode.path("name").asText())
+                    .count(itemNode.path("count").asInt())
+                    .unitPrice(itemNode.path("unitPrice").asInt())
+                    .build();
+            orderItems.add(item);
+        }
+
+        // 최종 ReceiptDto 생성
+        return ReceiptDto.builder()
+                .storeInfo(storeInfo)
+                .paymentInfo(paymentInfo)
+                .orderItems(orderItems)
+                .build();
     }
 
     private String postFileForConversion(MultipartFile file) throws IOException {

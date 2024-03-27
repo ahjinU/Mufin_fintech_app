@@ -4,6 +4,10 @@ import com.a502.backend.application.config.dto.CustomUserDetails;
 import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.config.generator.JwtProvider;
 import com.a502.backend.application.config.generator.JwtUtil;
+import com.a502.backend.application.entity.User;
+import com.a502.backend.application.facade.KeypadFacade;
+import com.a502.backend.domain.numberimg.request.KeyPadRequest;
+import com.a502.backend.domain.numberimg.response.KeypadListResponse;
 import com.a502.backend.domain.user.UserRepository;
 import com.a502.backend.domain.user.dto.EmailDto;
 import com.a502.backend.domain.user.dto.LoginDto;
@@ -11,8 +15,10 @@ import com.a502.backend.domain.user.dto.SignUpDto;
 import com.a502.backend.domain.user.dto.TelephoneDto;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.error.BusinessException;
+import com.a502.backend.global.exception.ErrorCode;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
+import com.amazonaws.Response;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,7 +39,6 @@ import java.util.UUID;
 import static com.a502.backend.application.config.constant.JwtConstant.GRANT_TYPE;
 import static com.a502.backend.application.config.constant.JwtConstant.HEADER_STRING;
 import static com.a502.backend.global.exception.ErrorCode.API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND;
-import static com.a502.backend.global.exception.ErrorCode.API_ERROR_USER_NOT_EXIST;
 import static com.a502.backend.global.response.ResponseCode.*;
 
 
@@ -43,7 +48,7 @@ import static com.a502.backend.global.response.ResponseCode.*;
 public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
-
+    private final KeypadFacade keypadFacade;
 
     private final JwtProvider tokenProvider;
     private final JwtUtil jwtUtil;
@@ -51,7 +56,6 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
-        System.out.println("[controller /login]: "+loginDto.toString());
 
         JWTokenDto jwt = userService.login(loginDto);
 
@@ -113,7 +117,7 @@ public class UserController {
         System.out.println("[authentication]");
         System.out.println(authentication.toString());
         if(authentication==null)
-            throw BusinessException.of(API_ERROR_USER_NOT_EXIST);
+            throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST);
 
         String parentEmail = authentication.getName(); // Username 추출
 

@@ -3,6 +3,7 @@ package com.a502.backend.application.controller;
 import com.a502.backend.application.entity.RankingDetail;
 import com.a502.backend.application.facade.StockFacade;
 import com.a502.backend.domain.stock.request.StockPriceHistoryRequest;
+import com.a502.backend.domain.stock.request.StockTransactionRequest;
 import com.a502.backend.domain.stock.response.*;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
@@ -32,20 +33,20 @@ public class StockController {
 	}
 
 	@PostMapping("/buy")
-	public ResponseEntity<ApiResponse<Void>> stockBuy(int userId, String name, int price, int cnt_total) {
+	public ResponseEntity<ApiResponse<Void>> stockBuy(@RequestBody StockTransactionRequest request) {
 		// 주식 매수 주문 넣을 때마다 sub/orders/name 으로 데이터 보내주기
-		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(name);
-		sendingOperations.convertAndSend("/sub/orders/" + name, result);
-		stockFacade.stockBuy(userId, name, price, cnt_total);
+		stockFacade.stockBuy(request);
+		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(request.getName());
+		sendingOperations.convertAndSend("/sub/orders/" + request.getName(), result);
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_BUY));
 	}
 
 	@PostMapping("/sell")
-	public ResponseEntity<ApiResponse<Void>> stockSell(int userId, String name, int price, int cnt_total) {
+	public ResponseEntity<ApiResponse<Void>> stockSell(@RequestBody StockTransactionRequest request) {
 		// 주식 매도 주문 넣을 때마다 sub/orders/name 으로 데이터 보내주기
-		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(name);
-		sendingOperations.convertAndSend("/sub/orders/" + name, result);
-		stockFacade.stockSell(userId, name, price, cnt_total);
+		stockFacade.stockSell(request);
+		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(request.getName());
+		sendingOperations.convertAndSend("/sub/orders/" + request.getName(), result);
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_SELL));
 	}
 

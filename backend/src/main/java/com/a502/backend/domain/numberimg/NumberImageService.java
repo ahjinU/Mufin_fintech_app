@@ -1,7 +1,10 @@
 package com.a502.backend.domain.numberimg;
 
 import com.a502.backend.application.entity.NumberImage;
+import com.a502.backend.global.error.BusinessException;
+import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -25,51 +29,44 @@ public class NumberImageService {
                 .build());
     }
 
-    public List<NumberImage> saveNumberImageList(String user){
-        if (redisTemplate.hasKey(user)){
-            redisTemplate.delete(user);
-        }
+    public List<String> getKeypadList(String uuid){
         List<NumberImage> images = numberImageRepository.findAll();
         Collections.shuffle(images);
         List<String> numbers = new ArrayList<>();
         images.forEach(value -> numbers.add(value.getImageUrl()));
-        saveNumberList(user, numbers);
-        return images;
+        saveNumberList(uuid, numbers);
+        return numbers;
     }
 
-    public String decodePassword(String user, List<Integer> sequence){
+    public String decodePassword(String uuid, List<Integer> inputSequence){
         StringBuilder sb = new StringBuilder();
-        // redis 에서 추출
-        List<String> numberSequence = getNumberList(user);
-        for(int num : sequence){
-            sb.append(numberSequence.get(num).charAt(6));
+        List<String> numberSequence = getNumberList(uuid);
+        for(int num : inputSequence){
+            sb.append(numberSequence.get(num).charAt(60));
         }
         return sb.toString();
     }
 
-    private void saveNumberList(String user, List<String> numbers) {
+    private void saveNumberList(String uuid, List<String> numbers) {
+        if (redisTemplate.hasKey(uuid)){
+            redisTemplate.delete(uuid);
+        }
         ListOperations<String, String> listOps = redisTemplate.opsForList();
-        numbers.forEach(value -> listOps.rightPush(user, value));
-        redisTemplate.expire(user, 500, TimeUnit.MINUTES);
+        numbers.forEach(value -> listOps.rightPush(uuid, value));
+        redisTemplate.expire(uuid, 500, TimeUnit.MINUTES);
     }
 
-    private List<String> getNumberList(String user) {
+    private List<String> getNumberList(String uuid) {
+        if (!redisTemplate.hasKey(uuid))
+            throw BusinessException.of(ErrorCode.API_ERROR_KEYPAD_TIMEOUT);
         ListOperations<String, String> listOps = redisTemplate.opsForList();
-        return listOps.range(user, 0, -1); // 리스트의 전체 범위를 가져옴
+        List<String> result = listOps.range(uuid, 0, -1);
+        return result;
+    }
+
+    public void deleteNumberList(String uuid){
+        redisTemplate.delete(uuid);
     }
 
 }
-/**
- * 처음 비밀번호 등록할 때
- * // "결제 키패드 주기" -> (value :키패드 순서 & key : 유저 email) 에 넣기
- * // 비밀번호 입력 후 -> "비밀번호 해석"
- * 저장
- *
- *
- * 결제
- * // "결제 키패드 주기" -> (value :키패드 순서 & key : 유저 email) 에 넣기
- * // 비밀번호 입력 후 -> "비밀번호 해석"
- * 비밀번호 일치하는지 확인
- * :일치 Good 오류 회수 0 으로 초기화 후 pass
- * :불일치 -> 다시 결제 키패드 주거나 cnt==5 이면 계좌 정지
- */
+

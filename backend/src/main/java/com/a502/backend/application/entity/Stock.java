@@ -52,4 +52,8 @@ public class Stock extends BaseEntity {
 		this.name = name;
 		this.imageUrl = imageUrl;
 	}
+
+	public void updateImageUrl(String imageUrl){
+		this.imageUrl = imageUrl;
+	}
 }

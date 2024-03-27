@@ -4,6 +4,7 @@ import com.a502.backend.application.entity.NumberImage;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -40,7 +42,7 @@ public class NumberImageService {
         StringBuilder sb = new StringBuilder();
         List<String> numberSequence = getNumberList(uuid);
         for(int num : inputSequence){
-            sb.append(numberSequence.get(num).charAt(6));
+            sb.append(numberSequence.get(num).charAt(60));
         }
         return sb.toString();
     }
@@ -58,7 +60,9 @@ public class NumberImageService {
         if (!redisTemplate.hasKey(uuid))
             throw BusinessException.of(ErrorCode.API_ERROR_KEYPAD_TIMEOUT);
         ListOperations<String, String> listOps = redisTemplate.opsForList();
-        return listOps.range(uuid, 0, -1); // 리스트의 전체 범위를 가져옴
+        List<String> result = listOps.range(uuid, 0, -1);
+        redisTemplate.delete(uuid);
+        return result;
     }
 
 }

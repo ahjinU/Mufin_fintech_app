@@ -1,7 +1,10 @@
 package com.a502.backend.application.controller;
 
+import com.a502.backend.application.facade.KeypadFacade;
 import com.a502.backend.domain.account.dto.DepositWithdrawalAccountDto;
 import com.a502.backend.domain.account.AccountService;
+import com.a502.backend.domain.account.request.AccountPasswordRequest;
+import com.a502.backend.domain.numberimg.response.KeypadListResponse;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
@@ -17,16 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/account")
 @RequiredArgsConstructor
 public class AccountController {
-    private final AccountService accountService;
-    private final UserService userService;
-
+    private final KeypadFacade keypadFacade;
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<DepositWithdrawalAccountDto>> login(@Valid @RequestBody String password) {
+    public ResponseEntity<ApiResponse<KeypadListResponse>> createAccount() {
+        KeypadListResponse response = keypadFacade.getKeypadList();
+        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_GET_KEYPAD, response));
+    }
 
-        System.out.println("[AccountController]: create");
-
-        accountService.createDepositWithdrawalAccount(password);
-
+    @PostMapping("/password")
+    public ResponseEntity<ApiResponse<Void>> setAccountPassword(@RequestBody AccountPasswordRequest request){
+        keypadFacade.craeteAccount(request);
         return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_ACCOUNT_CREATE));
     }
 

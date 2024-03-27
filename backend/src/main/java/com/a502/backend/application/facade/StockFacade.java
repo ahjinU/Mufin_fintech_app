@@ -91,8 +91,6 @@ public class StockFacade {
 		stockDetailsService.validStockPrice(stock, price);
 		int cnt1 = stockHoldingsService.getStockHolding(user, stock);
 		int cnt2 = stockSellsService.getStockSellWaitingList(user, stock, codeService.findByName("거래중"));
-		log.info("cnt1 : {}" , cnt1);
-		log.info("cnt2 : {}" , cnt2);
 		if (cnt1 - cnt2 < cnt_total)
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCK_HOLDING_NOT_EXIST);
 

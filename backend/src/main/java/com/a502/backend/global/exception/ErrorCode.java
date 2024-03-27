@@ -28,8 +28,9 @@ public enum ErrorCode {
     API_ERROR_ACCOUNT_IS_STOPPED(422, "A002","거래가 정지된 계좌입니다."),
     API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE(422, "A003", "잔액이 부족해 출금이 불가능합니다."),
     API_ERROR_ACCOUNT_IS_NOT_YOURS(400, "A004", "접근권한이 없는 계좌입니다."),
-    API_ERROR_CODE_NOT_EXIST(400, "A001", "존재하지 않는 코드 입니다."),
-    API_ERROR_NOT_CREATED(500, "A001", "계좌 생성에 실패하였습니다."),
+    API_ERROR_CODE_NOT_EXIST(400, "A005", "존재하지 않는 코드 입니다."),
+    API_ERROR_NOT_CREATED(500, "A006", "계좌 생성에 실패하였습니다."),
+    API_ERROR_ACCOUNT_IS_ALREADY_EXIST(400, "A007", "이미 입출금 계좌가 존재합니다."),
 
     // AccountDetil
     API_ERROR_ACCOUNT_DETAIL_NOT_EXIST(400, "AD01", "존재하지 않는 계좌 거래 내역 입니다."),

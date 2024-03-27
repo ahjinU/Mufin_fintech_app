@@ -2,22 +2,24 @@ package com.a502.backend.application.facade;
 
 import com.a502.backend.application.entity.Account;
 import com.a502.backend.application.entity.User;
+import com.a502.backend.domain.account.request.AccountPasswordRequest;
 import com.a502.backend.domain.numberimg.NumberImageService;
-import com.a502.backend.domain.numberimg.request.CreatePasswordRequest;
 import com.a502.backend.domain.numberimg.request.KeyPadRequest;
 import com.a502.backend.domain.numberimg.request.ValidPasswordRequest;
 import com.a502.backend.domain.numberimg.response.KeypadListResponse;
-import com.a502.backend.domain.payment.AccountService;
+import com.a502.backend.domain.account.AccountService;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -28,23 +30,26 @@ public class KeypadFacade {
     private final CodeService codeService;
 
 
-    public KeypadListResponse getKeypadList(int userId, KeyPadRequest request){
-        User user = userService.findById(userId);
+    public KeypadListResponse getKeypadList(KeyPadRequest request){
+        User user = userService.userFindByEmail();
         Account account = accountService.findByAccountNumber(request.getAccountNumberOut());
         if (!user.getEmail().equals(account.getUser().getEmail()))
             throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_IS_NOT_YOURS);
         return new KeypadListResponse(numberImageService.getKeypadList(account.getAccountNumber()));
     }
 
-    public void craeteAccountPassword(int userId, CreatePasswordRequest request){
-        User user = userService.findById(userId);
-        Account account = accountService.findByAccountNumber(request.getAccountNumberOut());
-        if (!user.getEmail().equals(account.getUser().getEmail()))
-            throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_IS_NOT_YOURS);
+    public KeypadListResponse getKeypadList(){
+        User user = userService.userFindByEmail();
+        accountService.validCheckAccountIsCreated(user);
+        return new KeypadListResponse(numberImageService.getKeypadList(user.getUserUuid().toString()));
+    }
 
-        String password = numberImageService.decodePassword(account.getAccountNumber(), request.getPassword());
-        account.updatePassword(password);
-//        saveAccount
+    public void craeteAccount(AccountPasswordRequest request){
+        User user = userService.userFindByEmail();
+        String password = numberImageService.decodePassword(user.getUserUuid().toString(), request.getPassword());
+
+        log.info("password : {}", password);
+        accountService.createDepositWithdrawalAccount(password);
     }
 
     public int validAccountPassword(int userId, ValidPasswordRequest request){

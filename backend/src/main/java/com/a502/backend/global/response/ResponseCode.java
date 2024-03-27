@@ -20,7 +20,8 @@ public enum ResponseCode {
 	// account
 	API_SUCCESS_ACCOUNT_EXIST("A001", "존재하는 계좌입니다."),
 	API_SUCCESS_ACCOUNT_IS_SUFFICIENT("A002", "정상적으로 출금이 가능합니다."),
-	API_SUCCESS_ACCOUNT_CREATE("AT001", "계좌생성 완료했습니다."),
+	API_SUCCESS_ACCOUNT_CREATE("AT003", "계좌생성 완료했습니다."),
+	API_SUCCESS_GET_KEYPAD("AT004", "키패드를 성공적으로 전송했습니다."),
 
 	// allowance
 	API_SUCCESS_ALLOWANCE_GET_BY_MONTH("AW001", "가계부 정보(1달) 조회에 성공하였습니다."),

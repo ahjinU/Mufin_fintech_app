@@ -212,8 +212,8 @@ public class UserController {
     }
 
     @PostMapping("/keypad/image")
-    public ResponseEntity<ApiResponse<KeypadListResponse>> getKeypadList(int userId, KeyPadRequest request){
-        KeypadListResponse response = keypadFacade.getKeypadList(userId, request);
+    public ResponseEntity<ApiResponse<KeypadListResponse>> getKeypadList(@RequestBody KeyPadRequest request){
+        KeypadListResponse response = keypadFacade.getKeypadList(request);
         return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_KEYPAD_LIST, response));
 
     }

@@ -239,6 +239,11 @@ public class UserService implements UserDetailsService {
         }
         userRepository.save(registUser);
 
+        if(parent!=null){
+            //파킹 통장 생성 및 주식 홀딩 초기화
+            parkingService.createParkingAccount(registUser);
+        }
+
     }
 
 

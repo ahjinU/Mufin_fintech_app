@@ -6,11 +6,6 @@ import { ComplexInput, Input, Button, TinyButton } from '@/components';
 export default function UserContact() {
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
-  const [gender, setGender] = useState('');
-
-  const goNext = async () => {
-    console.log(gender, name);
-  };
 
   return (
     <div className="flex flex-col gap-[2rem]">

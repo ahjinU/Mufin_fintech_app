@@ -6,14 +6,13 @@ export default function DateInput({
   onChange,
 }: {
   name: 'year' | 'month' | 'day';
-  onChange: (value: string) => void;
+  onChange: (e: { target: { name: string; value: string } }) => void;
 }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setInputValue(value);
-    onChange(value);
+    setInputValue(e.target.value);
+    onChange(e);
   };
 
   return (

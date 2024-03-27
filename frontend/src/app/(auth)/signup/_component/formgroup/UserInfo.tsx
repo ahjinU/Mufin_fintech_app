@@ -5,12 +5,16 @@ import { ComplexInput, Input, Button } from '@/components';
 import DateInput from './DateInput';
 
 export default function UserInfo() {
-  const [message, setMessage] = useState('');
-  const [name, setName] = useState('');
+  const [info, setInfo] = useState({ name: '', year: '', month: '', day: '' });
   const [gender, setGender] = useState('');
+  const [message, setMessage] = useState('');
 
-  const goNext = async () => {
-    console.log(gender, name);
+  const onChangeInput = (e: { target: { name: string; value: string } }) => {
+    setInfo({ ...info, [e.target.name]: e.target.value });
+  };
+
+  const goNext = () => {
+    console.log(gender, info.name);
   };
 
   return (
@@ -18,9 +22,8 @@ export default function UserInfo() {
       <ComplexInput label="이름" mode="ERROR" isMsg message={message}>
         <Input
           placeholder="이름을 입력해주세요"
-          value={name}
-          onChange={() => {}}
-          setValue={() => {}}
+          name="name"
+          onChange={onChangeInput}
         />
       </ComplexInput>
       <ComplexInput label="성별" mode="NONE">
@@ -39,12 +42,12 @@ export default function UserInfo() {
       </ComplexInput>
       <ComplexInput label="생년월일" mode="NONE">
         <div className="flex justify-between items-center">
-          <DateInput name="year" onChange={() => {}} />
-          <DateInput name="month" onChange={() => {}} />
-          <DateInput name="day" onChange={() => {}} />
+          <DateInput name="year" onChange={onChangeInput} />
+          <DateInput name="month" onChange={onChangeInput} />
+          <DateInput name="day" onChange={onChangeInput} />
         </div>
       </ComplexInput>
-      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+      <div className="fixed bottom-0 inset-x-0 p-[1.2rem]">
         <Button label="다음" mode="ACTIVE" onClick={goNext} />
       </div>
     </div>

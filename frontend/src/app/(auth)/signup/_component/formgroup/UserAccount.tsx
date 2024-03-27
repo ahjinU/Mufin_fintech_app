@@ -7,9 +7,6 @@ import Link from 'next/link';
 export default function UserAccount() {
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
-  const [gender, setGender] = useState('');
-
-  const goNext = async () => {};
 
   return (
     <div className="flex flex-col gap-[2rem]">

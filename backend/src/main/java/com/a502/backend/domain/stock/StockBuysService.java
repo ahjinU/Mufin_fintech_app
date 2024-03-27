@@ -47,14 +47,13 @@ public class StockBuysService {
 	}
 
 	@Transactional
-	public void stockBuy(StockBuy stockBuy, int cnt) {
+	public void stockBuy(StockBuy stockBuy, int cnt, Code code) {
 		int cntNot = stockBuy.getCntNot();
 		if (cntNot - cnt < 0)
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_STOCK_IS_NOT_ENOUGH);
 		stockBuy.setCntNot(cntNot - cnt);
-		// 로직 추가할 것
-//        if (cntNot - cnt == 0)
-//            stockBuy.setStatus(StockCode.STOCK_STATUS_DONE);
+        if (cntNot - cnt == 0)
+            stockBuy.updateCode(code);
 	}
 
 	public List<StockBuy> getTodayTransactions(Stock stock, LocalDateTime localDateTime) {
@@ -65,9 +64,14 @@ public class StockBuysService {
 		return stockBuysRepository.findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(user, code, localDateTime, cnt).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_NOT_EXIST));
 	}
 
+	public int getStockBuyWaitingList(User user, Stock stock, Code code){
+		List<StockBuy> list = stockBuysRepository.findAllByUserAndStockAndCode(user, stock, code);
+		int price = 0;
+		for(StockBuy stockBuy : list){
+			price += stockBuy.getPrice() * stockBuy.getCntNot();
+		}
+		return price;
+	}
 
-    public void setMarketEnd(){
-
-    }
 
 }

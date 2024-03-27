@@ -22,4 +22,5 @@ interface StockBuysRepository extends JpaRepository<StockBuy, Integer> {
 	// 미체결 주식 주문 조회
 	Optional<List<StockBuy>> findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(User user, Code code, LocalDateTime localDateTime, int cnt);
 
+	List<StockBuy> findAllByUserAndStockAndCode(User user, Stock stock, Code code);
 }

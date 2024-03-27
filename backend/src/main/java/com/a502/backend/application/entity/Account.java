@@ -85,4 +85,13 @@ public class Account extends BaseEntity {
 	public void updateAccount(int balance){
 		this.balance = balance;
 	}
+
+	public void updateCode(Code code){
+		this.statusCode = code;
+	}
+
+	public int updateIncorectCnt(int cnt){
+		return this.incorrectCount = cnt;
+	}
+
 }

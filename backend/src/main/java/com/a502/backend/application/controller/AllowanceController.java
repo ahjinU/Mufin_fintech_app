@@ -29,7 +29,7 @@ public class AllowanceController {
     @Value("${receipt.apiURL}")
     String apiURL;
     @Value("${receipt.secretKey}")
-    String secretKey ;
+    String secretKey;
 
     private final AllowanceService allowanceService;
 
@@ -44,3 +44,4 @@ public class AllowanceController {
         return ResponseEntity.ok().body(apiResponse);
 
     }
+}

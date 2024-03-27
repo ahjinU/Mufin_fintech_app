@@ -1,23 +1,22 @@
 package com.a502.backend.domain.allowance.response;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
     private String name;
     private int count;
-    private int unit;
+    private int totalPrice;
     private int unitPrice;
 
     @Builder
-    public OrderItem(String name, int count, int unit, int unitPrice) {
+
+    public OrderItem(String name, int count, int totalPrice, int unitPrice) {
         this.name = name;
         this.count = count;
-        this.unit = unit;
+        this.totalPrice = totalPrice;
         this.unitPrice = unitPrice;
     }
 }

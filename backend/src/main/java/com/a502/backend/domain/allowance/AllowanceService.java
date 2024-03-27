@@ -9,7 +9,7 @@ import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.fasterxml.jackson.databind.node.NullNode;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -63,102 +63,78 @@ public class AllowanceService {
 
     }
 
-    public static ReceiptDto parseReceipt(String jsonInput) throws IOException {
-
-
+    private static ReceiptDto parseReceipt(String jsonInput) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(jsonInput);
-        JsonNode imagesNode = rootNode.path("images");
-        JsonNode receiptNode = imagesNode.get(0).path("receipt").path("result");
-
-
-
-
-        StoreInfo storeInfo=null;
-        if (!imagesNode.isEmpty() && imagesNode.isArray()) {
-            JsonNode storeInfoNode = receiptNode.path("storeInfo");
-
-            // 가게 정보 추출
-            storeInfo = StoreInfo.builder()
-                    .name(storeInfoNode.path("name").path("text").asText())
-                    .address(storeInfoNode.path("addresses").get(0).path("text").asText()) // 첫 번째 주소를 사용
-                    .tel(storeInfoNode.path("tel").get(0).path("text").asText()) // 첫 번째 전화번호를 사용
-                    .build();
-
-            // 이후 코드...
-            System.out.println(storeInfo.toString());
-        }
-
-        PaymentInfo paymentInfo=null;
-        if (!imagesNode.isEmpty() && imagesNode.isArray()) {
-            String totalPriceText = receiptNode.path("totalPrice").path("price").path("text").asText(); // "text" 필드에서 값을 추출
-            int totalPrice=Integer.parseInt(totalPriceText.replace(",",""));
-
-
-            if (!totalPriceText.isEmpty()) {
-                try {
-                    totalPrice= Integer.parseInt(totalPriceText.replace(",", ""));
-                    // 사용 예: paymentInfo 객체에 totalPrice 설정
-                } catch (NumberFormatException e) {
-                    System.err.println("Parsing totalPrice failed: " + e.getMessage());
-                    // 오류 처리: 로그 기록, 기본값 설정 등
-                }
-            } else {
-                System.err.println("totalPrice is empty or not available.");
-                // totalPrice가 비어 있거나 사용할 수 없을 때의 처리
-            }
-
-            // 결제 정보 추출
-            JsonNode paymentInfoNode = receiptNode.path("paymentInfo");
-            paymentInfo = PaymentInfo.builder()
-                    .date(paymentInfoNode.path("date").path("text").asText()) // "text" 필드 사용
-                    .time(paymentInfoNode.path("time").path("text").asText()) // "text" 필드 사용
-                    .price(totalPrice) // totalPrice의 "price" 필드에서 정수 값을 추출하여 사용
-                    .build();
-            System.out.println(paymentInfo.toString());
-        }
-
-        // 주문 항목 추출
-        List<OrderItem> orderItems = new ArrayList<>();
-        JsonNode orderItemsNode = rootNode.path("images");
-
-        if (!orderItemsNode.isEmpty() && orderItemsNode.isArray()) {
-            JsonNode subNode = receiptNode.path("subResults");
-            if (!subNode.isEmpty() && subNode.isArray()) {
-                JsonNode itemsNode = subNode.get(0).path("items");
-                for (JsonNode itemNode : itemsNode) {
-                    String nameText = itemNode.path("name").path("text").asText();
-
-                    String totalPriceText = itemNode.path("price").path("price").path("text").asText().replace(",", "");
-                    int totalPrice = Integer.parseInt(totalPriceText);
-
-                    String countText = itemNode.path("count").path("text").asText().replace(",", "");
-                    int  count = Integer.parseInt(countText);
-
-                    String unitPriceText = itemNode.path("price").path("unitPrice").path("text").asText().replace(",", "");
-                    int unitPrice = Integer.parseInt(unitPriceText);
-
-
-                    OrderItem item = OrderItem.builder()
-                            .name(nameText) // name 안에 text 필드 사용
-                            .count(count)
-                            .unitPrice(unitPrice) // price 안의 price 필드 사용
-                            .totalPrice(totalPrice)
-                            .build();
-                    orderItems.add(item);
-                }
-            }
-        }
-        for(OrderItem orderItem: orderItems)
-            System.out.println(orderItem.toString());
-        // 최종 ReceiptDto 생성
         return ReceiptDto.builder()
-                .storeInfo(storeInfo)
-                .paymentInfo(paymentInfo)
-                .orderItems(orderItems)
+                .storeInfo(parseStoreInfo(rootNode))
+                .paymentInfo(parsePaymentInfo(rootNode))
+                .orderItems(parseOrderItems(rootNode))
                 .build();
     }
 
+    private static StoreInfo parseStoreInfo(JsonNode rootNode) {
+        JsonNode storeInfoNode = findNode(rootNode, "images/0/receipt/result/storeInfo");
+        return StoreInfo.builder()
+                .name(getText(storeInfoNode, "name/text"))
+                .address(getText(storeInfoNode, "addresses/0/text"))
+                .tel(getText(storeInfoNode, "tel/0/text"))
+                .build();
+    }
+
+    private static PaymentInfo parsePaymentInfo(JsonNode rootNode) {
+        JsonNode paymentInfoNode = findNode(rootNode, "images/0/receipt/result/paymentInfo");
+        int totalPrice = parseSafeInt(getText(rootNode, "images/0/receipt/result/totalPrice/price/text"), 0);
+        return PaymentInfo.builder()
+                .date(getText(paymentInfoNode, "date/text"))
+                .time(getText(paymentInfoNode, "time/text"))
+                .price(totalPrice)
+                .build();
+    }
+
+    private static List<OrderItem> parseOrderItems(JsonNode rootNode) {
+        List<OrderItem> orderItems = new ArrayList<>();
+        JsonNode itemsNode = findNode(rootNode, "images/0/receipt/result/subResults/0/items");
+        if (itemsNode.isArray()) {
+            for (JsonNode itemNode : itemsNode) {
+                orderItems.add(OrderItem.builder()
+                        .name(getText(itemNode, "name/text"))
+                        .count(parseSafeInt(getText(itemNode, "count/text"), 1))
+                        .unitPrice(parseSafeInt(getText(itemNode, "price/price/text").replace(",", ""), 0))
+                        .build());
+            }
+        }
+        return orderItems;
+    }
+
+    // Utility methods for JSON parsing and safe integer parsing
+    private static JsonNode findNode(JsonNode rootNode, String path) {
+        String[] parts = path.split("/");
+        JsonNode currentNode = rootNode;
+        for (String part : parts) {
+            if (part.matches("\\d+")) { // Array index
+                currentNode = currentNode.get(Integer.parseInt(part));
+            } else {
+                currentNode = currentNode.path(part);
+            }
+            if (currentNode.isMissingNode()) {
+                throw BusinessException.of(ErrorCode.API_ERROR_RECEIPT_NOT_EXIST);
+            }
+        }
+        return currentNode;
+    }
+
+    private static String getText(JsonNode node, String path) {
+        return findNode(node, path).asText("");
+    }
+
+    private static int parseSafeInt(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
     private String postFileForConversion(MultipartFile file) throws IOException {
         HttpURLConnection con = createConnection();
         sendRequest(con, file);

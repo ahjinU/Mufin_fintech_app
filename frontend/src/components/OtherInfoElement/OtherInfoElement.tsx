@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 interface OtherInfoElementProps {
-  imageSrc?: string;
+  imageSrc?: string | null;
   leftExplainText: string;
   leftHighlightText: string;
   state: 'UP' | 'DOWN';
@@ -49,7 +49,7 @@ export default function OtherInfoElement({
               state === 'UP' ? 'text-custom-red' : 'text-custom-blue'
             }`}
           >
-            {rightExplainText}
+            {state === 'UP' ? '+' + rightExplainText : rightExplainText}
           </span>
         </div>
       )}

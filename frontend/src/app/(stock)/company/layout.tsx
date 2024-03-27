@@ -6,7 +6,7 @@ export default function CompanyLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section className="flex flex-col gap-[1rem]">
+    <section className="flex flex-col">
       <Header>
         <BackButton label="바람막이 회사" />
       </Header>

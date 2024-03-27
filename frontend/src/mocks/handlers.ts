@@ -1,6 +1,7 @@
 import { HttpResponse, http } from 'msw';
 import line from './services/stock/line';
 import candle from './services/stock/candle';
+import stockDetail from './services/stock/stockDetail';
 
 export const handlers = [
   http.get('/api/user', ({ request }) => {
@@ -242,4 +243,5 @@ export const handlers = [
 
   line,
   candle,
+  stockDetail,
 ];

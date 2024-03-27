@@ -1,6 +1,7 @@
 'use client';
 
 import { ComplexInput, Input, InfoShow } from '@/components';
+import { commaNum } from '@/utils/commaNum';
 
 interface StockBuySellType {
   mode: 'BUY' | 'SELL';
@@ -41,7 +42,7 @@ export function StockBuySell({
           mode === 'BUY' ? '구매' : '판매'
         }할 가격과 수량을 모두 입력해주세요!`}
       >
-        <InfoShow text={`${totalPrice} 초코칩`} copyIcon={false} />
+        <InfoShow text={`${commaNum(totalPrice)} 초코칩`} copyIcon={false} />
       </ComplexInput>
     </section>
   );

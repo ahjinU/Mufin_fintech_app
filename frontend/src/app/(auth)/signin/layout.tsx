@@ -1,4 +1,4 @@
-import { BackButton } from '@/components';
+import { Header, BackButton } from '@/components';
 
 export default function Layout({
   children,
@@ -6,11 +6,11 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen px-[1.2rem] bg-custom-white">
-      <div className="flex items-center w-full h-[5.6rem]">
+    <div className="min-h-screen bg-custom-white">
+      <Header>
         <BackButton label="로그인" />
-      </div>
-      {children}
+      </Header>
+      <div className="px-[1.2rem]">{children}</div>
     </div>
   );
 }

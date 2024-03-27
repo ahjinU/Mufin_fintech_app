@@ -235,7 +235,10 @@ public class UserService implements UserDetailsService {
 		if (parent != null) {
 			registUser.addParent(parent); // 찾은 부모 사용자를 설정
 		}
+
 		userRepository.save(registUser);
+
+
 
 	}
 

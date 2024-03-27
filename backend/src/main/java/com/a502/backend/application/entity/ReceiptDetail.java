@@ -36,16 +36,20 @@ public class ReceiptDetail extends BaseEntity {
 	@Column(name = "total")
 	private int total;
 
+	@Column(name = "unit_price")
+	private int unitPrice;
+
 	@ManyToOne
 	@JoinColumn(name = "receipt_id")
 	private Receipt receipt;
 
 	@Builder
-	public ReceiptDetail(String item, int price, int cnt, int total, Receipt receipt) {
+	public ReceiptDetail(String item, int price, int cnt, int total, Receipt receipt, int unitPrice) {
 		this.item = item;
 		this.price = price;
 		this.cnt = cnt;
 		this.total = total;
 		this.receipt = receipt;
+		this.unitPrice=unitPrice;
 	}
 }

@@ -1,5 +1,6 @@
 package com.a502.backend.application.controller;
 import com.a502.backend.domain.allowance.AllowanceService;
+import com.a502.backend.domain.allowance.response.ReceiptDto;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import com.a502.backend.global.response.ApiResponse;
@@ -34,13 +35,13 @@ public class AllowanceController {
     private final AllowanceService allowanceService;
 
     @PostMapping("/receipt/convert")
-    public ResponseEntity<ApiResponse<String>> convert(@RequestParam MultipartFile file) {
+    public ResponseEntity<ApiResponse<ReceiptDto>> convert(@RequestParam MultipartFile file) {
 
         System.out.println("[controller] /receipt/convert 진입");
 
-        allowanceService.convert(file);
+        ReceiptDto convert = allowanceService.convert(file);
 
-        ApiResponse<String> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_CONVERT_IMAGE);
+        ApiResponse<ReceiptDto> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_CONVERT_IMAGE, convert);
         return ResponseEntity.ok().body(apiResponse);
 
     }

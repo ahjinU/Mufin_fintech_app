@@ -24,15 +24,30 @@ public class Receipt extends BaseEntity {
 		if (receiptUuid == null)
 			receiptUuid = UUID.randomUUID();
 	}
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+
+	@Column(name = "price")
+	private int price;
+
+	@Column(name = "store_name")
+	private String storeName;
+
+	@Column(name = "store_adress")
+	private String storeAddress;
+
+	@Column(name = "store_adress")
+	private Data paymentDate;
+
 
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ReceiptDetail> receiptDetails;
 
 	@Builder
-	public Receipt(User user) {
-		this.user = user;
+	public Receipt(int id, UUID receiptUuid, int price, String storeName, String storeAddress, List<ReceiptDetail> receiptDetails) {
+		this.id = id;
+		this.receiptUuid = receiptUuid;
+		this.price = price;
+		this.storeName = storeName;
+		this.storeAddress = storeAddress;
+		this.receiptDetails = receiptDetails;
 	}
 }

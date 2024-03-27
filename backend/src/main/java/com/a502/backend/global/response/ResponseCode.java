@@ -40,6 +40,15 @@ public enum ResponseCode {
 	API_SUCCESS_RANKING_LIST("S009", "1 ~ 10위 랭킹 조회에 성공했습니다."),
 	API_SUCCESS_STOCK_GET_ONE_INFO("S010", "주식 정보 조회에 성공했습니다."),
 
+	//Pay
+	API_SUCCESS_PAY_TRANSFER("P001", "송금에 성공하였습니다."),
+
+	// Loan
+	API_SUCCESS_LOAN_APPLY("L001", "대출 신청에 성공하였습니다."),
+	API_SUCCESS_LOAN_GET_ALL_FOR_CHILD("L002","전체 대출 내역 조회(아이기준)에 성공하였습니다."),
+	API_SUCCESS_LOAN_GET_DETAIL_FOR_CHILD("L003","대출 상세 내역 조회(아이기준)에 성공하였습니다."),
+	API_SUCCESS_LOAN_REPAY("L004", "정상적으로 상환되었습니다."),
+
 	// ParkingDetail
 	API_SUCCESS_PARKING_DETAILS_GET("PD001", "성공적으로 파킹통장 내역을 조회하였습니다."),
 	API_SUCCESS_PARKING_GET_INFO("PD002", "성공적으로 파킹통장 정보를 조회하였습니다.");

@@ -2,11 +2,9 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -21,17 +19,12 @@ public class Loan extends BaseEntity {
 
 	@Column(name = "loan_uuid")
 	private UUID loanUuid;
-	@PrePersist
-	public void initUUID() {
-		if (loanUuid == null)
-			loanUuid = UUID.randomUUID();
-	}
-
-	@Column(name = "name")
-	private String name;
 
 	@Column(name = "amount")
 	private int amount;
+
+	@Column(name = "reason")
+	private String reason;
 
 	@Column(name = "payment_date")
 	private int paymentDate;
@@ -47,6 +40,9 @@ public class Loan extends BaseEntity {
 
 	@Column(name = "overdue_cnt")
 	private int overdueCnt;
+
+	@Column(name = "start_date")
+	private LocalDate startDate;
 
 	@ManyToOne
 	@JoinColumn(name = "child_id")
@@ -66,14 +62,40 @@ public class Loan extends BaseEntity {
 	private Code code;
 
 	@Builder
-	public Loan(String name, int amount, int paymentDate, String penalty, int paymentTotalCnt, User child, User parent, Code code) {
-		this.name = name;
+	public Loan(int amount, String reason, int paymentDate, String penalty, int paymentTotalCnt, LocalDate startDate, User child, User parent, LoanConversation loanConversation, Code code) {
 		this.amount = amount;
+		this.reason = reason;
 		this.paymentDate = paymentDate;
 		this.penalty = penalty;
 		this.paymentTotalCnt = paymentTotalCnt;
+		this.startDate = startDate;
 		this.child = child;
 		this.parent = parent;
+		this.code = code;
+		this.loanConversation = loanConversation;
+	}
+
+	@PrePersist
+	public void initUUID() {
+		if (loanUuid == null)
+			loanUuid = UUID.randomUUID();
+	}
+
+	// 대출 상환시
+	public boolean repayLoan(int cnt) {
+		this.paymentNowCnt += cnt;
+		if (this.overdueCnt > 0) {
+			this.overdueCnt -= cnt;
+			if (this.overdueCnt < 0)
+				this.overdueCnt = 0;
+		}
+		if (this.paymentNowCnt == this.paymentTotalCnt && overdueCnt == 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public void completeLoan(Code code){
 		this.code = code;
 	}
 }

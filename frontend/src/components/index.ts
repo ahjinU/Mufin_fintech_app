@@ -1,3 +1,4 @@
+import Accordion from './Accordion/Accordion';
 import AdBox from './AdBox/AdBox';
 import AgreeBottomSheet from './AgreeBottomSheet/AgreeBottomSheet';
 import AlertConfirmModal from './AlertConfirmModal/AlertConfirmModal';
@@ -31,6 +32,7 @@ import InfoShow from './InfoShow/InfoShow';
 import PlusButton from './PlusButton/PlusButton';
 
 export {
+  Accordion,
   FlexBox,
   Button,
   NavBar,

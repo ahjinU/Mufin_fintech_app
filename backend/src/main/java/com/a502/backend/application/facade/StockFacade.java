@@ -58,21 +58,30 @@ public class StockFacade {
 		stockDetailsService.validStockPrice(stock, price);
 		int price1 = parkingService.getParkingBalance(user, price * cnt_total);
 		int price2 = stockBuysService.getStockBuyWaitingList(user, stock, codeService.findByName("거래중"));
-		if (price1 - price2 < price)
+		log.info("price1 : {}" , price1);
+		log.info("price2 : {}" , price2);
+		log.info("cnt_total : {}" , cnt_total * price);
+		if (price1 - price2 < price * cnt_total)
 			throw BusinessException.of(ErrorCode.API_ERROR_PARKING_NOT_ENOUGH_BALANCE);
 
 		Code code = codeService.findByName("거래중");
 
 		StockBuy stockBuy = stockBuysService.save(user, stock, price, cnt_total, code);
+		log.info("stockBuy : {}", stockBuy.getStock());
 		List<StockSell> list = stockSellsService.findTransactionList(stock, price);
+		log.info("list : {}", list.size());
 
 		if (list == null) return;
+		log.info("list : 반환됨.");
 		for (StockSell stockSell : list) {
+			log.info("stockSell : {}", stockSell.getStock().getName());
 			if (cnt_total == 0) break;
 			cnt_total -= transaction(stockBuy, stockSell);
 		}
 
+		log.info("before: stockDetailService update");
 		stockDetailsService.updateStockDetail(stock, price);
+		log.info("after: stockDetailService update");
 	}
 
 	/**
@@ -91,6 +100,10 @@ public class StockFacade {
 		stockDetailsService.validStockPrice(stock, price);
 		int cnt1 = stockHoldingsService.getStockHolding(user, stock);
 		int cnt2 = stockSellsService.getStockSellWaitingList(user, stock, codeService.findByName("거래중"));
+		log.info("cnt1 : {}" , cnt1);
+		log.info("cnt2 : {}" , cnt1);
+		log.info("cnt_total : {}" , cnt_total);
+
 		if (cnt1 - cnt2 < cnt_total)
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCK_HOLDING_NOT_EXIST);
 
@@ -123,6 +136,9 @@ public class StockFacade {
 		int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
 		Code code = codeService.findByName("완료");
 
+
+		log.info("usersell : {}" ,stockSell.getUser().getName());
+		log.info("userBuy : {}" ,stockBuy.getUser().getName());
 		ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt, codeService.findByName("매도"));
 		ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt, codeService.findByName("매수"));
 
@@ -402,11 +418,10 @@ public class StockFacade {
 	 * 10위권 이하의 회원 : 동점자 처리X 순위 반영
 	 * 10위권 이상의 회원 : 동점자 처리 순위 반영
 	 *
-	 * @param userId 회원 id
 	 * @return 랭킹 정보
 	 */
-	public RankingDetail getRanking(int userId) {
-		User user = userService.findById(userId);
+	public RankingDetail getRanking() {
+		User user = userService.userFindByEmail();
 		int rank = Math.toIntExact(rankService.getUserRank(user));
 		int balance = (int) rankService.getUserScore(user);
 

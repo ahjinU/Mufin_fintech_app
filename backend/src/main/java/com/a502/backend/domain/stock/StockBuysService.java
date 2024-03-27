@@ -27,6 +27,7 @@ public class StockBuysService {
 	@Transactional
 	public StockBuy save(User user, Stock stock, int price, int cntTotal, Code code) {
 		return stockBuysRepository.save(StockBuy.builder()
+				.user(user)
 				.price(price)
 				.cntTotal(cntTotal)
 				.stock(stock)

@@ -30,7 +30,13 @@ public class StockSellsService {
 
 	@Transactional
 	public StockSell save(User user, Stock stock, int price, int cntTotal, Code code) {
-		return stockSellsRepository.save(new StockSell(price, cntTotal, stock, user, code));
+		return stockSellsRepository.save(StockSell.builder()
+				.user(user)
+				.stock(stock)
+				.price(price)
+				.cntTotal(cntTotal)
+				.code(code)
+				.build());
 	}
 
 	public List<StockSell> findTransactionList(Stock stock, int price) {

@@ -1,7 +1,7 @@
 package com.a502.backend.application.controller;
 
 import com.a502.backend.domain.account.dto.DepositWithdrawalAccountDto;
-import com.a502.backend.domain.payment.AccountService;
+import com.a502.backend.domain.account.AccountService;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
@@ -25,11 +25,9 @@ public class AccountController {
 
         System.out.println("[AccountController]: create");
 
-        DepositWithdrawalAccountDto account = accountService.createDepositWithdrawalAccount(password);
-
+        accountService.createDepositWithdrawalAccount(password);
 
         return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_ACCOUNT_CREATE));
-
     }
 
 }

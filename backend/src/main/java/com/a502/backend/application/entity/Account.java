@@ -82,6 +82,10 @@ public class Account extends BaseEntity {
 		this.typeCode = typeCode;
 	}
 
+	public void updateAccount(int balance){
+		this.balance = balance;
+	}
+
 	public void updateCode(Code code){
 		this.statusCode = code;
 	}

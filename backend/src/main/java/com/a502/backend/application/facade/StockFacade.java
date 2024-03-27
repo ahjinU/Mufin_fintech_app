@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -209,12 +210,13 @@ public class StockFacade {
 
 		if (period == 1) {
 			for (StockDetail sd : stockDetailsList) {
+				long x = sd.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 				List<Integer> y = new ArrayList<>();
 				y.add(sd.getStartPrice());
 				y.add(sd.getHighestPrice());
 				y.add(sd.getLowestPrice());
 				y.add(sd.getPrice());
-				StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder().x(Timestamp.valueOf(sd.getCreatedAt())).y(y).build();
+				StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder().x(x).y(y).build();
 				result.add(priceHistoryByBar);
 			}
 		} else {
@@ -240,8 +242,9 @@ public class StockFacade {
 					y.add(highestPrice);
 					y.add(lowestPrice);
 					y.add(price);
+					long x = createdAt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 					StockPriceHistoryByBar priceHistoryByBar = StockPriceHistoryByBar.builder()
-							.x(Timestamp.valueOf(createdAt))
+							.x(x)
 							.y(y).build();
 					result.add(priceHistoryByBar);
 				}
@@ -332,6 +335,7 @@ public class StockFacade {
 			int cnt = sb.getCntNot();
 			// 총 주문금액
 			int amount = price * cnt;
+			System.out.println(transName);
 			// 거래 종류(매도/매수)
 			String type = "매수";
 			myWaitingStockOrders.add(MyWaitingStockOrder.builder()
@@ -418,6 +422,33 @@ public class StockFacade {
 				.rank(rank)
 				.balance(balance)
 				.childName(user.getName())
+				.build();
+	}
+
+	// 주식 상세 정보 조회
+	public StockInfoResponse getStockInfo(String name) {
+		Stock stock = stocksService.findByName(name);
+
+		// 일별 주식 정보(오늘 기준)
+		StockDetail stockDetail = stockDetailsService.getLastDetail(stock);
+		// 현재가
+		int price = stockDetail.getPrice();
+		// 수익률 ((현재가 - 시가) / 시가) * 100
+		int startPrice = stockDetail.getStartPrice();
+		double incomeRatio = Math.round(((float) (price - startPrice) / startPrice) * 10000) / 100.0;
+		// 오늘 거래량
+		List<StockBuy> stockBuyList = stockBuysService.getTodayTransactions(stock, LocalDate.now().atStartOfDay());
+		int transCnt = 0;
+		for (StockBuy sb : stockBuyList) {
+			transCnt += (sb.getCntTotal() - sb.getCntNot());
+		}
+		/////////// 이미지 url 추가하기	///////////
+		TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).build();
+
+		return StockInfoResponse.builder()
+				.price(price)
+				.incomeRatio(incomeRatio)
+				.transCnt(transCnt)
 				.build();
 	}
 

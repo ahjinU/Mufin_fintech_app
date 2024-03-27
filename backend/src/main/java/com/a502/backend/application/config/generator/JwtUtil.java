@@ -1,7 +1,6 @@
 package com.a502.backend.application.config.generator;
 
 import com.a502.backend.application.config.dto.JWTokenDto;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;

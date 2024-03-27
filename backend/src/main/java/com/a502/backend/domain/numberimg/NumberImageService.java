@@ -61,8 +61,11 @@ public class NumberImageService {
             throw BusinessException.of(ErrorCode.API_ERROR_KEYPAD_TIMEOUT);
         ListOperations<String, String> listOps = redisTemplate.opsForList();
         List<String> result = listOps.range(uuid, 0, -1);
-        redisTemplate.delete(uuid);
         return result;
+    }
+
+    public void deleteNumberList(String uuid){
+        redisTemplate.delete(uuid);
     }
 
 }

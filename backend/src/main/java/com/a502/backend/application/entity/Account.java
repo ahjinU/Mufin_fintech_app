@@ -94,7 +94,4 @@ public class Account extends BaseEntity {
 		return this.incorrectCount = cnt;
 	}
 
-	public void updatePassword(String password){
-		this.password = password;
-	}
 }

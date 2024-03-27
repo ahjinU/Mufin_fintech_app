@@ -22,6 +22,8 @@ public enum ResponseCode {
 	API_SUCCESS_ACCOUNT_IS_SUFFICIENT("A002", "정상적으로 출금이 가능합니다."),
 	API_SUCCESS_ACCOUNT_CREATE("AT003", "계좌생성 완료했습니다."),
 	API_SUCCESS_GET_KEYPAD("AT004", "키패드를 성공적으로 전송했습니다."),
+	API_FAIL_ACCOUNT_PASSWORD("AT005", "계좌 비밀번호가 불일치합니다."),
+	API_SUCCESS_ACCOUNT_PASSWORD("AT006", "계좌 비밀번호가 일치합니다."),
 
 	// allowance
 	API_SUCCESS_ALLOWANCE_GET_BY_MONTH("AW001", "가계부 정보(1달) 조회에 성공하였습니다."),

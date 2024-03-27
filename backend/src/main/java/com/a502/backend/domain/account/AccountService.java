@@ -144,4 +144,8 @@ public class AccountService {
 
 		Account createdAccount = saveAccount(account);
 	}
+
+	public Account findByUser(User user){
+		return accountRepository.findByUser(user).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
+	}
 }

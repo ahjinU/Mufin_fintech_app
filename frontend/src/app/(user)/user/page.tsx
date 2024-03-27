@@ -32,8 +32,15 @@ export default function UserMenu() {
   return (
     <section className="p-[1.2rem] flex flex-col gap-[1rem]">
       <NavButton mode="HIGHLIGHT" label="김지니" link="/" />
-      {data.map((menu) => {
-        return <NavButton mode="GENERAL" label={menu} link="/" />;
+      {data.map((menu, index) => {
+        return (
+          <NavButton
+            key={`menu-${index}`}
+            mode="GENERAL"
+            label={menu}
+            link="/"
+          />
+        );
       })}
     </section>
   );

@@ -3,8 +3,6 @@ package com.a502.backend.domain.account.dto;
 import com.a502.backend.application.entity.Account;
 import lombok.*;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 @Getter
 @Setter
 @Builder

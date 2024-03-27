@@ -1,19 +1,13 @@
 package com.a502.backend.application.controller;
 
 import com.a502.backend.application.entity.RankingDetail;
-import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.facade.StockFacade;
 import com.a502.backend.domain.stock.request.StockPriceHistoryRequest;
 import com.a502.backend.domain.stock.response.*;
-import com.a502.backend.domain.stock.response.PriceAndStockOrderList;
-import com.a502.backend.domain.stock.response.RankingResponse;
-import com.a502.backend.domain.stock.response.StockPriceHistoryByBar;
-import com.a502.backend.domain.stock.response.StockPriceHistoryByLine;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -91,15 +85,22 @@ public class StockController {
 	}
 
 	@GetMapping("/ranking/user")
-	public ResponseEntity<ApiResponse<RankingDetail>> getRanking(@RequestParam(value = "userId") int userId){
+	public ResponseEntity<ApiResponse<RankingDetail>> getRanking(@RequestParam(value = "userId") int userId) {
 		RankingDetail result = stockFacade.getRanking(userId);
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_RANKING_USER, result));
 	}
 
 	@GetMapping("/ranking/total")
-	public ResponseEntity<ApiResponse<RankingResponse>> getRankingList(){
+	public ResponseEntity<ApiResponse<RankingResponse>> getRankingList() {
 		RankingResponse result = stockFacade.getRanknigList();
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_RANKING_LIST, result));
+	}
+
+	// 주식 상세 정보 조회(1개)
+	@PostMapping("/detail")
+	public ResponseEntity<ApiResponse<StockInfoResponse>> getStockInfo(@RequestParam String name) {
+		StockInfoResponse result = stockFacade.getStockInfo(name);
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_GET_ONE_INFO, result));
 	}
 }
 

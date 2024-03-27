@@ -54,7 +54,7 @@ public class AccountService {
 	}
 
 	// 입출금 계좌 생성 메소드
-	public DepositWithdrawalAccountDto createDepositWithdrawalAccount(String password) {
+	public void createDepositWithdrawalAccount(String password) {
 
 		User user = userService.userFindByEmail();
 
@@ -74,13 +74,6 @@ public class AccountService {
 
 		Account createdAccount = saveAccount(account);
 
-		DepositWithdrawalAccountDto accountDto = DepositWithdrawalAccountDto.builder()
-				.accountNumber(createdAccount.getAccountNumber())
-				.balance(createdAccount.getBalance())
-				.interestAmount(createdAccount.getInterestAmount())
-				.build();
-
-		return accountDto;
 	}
 
 	// 적금 계좌 생성 메소드

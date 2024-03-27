@@ -53,9 +53,8 @@ public class AllowanceService {
 
         try {
             receipt = parseReceipt(response);
-            // 여기서 receipt 객체 사용
         } catch (IOException e) {
-            e.printStackTrace();
+            throw BusinessException.of(ErrorCode.API_ERROR_RECEIPT_FAIL_CONVERT_TO_TEXT);
         }
 
         System.out.println(receipt.toString());

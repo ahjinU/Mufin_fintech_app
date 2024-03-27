@@ -25,6 +25,11 @@ public class StocksService {
     }
 
     public Stock save(String name, String imageUrl){
+        Stock stock = findByName(name);
+        if (stock != null){
+            stock.updateImageUrl(imageUrl);
+            return stock;
+        }
         return stocksRepository.save(Stock.builder()
                 .name(name)
                 .imageUrl(imageUrl)

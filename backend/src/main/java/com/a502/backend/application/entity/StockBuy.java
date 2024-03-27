@@ -58,4 +58,8 @@ public class StockBuy extends BaseEntity {
 		this.code = code;
 	}
 
+	public void updateCode(Code code){
+		this.code = code;
+	}
+
 }

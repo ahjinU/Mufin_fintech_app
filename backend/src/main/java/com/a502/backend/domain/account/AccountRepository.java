@@ -19,6 +19,6 @@ interface AccountRepository extends JpaRepository<Account, Integer> {
 	@Transactional
 	@Query("select a from Account a where a.accountNumber = :accountNumber order by a.createdAt desc")
 	Optional<List<Account>> findByAccountNumber(String accountNumber);
-
 	boolean existsByAccountNumber(String accountNumber);
+	boolean existsByUserAndTypeCode(User user, Code code);
 }

@@ -7,7 +7,6 @@ interface ButtonProps {
 export default function Button({
   mode,
   label,
-  onClick,
   ...props
 }: ButtonProps) {
   let backgroundColor: string;

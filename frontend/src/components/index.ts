@@ -27,6 +27,7 @@ import Notification from './Notification/Notification';
 import SubGuideText from './SubGuideText/SubGuideText';
 import MoneyShow from './MoneyShow/MoneyShow';
 import Ranking from './Ranking/Ranking';
+import InfoShow from './InfoShow/InfoShow';
 
 export {
   FlexBox,
@@ -58,4 +59,5 @@ export {
   ImageUploadBox,
   MoneyShow,
   Ranking,
+  InfoShow,
 };

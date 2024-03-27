@@ -43,8 +43,12 @@ public enum ErrorCode {
     API_ERROR_MEMO_NOT_EXIST(400, "M001", "존재하지 않는 메모입니다."),
 
     // Receipt
-    API_ERROR_RECEIPT_NOT_EXIST(400, "R001", "존재하지 않는 영수증 입니다."),
-
+    API_ERROR_RECEIPT_NOT_EXIST(404, "R001", "영수증 형식과 다릅니다. 사진을 다시 찍어주세요."),
+    API_ERROR_RECEIPT_NOT_COINCIDE_PRICE(400,"R002","해당 거래내역과 금액이 일치 하지 않습니다."),
+    API_ERROR_RECEIPT_NOT_COINCIDE_STORE(400,"R003","상호명이 일치하지 않습니다."),
+    API_ERROR_RECEIPT_FAIL_CONVERT_TO_TEXT(500,"R004","서버상의 이유로 텍스트 변환에 실패했습니다. 잠시 후 다시 요청해 주세요."),
+    API_ERROR_RECEIPT_NOT_KNOWN_EXTENSION(400, "R005", "확장자를 알 수 없습니다."),
+    UNSUPPORTED_FILE_EXTENSION(400,"R006","지원하지 않는 확장자 입니다. jpg 혹은 png 파일을 사용하세요."),
     // ReceiptDetail
     API_ERROR_RECEIPT_DETAIL_NOT_EXIST(400, "RD01", "존재하지 않는 영수증 내역입니다."),
 

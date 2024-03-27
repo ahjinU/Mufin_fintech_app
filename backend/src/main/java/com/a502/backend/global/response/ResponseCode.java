@@ -25,6 +25,10 @@ public enum ResponseCode {
 	API_SUCCESS_ALLOWANCE_GET_BY_MONTH("AW001", "가계부 정보(1달) 조회에 성공하였습니다."),
 
 	// Stock
+	//receipt
+	API_SUCCESS_CONVERT_IMAGE("R001","영수증 분석을 완료햐였습니다."),
+
+   	// Stock
 	API_SUCCESS_STOCK_BUY("S001", "성공적으로 매수 주문했습니다."),
 	API_SUCCESS_STOCK_SELL("S002", "성공적으로 매도 주문했습니다."),
 	API_SUCCESS_STOCK_PRICE_HISTORY_BAR("S003", "기간별 주가 조회(봉 그래프)에 성공하였습니다."),

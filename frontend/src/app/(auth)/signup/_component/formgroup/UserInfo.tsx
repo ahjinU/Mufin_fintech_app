@@ -1,16 +1,8 @@
-'use client';
-
 import { useState } from 'react';
 import { ComplexInput, Input, Button } from '@/components';
 import DateInput from './DateInput';
 
-type UserInfoPageProps = {
-  previous: () => void;
-  next: (data: any) => void;
-  userInfo: {};
-};
-
-export default function UserInfo({ next }: UserInfoPageProps) {
+export default function UserInfo({ onNext }: { onNext: (data: any) => void }) {
   const [info, setInfo] = useState({ name: '', year: '', month: '', day: '' });
   const [gender, setGender] = useState('');
   const [message, setMessage] = useState('');
@@ -19,13 +11,13 @@ export default function UserInfo({ next }: UserInfoPageProps) {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
 
-  const goNext = () => {
+  const handleNext = () => {
     const data = {
       name: info.name,
       gender: gender,
       birth: info.year + '-' + info.month + '-' + info.day,
     };
-    next(data);
+    onNext(data);
   };
 
   return (
@@ -59,7 +51,7 @@ export default function UserInfo({ next }: UserInfoPageProps) {
         </div>
       </ComplexInput>
       <div className="fixed bottom-0 inset-x-0 p-[1.2rem]">
-        <Button label="다음" mode="ACTIVE" onClick={goNext} />
+        <Button label="다음" mode="ACTIVE" onClick={handleNext} />
       </div>
     </div>
   );

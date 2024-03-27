@@ -15,11 +15,15 @@ public enum ResponseCode {
 	API_SUCCESS_USER_CHECK_EMAIL("U002", "사용할 수 있는 이메일 입니다."),
 	API_SUCCESS_LOGIN("U003", "로그인 되었습니다."),
 	API_SUCCESS_SIGNUP("U004", "회원가입 되었습니다."),
+	API_SUCCESS_KEYPAD_LIST("U005", "성공적으로 키패드가 반환되었습니다."),
 
 	// account
 	API_SUCCESS_ACCOUNT_EXIST("A001", "존재하는 계좌입니다."),
 	API_SUCCESS_ACCOUNT_IS_SUFFICIENT("A002", "정상적으로 출금이 가능합니다."),
-	API_SUCCESS_ACCOUNT_CREATE("AT001", "계좌생성 완료했습니다."),
+	API_SUCCESS_ACCOUNT_CREATE("AT003", "계좌생성 완료했습니다."),
+	API_SUCCESS_GET_KEYPAD("AT004", "키패드를 성공적으로 전송했습니다."),
+	API_FAIL_ACCOUNT_PASSWORD("AT005", "계좌 비밀번호가 불일치합니다."),
+	API_SUCCESS_ACCOUNT_PASSWORD("AT006", "계좌 비밀번호가 일치합니다."),
 
 	// allowance
 	API_SUCCESS_ALLOWANCE_GET_BY_MONTH("AW001", "가계부 정보(1달) 조회에 성공하였습니다."),

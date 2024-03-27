@@ -29,10 +29,9 @@ public class StockHoldingsService {
     }
 
     @Transactional
-    public void validStockHolding(User user, Stock stock, int cnt){
+    public int getStockHolding(User user, Stock stock){
         StockHolding stockHolding = findById(user, stock);
-        if (stockHolding.getCnt() < cnt)
-            throw BusinessException.of(ErrorCode.API_ERROR_STOCK_NOT_EXIST);
+        return stockHolding.getCnt();
     }
 
     @Transactional
@@ -41,7 +40,6 @@ public class StockHoldingsService {
         int stockHoldingCnt = stockHolding.getCnt();
         int stockHoldingTotal = stockHolding.getTotal();
 
-        validStockHolding(user, stock, cnt);
         stockHolding.setCnt(stockHoldingCnt - cnt);
         stockHolding.setTotal(stockHoldingTotal - cnt * price);
     }
@@ -52,7 +50,6 @@ public class StockHoldingsService {
         int stockHoldingCnt = stockHolding.getCnt();
         int stockHoldingTotal = stockHolding.getTotal();
 
-        validStockHolding(user, stock, cnt);
         stockHolding.setCnt(stockHoldingCnt + cnt);
         stockHolding.setTotal(stockHoldingTotal + cnt * price);
     }

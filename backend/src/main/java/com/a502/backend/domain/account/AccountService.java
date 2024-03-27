@@ -55,9 +55,8 @@ public class AccountService {
 
 	// 입출금 계좌 생성 메소드
 	public void createDepositWithdrawalAccount(String password) {
-
 		User user = userService.userFindByEmail();
-
+		validCheckAccountIsCreated(user);
 		String encodedPassword = passwordEncoder.encode(password);
 		String accountNumber = generateUniqueAccountNumber(false);
 		Code typeCode = codeService.findTypeCode("입출금");
@@ -73,7 +72,12 @@ public class AccountService {
 				.build();
 
 		Account createdAccount = saveAccount(account);
+	}
 
+	public void validCheckAccountIsCreated(User user){
+		if (accountRepository.existsByUserAndTypeCode(user, codeService.findTypeCode("입출금"))){
+			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_IS_ALREADY_EXIST);
+		}
 	}
 
 	// 적금 계좌 생성 메소드
@@ -121,6 +125,7 @@ public class AccountService {
 		} while (accountRepository.existsByAccountNumber(accountNumber));
 		return accountNumber;
 	}
+
 
 	/**
 	 * test용(테스트 후 지우기)

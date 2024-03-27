@@ -28,8 +28,6 @@ public class StockSellsService {
 		return stockSellsRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(id, cnt, localDateTime);
 	}
 
-	;
-
 	@Transactional
 	public StockSell save(User user, Stock stock, int price, int cntTotal, Code code) {
 		return stockSellsRepository.save(new StockSell(price, cntTotal, stock, user, code));
@@ -40,18 +38,26 @@ public class StockSellsService {
 	}
 
 	@Transactional
-	public void stockSell(StockSell stocksell, int cnt) {
+	public void stockSell(StockSell stocksell, int cnt, Code code) {
 		int cntNot = stocksell.getCntNot();
 		if (cntNot - cnt < 0)
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_STOCK_IS_NOT_ENOUGH);
 		stocksell.setCntNot(cntNot - cnt);
-		// 로직 추가할 것
-//        if (cntNot - cnt == 0)
-//            stocksell.setStatus(StockCode.STOCK_STATUS_DONE);
+        if (cntNot - cnt == 0)
+            stocksell.updateCode(code);
 	}
 
 	public List<StockSell> getWaitingStockOrders(User user, Code code, LocalDateTime localDateTime, int cnt) {
 		return stockSellsRepository.findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(user, code, localDateTime, 0).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_NOT_EXIST));
+	}
+
+	public int getStockSellWaitingList(User user, Stock stock, Code code){
+		List<StockSell> list = stockSellsRepository.findAllByUserAndStockAndCode(user, stock, code);
+		int cntNot = 0;
+		for (StockSell sell : list){
+			cntNot += sell.getCntNot();
+		}
+		return cntNot;
 	}
 
 }

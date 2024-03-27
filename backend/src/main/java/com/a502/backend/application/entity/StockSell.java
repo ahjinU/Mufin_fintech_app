@@ -55,4 +55,8 @@ public class StockSell extends BaseEntity {
 		this.user = user;
 		this.code = code;
 	}
+
+	public void updateCode(Code code){
+		this.code = code;
+	}
 }

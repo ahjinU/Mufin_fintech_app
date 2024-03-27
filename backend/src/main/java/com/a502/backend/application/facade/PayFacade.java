@@ -3,16 +3,18 @@ package com.a502.backend.application.facade;
 import com.a502.backend.application.entity.Account;
 import com.a502.backend.application.entity.AccountDetail;
 import com.a502.backend.application.entity.User;
-import com.a502.backend.domain.payment.AccountDetailService;
-import com.a502.backend.domain.payment.AccountService;
+import com.a502.backend.domain.account.AccountDetailService;
+import com.a502.backend.domain.account.AccountService;
 import com.a502.backend.domain.payment.request.MyAccount;
 import com.a502.backend.domain.payment.request.RecipientAccount;
 import com.a502.backend.domain.payment.request.TransferMoneyRequest;
 import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PayFacade {
 	private final AccountService accountService;
@@ -64,17 +65,21 @@ public class PayFacade {
 		String accountNumberOut = transferMoneyRequest.getAccountNumberOut();
 		int amount = transferMoneyRequest.getAmount();
 		String transType = transferMoneyRequest.getTransType();
-		System.out.println(accountNumberIn + "," + accountNumberOut + "," + amount + "," + transType);
 
 		Account accountOut = accountService.findByAccountNumber(accountNumberOut);
 		Account accountIn = accountService.findByAccountNumber(accountNumberIn);
 
 		// 송금처리
 		int afterBalanceOut = accountOut.getBalance() - amount;
+		// 트랜잭션 의논사항
+		if(afterBalanceOut<0)
+			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE);
 		int afterBalanceIn = accountIn.getBalance() + amount;
-		System.out.println(afterBalanceIn);
-		System.out.println(afterBalanceOut);
+
 		// 거래내역 저장
+		accountOut.updateAccount(afterBalanceOut);
+		accountIn.updateAccount(afterBalanceIn);
+
 		// 송금 하는 사람
 		accountDetailService.save(AccountDetail.builder()
 				.account(accountOut)

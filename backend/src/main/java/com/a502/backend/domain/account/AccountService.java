@@ -1,4 +1,4 @@
-package com.a502.backend.domain.payment;
+package com.a502.backend.domain.account;
 
 import com.a502.backend.application.entity.Account;
 import com.a502.backend.application.entity.Code;
@@ -29,6 +29,21 @@ public class AccountService {
 	private final ParkingService parkingService;
 	private final UserRepository userRepository;
 
+	// 계좌 번호 생성 함수
+	public static String generateAccountNumber(boolean isSavingsAccount) {
+
+		Random random = new Random();
+
+		// 적금 계좌인 경우 "5022", 입출금 계좌인 경우 "5021"로 시작
+		String prefix = isSavingsAccount ? "5022" : "5021";
+		// 랜덤 4자리 숫자 생성
+		String middle1 = String.format("%04d", random.nextInt(10000));
+		String middle2 = String.format("%02d", random.nextInt(100));
+		String end = String.format("%04d", random.nextInt(10000));
+
+		// 생성된 부분들을 하이픈(-)으로 연결
+		return prefix + "-" + middle1 + "-" + middle2 + "-" + end;
+	}
 
 	public Account findByAccountNumber(String accountNumber) {
 		List<Account> accounts = accountRepository.findByAccountNumber(accountNumber).
@@ -69,7 +84,7 @@ public class AccountService {
 	}
 
 	// 적금 계좌 생성 메소드
-	public Account createSavingsAccount(Savings savings, int cycle, int date, int ammount, String password ) {
+	public Account createSavingsAccount(Savings savings, int cycle, int date, int ammount, String password) {
 
 		User user = userService.userFindByEmail();
 
@@ -94,11 +109,10 @@ public class AccountService {
 				.paymentDate(date)
 				.build();
 
-		Account createdAccount =  accountRepository.save(account);
+		Account createdAccount = accountRepository.save(account);
 
 		return createdAccount;
 	}
-
 
 	private Account saveAccount(Account account) {
 
@@ -114,26 +128,11 @@ public class AccountService {
 		} while (accountRepository.existsByAccountNumber(accountNumber));
 		return accountNumber;
 	}
-	// 계좌 번호 생성 함수
-	public static String generateAccountNumber(boolean isSavingsAccount) {
-
-		Random random = new Random();
-
-		// 적금 계좌인 경우 "5022", 입출금 계좌인 경우 "5021"로 시작
-		String prefix = isSavingsAccount ? "5022" : "5021";
-		// 랜덤 4자리 숫자 생성
-		String middle1 = String.format("%04d", random.nextInt(10000));
-		String middle2 = String.format("%02d", random.nextInt(100));
-		String end = String.format("%04d", random.nextInt(10000));
-
-		// 생성된 부분들을 하이픈(-)으로 연결
-		return prefix + "-" + middle1 + "-" + middle2 + "-" + end;
-	}
 
 	/**
 	 * test용(테스트 후 지우기)
 	 */
-	public void createInit(int id, String password){
+	public void createInit(int id, String password) {
 
 		Optional<User> user = userRepository.findById(id);
 		String encodedPassword = passwordEncoder.encode(password);

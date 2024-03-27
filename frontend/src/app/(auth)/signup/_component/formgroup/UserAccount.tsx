@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { ComplexInput, Input, Button, TinyButton } from '@/components';
 import Link from 'next/link';
 
-export default function UserContact() {
+export default function UserAccount() {
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
   const [gender, setGender] = useState('');

@@ -1,5 +1,5 @@
 import RedirectToSignUp from '../_component/RedirectToSignUp';
 
-export default function Check() {
+export default function Complete() {
   return <RedirectToSignUp />;
 }

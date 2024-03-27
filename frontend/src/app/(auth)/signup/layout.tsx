@@ -13,6 +13,7 @@ export default function Layout({
         <BackButton label="회원가입" />
       </Header>
       <div className="px-[1.2rem]">{children}</div>
+      <div className="z-10">{modal}</div>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ComplexInput, Input, Button } from '@/components';
-import DateInput from '../input/DateInput';
+import DateInput from './DateInput';
 
 export default function UserInfo() {
   const [message, setMessage] = useState('');

@@ -62,6 +62,7 @@ public class InitFacade {
         codeService.save("PD001","이자");
         codeService.save("PD002","매도");
         codeService.save("PD003","매수");
+        codeService.save("PD004","시드머니");
         codeService.save("S001","거래중");
         codeService.save("S002","완료");
         codeService.save("S003","취소");

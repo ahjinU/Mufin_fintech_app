@@ -1,12 +1,10 @@
 package com.a502.backend.domain.parking;
 
-import com.a502.backend.application.entity.Parking;
-import com.a502.backend.application.entity.Stock;
-import com.a502.backend.application.entity.StockHolding;
-import com.a502.backend.application.entity.User;
+import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.stock.StockHoldingsId;
 import com.a502.backend.domain.stock.StockHoldingsService;
 import com.a502.backend.domain.stock.StocksService;
+import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.Builder;
@@ -23,6 +21,10 @@ public class ParkingService {
     private final ParkingRepository parkingRepository;
     private final StocksService stocksService;
     private final StockHoldingsService stockHoldingsService;
+    private final ParkingDetailsRepository parkingDetailsRepository;
+    private final CodeService codeService;
+
+
 
 
 
@@ -61,10 +63,14 @@ public class ParkingService {
 
         parkingRepository.save(newParkingAccount);
 
-        // 모든 Stock 레코드 조회
+        initSeadMoney(newParkingAccount);
+        initStockHolding(user);
+    }
+
+    private void initStockHolding(User user) {
+
         List<Stock> stocks = stocksService.findAllList();
 
-        // 각 Stock에 대해 StockHolding 인스턴스 생성 및 저장
         stocks.forEach(stock -> {
             StockHolding stockHolding = StockHolding.builder()
                     .user(user)
@@ -73,8 +79,21 @@ public class ParkingService {
                     .build();
 
             stockHoldingsService.save(stockHolding);
+
         });
+    }
 
+    private void initSeadMoney(Parking newParkingAccount) {
+        Code initCode = codeService.findTypeCode("시드머니");
+        String counterpartyName = "머핀";
 
+        ParkingDetail initParkingDetail= ParkingDetail.builder()
+                .parking(newParkingAccount)
+                .balance(newParkingAccount.getBalance())
+                .counterpartyName(counterpartyName)
+                .code(initCode)
+                .build();
+
+        parkingDetailsRepository.save(initParkingDetail);
     }
 }

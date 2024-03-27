@@ -11,8 +11,6 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        console.log('여기 들어옴?');
-
         try {
           const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/login`,
@@ -30,15 +28,16 @@ export const authOptions: NextAuthOptions = {
 
           if (res.ok) {
             const user = await res.json();
-            console.log('로그인되었다!', user);
-            console.log(res.headers)
+            user.accessToken = res.headers.get('authorization');
+            user.refreshToken = res.headers.get('set-cookie');
+            console.log('로그인 성공', user);
             return user;
           } else {
-            console.log('사용자가 잘못한듯');
+            console.log('잘못된 입력');
             return null;
           }
         } catch (error) {
-          console.log('아 몬가 잘못됨', error);
+          console.log('로그인 실패', error);
         }
       },
     }),
@@ -47,19 +46,19 @@ export const authOptions: NextAuthOptions = {
     signIn: '/login',
   },
   callbacks: {
-    async jwt({ token }) {
-      console.log('토킁', token);
+    async jwt({ user, token }) {
+      if (user) {
+        token.Authorization = user.accessToken;
+        token.refreshToken = user.refreshToken;
+      }
       return token;
     },
     async session({ token, session }) {
-      console.log('저장할 유저 정보?', session);
-      // session.user.accessToken = token
+      session.Authorization = token.Authorization;
+      session.refreshToken = token.refreshToken;
       return session;
     },
   },
-  // session: {
-  //   jwt: true,
-  // },
 };
 
 export default NextAuth(authOptions);

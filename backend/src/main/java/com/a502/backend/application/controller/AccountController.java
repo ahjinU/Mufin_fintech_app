@@ -25,11 +25,9 @@ public class AccountController {
 
         System.out.println("[AccountController]: create");
 
-        DepositWithdrawalAccountDto account = accountService.createDepositWithdrawalAccount(password);
-
+        accountService.createDepositWithdrawalAccount(password);
 
         return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_ACCOUNT_CREATE));
-
     }
 
 }

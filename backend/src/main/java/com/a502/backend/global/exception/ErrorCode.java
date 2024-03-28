@@ -26,7 +26,7 @@ public enum ErrorCode {
     // Account
     API_ERROR_ACCOUNT_NOT_EXIST(400, "A001", "존재하지 않는 계좌 입니다."),
     API_ERROR_ACCOUNT_IS_STOPPED(422, "A002","거래가 정지된 계좌입니다."),
-    API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE(422, "A003", "잔액이 부족해 출금이 불가능합니다."),
+    API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE(422, "A003", "계좌에 잔액이 부족합니다."),
     API_ERROR_ACCOUNT_IS_NOT_YOURS(400, "A004", "접근권한이 없는 계좌입니다."),
     API_ERROR_CODE_NOT_EXIST(400, "A005", "존재하지 않는 코드 입니다."),
     API_ERROR_NOT_CREATED(500, "A006", "계좌 생성에 실패하였습니다."),
@@ -88,6 +88,8 @@ public enum ErrorCode {
 
     // Loan
     API_ERROR_LOAN_NOT_EXIST(400, "L001", "존재하지 않는 대출 상품입니다."),
+    API_ERROR_LOAN_NOT_EXIST_FOR_PARENTS(400, "L002","대출 받은 내역이 없습니다."),
+    API_ERROR_LOAN_REQUESTED_NOT_EXIST_FOR_PARENTS(400,"L003","대출 요청 내역이 없습니다."),
 
     // LoanDetail
     API_ERROR_LOAN_DETAIL_NOT_EXIST(400, "LD01", "존재하지 않는 대출 납부 내역 입니다."),

@@ -2,7 +2,10 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -95,7 +98,16 @@ public class Loan extends BaseEntity {
 		return false;
 	}
 
-	public void completeLoan(Code code){
+	public void completeLoan(Code code) {
+		this.code = code;
+	}
+
+	public void startLoan(LocalDate startDate, Code code) {
+		this.startDate = startDate;
+		this.code = code;
+	}
+
+	public void refuseLoan(Code code) {
 		this.code = code;
 	}
 }

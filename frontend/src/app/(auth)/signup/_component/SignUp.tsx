@@ -2,43 +2,32 @@
 
 import { useState } from 'react';
 import { GuideText, ProgressBar } from '@/components';
-
+import useRegisterStore from '../_store/store';
 import {
   UserInfoType,
   UserContactType,
   UserAccountType,
 } from '../_types/types';
 
-import UserInfo from './formgroup/UserInfo';
-import UserContact from './formgroup/UserContact';
-import UserAccount from './formgroup/UserAccount';
-
-const initialData = {
-  name: '',
-  gender: '',
-  birth: '',
-  telephone: '',
-  address: '',
-  address2: '',
-  email: '',
-  password: '',
-};
+import UserInfo from './pagegroup/UserInfo';
+import UserContact from './pagegroup/UserContact';
+import UserAccount from './pagegroup/UserAccount';
 
 export default function SignUp() {
   const [state, setState] = useState('first');
   const [barGage, setBarGage] = useState(100 / 3);
-  const [registerData, setRegisterData] = useState(initialData);
+  const { registerData, setRegisterData } = useRegisterStore();
 
   const firstPage = {
     onNext: (data: UserInfoType) => {
       setState('second');
       setBarGage((100 / 3) * 2);
-      setRegisterData((prevData) => ({
-        ...prevData,
+      setRegisterData({
+        ...registerData,
         name: data.name,
         gender: data.gender,
         birth: data.birth,
-      }));
+      });
     },
   };
 
@@ -46,22 +35,22 @@ export default function SignUp() {
     onNext: (data: UserContactType) => {
       setState('third');
       setBarGage(100);
-      setRegisterData((prevData) => ({
-        ...prevData,
+      setRegisterData({
+        ...registerData,
         telephone: data.telephone,
         address: data.address,
         address2: data.address2,
-      }));
+      });
     },
   };
 
   const thirdPage = {
     onNext: (data: UserAccountType) => {
-      setRegisterData((prevData) => ({
-        ...prevData,
+      setRegisterData({
+        ...registerData,
         email: data.email,
         password: data.password,
-      }));
+      });
     },
   };
 

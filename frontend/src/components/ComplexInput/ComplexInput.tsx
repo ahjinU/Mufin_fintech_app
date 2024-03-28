@@ -1,6 +1,7 @@
 interface ComplexInput {
   label: string;
   width?: string;
+  height?: string;
   message?: string;
   isMsg?: boolean;
   mode: 'ERROR' | 'INFORM' | 'NONE';
@@ -10,6 +11,7 @@ interface ComplexInput {
 export default function ComplexInput({
   label,
   width,
+  height,
   children,
   message,
   isMsg = false,
@@ -17,7 +19,10 @@ export default function ComplexInput({
   ...props
 }: ComplexInput) {
   return (
-    <div className={`min-w-[16rem] ${width || 'w-full'}`} {...props}>
+    <div
+      className={`min-w-[16rem] ${width || 'w-full'} ${height || 'h-[10rem]'}`}
+      {...props}
+    >
       <label className="custom-semibold-text text-custom-black">{label}</label>
       <div className="mt-2">{children}</div>
       {message && isMsg && (

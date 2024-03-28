@@ -1,45 +1,45 @@
 import Image from 'next/image';
 
 interface ButtonProps {
-  mode: 'ME' | 'YOU';
-  message: string;
+  mode: 'USER' | 'BOT';
+  message: string | React.ReactElement;
   nickname?: string;
 }
 
 export default function ChatBox({
-  mode = 'YOU',
+  mode = 'BOT',
   message,
   nickname = '챗봇',
   ...props
 }: ButtonProps) {
   let icon: string;
   switch (mode) {
-    case 'ME':
-      icon = 'http://localhost:3000/images/icon-chat-me.png';
+    case 'USER':
+      icon = '/images/icon-chat-me.png';
       break;
-    case 'YOU':
-      icon = 'http://localhost:3000/images/icon-chat-bot.png';
+    case 'BOT':
+      icon = '/images/icon-chat-bot.png';
       break;
     default:
-      icon = 'http://localhost:3000/images/icon-chat-mepng';
+      icon = '/images/icon-chat-me.png';
   }
 
   return (
     <div
       className={`w-full flex ${
-        mode === 'ME' ? 'justify-end' : 'justify-start'
+        mode === 'USER' ? 'justify-end' : 'justify-start'
       } `}
     >
       <div
-        className={`w-[20rem] flex flex-col ${
-          mode === 'ME'
+        className={`w-[25rem] flex flex-col ${
+          mode === 'USER'
             ? 'bg-custom-light-purple p-[0.7rem]'
             : 'bg-custom-light-gray p-[1rem]'
         } rounded-[0.8rem] pb-0`}
       >
         <div
           className={`flex flex-row ${
-            mode === 'YOU' && 'gap-[1rem]'
+            mode === 'BOT' && 'gap-[1rem]'
           }  h-[3rem] items-center`}
         >
           <Image src={icon} width={35} height={10} alt="없음" />

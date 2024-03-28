@@ -15,6 +15,7 @@ export default function LoanApply() {
             width={200}
             height={200}
             alt={'icon-rank-dot'}
+            priority
           />
         </div>
         <span className="custom-medium-text">
@@ -24,7 +25,7 @@ export default function LoanApply() {
           <br />꼭 갚아야 한다는 것을 명심하세요 :)
         </span>
       </div>
-      <Link className="fixed bottom-0 w-full p-[1.2rem]" href={'apply/detail'}>
+      <Link className="fixed bottom-0 w-full p-[1.2rem]" href={'apply/agree'}>
         <Button mode={'ACTIVE'} label={'신청하기'} />
       </Link>
     </div>

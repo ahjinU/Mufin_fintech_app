@@ -35,7 +35,6 @@ public class OrderItem {
         return orderItem;
     }
 
-    // List<OrderItem> 반환하도록 수정
     public static List<OrderItem> getOrderList(List<ReceiptDetail> receiptDetails) {
 
         List<OrderItem> items = new ArrayList<>();

@@ -2,7 +2,6 @@ package com.a502.backend.domain.allowance;
 
 import com.a502.backend.application.entity.Receipt;
 import com.a502.backend.application.entity.ReceiptDetail;
-import com.a502.backend.application.entity.User;
 import com.a502.backend.domain.allowance.OcrDto.OrderItem;
 import com.a502.backend.domain.allowance.OcrDto.PaymentInfo;
 import com.a502.backend.domain.allowance.OcrDto.ReceiptDto;
@@ -27,8 +26,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -155,12 +152,11 @@ public class ReceiptService {
         return orderItems;
     }
 
-    // Utility methods for JSON parsing and safe integer parsing
     private static JsonNode findNode(JsonNode rootNode, String path) {
         String[] parts = path.split("/");
         JsonNode currentNode = rootNode;
         for (String part : parts) {
-            if (part.matches("\\d+")) { // Array index
+            if (part.matches("\\d+")) {
                 currentNode = currentNode.get(Integer.parseInt(part));
             } else {
                 currentNode = currentNode.path(part);

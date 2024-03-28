@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import OpenAI from 'openai';
 import ChatBox from '@/components/ChatBox/ChatBox';
 import useLoanApplyStore from '../_store';
-import { postFetch } from '@/hooks/useFetch';
 import { useRouter } from 'next/navigation';
 
 type ChatMessage = {
@@ -110,7 +109,7 @@ export default function ChatArea() {
           }
         })}
       </div>
-      <div className="flex flex-row gap-[1rem] fixed bottom-0 w-full p-[1.2rem] pt-0 bg-custom-white border-none outline-none">
+      <div className="flex flex-row gap-[0.7rem] fixed bottom-0 w-full p-[1.2rem] pt-0 pr-[2.5rem] bg-custom-white border-none outline-none">
         <Input reset={false} value={input} setValue={setInput} />
         <PaperAirplaneIcon
           className="text-custom-purple w-[4rem] cursor-pointer"

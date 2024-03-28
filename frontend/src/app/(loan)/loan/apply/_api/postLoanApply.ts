@@ -1,13 +1,15 @@
-import { postFetch } from '@/hooks/useFetch';
+import useFetch from '@/hooks/useFetch';
 
 type dataType = {
   data?: any;
   api: string;
 };
 
-export const postLoanApply = async (data: dataType) => {
+export const usePostLoanApply = async (data: dataType) => {
+  const { UsePostFetch } = useFetch();
+
   console.log(data);
-  const res = await postFetch(data);
+  const res = await UsePostFetch(data);
   console.log(res);
   return res.json();
 };

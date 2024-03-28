@@ -20,7 +20,7 @@ export default function LoanApplyDetail() {
   const [isError, setIsError] = useState<boolean>(false);
 
   const [reason, setReason] = useState<string>('');
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<number>();
   const [paymentTotalCnt, setPaymentTotalCnt] = useState<number>(0);
   const [paymentDate, setPaymentDate] = useState<number>(0);
   const [penalty, setPenalty] = useState<string>('');
@@ -29,8 +29,9 @@ export default function LoanApplyDetail() {
 
   useEffect(() => {
     if (amount != 0 && paymentTotalCnt === 0) {
-      setExpectAmount(amount);
+      amount && setExpectAmount(amount);
     } else {
+      if (!amount) return;
       const nextAmouont = amount / paymentTotalCnt;
 
       !isNaN(nextAmouont) &&
@@ -44,6 +45,7 @@ export default function LoanApplyDetail() {
   }, [reason]);
 
   const saveLoanApplyData = () => {
+    if (!amount) return;
     updateApply({
       reason: reason,
       amount: amount,

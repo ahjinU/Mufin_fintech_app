@@ -30,6 +30,9 @@ export default function Input({
   ...props
 }: InputProps) {
   const [inputPlaceholder, setInputPlaceholder] = useState(placeholder || '');
+  const [inputValue, setInputValue] = useState(
+    value !== undefined ? value : '',
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleReset = () => {
@@ -40,7 +43,7 @@ export default function Input({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     onChange && onChange(e);
-    setValue && setValue(newValue);
+    setValue ? setValue(newValue) : setInputValue(newValue);
   };
 
   return (
@@ -63,7 +66,7 @@ export default function Input({
         {...props}
         placeholder={inputPlaceholder}
         name={name}
-        value={value || ''}
+        value={value || inputValue}
         ref={inputRef}
         disabled={disabled}
         onChange={handleChange}

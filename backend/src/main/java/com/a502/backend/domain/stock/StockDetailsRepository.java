@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 interface StockDetailsRepository extends JpaRepository<StockDetail, Integer> {
-	@Lock(LockModeType.PESSIMISTIC_WRITE)
-	@Transactional
+//	@Lock(LockModeType.PESSIMISTIC_WRITE)
+//	@Transactional
 	StockDetail findTopByStockOrderByCreatedAtDesc(Stock stock);
 
 	List<StockDetail> findAllByStockOrderByCreatedAtDesc(Stock stock, Pageable pageable);

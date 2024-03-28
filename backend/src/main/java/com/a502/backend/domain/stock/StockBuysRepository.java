@@ -17,8 +17,8 @@ import java.util.Optional;
 interface StockBuysRepository extends JpaRepository<StockBuy, Integer> {
 	// 주식 하나당 매도 주문 들어온 것 리스트 조회
 	List<StockBuy> findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(int id, int cnt , LocalDateTime localDateTime);
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-	@Transactional
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//	@Transactional
 	Optional<List<StockBuy>> findAllByStockAndPriceOrderByCreatedAtAsc(Stock stock, int price);
 
 	// 주식별 설정 기간 이후 총 매수 주문 조회
@@ -27,8 +27,9 @@ interface StockBuysRepository extends JpaRepository<StockBuy, Integer> {
 	// 미체결 주식 주문 조회
 	Optional<List<StockBuy>> findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(User user, Code code, LocalDateTime localDateTime, int cnt);
 
-	@Lock(LockModeType.PESSIMISTIC_WRITE)
-	@Transactional
+//	@Lock(LockModeType.PESSIMISTIC_WRITE)
+//	@Transactional
 	List<StockBuy> findAllByUserAndStockAndCode(User user, Stock stock, Code code);
 	List<StockBuy> findAllByStock(Stock stock);
+	void deleteAll();
 }

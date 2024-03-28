@@ -32,6 +32,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -90,6 +91,12 @@ public class UserController {
     public ResponseEntity<ApiResponse<String>> checkParentEmail(@Valid @RequestBody EmailDto email,HttpServletRequest request, HttpServletResponse response) {
 
         System.out.println("[UserController]: /signup/parent/check/email"+email.toString());
+
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            System.out.println(headerName + ": " + request.getHeader(headerName));
+        }
 
         return checkEmailAndRespond(email.getEmail(), request, response);
     }

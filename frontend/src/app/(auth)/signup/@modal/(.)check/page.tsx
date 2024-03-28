@@ -25,7 +25,7 @@ export default function Check() {
       if (fetchedData.ok) {
         router.push('/signup/complete');
       } else {
-        console.log('회원가입 실패');
+        console.log('회원가입 토큰 잘못됨', fetchedData);
       }
     } catch (error) {
       console.error('회원가입 에러', error);
@@ -39,10 +39,7 @@ export default function Check() {
       className={`absolute top-0 left-0 size-full flex justify-center ${background}`}
     >
       <AlertConfirm
-        handleClickOkay={() => {
-          setIsOpen(false);
-          router.push('/signup/complete');
-        }}
+        handleClickOkay={signUp}
         handleClickNo={() => {
           router.back();
         }}

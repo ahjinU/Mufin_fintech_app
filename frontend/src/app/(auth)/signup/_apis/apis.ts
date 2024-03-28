@@ -65,7 +65,7 @@ export const signUpParent = async (
   address2: string,
   password: string,
 ) => {
-  const res = await fetch(`${API_URL}/parent`, {
+  const res = await fetch(`https://mufin.life/api/user/signup/parent`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

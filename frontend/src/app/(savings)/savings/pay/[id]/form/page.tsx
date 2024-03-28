@@ -1,9 +1,12 @@
 'use client';
 
 import { AccountBox, ComplexInput, Select, Button } from '@/components';
+import { useRouter } from 'next/navigation';
 
 // 몇 개월치를 납부할까요?에 상한은 밀린 횟수
 export default function PaySavingsForm() {
+  const router = useRouter();
+
   return (
     <>
       <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] relative">
@@ -34,7 +37,11 @@ export default function PaySavingsForm() {
       </section>
 
       <div className="absolute w-full bottom-0 left-0 p-[1.2rem]">
-        <Button mode="ACTIVE" label="납부하기" />
+        <Button
+          mode="ACTIVE"
+          label="납부하기"
+          onClick={() => router.push('/savings/password')}
+        />
       </div>
     </>
   );

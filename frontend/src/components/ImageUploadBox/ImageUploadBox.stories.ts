@@ -19,6 +19,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Main: Story = {
   args: {
-    text: '계좌번호 사진 업로드하기',
+    text: '아아',
+    image: null,
+    setImage: (image) => console.log(image),
   },
 };

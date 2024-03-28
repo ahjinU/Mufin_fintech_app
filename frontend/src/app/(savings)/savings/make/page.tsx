@@ -9,7 +9,7 @@ export default function MakeSavings() {
 
         <div className="mx-auto">
           <Image
-            src={'/images/icon-piggy-bankz.png'}
+            src={'/images/icon-piggy-bank.png'}
             width={200}
             height={200}
             alt={'돼지 저금통'}

@@ -31,6 +31,7 @@ import MoneyShow from './MoneyShow/MoneyShow';
 import Ranking from './Ranking/Ranking';
 import InfoShow from './InfoShow/InfoShow';
 import PlusButton from './PlusButton/PlusButton';
+import PayPasswordBox from './PayPasswordBox/PayPasswordBox';
 
 export {
   Accordion,
@@ -66,4 +67,5 @@ export {
   Ranking,
   InfoShow,
   PlusButton,
+  PayPasswordBox,
 };

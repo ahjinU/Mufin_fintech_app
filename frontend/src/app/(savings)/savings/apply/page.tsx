@@ -13,20 +13,20 @@ function Title() {
   );
 }
 
-export function ContentRow({
-  keyName,
-  value,
-}: {
-  keyName: string;
-  value: string;
-}) {
-  return (
-    <section className="flex justify-between custom-medium-text">
-      <span>{keyName}</span>
-      <span>{value}</span>
-    </section>
-  );
-}
+// export function ContentRow({
+//   keyName,
+//   value,
+// }: {
+//   keyName: string;
+//   value: string;
+// }) {
+//   return (
+//     <section className="flex justify-between custom-medium-text">
+//       <span>{keyName}</span>
+//       <span>{value}</span>
+//     </section>
+//   );
+// }
 
 export default function ApplySavings() {
   // const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
@@ -40,8 +40,8 @@ export default function ApplySavings() {
           bottomChildren={
             <>
               <div className="flex flex-col gap-[0.5rem]">
-                <ContentRow keyName="이자율" value="0.1%" />
-                <ContentRow keyName="적금 기간" value="12개월" />
+                {/* <ContentRow keyName="이자율" value="0.1%" />
+                <ContentRow keyName="적금 기간" value="12개월" /> */}
               </div>
               <div className="self-end">
                 <TinyButton label="선택하기" />

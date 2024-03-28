@@ -11,7 +11,6 @@ import java.io.Serializable;
 @Embeddable
 @NoArgsConstructor
 @EqualsAndHashCode
-@Data
 public class StockHoldingsId implements Serializable {
 
     @ManyToOne

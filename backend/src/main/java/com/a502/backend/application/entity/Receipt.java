@@ -1,9 +1,11 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.domain.allowance.OcrDto.ReceiptDto;
 import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,15 +26,37 @@ public class Receipt extends BaseEntity {
 		if (receiptUuid == null)
 			receiptUuid = UUID.randomUUID();
 	}
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+
+	@Column(name = "price")
+	private int price;
+
+	@Column(name = "store_name")
+	private String storeName;
+
+	@Column(name = "store_adress")
+	private String storeAddress;
+
 
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ReceiptDetail> receiptDetails;
+	private List<ReceiptDetail> receiptDetails = new ArrayList<>();
+
+	public void addReceiptDetail(ReceiptDetail receiptDetail) {
+		receiptDetails.add(receiptDetail);
+		receiptDetail.addReceipt(this);
+	}
 
 	@Builder
-	public Receipt(User user) {
-		this.user = user;
+	public Receipt(int price, String storeName, String storeAddress) {
+		this.price = price;
+		this.storeName = storeName;
+		this.storeAddress = storeAddress;
 	}
+	public static Receipt createReceipt(ReceiptDto receiptDto) {
+		return Receipt.builder()
+				.storeName(receiptDto.getStoreInfo().getName())
+				.storeAddress(receiptDto.getStoreInfo().getAddress())
+				.price(receiptDto.getPaymentInfo().getPrice())
+				.build();
+	}
+
 }

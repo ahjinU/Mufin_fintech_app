@@ -26,14 +26,8 @@ public class ReceiptResponseDto {
     }
 
     public static ReceiptResponseDto convertFromEntity(Receipt receipt) {
-        System.out.println("convertFromEntity!");
-
-        System.out.println(receipt.getReceiptDetails());
-        System.out.println("===========");
 
         List<OrderItem> convertedOrderItems = OrderItem.getOrderList(receipt.getReceiptDetails());
-
-        System.out.println("orderItems 변환");
 
         return ReceiptResponseDto.builder()
                 .storeName(receipt.getStoreName())

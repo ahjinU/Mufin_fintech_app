@@ -177,7 +177,6 @@ public class ReceiptService {
     }
 
     private static int parseSafeInt(String value, int defaultValue) {
-        System.out.println("Price: " + value);
 
         try {
             return Integer.parseInt(value);

@@ -34,7 +34,7 @@ export default function GuideAccordionContent({
   }
 
   return (
-    <>
+    <div>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full h-[5.0rem] px-[2rem] flex justify-between items-center bg-custom-light-gray ${
@@ -76,6 +76,6 @@ export default function GuideAccordionContent({
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 }

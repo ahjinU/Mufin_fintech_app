@@ -4,7 +4,12 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-export default function Button({ mode, label, ...props }: ButtonProps) {
+export default function Button({
+  mode,
+  label,
+  onClick,
+  ...props
+}: ButtonProps) {
   let backgroundColor: string;
   let hoverEvent: string;
 
@@ -29,7 +34,10 @@ export default function Button({ mode, label, ...props }: ButtonProps) {
 
   return (
     <button
-      className={`w-full h-[4.4rem] rounded-[0.8rem] text-custom-white custom-semibold-text ${backgroundColor} ${hoverEvent}`}
+      className={`w-full h-[4.4rem] rounded-lg text-custom-white custom-semibold-text ${backgroundColor} ${
+        mode === 'ACTIVE' && 'hover:bg-custom-dark-purple'
+      }`}
+      onClick={onClick}
       {...props}
     >
       {label}

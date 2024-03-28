@@ -11,6 +11,7 @@ import {
 } from './_apis';
 import useStockStore from './_store';
 const url = `${process.env.REACT_APP_WEATHER_API}?q=Seoul&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
+import { useServerPostFetch } from '@/hooks/useServerFetch';
 
 export interface DataType {
   temp: number;
@@ -27,6 +28,11 @@ export default async function Stock() {
   // const myRank = await getRankingMine();
   // updateMyRank(myRank?.data);
   // const myStocks = await postStockMine();
+
+  // const myStocksData = await myStocks.json();
+  // console.log(myStocksData.data);
+  const myStocks = await useServerPostFetch({ api: '/api/stock/mine' });
+  console.log(myStocks.data);
   // updateMyStock(myStocks?.data);
   // const myParking = await postParkingAccount();
   // updateMyParking(myParking?.data);
@@ -50,7 +56,7 @@ export default async function Stock() {
       <Tab
         tabs={[
           {
-            label: '주식목록',
+            label: '주식 목록',
             component: <MainStockList data={mainTabData} />,
           },
           {

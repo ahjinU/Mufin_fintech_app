@@ -1,16 +1,13 @@
 const API_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/signup`;
 
 export const checkTelephoneParent = async (telephone: string) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/signup/parent/check/telephone`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ telephone }),
+  const res = await fetch(`${API_URL}/parent/check/telephone`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    body: JSON.stringify({ telephone }),
+  });
   return res;
 };
 
@@ -30,17 +27,14 @@ export const checkTelephoneChild = async (
 };
 
 export const checkEmailParent = async (email: string) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/signup/parent/check/email`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ email }),
+  const res = await fetch(`${API_URL}/parent/check/email`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    credentials: 'include',
+    body: JSON.stringify({ email }),
+  });
   return res;
 };
 
@@ -65,24 +59,21 @@ export const signUpParent = async (
   address2: string,
   password: string,
 ) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/signup/parent`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({
-        name,
-        gender,
-        birth,
-        address,
-        address2,
-        password,
-      }),
+  const res = await fetch(`${API_URL}/parent`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    credentials: 'include',
+    body: JSON.stringify({
+      name,
+      gender,
+      birth,
+      address,
+      address2,
+      password,
+    }),
+  });
   return res;
 };
 

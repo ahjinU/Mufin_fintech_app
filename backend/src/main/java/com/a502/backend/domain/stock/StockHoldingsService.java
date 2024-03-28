@@ -20,7 +20,7 @@ public class StockHoldingsService {
     private final StockHoldingsRepository stockHoldingsRepository;
     private final StocksService stocksService;
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public StockHolding findById(User user, Stock stock){
         return stockHoldingsRepository.findById(StockHoldingsId.builder()
                         .user(user)

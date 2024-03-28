@@ -12,6 +12,7 @@ import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import jakarta.persistence.LockModeType;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,19 @@ public class StockTransactionTest {
     CodeService codeService;
     @Autowired
     UserService userService;
+
+    @Autowired
+    StockBuysRepository stockBuysRepository;
+
+    @Autowired
+    StockSellsRepository stockSellsRepository;
+
+    @BeforeEach
+    void deleteTableRecode() {
+        log.info("delete !!");
+        stockBuysRepository.deleteAll();
+        stockSellsRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("stock transaction Test")
@@ -216,18 +230,46 @@ public class StockTransactionTest {
         Code code = codeService.findByName("거래중");
 
         StockBuy stockBuy = stockBuysService.save(user, stock, price, cnt_total, code);
+        transSell(stock, price, cnt_total, stockBuy, code);
+//        List<StockSell> list = stockSellsService.findTransactionList(stock, price);
+//
+//        if (list == null) return;
+//        for (StockSell stockSell : list) {
+//            log.info("StockSell list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockSell.getCntNot(), stockSell.getCntTotal(), stockSell.getPrice(), cnt_total);
+//            if (cnt_total == 0) break;
+//            int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
+//
+//            stockSellsService.stockSell(stockSell, transCnt, code);
+//            stockBuysService.stockBuy(stockBuy, transCnt, code);
+//
+//            cnt_total -= transCnt;
+////            cnt_total -= transaction(stockBuy, stockSell);
+//            log.info("StockSell list 값 검사 after : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockSell.getCntNot(), stockSell.getCntTotal(), stockSell.getPrice(), cnt_total);
+//
+//        }
+
+//        stockDetailsService.updateStockDetail(stock, price);
+    }
+
+    @Transactional
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    synchronized void transSell(Stock stock, int price, int cnt_total, StockBuy stockBuy, Code code){
         List<StockSell> list = stockSellsService.findTransactionList(stock, price);
 
         if (list == null) return;
         for (StockSell stockSell : list) {
             log.info("StockSell list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockSell.getCntNot(), stockSell.getCntTotal(), stockSell.getPrice(), cnt_total);
             if (cnt_total == 0) break;
+//            int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
+//
+//            stockSellsService.stockSell(stockSell, transCnt, code);
+//            stockBuysService.stockBuy(stockBuy, transCnt, code);
+//
+//            cnt_total -= transCnt;
             cnt_total -= transaction(stockBuy, stockSell);
             log.info("StockSell list 값 검사 after : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockSell.getCntNot(), stockSell.getCntTotal(), stockSell.getPrice(), cnt_total);
 
         }
-
-//        stockDetailsService.updateStockDetail(stock, price);
     }
 
     /**
@@ -236,6 +278,7 @@ public class StockTransactionTest {
      * @param request
      */
     @Transactional
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public void stockSell(StockTransactionRequest request, int userId) {
         String name = request.getName();
         int price = request.getPrice();
@@ -253,19 +296,52 @@ public class StockTransactionTest {
         log.info("거래 가능 상태 확인 완료!Sell");
         Code code = codeService.findByName("거래중");
         StockSell stockSell = stockSellsService.save(user, stock, price, cnt_total, code);
+        transBuy(stock, price, cnt_total, stockSell, code);
+//        List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
+//
+//        if (list == null) return;
+//        for (StockBuy stockBuy : list) {
+//            log.info("StockBuy list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum_{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
+//            if (cnt_total == 0) break;
+//
+//            int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
+//
+//            stockSellsService.stockSell(stockSell, transCnt, code);
+//            stockBuysService.stockBuy(stockBuy, transCnt, code);
+//
+//            cnt_total -= transCnt;
+////            cnt_total -= transaction(stockBuy, stockSell);
+//            log.info("StockBuy list 값 검사 after : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum_{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
+//
+//        }
+
+//        stockDetailsService.updateStockDetail(stock, price);
+    }
+
+
+    @Transactional
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    synchronized void transBuy(Stock stock, int price, int cnt_total, StockSell stockSell, Code code){
         List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
 
         if (list == null) return;
         for (StockBuy stockBuy : list) {
-            log.info("StockBuy list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
+            log.info("StockBuy list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum_{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
             if (cnt_total == 0) break;
+
+//            int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
+//
+//            stockSellsService.stockSell(stockSell, transCnt, code);
+//            stockBuysService.stockBuy(stockBuy, transCnt, code);
+//
+//            cnt_total -= transCnt;
             cnt_total -= transaction(stockBuy, stockSell);
-            log.info("StockBuy list 값 검사 after : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
+            log.info("StockBuy list 값 검사 after : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum_{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
 
         }
-
-//        stockDetailsService.updateStockDetail(stock, price);
     }
+
+
 
     /**
      * 매도-매수 거래, 거래 이후 정보 수정 메서드
@@ -278,14 +354,19 @@ public class StockTransactionTest {
      * @param stockSell 매도 거래
      * @return 최종 거래 개수
      */
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Transactional
     public int transaction(StockBuy stockBuy, StockSell stockSell) {
-        int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
         Code code = codeService.findByName("완료");
 
         log.info("stockBuy : {}" , stockBuy.getCntNot());
         log.info("stockSell : {}" , stockSell.getCntNot());
+//        StockBuy stockBuy1 = stockBuysService.findById(stockBuy.getId());
+//        StockSell stockSell1 = stockSellsService.findById(stockSell.getId());
+        int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
+//        log.info("stockBuy1 : {}" , stockBuy1.getCntNot());
+//        log.info("stockSell1 : {}" , stockSell1.getCntNot());
+
 
 //        ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt, codeService.findByName("매도"));
 //        ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt, codeService.findByName("매수"));

@@ -37,21 +37,23 @@ public class StockSellsService {
 				.build());
 	}
 
-	@Transactional
+//	@Transactional
+//	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public List<StockSell> findTransactionList(Stock stock, int price) {
 		return stockSellsRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
 	}
 
 	@Transactional
+//	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public void stockSell(StockSell stocksell, int cnt, Code code) {
-		StockSell ss = stockSellsRepository.findById(stocksell.getId()).orElse(null);
-		int cntNot = ss.getCntNot();
+//		StockSell ss = stockSellsRepository.findById(stocksell.getId()).orElse(null);
+		int cntNot = stocksell.getCntNot();
 		if (cntNot - cnt < 0)
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_STOCK_IS_NOT_ENOUGH);
-		ss.setCntNot(cntNot - cnt);
+		stocksell.setCntNot(cntNot - cnt);
         if (cntNot - cnt == 0)
-            ss.updateCode(code);
-		stockSellsRepository.saveAndFlush(ss);
+			stocksell.updateCode(code);
+		stockSellsRepository.saveAndFlush(stocksell);
 	}
 
 	public List<StockSell> getWaitingStockOrders(User user, Code code, LocalDateTime localDateTime, int cnt) {

@@ -56,7 +56,7 @@ public class StockFacade {
 		Stock stock = stocksService.findByName(name);
 
 		stockDetailsService.validStockPrice(stock, price);
-		int price1 = parkingService.getParkingBalance(user, price * cnt_total);
+		int price1 = parkingService.getParkingBalance(user);
 		int price2 = stockBuysService.getStockBuyWaitingList(user, stock, codeService.findByName("거래중"));
 		log.info("price1 : {}" , price1);
 		log.info("price2 : {}" , price2);

@@ -11,15 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class ParkingDetailsService {
 	private final ParkingDetailsRepository parkingDetailsRepository;
 
+	@Transactional
 	public ParkingDetail getLastDetail(Parking parking) {
 		return parkingDetailsRepository.findTopByParkingOrderByCreatedAtDesc(parking);
 	}
 
+	@Transactional
 	public ParkingDetail saveStockBuy(StockBuy stockBuy, Parking parking, int cnt, Code code) {
 		ParkingDetail last = getLastDetail(parking);
 		// 거래 주식회사 이름
@@ -31,10 +32,12 @@ public class ParkingDetailsService {
 				.balance(last.getBalance() + amount)
 				.counterpartyName(counterpartyName)
 				.code(code)
+				.cnt(cnt)
 				.build()
 		);
 	}
 
+	@Transactional
 	public ParkingDetail saveStockSell(StockSell stockSell, Parking parking, int cnt, Code code) {
 		ParkingDetail last = getLastDetail(parking);
 		// 거래 주식회사 이름
@@ -46,6 +49,7 @@ public class ParkingDetailsService {
 				.balance(last.getBalance() + amount)
 				.counterpartyName(counterpartyName)
 				.code(code)
+				.cnt(cnt)
 				.build()
 		);
 	}

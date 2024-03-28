@@ -6,19 +6,21 @@ import com.a502.backend.application.entity.StockSell;
 import com.a502.backend.application.entity.User;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class StockHoldingsService {
     private final StockHoldingsRepository stockHoldingsRepository;
     private final StocksService stocksService;
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public StockHolding findById(User user, Stock stock){
         return stockHoldingsRepository.findById(StockHoldingsId.builder()
                         .user(user)
@@ -42,6 +44,7 @@ public class StockHoldingsService {
 
         stockHolding.setCnt(stockHoldingCnt - cnt);
         stockHolding.setTotal(stockHoldingTotal - cnt * price);
+        stockHoldingsRepository.saveAndFlush(stockHolding);
     }
 
     @Transactional
@@ -52,6 +55,7 @@ public class StockHoldingsService {
 
         stockHolding.setCnt(stockHoldingCnt + cnt);
         stockHolding.setTotal(stockHoldingTotal + cnt * price);
+        stockHoldingsRepository.saveAndFlush(stockHolding);
     }
 
     // 유저가 가진 주식 조회

@@ -1,12 +1,11 @@
 package com.a502.backend.domain.stock;
 
-import com.a502.backend.application.entity.Code;
-import com.a502.backend.application.entity.Stock;
-import com.a502.backend.application.entity.StockBuy;
-import com.a502.backend.application.entity.User;
+import com.a502.backend.application.entity.*;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class StockBuysService {
 	private final StockBuysRepository stockBuysRepository;
@@ -36,25 +34,25 @@ public class StockBuysService {
 				.build());
 	}
 
-	//    public List<StockBuy> getBuyList(int id){
-//        return stockBuysRepository.getBuyList(id);
-//    }
 	public List<StockBuy> getBuyOrderList(int id, int cnt, LocalDateTime localDateTime) {
 		return stockBuysRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(id, cnt, localDateTime);
 	}
-
+	@Transactional
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public List<StockBuy> findTransactionList(Stock stock, int price) {
 		return stockBuysRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
 	}
 
 	@Transactional
 	public void stockBuy(StockBuy stockBuy, int cnt, Code code) {
-		int cntNot = stockBuy.getCntNot();
+		StockBuy sb = stockBuysRepository.findById(stockBuy.getId()).orElse(null);
+		int cntNot = sb.getCntNot();
 		if (cntNot - cnt < 0)
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_STOCK_IS_NOT_ENOUGH);
-		stockBuy.setCntNot(cntNot - cnt);
+		sb.setCntNot(cntNot - cnt);
         if (cntNot - cnt == 0)
-            stockBuy.updateCode(code);
+            sb.updateCode(code);
+		stockBuysRepository.saveAndFlush(sb);
 	}
 
 	public List<StockBuy> getTodayTransactions(Stock stock, LocalDateTime localDateTime) {
@@ -65,6 +63,7 @@ public class StockBuysService {
 		return stockBuysRepository.findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(user, code, localDateTime, cnt).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_NOT_EXIST));
 	}
 
+	@Transactional
 	public int getStockBuyWaitingList(User user, Stock stock, Code code){
 		List<StockBuy> list = stockBuysRepository.findAllByUserAndStockAndCode(user, stock, code);
 		int price = 0;
@@ -74,5 +73,7 @@ public class StockBuysService {
 		return price;
 	}
 
-
+	public List<StockBuy> getStockTransListByStock(Stock stock){
+		return stockBuysRepository.findAllByStock(stock);
+	}
 }

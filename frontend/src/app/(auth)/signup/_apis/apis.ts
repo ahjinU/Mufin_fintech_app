@@ -1,13 +1,16 @@
 const API_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/signup`;
 
 export const checkTelephoneParent = async (telephone: string) => {
-  const res = await fetch(`${API_URL}/parent/check/telephone`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const res = await fetch(
+    `https://mufin.life/api/user/signup/parent/check/telephone`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ telephone }),
     },
-    body: JSON.stringify({ telephone }),
-  });
+  );
   return res;
 };
 
@@ -27,14 +30,17 @@ export const checkTelephoneChild = async (
 };
 
 export const checkEmailParent = async (email: string) => {
-  const res = await fetch(`${API_URL}/parent/check/email`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const res = await fetch(
+    `https://mufin.life/api/user/signup/parent/check/email`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ email }),
     },
-    credentials: 'include',
-    body: JSON.stringify({ email }),
-  });
+  );
   return res;
 };
 

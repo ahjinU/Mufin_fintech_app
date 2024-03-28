@@ -33,8 +33,7 @@ public class TemporaryUser  extends BaseEntity {
 
 
     @Builder
-    public TemporaryUser(int id, UUID temporaryUserUuid, String telephone, String email) {
-        this.id = id;
+    public TemporaryUser(UUID temporaryUserUuid, String telephone, String email) {
         this.temporaryUserUuid = temporaryUserUuid;
         this.telephone = telephone;
         this.email = email;

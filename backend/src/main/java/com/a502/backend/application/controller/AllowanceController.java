@@ -30,11 +30,11 @@ public class AllowanceController {
     private final AllowanceService allowanceService;
 
     @PostMapping("/allowance/calender")
-    public ResponseEntity<ApiResponse<List<CalendarSummary>>> calender(@RequestBody CalendarDTO calendarDTO) {
+    public ResponseEntity<ApiResponse<CalendarSummary>> calender(@RequestBody CalendarDTO calendarDTO) {
 
-        List<CalendarSummary> summary = allowanceService.getTransactionsForPeriod(calendarDTO);
+       CalendarSummary summary = allowanceService.getTransactionsForPeriod(calendarDTO);
 
-        ApiResponse<List<CalendarSummary>> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_ALLOWANCE_GET_BY_MONTH, summary);
+        ApiResponse<CalendarSummary> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_ALLOWANCE_GET_BY_MONTH, summary);
 
         return ResponseEntity.ok().body(apiResponse);
     }

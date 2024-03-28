@@ -7,6 +7,7 @@ import com.a502.backend.domain.account.AccountDetailService;
 import com.a502.backend.domain.account.CashDetailService;
 import com.a502.backend.domain.allowance.request.CalendarDTO;
 import com.a502.backend.domain.allowance.response.CalendarSummary;
+import com.a502.backend.domain.allowance.response.DailySummary;
 import com.a502.backend.domain.allowance.response.ReceiptResponseDto;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.error.BusinessException;
@@ -34,21 +35,42 @@ public class AllowanceService {
     }
 
 
-    public List<CalendarSummary> getTransactionsForPeriod(CalendarDTO calendarDTO) {
+    public CalendarSummary getTransactionsForPeriod(CalendarDTO calendarDTO) {
 
-        List<CalendarSummary> summary = new ArrayList<>();
+        List<DailySummary> transactions = new ArrayList<>();
 
-        User holderUser= findHolderUser(calendarDTO.getChildUuid());
+        User holderUser= findHolderUser(calendarDTO.getChildUuid()).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
         if (holderUser != null) {
             List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, calendarDTO.getStartDate(), calendarDTO.getEndDate());
-            summaries.addAll(convertFromEntitys(accountDetails));
-
             List<CashDetail> cashDetails = cashDetailService.findCashDetailsForUserAndPeriod(holderUser, calendarDTO.getStartDate(), calendarDTO.getEndDate());
-            summaries.addAll(CashDetail.convertFromEntitys(cashDetails));
+
+
         }
+
+        CalendarSummary summary = calculateTransactions(transactions);
 
         return summary;
     }
+
+    private CalendarSummary calculateTransactions(List<DailySummary> transactions) {
+        for(DailySummary transaction : transactions){
+
+        }
+    }
+
+    /**
+     * 계좌 Entity ->
+     * @param accountDetails
+     * @return
+     */
+    private List<DailySummary> convertFromAccountDetails(List<AccountDetail> accountDetails) {
+
+    }
+
+    private List<DailySummary> convertFromCashDetails(List<CashDetail> cashDetails) {
+
+    }
+
 
     private User findHolderUser(String childUuid){
         if(childUuid==null)

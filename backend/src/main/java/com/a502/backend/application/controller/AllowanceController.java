@@ -1,27 +1,17 @@
 package com.a502.backend.application.controller;
 import com.a502.backend.domain.allowance.AllowanceService;
-import com.a502.backend.domain.allowance.response.ReceiptDto;
-import com.a502.backend.global.error.BusinessException;
-import com.a502.backend.global.exception.ErrorCode;
+import com.a502.backend.domain.allowance.OcrDto.ReceiptDto;
+import com.a502.backend.domain.allowance.response.ReceiptResponseDto;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Base64;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,13 +25,11 @@ public class AllowanceController {
     private final AllowanceService allowanceService;
 
     @PostMapping("/receipt/convert")
-    public ResponseEntity<ApiResponse<ReceiptDto>> convert(@RequestParam MultipartFile file) {
+    public ResponseEntity<ApiResponse<ReceiptResponseDto>> convert(@RequestParam MultipartFile file) {
 
-        System.out.println("[controller] /receipt/convert 진입");
+        ReceiptResponseDto receiptResponseDto = allowanceService.convert(file);
 
-        ReceiptDto convert = allowanceService.convert(file);
-
-        ApiResponse<ReceiptDto> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_CONVERT_IMAGE, convert);
+        ApiResponse<ReceiptResponseDto> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_CONVERT_IMAGE, receiptResponseDto);
         return ResponseEntity.ok().body(apiResponse);
 
     }

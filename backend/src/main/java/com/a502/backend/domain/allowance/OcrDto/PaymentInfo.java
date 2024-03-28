@@ -1,4 +1,4 @@
-package com.a502.backend.domain.allowance.response;
+package com.a502.backend.domain.allowance.OcrDto;
 
 import lombok.*;
 

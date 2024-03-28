@@ -1,8 +1,5 @@
-package com.a502.backend.domain.allowance.response;
+package com.a502.backend.domain.allowance.OcrDto;
 
-import com.a502.backend.application.entity.Account;
-import com.a502.backend.application.entity.Receipt;
-import com.a502.backend.domain.account.dto.DepositWithdrawalAccountDto;
 import lombok.*;
 
 import java.util.List;
@@ -16,7 +13,7 @@ public class ReceiptDto {
     private List<OrderItem> orderItems;
 
     @Builder
-    public ReceiptDto(long timestamp, StoreInfo storeInfo, PaymentInfo paymentInfo, List<OrderItem> orderItems, int totalDiscount) {
+    public ReceiptDto( StoreInfo storeInfo, PaymentInfo paymentInfo, List<OrderItem> orderItems) {
         this.storeInfo = storeInfo;
         this.paymentInfo = paymentInfo;
         this.orderItems = orderItems;

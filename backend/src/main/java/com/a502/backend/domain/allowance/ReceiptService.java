@@ -3,21 +3,22 @@ package com.a502.backend.domain.allowance;
 import com.a502.backend.application.entity.Receipt;
 import com.a502.backend.application.entity.ReceiptDetail;
 import com.a502.backend.application.entity.User;
-import com.a502.backend.domain.allowance.response.OrderItem;
-import com.a502.backend.domain.allowance.response.PaymentInfo;
-import com.a502.backend.domain.allowance.response.ReceiptDto;
-import com.a502.backend.domain.allowance.response.StoreInfo;
+import com.a502.backend.domain.allowance.OcrDto.OrderItem;
+import com.a502.backend.domain.allowance.OcrDto.PaymentInfo;
+import com.a502.backend.domain.allowance.OcrDto.ReceiptDto;
+import com.a502.backend.domain.allowance.OcrDto.StoreInfo;
+import com.a502.backend.domain.allowance.response.ReceiptResponseDto;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -47,61 +48,66 @@ public class ReceiptService {
     private final UserService userService;
 
 
-    public ReceiptDto saveReceiptFromImage(MultipartFile file){
-        ReceiptDto receipt=null;
+    /**
+     * 이미지로부터 변환한 텍스트를 Entity로 저장
+     *
+     * @param file
+     * @return
+     */
+    @Transactional
+    public ReceiptResponseDto saveReceiptFromImage(MultipartFile file) {
+
+        ReceiptResponseDto receiptResponseDto = null;
 
         try {
-           // String response = connectionToOcr(file);
-            String response = "{\"version\":\"V2\",\"requestId\":\"95392ccf-64e0-4c1c-a7ba-f5fe287c976b\",\"timestamp\":1711521317903,\"images\":[{\"receipt\":{\"meta\":{\"estimatedLanguage\":\"ko\"},\"result\":{\"storeInfo\":{\"name\":{\"text\":\"Frame676\",\"formatted\":{\"value\":\"Frame676\"},\"keyText\":\"\",\"confidenceScore\":0.95594,\"boundingPolys\":[{\"vertices\":[{\"x\":451.0,\"y\":214.0},{\"x\":873.0,\"y\":222.0},{\"x\":872.0,\"y\":275.0},{\"x\":450.0,\"y\":266.0}]}],\"maskingPolys\":[]},\"bizNum\":{\"text\":\"6132627858\",\"formatted\":{\"value\":\"613-26-27858\"},\"keyText\":\"사업자번호 :\",\"confidenceScore\":0.61607,\"boundingPolys\":[{\"vertices\":[{\"x\":444.0,\"y\":452.0},{\"x\":723.0,\"y\":457.0},{\"x\":722.0,\"y\":518.0},{\"x\":443.0,\"y\":513.0}]}],\"maskingPolys\":[]},\"addresses\":[{\"text\":\"서울 동작구 시흥대로 676 1층\",\"formatted\":{\"value\":\"서울 동작구 시흥대로 676 1층\"},\"keyText\":\"주소 :\",\"confidenceScore\":0.80108,\"boundingPolys\":[{\"vertices\":[{\"x\":290.0,\"y\":508.0},{\"x\":403.0,\"y\":508.0},{\"x\":403.0,\"y\":575.0},{\"x\":290.0,\"y\":575.0}]},{\"vertices\":[{\"x\":422.0,\"y\":508.0},{\"x\":589.0,\"y\":510.0},{\"x\":587.0,\"y\":579.0},{\"x\":421.0,\"y\":577.0}]},{\"vertices\":[{\"x\":605.0,\"y\":511.0},{\"x\":821.0,\"y\":514.0},{\"x\":820.0,\"y\":585.0},{\"x\":604.0,\"y\":582.0}]},{\"vertices\":[{\"x\":835.0,\"y\":519.0},{\"x\":928.0,\"y\":519.0},{\"x\":928.0,\"y\":580.0},{\"x\":835.0,\"y\":580.0}]},{\"vertices\":[{\"x\":965.0,\"y\":519.0},{\"x\":1052.0,\"y\":519.0},{\"x\":1052.0,\"y\":584.0},{\"x\":965.0,\"y\":584.0}]}],\"maskingPolys\":[]}],\"tel\":[{\"text\":\"07088076046\",\"formatted\":{\"value\":\"07088076046\"},\"keyText\":\"전화 :\",\"confidenceScore\":0.87398,\"boundingPolys\":[{\"vertices\":[{\"x\":309.0,\"y\":633.0},{\"x\":618.0,\"y\":636.0},{\"x\":617.0,\"y\":702.0},{\"x\":308.0,\"y\":699.0}]}]}]},\"paymentInfo\":{\"date\":{\"text\":\"2024-03-26\",\"formatted\":{\"year\":\"2024\",\"month\":\"03\",\"day\":\"26\"},\"keyText\":\"일자 :\",\"confidenceScore\":0.6404,\"boundingPolys\":[{\"vertices\":[{\"x\":311.0,\"y\":699.0},{\"x\":590.0,\"y\":702.0},{\"x\":589.0,\"y\":761.0},{\"x\":310.0,\"y\":758.0}]}],\"maskingPolys\":[]},\"time\":{\"text\":\"11: 58: 55\",\"formatted\":{\"hour\":\"11\",\"minute\":\"58\",\"second\":\"55\"},\"keyText\":\"\",\"confidenceScore\":0.89634,\"boundingPolys\":[{\"vertices\":[{\"x\":606.0,\"y\":706.0},{\"x\":684.0,\"y\":706.0},{\"x\":684.0,\"y\":760.0},{\"x\":606.0,\"y\":760.0}]},{\"vertices\":[{\"x\":680.0,\"y\":706.0},{\"x\":761.0,\"y\":706.0},{\"x\":761.0,\"y\":760.0},{\"x\":680.0,\"y\":760.0}]},{\"vertices\":[{\"x\":756.0,\"y\":706.0},{\"x\":824.0,\"y\":706.0},{\"x\":824.0,\"y\":763.0},{\"x\":756.0,\"y\":763.0}]}]}},\"subResults\":[{\"items\":[{\"name\":{\"text\":\"빵추가\",\"formatted\":{\"value\":\"빵추가\"},\"keyText\":\"\",\"confidenceScore\":0.95356,\"boundingPolys\":[{\"vertices\":[{\"x\":126.0,\"y\":939.0},{\"x\":292.0,\"y\":939.0},{\"x\":292.0,\"y\":1005.0},{\"x\":126.0,\"y\":1005.0}]}],\"maskingPolys\":[]},\"count\":{\"text\":\"1\",\"formatted\":{\"value\":\"1\"},\"keyText\":\"\",\"confidenceScore\":0.94926,\"boundingPolys\":[{\"vertices\":[{\"x\":909.0,\"y\":950.0},{\"x\":939.0,\"y\":950.0},{\"x\":939.0,\"y\":1002.0},{\"x\":909.0,\"y\":1002.0}]}]},\"price\":{\"price\":{\"text\":\"3,500\",\"formatted\":{\"value\":\"3500\"},\"keyText\":\"\",\"confidenceScore\":0.90772,\"boundingPolys\":[{\"vertices\":[{\"x\":1033.0,\"y\":947.0},{\"x\":1176.0,\"y\":949.0},{\"x\":1175.0,\"y\":1008.0},{\"x\":1032.0,\"y\":1005.0}]}]},\"unitPrice\":{\"text\":\"3,500\",\"formatted\":{\"value\":\"3500\"},\"keyText\":\"\",\"confidenceScore\":0.93931,\"boundingPolys\":[{\"vertices\":[{\"x\":649.0,\"y\":946.0},{\"x\":795.0,\"y\":946.0},{\"x\":795.0,\"y\":1007.0},{\"x\":649.0,\"y\":1007.0}]}]}}},{\"name\":{\"text\":\"PA - 알리올리오\",\"formatted\":{\"value\":\"PA-알리올리오\"},\"keyText\":\"\",\"confidenceScore\":0.76275,\"boundingPolys\":[{\"vertices\":[{\"x\":122.0,\"y\":1007.0},{\"x\":192.0,\"y\":1007.0},{\"x\":192.0,\"y\":1061.0},{\"x\":122.0,\"y\":1061.0}]},{\"vertices\":[{\"x\":213.0,\"y\":1026.0},{\"x\":237.0,\"y\":1026.0},{\"x\":237.0,\"y\":1042.0},{\"x\":213.0,\"y\":1042.0}]},{\"vertices\":[{\"x\":261.0,\"y\":1005.0},{\"x\":529.0,\"y\":1005.0},{\"x\":529.0,\"y\":1066.0},{\"x\":261.0,\"y\":1066.0}]}],\"maskingPolys\":[]},\"count\":{\"text\":\"1\",\"formatted\":{\"value\":\"1\"},\"keyText\":\"\",\"confidenceScore\":0.95509,\"boundingPolys\":[{\"vertices\":[{\"x\":909.0,\"y\":1013.0},{\"x\":937.0,\"y\":1013.0},{\"x\":937.0,\"y\":1061.0},{\"x\":909.0,\"y\":1061.0}]}]},\"price\":{\"price\":{\"text\":\"15,000\",\"formatted\":{\"value\":\"15000\"},\"keyText\":\"\",\"confidenceScore\":0.93741,\"boundingPolys\":[{\"vertices\":[{\"x\":1011.0,\"y\":1013.0},{\"x\":1174.0,\"y\":1013.0},{\"x\":1174.0,\"y\":1065.0},{\"x\":1011.0,\"y\":1065.0}]}]},\"unitPrice\":{\"text\":\"15,000\",\"formatted\":{\"value\":\"15000\"},\"keyText\":\"\",\"confidenceScore\":0.93641,\"boundingPolys\":[{\"vertices\":[{\"x\":627.0,\"y\":1007.0},{\"x\":791.0,\"y\":1007.0},{\"x\":791.0,\"y\":1063.0},{\"x\":627.0,\"y\":1063.0}]}]}}},{\"name\":{\"text\":\"R - 로제해산물\",\"formatted\":{\"value\":\"R-로제해산물\"},\"keyText\":\"\",\"confidenceScore\":0.76523,\"boundingPolys\":[{\"vertices\":[{\"x\":126.0,\"y\":1068.0},{\"x\":170.0,\"y\":1068.0},{\"x\":170.0,\"y\":1122.0},{\"x\":126.0,\"y\":1122.0}]},{\"vertices\":[{\"x\":181.0,\"y\":1083.0},{\"x\":209.0,\"y\":1083.0},{\"x\":209.0,\"y\":1103.0},{\"x\":181.0,\"y\":1103.0}]},{\"vertices\":[{\"x\":231.0,\"y\":1061.0},{\"x\":503.0,\"y\":1061.0},{\"x\":503.0,\"y\":1127.0},{\"x\":231.0,\"y\":1127.0}]}],\"maskingPolys\":[]},\"count\":{\"text\":\"1\",\"formatted\":{\"value\":\"1\"},\"keyText\":\"\",\"confidenceScore\":0.95516,\"boundingPolys\":[{\"vertices\":[{\"x\":907.0,\"y\":1070.0},{\"x\":939.0,\"y\":1070.0},{\"x\":939.0,\"y\":1122.0},{\"x\":907.0,\"y\":1122.0}]}]},\"price\":{\"price\":{\"text\":\"16,500\",\"formatted\":{\"value\":\"16500\"},\"keyText\":\"\",\"confidenceScore\":0.93102,\"boundingPolys\":[{\"vertices\":[{\"x\":1007.0,\"y\":1068.0},{\"x\":1174.0,\"y\":1068.0},{\"x\":1174.0,\"y\":1126.0},{\"x\":1007.0,\"y\":1126.0}]}]},\"unitPrice\":{\"text\":\"16,500\",\"formatted\":{\"value\":\"16500\"},\"keyText\":\"\",\"confidenceScore\":0.93231,\"boundingPolys\":[{\"vertices\":[{\"x\":625.0,\"y\":1066.0},{\"x\":791.0,\"y\":1066.0},{\"x\":791.0,\"y\":1126.0},{\"x\":625.0,\"y\":1126.0}]}]}}}]}],\"totalPrice\":{\"price\":{\"text\":\"35,000\",\"formatted\":{\"value\":\"35000\"},\"keyText\":\"청구금액:\",\"confidenceScore\":0.90829,\"boundingPolys\":[{\"vertices\":[{\"x\":991.0,\"y\":1658.0},{\"x\":1157.0,\"y\":1658.0},{\"x\":1157.0,\"y\":1713.0},{\"x\":991.0,\"y\":1713.0}]}]}},\"subTotal\":[{\"taxPrice\":[{\"text\":\"3,182\",\"formatted\":{\"value\":\"3182\"},\"keyText\":\"부 가 세:\",\"confidenceScore\":0.91834,\"boundingPolys\":[{\"vertices\":[{\"x\":1018.0,\"y\":1480.0},{\"x\":1161.0,\"y\":1480.0},{\"x\":1161.0,\"y\":1540.0},{\"x\":1018.0,\"y\":1540.0}]}]}]}]}},\"uid\":\"8e7d241533c546d8a40fc0369136fa52\",\"name\":\"receiptImage\",\"inferResult\":\"SUCCESS\",\"message\":\"SUCCESS\",\"validationResult\":{\"result\":\"NO_REQUESTED\"}}]}\n";
-            System.out.println(response);
+            String response = connectionToOcr(file);
 
-            receipt = parseReceipt(response);
-            System.out.println(receipt.toString());
+            ReceiptDto receipt = parseReceipt(response);
 
-            User user = userService.userFindByEmail();
-            System.out.println(user.toString());
-
-            saveReceiptAndDetails(receipt,user);
-
-            System.out.println(receipt.toString());
+            try {
+                Receipt registerReceipt = saveReceiptAndDetails(receipt);
+                Receipt registeredReceipt = receiptRepository.findById(registerReceipt.getId()).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_NOT_RECEIPT));
+                receiptResponseDto = ReceiptResponseDto.convertFromEntity(registeredReceipt);
+            } catch (Exception e) {
+            }
         } catch (Exception e) {
             throw BusinessException.of(ErrorCode.API_ERROR_RECEIPT_FAIL_CONVERT_TO_TEXT);
         }
 
-        return receipt;
+        return receiptResponseDto;
     }
 
     @Transactional
-    public void saveReceiptAndDetails(ReceiptDto receiptDto, User user) {
-        // Receipt 엔티티 생성
-        Receipt receipt = Receipt.builder()
-                .storeName(receiptDto.getStoreInfo().getName())
-                .storeAddress(receiptDto.getStoreInfo().getAddress())
-                .price(receiptDto.getPaymentInfo().getPrice())
-                .build();
+    public Receipt saveReceiptAndDetails(ReceiptDto receiptDto) {
+        Receipt receipt = Receipt.createReceipt(receiptDto);
+        Receipt savedReceipt = receiptRepository.save(receipt);
 
-        for (OrderItem item : receiptDto.getOrderItems()) {
+        saveReceiptDetails(receiptDto.getOrderItems(), savedReceipt);
+
+        return savedReceipt;
+
+
+    }
+
+    private void saveReceiptDetails(List<OrderItem> orderItems, Receipt receipt) {
+        for (OrderItem item : orderItems) {
             ReceiptDetail detail = ReceiptDetail.builder()
-                    .item(item.getName())
-                    .price(item.getUnitPrice())
-                    .cnt(item.getCount())
+                    .item(item.getItem())
                     .unitPrice(item.getUnitPrice())
-                    .total(item.getTotalPrice())
+                    .cnt(item.getCnt())
+                    .total(item.getTotal())
                     .receipt(receipt)
                     .build();
-            receipt.getReceiptDetails().add(detail);
+
+            receipt.addReceiptDetail(detail);
+            receiptDetailRepository.save(detail);
         }
-
-        receiptRepository.save(receipt);
     }
 
-    public static LocalDateTime combineDateAndTime(String date, String time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return LocalDateTime.parse(date + " " + time, formatter);
-    }
     public static ReceiptDto parseReceipt(String response) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response);
+
         return ReceiptDto.builder()
                 .storeInfo(parseStoreInfo(rootNode))
                 .paymentInfo(parsePaymentInfo(rootNode))
@@ -120,12 +126,14 @@ public class ReceiptService {
 
     private static PaymentInfo parsePaymentInfo(JsonNode rootNode) {
         JsonNode paymentInfoNode = findNode(rootNode, "images/0/receipt/result/paymentInfo");
-        int totalPrice = parseSafeInt(getText(rootNode, "images/0/receipt/result/totalPrice/price/text"), 0);
-        return PaymentInfo.builder()
+        int totalPrice = parseSafeInt(getText(rootNode, "images/0/receipt/result/totalPrice/price/text").replace(",", ""), 0);
+        PaymentInfo pay = PaymentInfo.builder()
                 .date(getText(paymentInfoNode, "date/text"))
                 .time(getText(paymentInfoNode, "time/text"))
+
                 .price(totalPrice)
                 .build();
+        return pay;
     }
 
     private static List<OrderItem> parseOrderItems(JsonNode rootNode) {
@@ -133,10 +141,14 @@ public class ReceiptService {
         JsonNode itemsNode = findNode(rootNode, "images/0/receipt/result/subResults/0/items");
         if (itemsNode.isArray()) {
             for (JsonNode itemNode : itemsNode) {
+
+                int cnt = parseSafeInt(getText(itemNode, "count/text"), 1);
+                int unitPrice = parseSafeInt(getText(itemNode, "price/price/text").replace(",", ""), 0);
                 orderItems.add(OrderItem.builder()
-                        .name(getText(itemNode, "name/text"))
-                        .count(parseSafeInt(getText(itemNode, "count/text"), 1))
-                        .unitPrice(parseSafeInt(getText(itemNode, "price/price/text").replace(",", ""), 0))
+                        .item(getText(itemNode, "name/text"))
+                        .cnt(cnt)
+                        .unitPrice(unitPrice)
+                        .total(cnt * unitPrice)
                         .build());
             }
         }
@@ -154,7 +166,7 @@ public class ReceiptService {
                 currentNode = currentNode.path(part);
             }
             if (currentNode.isMissingNode()) {
-                throw BusinessException.of(ErrorCode.API_ERROR_RECEIPT_NOT_EXIST);
+                throw BusinessException.of(ErrorCode.API_ERROR_NOT_RECEIPT);
             }
         }
         return currentNode;
@@ -165,6 +177,8 @@ public class ReceiptService {
     }
 
     private static int parseSafeInt(String value, int defaultValue) {
+        System.out.println("Price: " + value);
+
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
@@ -173,9 +187,18 @@ public class ReceiptService {
     }
 
     public String connectionToOcr(MultipartFile file) throws IOException {
-        HttpURLConnection con = createConnection();
-        sendRequest(con, file);
-        return readResponse(con);
+        HttpURLConnection con = null;
+        try {
+            con = createConnection();
+            sendRequest(con, file);
+            return readResponse(con);
+        } catch (IOException e) {
+            throw BusinessException.of(ErrorCode.API_ERROR_OCR_CONNECTION);
+        } finally {
+            if (con != null) {
+                con.disconnect();
+            }
+        }
     }
 
     private HttpURLConnection createConnection() throws IOException {
@@ -261,8 +284,8 @@ public class ReceiptService {
 
         String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
 
-        if (!extension.equals("jpg") && !extension.equals("png")) {
-            throw BusinessException.of(ErrorCode.UNSUPPORTED_FILE_EXTENSION);
+        if (!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")) {
+            throw BusinessException.of(ErrorCode.API_ERROR_UNSUPPORTED_FILE_EXTENSION);
         }
 
         return extension;

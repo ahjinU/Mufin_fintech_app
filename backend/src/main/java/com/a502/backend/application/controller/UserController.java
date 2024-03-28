@@ -83,6 +83,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<String>> checkParentTelephone(@Valid @RequestBody TelephoneDto telephone, HttpServletResponse response) {
 
         System.out.println("[UserController]: ");
+
         return checkTelephoneAndRespond(telephone.getTelephone(), response);
     }
 

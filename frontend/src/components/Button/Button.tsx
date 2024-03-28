@@ -27,7 +27,9 @@ export default function Button({
 
   return (
     <button
-      className={`w-full h-[4.4rem] rounded-lg text-custom-white custom-semibold-text ${backgroundColor}`}
+      className={`w-full h-[4.4rem] rounded-lg text-custom-white custom-semibold-text ${backgroundColor} ${
+        mode === 'ACTIVE' && 'hover:bg-custom-dark-purple'
+      }`}
       onClick={onClick}
       {...props}
     >

@@ -13,7 +13,13 @@ function Title() {
   );
 }
 
-function ContentRow({ keyName, value }: { keyName: string; value: string }) {
+export function ContentRow({
+  keyName,
+  value,
+}: {
+  keyName: string;
+  value: string;
+}) {
   return (
     <section className="flex justify-between custom-medium-text">
       <span>{keyName}</span>

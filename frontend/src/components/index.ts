@@ -1,4 +1,5 @@
 import Accordion from './Accordion/Accordion';
+import AccountBox from './AccountBox/AccountBox';
 import AdBox from './AdBox/AdBox';
 import AgreeBottomSheet from './AgreeBottomSheet/AgreeBottomSheet';
 import AlertConfirmModal from './AlertConfirmModal/AlertConfirmModal';
@@ -33,6 +34,7 @@ import PlusButton from './PlusButton/PlusButton';
 
 export {
   Accordion,
+  AccountBox,
   FlexBox,
   Button,
   NavBar,

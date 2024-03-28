@@ -9,10 +9,9 @@ import com.a502.backend.domain.loan.LoanRefusalService;
 import com.a502.backend.domain.loan.LoansService;
 import com.a502.backend.domain.loan.Request.ApplyLoanRequest;
 import com.a502.backend.domain.loan.Request.LoanUuidRequest;
+import com.a502.backend.domain.loan.Request.RefuseLoanRequest;
 import com.a502.backend.domain.loan.Request.RepayLoanRequest;
-import com.a502.backend.domain.loan.Response.LoanDetailResponse;
-import com.a502.backend.domain.loan.Response.LoanList;
-import com.a502.backend.domain.loan.Response.LoanListForChildResponse;
+import com.a502.backend.domain.loan.Response.*;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
@@ -40,6 +39,7 @@ public class LoanFacade {
 	private final AccountService accountService;
 	private final AccountDetailService accountDetailService;
 	private final LoanDetailService loanDetailService;
+
 	public void applyLoan(ApplyLoanRequest applyLoanRequest) {
 		User child = userService.userFindByEmail();
 		User parent = child.getParent();
@@ -108,7 +108,6 @@ public class LoanFacade {
 
 		int totalCnt = loan.getPaymentTotalCnt();
 
-		LocalDate startDate = loan.getStartDate();
 		LocalDate endDate = loan.getStartDate().plusMonths(totalCnt);
 		Period period = Period.between(LocalDate.now(), endDate);
 		String remainderDay = period.getMonths() + "개월 " + period.getDays() + "일";
@@ -148,7 +147,7 @@ public class LoanFacade {
 		// 대출 상품 업데이트
 		boolean isFinal = loan.repayLoan(paymentCnt);
 		// 상환된 경우 업데이트
-		if(isFinal)
+		if (isFinal)
 			loan.completeLoan(codeService.findStatusCode("상환완료"));
 		// 계좌 거래 내역 등록 //
 		// 타입코드
@@ -159,7 +158,7 @@ public class LoanFacade {
 		AccountDetail accountDetail = AccountDetail.builder()
 				.amount(-payment * paymentCnt)
 				.balance(account.getBalance())
-				.counterpartyName("대출 상환  ("+ loan.getPaymentNowCnt()+"/"+loan.getPaymentTotalCnt()+")")
+				.counterpartyName("대출 상환  (" + loan.getPaymentNowCnt() + "/" + loan.getPaymentTotalCnt() + ")")
 				.account(account)
 				.accountDetailTypeCode(typeCode)
 				.accountDetailStatusCode(statusCode)
@@ -173,4 +172,107 @@ public class LoanFacade {
 		loanDetailService.save(loanDetail);
 	}
 
+	public AllLoansListForParentResponse getMyKidsLoans() {
+		User user = userService.userFindByEmail();
+		List<LoanDetailForParents> loanDetailList = new ArrayList<>();
+		List<Loan> loanList = loansService.getAllLoansForParents(user);
+		for (Loan l : loanList) {
+			LoanDetailForParents loanDetailForParents = LoanDetailForParents.builder()
+					.reason(l.getReason())
+					.amount(l.getAmount())
+					.paymentDate(l.getPaymentDate())
+					.penalty(l.getPenalty())
+					.paymentTotalCnt(l.getPaymentTotalCnt())
+					.paymentNowCnt(l.getPaymentNowCnt())
+					.statusCode(l.getCode().getName())
+					.overdueCnt(l.getOverdueCnt())
+					.build();
+			loanDetailList.add(loanDetailForParents);
+		}
+		return AllLoansListForParentResponse.builder()
+				.loansList(loanDetailList)
+				.build();
+	}
+
+	public RequestedLoanDetailForParentsResponse getRequestedLoans() {
+		User parent = userService.userFindByEmail();
+		List<RequestedLoanDetail> requestedLoanDetail = new ArrayList<>();
+		List<Loan> loans = loansService.getRequestedLoansForParents(parent);
+		for (Loan l : loans) {
+		String[] loanConversation = l.getLoanConversation().getContent().split("/`/");
+			RequestedLoanDetail loanDetail = RequestedLoanDetail.builder()
+					.reason(l.getReason())
+					.loanUuid(l.getLoanUuid().toString())
+					.amount(l.getAmount())
+					.paymentDate(l.getPaymentDate())
+					.penalty(l.getPenalty())
+					.paymentTotalCnt(l.getPaymentTotalCnt())
+					.chatBotConversation(loanConversation)
+					.build();
+			requestedLoanDetail.add(loanDetail);
+		}
+		RequestedLoanDetailForParentsResponse result = RequestedLoanDetailForParentsResponse.builder()
+				.loansList(requestedLoanDetail).build();
+		return result;
+	}
+
+	@Transactional
+	public void acceptLoan(LoanUuidRequest loanUuidRequest) {
+		User parent = userService.userFindByEmail();
+		String loanUuid = loanUuidRequest.getLoanUuid();
+		// 대출 테이블 업데이트(시작일, 코드)
+		Loan loan = loansService.findByUuid(loanUuid);
+		Code code = codeService.findByName("진행중");
+		loan.startLoan(LocalDate.now(), code);
+		// 부모 계좌에서 송금(+돈 여부 체크)
+		Account parentAccount = accountService.findByUser(parent);
+		int parentBalance = parentAccount.getBalance();
+		if (parentBalance < loan.getAmount())
+			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE);
+		parentAccount.updateAccount(parentBalance - loan.getAmount());
+		// 아이 계좌 업데이트
+		Account childAccount = accountService.findByUser(loan.getChild());
+		int childBalance = childAccount.getBalance();
+		childAccount.updateAccount(childBalance + loan.getAmount());
+		// 거래내역(부모, 아이) 테이블 업데이트
+		// 부모
+		accountDetailService.save(AccountDetail.builder()
+				.amount(-loan.getAmount())
+				.balance(parentAccount.getBalance())
+				.counterpartyName(childAccount.getUser().getName())
+				.counterpartyAccount(childAccount.getAccountNumber())
+				.account(parentAccount)
+				.accountDetailStatusCode(codeService.findByName("대출"))
+				.accountDetailTypeCode(codeService.findByName("거래완료"))
+				.build());
+		// 아이
+		accountDetailService.save(AccountDetail.builder()
+				.amount(loan.getAmount())
+				.balance(childAccount.getBalance())
+				.counterpartyName(parentAccount.getUser().getName())
+				.counterpartyAccount(parentAccount.getAccountNumber())
+				.account(childAccount)
+				.accountDetailStatusCode(codeService.findByName("대출"))
+				.accountDetailTypeCode(codeService.findByName("거래완료"))
+				.build());
+	}
+
+	public void refuseLoan(RefuseLoanRequest refuseLoanRequest) {
+		String loanUuid = refuseLoanRequest.getLoanUuid();
+		String reason = refuseLoanRequest.getReason();
+
+		Loan loan = loansService.findByUuid(loanUuid);
+		User parent = userService.userFindByEmail();
+
+		// 대출 거절 사유 테이블 추가
+		LoanRefusal loanRefusal = LoanRefusal.builder()
+				.reason(reason)
+				.loan(loan)
+				.build();
+		loanRefusalService.save(loanRefusal);
+
+		// 대출 상태 = 거절 업데이트
+		Code code = codeService.findByName("거절");
+		loan.refuseLoan(code);
+	}
 }

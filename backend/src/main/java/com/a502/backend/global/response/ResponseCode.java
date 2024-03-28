@@ -48,6 +48,10 @@ public enum ResponseCode {
 	API_SUCCESS_LOAN_GET_ALL_FOR_CHILD("L002","전체 대출 내역 조회(아이기준)에 성공하였습니다."),
 	API_SUCCESS_LOAN_GET_DETAIL_FOR_CHILD("L003","대출 상세 내역 조회(아이기준)에 성공하였습니다."),
 	API_SUCCESS_LOAN_REPAY("L004", "정상적으로 상환되었습니다."),
+	API_SUCCESS_LOAN_GET_ALL_FOR_PARENTS("L005", "전체 대출 내역 조회(부모기준)에 성공하였습니다."),
+	API_SUCCESS_LOAN_GET_REQUESTED_FOR_PARENTS("L006", "대출 요청 내역 조회(부모기준)에 성공하였습니다."),
+	API_SUCCESS_LOAN_ACCEPT_REQUEST("L007","대출 승인에 성공하였습니다."),
+	API_SUCCESS_LOAN_REFUSE_REQUEST("L008","대출 거절에 성공하였습니다."),
 
 	// ParkingDetail
 	API_SUCCESS_PARKING_DETAILS_GET("PD001", "성공적으로 파킹통장 내역을 조회하였습니다."),

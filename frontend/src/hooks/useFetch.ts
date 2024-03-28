@@ -7,30 +7,42 @@ type dataType = {
   api: string;
 };
 
-const usePostFetch = async (data: dataType) => {
+const useFetch = () => {
   const { data: session } = useSession();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${data.api}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session?.Authorization}`,
-    },
-    body: JSON.stringify(data?.data),
-  });
-  return res.json();
+  console.log(session);
+
+  const UsePostFetch = async (data: dataType) => {
+    console.log(data);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api${data.api}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${session?.Authorization}`,
+        },
+        body: JSON.stringify(data.data),
+      },
+    );
+    console.log(res);
+    return res.json();
+  };
+
+  const UseGetFetch = async (data: dataType) => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api${data.api}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${session?.Authorization}`,
+        },
+      },
+    );
+    return res.json();
+  };
+
+  return { UseGetFetch, UsePostFetch };
 };
 
-const useGetFetch = async (data: dataType) => {
-  const { data: session } = useSession();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${data.api}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session?.Authorization}`,
-    },
-    body: JSON.stringify(data?.data),
-  });
-  return res.json();
-};
-
-export { usePostFetch, useGetFetch };
+export default useFetch;

@@ -1,4 +1,4 @@
-const API_URL = `{${process.env.NEXT_PUBLIC_BASE_URL}/api/user/signup}`;
+const API_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/signup`;
 
 export const checkTelephoneParent = async (telephone: string) => {
   const res = await fetch(`${API_URL}/parent/check/telephone`, {

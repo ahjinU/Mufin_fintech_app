@@ -19,17 +19,15 @@ public class TransactionDto {
     private String code;
     private String transactionUuid;
     private int amount;
-    private String memo;
     private LocalDateTime date;
 
 
     @Builder
-    public TransactionDto(String counterpartyName, String code, String transactionUuid, int amount, String memo, LocalDateTime date) {
+    public TransactionDto(String counterpartyName, String code, String transactionUuid, int amount, LocalDateTime date) {
         this.counterpartyName = counterpartyName;
         this.code = code;
         this.transactionUuid = transactionUuid;
         this.amount = amount;
-        this.memo = memo;
         this.date = date;
     }
 

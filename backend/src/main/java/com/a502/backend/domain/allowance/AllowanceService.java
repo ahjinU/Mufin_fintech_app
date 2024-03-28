@@ -62,15 +62,28 @@ public class AllowanceService {
 
     private CalendarSummary calculateTransactions(List<TransactionDto> transactions) {
         HashMap<String, DailySummary> map = new HashMap<>();
+        CalendarSummary resultSummary= null;
+
         for (TransactionDto transaction : transactions) {
             String date = formatDateAsIso(transaction.getDate());
+
             if(map.containsKey(date)){
                 DailySummary dailySummary = map.get(date);
                 dailySummary.updateTransactionAmount(transaction.getAmount());
                 //맵 벨류 갱신
                 map.put(date,dailySummary);
+            }else{
+                DailySummary dailySummary = DailySummary.builder()
+                        .date(date)
+                        .build();
+
+                dailySummary.updateTransactionAmount(transaction.getAmount());
             }
         }
+
+        //map -> list
+
+        return resultSummary;
     }
 
     private User findHolderUser(String childUuid) {

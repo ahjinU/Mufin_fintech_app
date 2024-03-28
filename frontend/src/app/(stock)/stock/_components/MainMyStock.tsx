@@ -17,24 +17,24 @@ export default function MainMyStock() {
       <AdBox
         icon="/images/icon-dollar.png"
         mode={'STATIC'}
-        subText={'자스민은 아래 두 가지 방법으로 관리할 수 있어요!'}
-        title={'요술램프 또는 주식 투자로 관리해 보세요'}
+        subText={'초코칩은 두 가지 방법으로 관리할 수 있어요!'}
+        title={'보관함 또는 주식으로 관리해 보세요.'}
       />
       <GuideAccordion
         icon={'/images/icon-bulb.png'}
-        title={'요술램프란? 날씨 주식이란?'}
+        title={'초코칩 보관함? 날씨 주식?'}
       >
         <div className="text-custom-white">
           <div className="custom-light-text">
-            자스민을 관리하는 두가지 방법이 있어요
+            초코칩을 관리하는 두가지 방법이 있어요.
           </div>
           <div className="mt-4 grid gap-2">
             <div className="custom-medium-text underline underline-offset-4">
-              요술램프(파킹통장)
+              초코칩 보관함 (파킹 통장)
             </div>
             <div className="custom-light-text whitespace-pre">
-              <p>주식에 투자하지 않고 요술램프에 보관할 수도 있어요</p>
-              <p>보관된 자스민에는 연 2%의 이자가 생겨요</p>
+              <p>주식에 투자하지 않고 보관함에 저장할 수도 있어요.</p>
+              <p>보관함에 있는 초코칩에는 연 2%의 이자가 붙어요.</p>
             </div>
           </div>
           <div className="mt-4 grid gap-2">
@@ -44,9 +44,7 @@ export default function MainMyStock() {
             <div className="custom-light-text whitespace-pre-line">
               <p>내 주식 가격은</p>
               <p>첫째, 사람들의 구매와 판매에 의해 실시간으로 결정돼요!</p>
-              <p>
-                둘째, 매일 주식 시장이 열릴 때 서울 날씨로 인한 변동이 있어요!
-              </p>
+              <p>둘째, 매일 시장이 열릴 때 서울 날씨로 인한 변동이 있어요.</p>
             </div>
           </div>
         </div>
@@ -56,8 +54,8 @@ export default function MainMyStock() {
         topChildren={
           <MoneyInfoElement
             imageSrc={'/images/icon-my-chocochips.png'}
-            leftExplainText={'내 초코칩 저장소'}
-            leftHighlightText={`${commaNum(MyParking.balanceToday)}초코칩`}
+            leftExplainText={'내 초코칩 보관함'}
+            leftHighlightText={`${commaNum(MyParking.balanceToday)} 초코칩`}
             buttonOption={'RIGHT_ARROW'}
             link="/stock/storage"
           />

@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 interface MoneyInfoElementProps {
-  imageSrc: string;
+  imageSrc?: string;
   leftExplainText: string;
   leftHighlightText: string;
   buttonOption:
@@ -22,6 +22,7 @@ interface MoneyInfoElementProps {
     | 'STOCK_DOWN'
     | 'NO';
   tinyButtonLabel?: string;
+  handleTinyButton?: () => void;
   stockPrice?: string;
   link?: string;
 }
@@ -63,6 +64,7 @@ export default function MoneyInfoElement({
   leftHighlightText,
   buttonOption,
   tinyButtonLabel,
+  handleTinyButton,
   stockPrice,
   link,
 }: MoneyInfoElementProps) {
@@ -73,12 +75,7 @@ export default function MoneyInfoElement({
         <ChevronRightIcon className="w-[1.6rem] h-[1.6rem] text-custom-medium-gray cursor-pointer" />
       );
     if (buttonOption === 'TINY_BUTTON' && tinyButtonLabel)
-      return (
-        <TinyButton
-          label={tinyButtonLabel}
-          onClick={() => link && router.push(link)}
-        />
-      );
+      return <TinyButton label={tinyButtonLabel} onClick={handleTinyButton} />;
     if (buttonOption === 'RATE') return <RateShow />;
     if (buttonOption === 'STOCK_DOWN' && stockPrice)
       return <StockDownShow stockDownPrice={stockPrice} />;
@@ -90,13 +87,15 @@ export default function MoneyInfoElement({
     return (
       <section className="w-full flex justify-between items-center">
         <div className="w-full flex gap-[1rem] items-center">
-          <Image
-            src={imageSrc}
-            width={42}
-            height={42}
-            alt={leftExplainText}
-            className="w-[4.2rem] h-[4.2rem]"
-          />
+          {imageSrc && (
+            <Image
+              src={imageSrc}
+              width={42}
+              height={42}
+              alt={leftExplainText}
+              className="w-[4.2rem] h-[4.2rem]"
+            />
+          )}
           <div className="flex flex-col justify-between">
             <span className="custom-medium-text">{leftExplainText}</span>
             <span className="custom-semibold-text">{leftHighlightText}</span>

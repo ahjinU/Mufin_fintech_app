@@ -29,6 +29,7 @@ import MoneyShow from './MoneyShow/MoneyShow';
 import Ranking from './Ranking/Ranking';
 import InfoShow from './InfoShow/InfoShow';
 import AlertConfirm from './AlertConfirmModal/AlertConfirmModal';
+import PlusButton from './PlusButton/PlusButton';
 
 export {
   FlexBox,
@@ -62,4 +63,5 @@ export {
   Ranking,
   InfoShow,
   AlertConfirm,
+  PlusButton,
 };

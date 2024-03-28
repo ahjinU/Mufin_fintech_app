@@ -1,32 +1,37 @@
-const accessToken = `eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYXN1bWluIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcxMTYxNTAyN30.dAPdoP-hemWzRCB8bpNlVpUXC6ypPIs6hy4hp1FNh3I`;
+'use client';
+
+import { useSession } from 'next-auth/react';
 
 type dataType = {
   data?: any;
   api: string;
 };
 
-const postFetch = async (data: dataType) => {
+const usePostFetch = async (data: dataType) => {
+  const { data: session } = useSession();
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${data.api}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${session?.Authorization}`,
     },
     body: JSON.stringify(data?.data),
   });
   return res.json();
 };
 
-const getFetch = async (data: dataType) => {
+const useGetFetch = async (data: dataType) => {
+  const { data: session } = useSession();
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${data.api}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${session?.Authorization}`,
     },
     body: JSON.stringify(data?.data),
   });
   return res.json();
 };
 
-export { getFetch, postFetch };
+export { usePostFetch, useGetFetch };
+4

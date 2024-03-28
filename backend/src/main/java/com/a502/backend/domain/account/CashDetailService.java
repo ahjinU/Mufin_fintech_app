@@ -1,5 +1,6 @@
 package com.a502.backend.domain.account;
 
+import com.a502.backend.application.entity.AccountDetail;
 import com.a502.backend.application.entity.CashDetail;
 import com.a502.backend.application.entity.User;
 import com.a502.backend.global.error.BusinessException;
@@ -19,7 +20,10 @@ import java.util.List;
 public class CashDetailService {
 	private final CashDetailRepository cashDetailRepository;
 
-	public List<CashDetail> getAllCashDetailsByUserAndPeriod(User user, LocalDateTime startDay, LocalDateTime endDay) {
-		return cashDetailRepository.findByUserAndPeriod(user, startDay, endDay).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST));
+
+
+	public List<CashDetail> getAllCashDetailsByUserAndPeriod(User user, LocalDateTime startDate, LocalDateTime endDate) {
+
+		return cashDetailRepository.findAllByUserAndTransAtBetween(user, startDate, endDate);
 	}
 }

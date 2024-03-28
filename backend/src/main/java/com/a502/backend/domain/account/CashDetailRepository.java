@@ -12,6 +12,6 @@ import java.util.Optional;
 
 @Repository
 interface CashDetailRepository extends JpaRepository<CashDetail, Integer> {
-	@Query("select cd from CashDetail cd where cd.user = :user and cd.transAt between :startDay and :endDay")
-	Optional<List<CashDetail>> findByUserAndPeriod(User user, LocalDateTime startDay, LocalDateTime endDay);
+
+	List<CashDetail> findAllByUserAndTransAtBetween(User user, LocalDateTime start, LocalDateTime end);;
 }

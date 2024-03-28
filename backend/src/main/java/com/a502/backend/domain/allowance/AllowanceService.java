@@ -9,6 +9,7 @@ import com.a502.backend.domain.allowance.request.CalendarDTO;
 import com.a502.backend.domain.allowance.response.CalendarSummary;
 import com.a502.backend.domain.allowance.response.DailySummary;
 import com.a502.backend.domain.allowance.response.ReceiptResponseDto;
+import com.a502.backend.domain.allowance.response.TransactionDto;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
@@ -16,7 +17,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -30,52 +36,67 @@ public class AllowanceService {
     public ReceiptResponseDto convert(MultipartFile file) {
 
         ReceiptResponseDto receiptResponseDto = receiptService.saveReceiptFromImage(file);
-
         return receiptService.saveReceiptFromImage(file);
     }
 
 
     public CalendarSummary getTransactionsForPeriod(CalendarDTO calendarDTO) {
 
-        List<DailySummary> transactions = new ArrayList<>();
+        List<TransactionDto> transactions = new ArrayList<>();
 
-        User holderUser= findHolderUser(calendarDTO.getChildUuid()).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
-        if (holderUser != null) {
-            List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, calendarDTO.getStartDate(), calendarDTO.getEndDate());
-            List<CashDetail> cashDetails = cashDetailService.findCashDetailsForUserAndPeriod(holderUser, calendarDTO.getStartDate(), calendarDTO.getEndDate());
+        LocalDateTime start = convertToStartLocalDateTime(calendarDTO.getStartDate());
+        LocalDateTime end = convertToEndLocalDateTime(calendarDTO.getEndDate());
 
+        User holderUser = findHolderUser(calendarDTO.getChildUuid());
+        List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, start,end);
+        List<CashDetail> cashDetails = cashDetailService.getAllCashDetailsByUserAndPeriod(holderUser, start, end);
 
-        }
+        transactions.addAll(TransactionDto.convertFromAccountDetails(accountDetails));
+        transactions.addAll(TransactionDto.convertFromCashetails(cashDetails));
+
 
         CalendarSummary summary = calculateTransactions(transactions);
 
         return summary;
     }
 
-    private CalendarSummary calculateTransactions(List<DailySummary> transactions) {
-        for(DailySummary transaction : transactions){
-
+    private CalendarSummary calculateTransactions(List<TransactionDto> transactions) {
+        HashMap<String, DailySummary> map = new HashMap<>();
+        for (TransactionDto transaction : transactions) {
+            String date = formatDateAsIso(transaction.getDate());
+            if(map.containsKey(date)){
+                DailySummary dailySummary = map.get(date);
+                dailySummary.updateTransactionAmount(transaction.getAmount());
+                //맵 벨류 갱신
+                map.put(date,dailySummary);
+            }
         }
     }
 
-    /**
-     * 계좌 Entity ->
-     * @param accountDetails
-     * @return
-     */
-    private List<DailySummary> convertFromAccountDetails(List<AccountDetail> accountDetails) {
-
-    }
-
-    private List<DailySummary> convertFromCashDetails(List<CashDetail> cashDetails) {
-
-    }
-
-
-    private User findHolderUser(String childUuid){
-        if(childUuid==null)
+    private User findHolderUser(String childUuid) {
+        if (childUuid == null)
             return userService.userFindByEmail();
 
         return userService.findByUserUuid(childUuid);
+    }
+
+    private LocalDateTime convertToStartLocalDateTime(String startDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(startDate, formatter).atStartOfDay();
+    }
+
+    private LocalDateTime convertToEndLocalDateTime(String endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(endDate, formatter).atTime(23, 59, 59);
+    }
+
+    public String formatDateAsIso(LocalDateTime localDateTime){
+        if (localDateTime == null) {
+            System.err.println("널포인터!!");
+            return null;
+        }
+
+        String formattedDate = localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return formattedDate;
     }
 }

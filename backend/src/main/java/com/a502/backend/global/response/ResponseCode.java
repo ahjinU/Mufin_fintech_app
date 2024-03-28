@@ -27,6 +27,7 @@ public enum ResponseCode {
 
 	// allowance
 	API_SUCCESS_ALLOWANCE_GET_BY_MONTH("AW001", "가계부 정보(1달) 조회에 성공하였습니다."),
+	API_SUCCESS_ALLOWANCE_GET_BUT_NOT_EXIST("AW002", "가계부 정보(달) 조회에 성공하였으나, 내역이 없습니다."),
 
 	// Stock
 	//receipt

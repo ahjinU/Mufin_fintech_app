@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class ParkingService {
     private final ParkingRepository parkingRepository;
@@ -32,6 +31,8 @@ public class ParkingService {
         return parkingRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_PARKING_NOT_EXIST));
     }
 
+
+    @Transactional
     public Parking findByUser(User user) {
         return parkingRepository.findByUser(user).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_PARKING_NOT_EXIST));
     }
@@ -42,7 +43,7 @@ public class ParkingService {
     }
 
     @Transactional
-    public int getParkingBalance(User user, int balance) {
+    public int getParkingBalance(User user) {
         Parking parking = findByUser(user);
         return parking.getBalance();
     }
@@ -51,6 +52,7 @@ public class ParkingService {
     public void updateParkingBalance(User user, int balance) {
         Parking parking = findByUser(user);
         parking.setBalance(balance);
+        parkingRepository.saveAndFlush(parking);
     }
 
     public void createParkingAccount(User user) {

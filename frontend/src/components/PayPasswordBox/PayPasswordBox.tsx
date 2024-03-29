@@ -1,29 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { XMarkIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { getKeyPadImage, checkPayPassword } from '@/services/password';
 
 interface PayPasswordBoxProps {
-  isOpen: boolean;
-  onClick?: () => void;
+  handleConfirmButton: () => void;
+  handleCloseButton: () => void;
 }
-
-const imageArray = [
-  'http://localhost:3000/images/icon-5.png',
-  'http://localhost:3000/images/icon-4.png',
-  'http://localhost:3000/images/icon-1.png',
-  'delete',
-  'http://localhost:3000/images/icon-6.png',
-  'http://localhost:3000/images/icon-2.png',
-  'http://localhost:3000/images/icon-0.png',
-  'http://localhost:3000/images/icon-8.png',
-  'http://localhost:3000/images/icon-7.png',
-  'http://localhost:3000/images/icon-3.png',
-  'http://localhost:3000/images/icon-9.png',
-  'confirm',
-];
 
 function EachInputBox({
   isInserted,
@@ -46,46 +32,75 @@ function EachInputBox({
 }
 
 export default function PayPasswordBox({
-  isOpen,
+  handleConfirmButton,
+  handleCloseButton,
   ...props
 }: PayPasswordBoxProps) {
   const [password, setPassword] = useState<number[]>([]);
   const [focusIndex, setFocusIndex] = useState<number>(0);
+  const [isBoxOpen, setIsBoxOpen] = useState<boolean>(true);
+  const [keyPadImage, setKeyPadImage] = useState<string[]>([]);
+  const [wrongCnt, setWrongCnt] = useState<number>(0);
+
+  console.log(password);
+
+  useEffect(() => {
+    (async () => {
+      const data = await getKeyPadImage('5021-5653-78-3742');
+      const keyPadData = data.data.keypad;
+      keyPadData.splice(3, 0, 'delete');
+      keyPadData.splice(11, 0, 'confirm');
+      setKeyPadImage(keyPadData);
+    })();
+  }, []);
 
   const container = {
     show: { y: 0, opacity: 1 },
     hidden: { y: '100%', opacity: 0 },
   };
 
+  const closeBox = () => {
+    setIsBoxOpen(false);
+    handleCloseButton();
+  };
+
   return (
     <motion.section
       variants={container}
       initial="hidden"
-      animate={isOpen ? 'show' : 'hidden'}
+      animate={isBoxOpen ? 'show' : 'hidden'}
       transition={{
         type: 'spring',
         mass: 0.5,
         damping: 40,
         stiffness: 400,
       }}
-      className={`fixed bottom-0 left-0 right-0 w-full min-w-[36rem] h-[47rem] rounded-t-[1.6rem] bg-custom-white text-custom-black p-[3rem] flex flex-col justify-between`}
+      className={`fixed bottom-0 left-0 right-0 w-full min-w-[36rem] h-[47rem] rounded-t-[1.6rem] bg-custom-white text-custom-black p-[2rem] flex flex-col justify-between`}
       {...props}
     >
-      <XMarkIcon className="w-[2.4rem] h-[2.4rem] absolute top-[2rem] right-[2rem] cursor-pointer" />
-      <h1 className="custom-bold-text">{'결제 비밀번호를 입력해주세요.'}</h1>
+      <XMarkIcon
+        className="w-[2.4rem] h-[2.4rem] absolute top-[2rem] right-[2rem] cursor-pointer"
+        onClick={closeBox}
+      />
+      <h1 className="custom-bold-text">{'계좌 비밀번호 입력'}</h1>
 
-      <div className="mx-auto w-[31rem] h-[5.6rem] flex justify-between">
-        {Array.from({ length: 6 }, (_, index) => (
-          <EachInputBox
-            key={`eachBox-${index}`}
-            isInserted={password[index] !== undefined}
-            isFocused={index === focusIndex}
-          />
-        ))}
+      <div className="mx-auto w-[30rem] h-[5.6rem] flex flex-col">
+        <div className="flex justify-between">
+          {Array.from({ length: 6 }, (_, index) => (
+            <EachInputBox
+              key={`eachBox-${index}`}
+              isInserted={password[index] !== undefined}
+              isFocused={index === focusIndex}
+            />
+          ))}
+        </div>
+        <p className="text-custom-red custom-light-text self-end">
+          계좌 비밀번호 틀린 횟수({wrongCnt} / 5)
+        </p>
       </div>
 
       <div className="mx-auto w-[31rem] h-[23rem] grid grid-cols-4 grid-rows-3">
-        {imageArray.map((imageSrc, index) => {
+        {keyPadImage.map((imageSrc, index) => {
           if (imageSrc !== 'delete' && imageSrc !== 'confirm') {
             return (
               <Image
@@ -93,11 +108,11 @@ export default function PayPasswordBox({
                 width={70}
                 height={70}
                 src={imageSrc}
-                alt={'결제비밀번호 버튼'}
-                className="cursor-pointer self-center justify-self-center"
+                alt={'계좌 비밀번호 버튼'}
+                className="cursor-pointer self-center justify-self-center rounded-[0.8rem]"
                 onClick={() => {
                   if (password.length < 6) {
-                    setPassword([...password, index]);
+                    setPassword([...password, index > 3 ? index - 1 : index]);
                     setFocusIndex((prev) => prev + 1);
                   }
                 }}
@@ -127,6 +142,17 @@ export default function PayPasswordBox({
                     ? 'bg-custom-light-purple'
                     : 'bg-custom-blue-with-opacity'
                 } rounded-[0.8rem] text-custom-black custom-semibold-text`}
+                onClick={
+                  // password.length === 6 ? handleConfirmButton : undefined
+                  async () => {
+                    const data = await checkPayPassword(
+                      '5021-5653-78-3742',
+                      password,
+                    );
+                    console.log(data);
+                    setWrongCnt(data.data.incorrectCnt);
+                  }
+                }
               >
                 {'확인'}
               </button>

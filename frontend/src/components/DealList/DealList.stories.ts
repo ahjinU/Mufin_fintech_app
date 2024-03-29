@@ -20,38 +20,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const READONLY: Story = {
+export const Main: Story = {
   args: {
-    mode: 'READONLY',
-    deals: [
-      {
-        name: '츕파츕스',
-        count: 2,
-        totalPrice: 10000,
-      },
-      {
-        name: '스윙칩',
-        count: 2,
-        totalPrice: 10000,
-      },
-    ],
-  },
-};
-
-export const MODIFY: Story = {
-  args: {
+    deals: [{ item: '하이', cnt: 3, price: 3, total: 3 }],
     mode: 'MODIFY',
-    deals: [
-      {
-        name: '츕파츕스',
-        count: 2,
-        totalPrice: 10000,
-      },
-      {
-        name: '스윙칩',
-        count: 2,
-        totalPrice: 10000,
-      },
-    ],
   },
 };

@@ -14,7 +14,7 @@ interface StockData {
   price: number;
 }
 
-export function StockLineChart() {
+export function StockLineChart({ name }: { name: string }) {
   // ApexCharts에 넘겨야 하는 series형식은 배열 내에 하나의 객체를 넘기는 법
   // 서버에서 date도 넘겨주지만 필요 없음.
   const [data, setData] = useState<number[]>([0]);
@@ -25,7 +25,7 @@ export function StockLineChart() {
 
   useEffect(() => {
     (async function () {
-      const data = await getStockLineData('바람개비', period);
+      const data = await getStockLineData(name, period);
       const prices = data.data.map((dataObj: StockData) => dataObj.price);
       setData(prices);
     })();

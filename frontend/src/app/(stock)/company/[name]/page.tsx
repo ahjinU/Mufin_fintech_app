@@ -69,7 +69,10 @@ export default async function Company({
 
       <Tab
         tabs={[
-          { label: '선 차트', component: <StockLineChart /> },
+          {
+            label: '선 차트',
+            component: companyName && <StockLineChart name={companyName} />,
+          },
           // { label: '봉 차트', component: <StockCandleChart /> },
         ]}
       />

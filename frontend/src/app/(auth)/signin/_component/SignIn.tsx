@@ -12,7 +12,7 @@ export default function SignIn() {
         </div>
         <div className="flex justify-between">
           <p className="custom-light-text">아직 회원이 아니신가요?</p>
-          <NavText link="/" text="회원가입" />
+          <NavText link="/signup" text="회원가입" />
         </div>
       </div>
     </div>

@@ -22,7 +22,7 @@ export default function Check() {
         password,
       );
       if (fetchedData.ok) {
-        router.push('/signup/complete');
+        router.replace('/signup/complete');
       } else {
         console.log('회원가입 토큰 문제', fetchedData);
       }

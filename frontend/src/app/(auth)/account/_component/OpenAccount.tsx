@@ -1,12 +1,8 @@
-'use client';
-
 import Image from 'next/image';
 import { Button, GuideText } from '@/components';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function OpenAccount() {
-  const router = useRouter();
-
   return (
     <div className="flex flex-col gap-[1rem]">
       <GuideText text="계좌를 개설해주세요" />
@@ -33,13 +29,9 @@ export default function OpenAccount() {
         </div>
       </div>
       <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
-        <Button
-          label="약관 보기"
-          mode="ACTIVE"
-          onClick={() => {
-            // router.push('/account/terms');
-          }}
-        />
+        <Link href="/account/terms">
+          <Button label="약관 보기" mode="ACTIVE" />
+        </Link>
       </div>
     </div>
   );

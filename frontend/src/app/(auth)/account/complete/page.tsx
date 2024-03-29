@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function Password() {
+export default function Complete() {
   redirect('/account');
 }

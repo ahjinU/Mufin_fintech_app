@@ -1,5 +1,5 @@
-import RedirectToAccount from '../_component/RedirectToAccount';
+import { redirect } from 'next/navigation';
 
 export default function Terms() {
-  return <RedirectToAccount />;
+  redirect('/account');
 }

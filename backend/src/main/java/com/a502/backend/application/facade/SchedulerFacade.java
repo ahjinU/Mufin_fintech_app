@@ -3,6 +3,7 @@ package com.a502.backend.application.facade;
 import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.account.AccountService;
 import com.a502.backend.domain.loan.LoansService;
+import com.a502.backend.domain.parking.ParkingDetailsService;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.savings.SavingsService;
 import com.a502.backend.domain.stock.*;
@@ -33,6 +34,8 @@ public class SchedulerFacade {
     private final AccountService accountService;
     private final CodeService codeService;
     private final LoansService loansService;
+    private final ParkingService parkingService;
+    private final ParkingDetailsService parkingDetailsService;
 
 //    @Scheduled(cron = "${schedule.cron.test}")
 //    @Scheduled(cron = "${schedule.cron.start}")
@@ -86,6 +89,22 @@ public class SchedulerFacade {
                 loansService.updateOverdueCnt(loan);
             }
         }
+
+    }
+
+    //    @Scheduled(cron = "${schedule.cron.test}")
+    public void checkParkingAccountInterest(){
+        List<Parking> parkingList = parkingService.findAllList();
+
+        for (Parking parking : parkingList) {
+            int interest = (int) (parking.getBalance() * parking.getInterest());
+            parkingService.updateParkingBalance(parking, interest + parking.getBalance());
+            parkingDetailsService.saveInterest(parking, interest, codeService.findByName("이자"));
+        }
+    }
+
+    @Scheduled(cron = "${schedule.cron.test}")
+    public void marketEnd(){
 
     }
 

@@ -2,6 +2,7 @@ package com.a502.backend.application.controller;
 
 import com.a502.backend.application.facade.PayFacade;
 import com.a502.backend.domain.payment.request.MyAccount;
+import com.a502.backend.domain.payment.request.PaymentRequest;
 import com.a502.backend.domain.payment.request.RecipientAccount;
 import com.a502.backend.domain.payment.request.TransferMoneyRequest;
 import com.a502.backend.global.response.ApiResponse;
@@ -41,8 +42,9 @@ public class PayController {
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_PAY_TRANSFER));
 	}
 
-//	@PostMapping("/request")
-//	public ResponseEntity<ApiResponse<Void>> requestPayment(@RequestBody){
-//
-//	}
+	@PostMapping("/request")
+	public ResponseEntity<ApiResponse<Void>> requestPayment(@RequestBody PaymentRequest paymentRequest){
+		payFacade.requestPayment(paymentRequest);
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_PAY_REQUEST));
+	}
 }

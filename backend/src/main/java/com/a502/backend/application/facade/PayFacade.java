@@ -6,15 +6,15 @@ import com.a502.backend.application.entity.User;
 import com.a502.backend.domain.account.AccountDetailService;
 import com.a502.backend.domain.account.AccountService;
 import com.a502.backend.domain.payment.request.MyAccount;
+import com.a502.backend.domain.payment.request.PaymentRequest;
 import com.a502.backend.domain.payment.request.RecipientAccount;
 import com.a502.backend.domain.payment.request.TransferMoneyRequest;
+import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
-import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +27,7 @@ public class PayFacade {
 	private final AccountService accountService;
 	private final AccountDetailService accountDetailService;
 	private final CodeService codeService;
+	private final UserService userService;
 
 	// 송금받는 사람 유효성 체크
 	@Transactional
@@ -72,7 +73,7 @@ public class PayFacade {
 		// 송금처리
 		int afterBalanceOut = accountOut.getBalance() - amount;
 		// 트랜잭션 의논사항
-		if(afterBalanceOut<0)
+		if (afterBalanceOut < 0)
 			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE);
 		int afterBalanceIn = accountIn.getBalance() + amount;
 
@@ -100,6 +101,28 @@ public class PayFacade {
 				.accountDetailTypeCode(codeService.findById(transType))
 				.counterpartyAccount(accountOut.getAccountNumber())
 				.counterpartyName(accountOut.getUser().getName())
+				.build());
+	}
+
+	public void requestPayment(PaymentRequest paymentRequest) {
+		int amount = paymentRequest.getAmount();
+		String counterpartyName = paymentRequest.getCounterpartyName();
+		System.out.println(counterpartyName);
+		User user = userService.userFindByEmail();
+
+		Account account = accountService.findByUser(user);
+		int balance = account.getBalance();
+		if (balance < amount)
+			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE);
+		account.updateAccount(balance - amount);
+
+		accountDetailService.save(AccountDetail.builder()
+				.account(account)
+				.counterpartyName(counterpartyName)
+				.amount(-amount)
+				.balance(account.getBalance())
+				.accountDetailStatusCode(codeService.findStatusCode("거래완료"))
+				.accountDetailTypeCode(codeService.findTypeCode("결제"))
 				.build());
 	}
 }

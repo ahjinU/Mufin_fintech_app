@@ -28,7 +28,7 @@ export default function AdBox({
 
   const adContent = (
     <div
-      className={`w-full h-[8.4rem] px-[1rem] rounded-[2rem] flex justify-start items-center ${
+      className={`w-full h-[8.4rem] px-[1.4rem] rounded-[2rem] flex justify-start items-center ${
         mode === 'WEATHER' ? 'bg-custom-light-gray' : 'bg-custom-purple'
       } `}
     >

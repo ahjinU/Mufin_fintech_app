@@ -22,7 +22,7 @@ export default function MainWithoutSignIn() {
         </div>
       </div>
       <div className="h-[16%] flex flex-col justify-start items-center gap-[1rem]">
-        <Link href="/signup" className="w-full">
+        <Link href="/signup" className='w-full'>
           <Button mode="ACTIVE" label="시작하기" />
         </Link>
         <div className="flex gap-[1rem]">

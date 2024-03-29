@@ -44,4 +44,8 @@ public class Savings extends BaseEntity {
 		this.name = name;
 		this.parent = parent;
 	}
+
+	public void delete(){
+		this.setDeleted(true);
+	}
 }

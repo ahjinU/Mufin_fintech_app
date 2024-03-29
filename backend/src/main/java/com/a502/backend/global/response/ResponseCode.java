@@ -57,6 +57,18 @@ public enum ResponseCode {
 	API_SUCCESS_LOAN_ACCEPT_REQUEST("L007","대출 승인에 성공하였습니다."),
 	API_SUCCESS_LOAN_REFUSE_REQUEST("L008","대출 거절에 성공하였습니다."),
 
+	// savings
+	API_SUCCESS_SAVINGS_REGISTER("SV001","적금 등록에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_DELETE("SV002","적금 삭제에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_GET_ALL("SV003", "적금 상품 전체 조회에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_JOIN("SV004", "적금 상품 가입에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_GET_MY_CHILD("SV005","자녀가 가입한 적금 내역 조회에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_DEPOSIT("SV006","적금 불입에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_CANCEL("SV007", "적금 중도 해지에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_TERMINATE("SV008", "적금 만기 해지에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_GET_ALL_MINE("SV009","가입중인 적금 상품 전체 조회에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_GET_DETAIL_MINE("SV010", "가입중인 적금 상세 조회에 성공하였습니다."),
+
 	// ParkingDetail
 	API_SUCCESS_PARKING_DETAILS_GET("PD001", "성공적으로 파킹통장 내역을 조회하였습니다."),
 	API_SUCCESS_PARKING_GET_INFO("PD002", "성공적으로 파킹통장 정보를 조회하였습니다.");

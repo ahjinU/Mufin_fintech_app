@@ -11,7 +11,9 @@ import com.a502.backend.domain.user.dto.SignUpDto;
 import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -245,7 +248,10 @@ public class UserService implements UserDetailsService {
 
     }
 
-	public User findByUserUuid(String userUuid) {
-		return userRepository.findByUserUuid(userUuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+	public List<User> findMyKidsByParents(User parents){
+		List<User> myKids = userRepository.findMyKidsByParents(parents);
+		if(myKids.isEmpty())
+			throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST_MY_KIDS);
+		return myKids;
 	}
 }

@@ -199,7 +199,7 @@ public class LoanFacade {
 		List<RequestedLoanDetail> requestedLoanDetail = new ArrayList<>();
 		List<Loan> loans = loansService.getRequestedLoansForParents(parent);
 		for (Loan l : loans) {
-		String[] loanConversation = l.getLoanConversation().getContent().split("/`/");
+		String[] loanConversation = l.getLoanConversation().getContent().split("!#@#!");
 			RequestedLoanDetail loanDetail = RequestedLoanDetail.builder()
 					.reason(l.getReason())
 					.loanUuid(l.getLoanUuid().toString())

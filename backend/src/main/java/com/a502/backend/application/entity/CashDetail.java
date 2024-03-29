@@ -52,16 +52,21 @@ public class CashDetail extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "code_id")
-    private Code code;
 
     @Builder
-    public CashDetail(int amount, User user, Category category, Code code, String usageName) {
+    public CashDetail(int amount, User user, Category category, String usageName, LocalDateTime transAt) {
         this.amount = amount;
         this.user = user;
         this.category = category;
-        this.code = code;
+        this.transAt=transAt;
         this.usageName = usageName;
+    }
+
+    public void updateMemo(Memo memo) {
+        this.memo = memo;
+    }
+
+    public void updateReceipt(Receipt receipt){
+        this.receipt=receipt;
     }
 }

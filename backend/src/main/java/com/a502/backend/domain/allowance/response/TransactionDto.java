@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,12 +15,13 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class TransactionDto {
-    private String counterpartyName;
-    private String code;
-    private String transactionUuid;
-    private int amount;
-    private LocalDateTime date;
+    protected String counterpartyName;
+    protected String code;
+    protected String transactionUuid;
+    protected int amount;
+    protected LocalDateTime date;
 
 
     @Builder
@@ -37,6 +39,7 @@ public class TransactionDto {
         for(AccountDetail detail : accountDetails){
             TransactionDto transactionDto = createTransactionDto(detail);
             result.add(transactionDto);
+            System.out.println(transactionDto.getTransactionUuid());
         }
         return result;
     }
@@ -47,6 +50,7 @@ public class TransactionDto {
                 .code("계좌")
                 .amount(detail.getAmount())
                 .counterpartyName(detail.getCounterpartyName())
+                .date(detail.getCreatedAt())
                 .build();
     }
 
@@ -56,16 +60,19 @@ public class TransactionDto {
         for(CashDetail detail : cashDetails){
             TransactionDto transactionDto = convertFromCashetail(detail);
             result.add(transactionDto);
+            System.out.println("dto 변환");
+            System.out.println(transactionDto.getTransactionUuid());
         }
         return result;
     }
 
-    private static TransactionDto convertFromCashetail(CashDetail detail) {
+    public static TransactionDto convertFromCashetail(CashDetail detail) {
         return TransactionDto.builder()
                 .transactionUuid(detail.getCashDetailUuid().toString())
                 .code("현금")
                 .amount(detail.getAmount())
                 .counterpartyName(detail.getUsageName())
+                .date(detail.getCreatedAt())
                 .build();
     }
 }

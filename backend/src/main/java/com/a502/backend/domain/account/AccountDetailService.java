@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +26,11 @@ public class AccountDetailService {
 
     public List<AccountDetail> findAccountDetailsForUserAndPeriod(User holderUser, LocalDateTime startDate, LocalDateTime endDate) {
 
-		List<AccountDetail> accountDetails = accountDetailRepository.findAllByAccountUserAndCreatedAtBetween(holderUser, startDate, endDate);
-		return accountDetails;
+		return accountDetailRepository.findAllByAccountUserAndCreatedAtBetween(holderUser, startDate, endDate);
 	}
 
 
+    public AccountDetail findTransaction(UUID transactionUUID) {
+		return accountDetailRepository.findAccountDetailByAccountDetailUuid(transactionUUID).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_DETAIL_NOT_EXIST));
+    }
 }

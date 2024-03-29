@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -23,7 +24,14 @@ public class CashDetailService {
 
 
 	public List<CashDetail> getAllCashDetailsByUserAndPeriod(User user, LocalDateTime startDate, LocalDateTime endDate) {
-
 		return cashDetailRepository.findAllByUserAndTransAtBetween(user, startDate, endDate);
 	}
+
+    public CashDetail findTransaction(UUID transactionUUID) {
+		return  cashDetailRepository.findCashDetailByCashDetailUuid(transactionUUID).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST));
+    }
+
+    public CashDetail save(CashDetail cashDetail) {
+		return cashDetailRepository.save(cashDetail);
+    }
 }

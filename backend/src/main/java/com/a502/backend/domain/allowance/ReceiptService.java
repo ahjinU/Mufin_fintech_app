@@ -1,11 +1,15 @@
 package com.a502.backend.domain.allowance;
 
-import com.a502.backend.application.entity.Receipt;
-import com.a502.backend.application.entity.ReceiptDetail;
+import com.a502.backend.application.entity.*;
+import com.a502.backend.domain.account.AccountDetailService;
+import com.a502.backend.domain.account.AccountService;
+import com.a502.backend.domain.account.CashDetailService;
 import com.a502.backend.domain.allowance.OcrDto.OrderItem;
 import com.a502.backend.domain.allowance.OcrDto.PaymentInfo;
 import com.a502.backend.domain.allowance.OcrDto.ReceiptDto;
 import com.a502.backend.domain.allowance.OcrDto.StoreInfo;
+import com.a502.backend.domain.allowance.request.DetailDto;
+import com.a502.backend.domain.allowance.request.ReceiptRequestDto;
 import com.a502.backend.domain.allowance.response.ReceiptResponseDto;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.error.BusinessException;
@@ -43,18 +47,40 @@ public class ReceiptService {
     private final ReceiptRepository receiptRepository;
     private final ReceiptDetailRepository receiptDetailRepository;
     private final UserService userService;
+    private final AccountDetailService accountDetailService;
+    private final CashDetailService cashDetailService;
 
 
-    /**
-     * 이미지로부터 변환한 텍스트를 Entity로 저장
-     *
-     * @param file
-     * @return
-     */
     @Transactional
-    public ReceiptResponseDto saveReceiptFromImage(MultipartFile file) {
+    public ReceiptResponseDto convert(ReceiptRequestDto receiptRequestDto) {
+        Receipt registeredReceipt = saveReceiptFromImage(receiptRequestDto.getFile());
+        String type =receiptRequestDto.getType();
+        if(type.equals("계좌")){
+            AccountDetail transaction = accountDetailService.findTransaction(convertToUuid(receiptRequestDto.getTransactionUuid()));
+            transaction.updateReceipt(registeredReceipt);
+        }else if(type.equals("현금")){
+            CashDetail transaction = cashDetailService.findTransaction(convertToUuid(receiptRequestDto.getTransactionUuid()));
+            System.out.println(transaction.getUsageName());
+            transaction.updateReceipt(registeredReceipt);
+        }
+        return ReceiptResponseDto.convertFromEntity(registeredReceipt);
+    }
 
-        ReceiptResponseDto receiptResponseDto = null;
+    private UUID convertToUuid(String uuidst) {
+        UUID uuid = null;
+
+        try {
+            uuid = UUID.fromString(uuidst);
+        } catch (IllegalArgumentException e) {
+            throw BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST);
+        }
+
+        return uuid;
+    }
+    @Transactional
+    public Receipt saveReceiptFromImage(MultipartFile file) {
+
+        Receipt registeredReceipt = null;
 
         try {
             String response = connectionToOcr(file);
@@ -62,16 +88,18 @@ public class ReceiptService {
             ReceiptDto receipt = parseReceipt(response);
 
             try {
+                User user = userService.userFindByEmail();
+
                 Receipt registerReceipt = saveReceiptAndDetails(receipt);
-                Receipt registeredReceipt = receiptRepository.findById(registerReceipt.getId()).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_NOT_RECEIPT));
-                receiptResponseDto = ReceiptResponseDto.convertFromEntity(registeredReceipt);
+                 registeredReceipt = receiptRepository.findById(registerReceipt.getId()).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_NOT_RECEIPT));
+                return registeredReceipt;
             } catch (Exception e) {
             }
         } catch (Exception e) {
             throw BusinessException.of(ErrorCode.API_ERROR_RECEIPT_FAIL_CONVERT_TO_TEXT);
         }
 
-        return receiptResponseDto;
+        return registeredReceipt;
     }
 
     @Transactional
@@ -82,8 +110,6 @@ public class ReceiptService {
         saveReceiptDetails(receiptDto.getOrderItems(), savedReceipt);
 
         return savedReceipt;
-
-
     }
 
     private void saveReceiptDetails(List<OrderItem> orderItems, Receipt receipt) {

@@ -9,9 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 interface CashDetailRepository extends JpaRepository<CashDetail, Integer> {
 
 	List<CashDetail> findAllByUserAndTransAtBetween(User user, LocalDateTime start, LocalDateTime end);;
+
+	Optional<CashDetail> findCashDetailByCashDetailUuid(UUID transactionUUID);
 }

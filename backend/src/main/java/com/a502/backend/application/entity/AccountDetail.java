@@ -77,5 +77,12 @@ public class AccountDetail extends BaseEntity {
 		this.accountDetailTypeCode = accountDetailTypeCode;
 		this.accountDetailStatusCode = accountDetailStatusCode;
 	}
+	public void updateMemo(Memo memo) {
+		this.memo = memo;
+	}
+
+	public void updateReceipt(Receipt receipt){
+		this.receipt=receipt;
+	}
 
 }

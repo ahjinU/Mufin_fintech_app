@@ -9,10 +9,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 interface AccountDetailRepository extends JpaRepository<AccountDetail, Integer> {
     List<AccountDetail> findAllByAccountUserAndCreatedAtBetween(User user, LocalDateTime start, LocalDateTime end);
 
+    Optional<AccountDetail> findAccountDetailByAccountDetailUuid(UUID transactionUUID);
 }

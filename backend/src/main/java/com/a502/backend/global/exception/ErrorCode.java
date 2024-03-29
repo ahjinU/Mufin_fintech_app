@@ -45,6 +45,7 @@ public enum ErrorCode {
     API_ERROR_CASHDETAIL_NOT_EXIST(400, "CD01", "존재하지 않는 현금 거래내역 입니다."),
 
     // Memo
+    API_ERROR_MEMO_NOT_EXIST_CODE(400, "M001", "존재하지 않는 코드입니다."),
     API_ERROR_MEMO_NOT_EXIST(400, "M001", "존재하지 않는 메모입니다."),
 
     // Receipt

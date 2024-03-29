@@ -26,7 +26,7 @@ export default function AlertConfirm({
 
   const onClickNo = () => {
     setIsClose(true);
-    handleClickNo;
+    handleClickNo();
   };
 
   return (

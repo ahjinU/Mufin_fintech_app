@@ -6,10 +6,11 @@ type dataType = {
 };
 
 export default function LoanListApis() {
-  const { UsePostFetch } = useFetch();
+  const { postFetch } = useFetch();
 
-  const postLoanList = (data: dataType) => {
-    const res = UsePostFetch(data);
+  const postLoanList = async (data: dataType) => {
+    const res = await postFetch(data);
+    console.log(res);
     return res;
   };
 

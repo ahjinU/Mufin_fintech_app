@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -20,5 +21,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("select u from User u where u.parent = :parents and u.isDeleted = false")
     List<User> findMyKidsByParents(User parents);
+
+    Optional<User> findByUserUuid(UUID uuid);
 }
 

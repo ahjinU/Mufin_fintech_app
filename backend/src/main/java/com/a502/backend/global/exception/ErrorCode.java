@@ -47,6 +47,7 @@ public enum ErrorCode {
 
     // Memo
     API_ERROR_MEMO_NOT_EXIST(400, "M001", "존재하지 않는 메모입니다."),
+    API_ERROR_MEMO_NOT_EXIST_CODE(400, "M002", "존재하지 않는 코드 입니다."),
 
     // Receipt
     API_ERROR_NOT_RECEIPT(404, "R001", "영수증 형식과 다릅니다. 사진을 다시 찍어주세요."),

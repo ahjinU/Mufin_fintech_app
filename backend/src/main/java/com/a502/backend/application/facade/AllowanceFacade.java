@@ -80,7 +80,7 @@ public class AllowanceFacade {
         if (childUuid == null)
             return userService.userFindByEmail();
 
-        return userService.findByUserUuid(childUuid);
+        return userService.findByUserUuid(convertToUuid(childUuid));
     }
 
     private CalendarSummary calculateTransactions(List<TransactionDto> transactions) {

@@ -25,4 +25,7 @@ public interface LoansRepository extends JpaRepository<Loan, Integer> {
 
 	@Query("select l from Loan l where l.parent = :parent and l.code.id = 'L001' order by l.createdAt desc")
 	List<Loan> findRequestedLoansByParents(User parent);
+
+	@Query("select l from Loan l where l.code.id = 'L002'")
+	List<Loan> findAllLoansInProgress();
 }

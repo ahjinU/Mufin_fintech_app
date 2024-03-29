@@ -32,8 +32,10 @@ export default function ChatArea() {
     },
   ]);
 
+  const key = process.env.NEXT_PUBLIC_GPT_API_KEY;
+
   const openai = new OpenAI({
-    apiKey: process.env.NEXT_PUBLIC_GPT_API_KEY,
+    apiKey: key,
     dangerouslyAllowBrowser: true,
   });
 

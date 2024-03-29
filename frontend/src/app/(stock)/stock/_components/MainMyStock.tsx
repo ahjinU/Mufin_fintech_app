@@ -6,14 +6,18 @@ import {
   FlexBox,
 } from '@/components';
 import { commaNum } from '@/utils/commaNum';
-import useStockStore from '../_store';
+import { MyStockType, MyParkingType } from '../_types';
 
-export default function MainMyStock() {
-  const { myStock, MyParking } = useStockStore.getState();
-  const { myStockList, totalPrice } = myStock;
+export default function MainMyStock({
+  data,
+}: {
+  data: { myStocks: MyStockType; myParking: MyParkingType };
+}) {
+  const { myStockList, totalPrice } = data.myStocks;
+  const { balanceToday } = data.myParking;
 
   return (
-    <div className="p-[1.5rem] flex flex-col gap-[1rem]">
+    <div className="p-[1.2rem] flex flex-col gap-[1rem]">
       <AdBox
         icon="/images/icon-dollar.png"
         mode={'STATIC'}
@@ -55,7 +59,7 @@ export default function MainMyStock() {
           <MoneyInfoElement
             imageSrc={'/images/icon-my-chocochips.png'}
             leftExplainText={'내 초코칩 보관함'}
-            leftHighlightText={`${commaNum(MyParking.balanceToday)} 초코칩`}
+            leftHighlightText={`${commaNum(balanceToday)} 초코칩`}
             buttonOption={'RIGHT_ARROW'}
             link="/stock/storage"
           />
@@ -67,7 +71,7 @@ export default function MainMyStock() {
           <MoneyInfoElement
             imageSrc={'/images/icon-stock.png'}
             leftExplainText={'내 주식 평가'}
-            leftHighlightText={`${commaNum(totalPrice)}초코칩`}
+            leftHighlightText={`${commaNum(totalPrice)} 초코칩`}
             buttonOption={'TINY_BUTTON'}
             tinyButtonLabel={'상세'}
             link="/stock/list"
@@ -76,16 +80,21 @@ export default function MainMyStock() {
         bottomChildren={
           <div className="flex flex-col gap-[1rem]">
             {myStockList?.map(
-              ({ cnt, name, incomeRatio, totalPriceCur, income }, index) => {
+              (
+                { cnt, name, incomeRatio, totalPriceAvg, totalPriceCur },
+                index,
+              ) => {
                 return (
                   <OtherInfoElement
                     key={`myStock-${index}`}
                     imageSrc={'/images/icon-dollar.png'}
-                    leftExplainText={`${cnt}주`}
+                    leftExplainText={`${commaNum(cnt)}주`}
                     leftHighlightText={`${name}`}
                     state={`${incomeRatio >= 0 ? 'UP' : 'DOWN'}`}
-                    rightExplainText={`${income}초코칩(${incomeRatio}%)`}
-                    rightHighlightText={`${commaNum(totalPriceCur)}초코칩`}
+                    rightExplainText={`${commaNum(
+                      totalPriceAvg,
+                    )} 초코칩(${commaNum(incomeRatio)}%)`}
+                    rightHighlightText={`${commaNum(totalPriceCur)} 초코칩`}
                   />
                 );
               },

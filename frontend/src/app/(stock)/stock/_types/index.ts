@@ -3,6 +3,7 @@ export interface StockAllType {
   price: number;
   incomeRatio: number;
   transCnt: number;
+  imageUrl: string;
 }
 
 export interface RankType {
@@ -20,6 +21,7 @@ export interface StockInfo {
   priceCur: number;
   totalPriceAvg: number;
   totalPriceCur: number;
+  imageUrl: string;
 }
 
 export interface MyStockType {

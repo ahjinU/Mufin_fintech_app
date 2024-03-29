@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { XMarkIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
-import { getKeyPadImage, checkPayPassword } from '@/services/password';
+import PasswordApis from '@/services/password';
+import useFetch from '@/hooks/useFetch';
 
 interface PayPasswordBoxProps {
   handleConfirmButton: () => void;
@@ -41,8 +42,9 @@ export default function PayPasswordBox({
   const [isBoxOpen, setIsBoxOpen] = useState<boolean>(true);
   const [keyPadImage, setKeyPadImage] = useState<string[]>([]);
   const [wrongCnt, setWrongCnt] = useState<number>(0);
-
   console.log(password);
+
+  const { getKeyPadImage, checkPayPassword } = PasswordApis();
 
   useEffect(() => {
     (async () => {

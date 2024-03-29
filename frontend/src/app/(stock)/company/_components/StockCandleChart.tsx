@@ -4,8 +4,8 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 import { Tag } from '@/components';
-import { getStockCandleData } from '../_apis';
 import { getMaxMinValueIndex } from '../_utils';
+import StockChartApis from '../_apis';
 
 const datetime: 'datetime' = 'datetime';
 const pan: 'pan' = 'pan';
@@ -22,10 +22,11 @@ export function StockCandleChart() {
   ]);
   const [period, setPeriod] = useState<number>(0);
   const series = [{ data }];
+  const { getStockCandleData } = StockChartApis();
 
   useEffect(() => {
     (async function () {
-      const data = await getStockCandleData('바람막이', period);
+      const data = await getStockCandleData('바람개비', period);
       setData(data.data);
     })();
   }, [period]);

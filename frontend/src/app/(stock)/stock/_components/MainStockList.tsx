@@ -1,3 +1,5 @@
+'use client';
+
 import {
   AdBox,
   ComplexInput,
@@ -7,28 +9,43 @@ import {
 } from '@/components';
 import { DataType } from '../page';
 import { commaNum } from '@/utils/commaNum';
-import useStockStore from '../_store';
 import MainRanking from './MainRanking';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const toWeatherDescript = (id: number) => {
   switch (Math.floor(id / 100)) {
     case 2:
-      return '천둥이 쳐요';
+      return '천둥이 쳐요.';
     case 3:
-      return '가랑비가 내려요';
+      return '가랑비가 내려요.';
     case 5:
-      return '비가 와요';
+      return '비가 와요.';
     case 6:
-      return '눈이 와요';
+      return '눈이 와요.';
+    case 7:
+      return '먼지가 많아요.';
     case 8:
-      return '날씨가 맑아요';
+      return '날씨가 맑아요.';
+  }
+};
+
+const toCompanyEnglishName = (name: string) => {
+  switch (name) {
+    case '눈오리':
+      return 'snowduck';
+    case '바람개비':
+      return 'pinwheel';
+    case '우산':
+      return 'umbrella';
+    case '아이스크림':
+      return 'icecream';
   }
 };
 
 export default function MainStockList({ data }: { data: DataType }) {
-  const { temp, description, stocks } = data;
-  const { ranks, myRank } = useStockStore.getState();
+  const { temp, description, stocks, ranks, myRank } = data;
+  const router = useRouter();
 
   return (
     <div className="p-[1.2rem] flex flex-col gap-[1rem] overflow-y-hidden">
@@ -41,15 +58,16 @@ export default function MainStockList({ data }: { data: DataType }) {
       <AdBox
         icon="/images/icon-dollar.png"
         mode={'STATIC'}
-        subText={'매일 낮 12시, 내 주식에 서울 날씨에 따른 변동이 있어요!'}
-        title={'주식은 오후 12시부터 7시까지 열려요'}
+        subText={'매일 낮 12시, 내 주식은 서울 날씨에 따라 변화해요!'}
+        title={'주식 시장은 오후 12시부터 7시까지에요.'}
       />
       <GuideText
         text={
           <div>
             <span>
-              실제 주식 시간은 낮 12시부터 오후 7시이며, <br />
-              날씨에 따른 주가 변화는 자스민에만 있는 서비스입니다.
+              실제 주식 시간은 오전 9시부터 오후 3시 30분이고
+              <br />
+              날씨에 따른 주가 변화는 머핀에만 있는 서비스입니다.
             </span>
           </div>
         }
@@ -61,7 +79,7 @@ export default function MainStockList({ data }: { data: DataType }) {
             leftExplainText={`${ranks[0]?.childName}`}
             leftHighlightText={'실시간 랭킹 1위'}
             rightExplainText={`내 실시간 랭킹은? ${myRank?.rank}위`}
-            rightHighlightText={`${commaNum(myRank?.balance)}자스민`}
+            rightHighlightText={`${commaNum(myRank?.balance)} 초코칩`}
           />
         }
         bottomChildren={
@@ -80,20 +98,25 @@ export default function MainStockList({ data }: { data: DataType }) {
         <FlexBox
           isDivided={false}
           topChildren={
-            <div className="flex flex-col gap-[1rem]">
-              {stocks?.map(({ name, price, transCnt, incomeRatio }, index) => {
-                return (
-                  <OtherInfoElement
-                    key={`stocks-${index}`}
-                    imageSrc={'/images/icon-dollar.png'}
-                    leftExplainText={`오늘 거래량 ${commaNum(transCnt)}주`}
-                    leftHighlightText={name}
-                    state={`${incomeRatio < 0 ? 'DOWN' : 'UP'}`}
-                    rightExplainText={`${commaNum(incomeRatio)}%`}
-                    rightHighlightText={`${commaNum(price)}초코칩`}
-                  />
-                );
-              })}
+            <div className="flex flex-col gap-[2rem]">
+              {stocks?.map(
+                ({ name, price, transCnt, incomeRatio, imageUrl }, index) => {
+                  return (
+                    <OtherInfoElement
+                      key={`stocks-${index}`}
+                      imageSrc={imageUrl}
+                      leftExplainText={`오늘 거래량 ${commaNum(transCnt)}주`}
+                      leftHighlightText={name}
+                      state={`${incomeRatio < 0 ? 'DOWN' : 'UP'}`}
+                      rightExplainText={`${commaNum(incomeRatio)}%`}
+                      rightHighlightText={`${commaNum(price)} 초코칩`}
+                      handleClick={() =>
+                        router.push(`/company/${toCompanyEnglishName(name)}`)
+                      }
+                    />
+                  );
+                },
+              )}
             </div>
           }
         />

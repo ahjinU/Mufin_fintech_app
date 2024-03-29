@@ -31,6 +31,8 @@ public class SchedulerFacade {
     private final StockDetailsService stockDetailsService;
     private final StocksService stocksService;
     private final StockFacade stockFacade;
+    private final StockSellsService stockSellsService;
+    private final StockBuysService stockBuysService;
     private final AccountService accountService;
     private final CodeService codeService;
     private final LoansService loansService;
@@ -105,6 +107,16 @@ public class SchedulerFacade {
 
     @Scheduled(cron = "${schedule.cron.test}")
     public void marketEnd(){
+        List<StockBuy> stockBuys = stockBuysService.getStockTransListOpend();
+        List<StockSell> stockSells = stockSellsService.getStockTransListOpend();
+        Code code = codeService.findByName("취소");
+
+        for (StockBuy stockBuy: stockBuys) {
+            stockBuysService.updateCode(stockBuy, code);
+        }
+        for (StockSell stockSell: stockSells) {
+            stockSellsService.updateCode(stockSell, code);
+        }
 
     }
 

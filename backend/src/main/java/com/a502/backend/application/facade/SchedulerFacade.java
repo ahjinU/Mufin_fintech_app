@@ -2,6 +2,7 @@ package com.a502.backend.application.facade;
 
 import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.account.AccountService;
+import com.a502.backend.domain.loan.LoansService;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.savings.SavingsService;
 import com.a502.backend.domain.stock.*;
@@ -14,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -26,9 +30,9 @@ public class SchedulerFacade {
     private final StockDetailsService stockDetailsService;
     private final StocksService stocksService;
     private final StockFacade stockFacade;
-    private final SavingsService savingsService;
     private final AccountService accountService;
     private final CodeService codeService;
+    private final LoansService loansService;
 
 //    @Scheduled(cron = "${schedule.cron.test}")
 //    @Scheduled(cron = "${schedule.cron.start}")
@@ -63,6 +67,26 @@ public class SchedulerFacade {
                 accountService.updateStatusCode(saving, code);
             }
         }
+    }
+
+
+//    @Scheduled(cron = "${schedule.cron.test}")
+    public void checkLoanArrears(){
+        Date now = new Date();
+        List<Loan> loans = loansService.findAllLoansInProgress();
+
+        for (Loan loan : loans) {
+            ZonedDateTime zonedDateTime = loan.getStartDate().atStartOfDay(ZoneId.systemDefault());
+            Date date = Date.from(zonedDateTime.toInstant());
+            long difference = now.getTime() - date.getTime();
+            long diffDays = difference / (24 * 60 * 60 * 1000);
+            diffDays /= loan.getPaymentDate();
+
+            if (loan.getPaymentNowCnt() < diffDays){
+                loansService.updateOverdueCnt(loan);
+            }
+        }
+
     }
 
 

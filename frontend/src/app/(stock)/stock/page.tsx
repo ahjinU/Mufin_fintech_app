@@ -1,51 +1,54 @@
 import { Header, Tab } from '@/components';
 import MainMyStock from './_components/MainMyStock';
 import MainStockList from './_components/MainStockList';
-import { StockAllType } from './_types';
-import {
-  getRankingMine,
-  getRankingTotal,
-  postParkingAccount,
-  postStockMine,
-  postStocksAll,
-} from './_apis';
-import useStockStore from './_store';
+import { StockAllType, RankType } from './_types';
 const url = `${process.env.REACT_APP_WEATHER_API}?q=Seoul&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
-import { useServerPostFetch } from '@/hooks/useServerFetch';
+import { useServerGetFetch, useServerPostFetch } from '@/hooks/useServerFetch';
 
 export interface DataType {
   temp: number;
   description: number;
   stocks: StockAllType[];
+  ranks: RankType[];
+  myRank: RankType;
 }
 
 export default async function Stock() {
-  const { updateRanks, updateMyRank, updateMyParking, updateMyStock } =
-    useStockStore.getState();
+  // 전체 주식 정보 가져오기
+  const stocks = await useServerPostFetch({ api: '/stock/all' });
+  // console.log(stocks.data);
 
-  // const ranks = await getRankingTotal();
-  // updateRanks(ranks?.data);
-  // const myRank = await getRankingMine();
-  // updateMyRank(myRank?.data);
-  // const myStocks = await postStockMine();
+  // 내 보유 주식 정보 가져오기
+  const myStocks = await useServerPostFetch({ api: '/stock/mine' });
+  // console.log(myStocks);
 
-  // const myStocksData = await myStocks.json();
-  // console.log(myStocksData.data);
-  const myStocks = await useServerPostFetch({ api: '/api/stock/mine' });
-  console.log(myStocks.data);
-  // updateMyStock(myStocks?.data);
-  // const myParking = await postParkingAccount();
-  // updateMyParking(myParking?.data);
+  // 내 파킹 통장 정보 가져오기
+  const myParking = await useServerPostFetch({ api: '/parking/account' });
+  // console.log(myParking.data);
 
-  // const stocks = await postStocksAll();
+  // 전체 랭킹 정보 가져오기
+  const ranks = await useServerGetFetch({ api: '/stock/ranking/total' });
+  // console.log(ranks.data);
+
+  // 내 랭킹 정보 가져오기
+  const myRank = await useServerGetFetch({ api: '/stock/ranking/user' });
+  // console.log(myRank.data);
+
+  // 날씨 정보 가져오기
   const weatherRes = await fetch(url, { cache: 'no-cache' });
   const weather = await weatherRes.json();
 
   const mainTabData = {
     temp: parseFloat((weather.main.temp - 273.15).toFixed(2)),
     description: weather.weather[0].id,
-    // stocks: stocks.data.stock,
-    stocks: [],
+    stocks: stocks.data.stock,
+    ranks: ranks.data.ranks,
+    myRank: myRank.data,
+  };
+
+  const myStockData = {
+    myStocks: myStocks.data,
+    myParking: myParking.data,
   };
 
   return (
@@ -61,7 +64,7 @@ export default async function Stock() {
           },
           {
             label: '내 잔고',
-            component: <MainMyStock />,
+            component: <MainMyStock data={myStockData} />,
           },
         ]}
       />

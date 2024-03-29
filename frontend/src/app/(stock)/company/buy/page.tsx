@@ -10,7 +10,7 @@ import {
   Button,
 } from '@/components';
 import { StockBuySell } from '../_components/StockBuySell';
-import { getChocoChipPocketData } from '../_apis';
+// import { getChocoChipPocketData } from '../_apis';
 import { commaNum } from '@/utils/commaNum';
 
 export default function Buy() {
@@ -19,12 +19,12 @@ export default function Buy() {
   const totalPrice = price * quantity;
   const [chocoChipPocket, setChocoChipPocket] = useState<number>(0);
 
-  useEffect(() => {
-    (async function () {
-      const data = await getChocoChipPocketData();
-      setChocoChipPocket(data.data.balanceToday);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async function () {
+  //     const data = await getChocoChipPocketData();
+  //     setChocoChipPocket(data.data.balanceToday);
+  //   })();
+  // }, []);
 
   return (
     <main className="p-[1.2rem] flex flex-col gap-[1rem]">

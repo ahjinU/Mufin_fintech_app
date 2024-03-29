@@ -1,12 +1,13 @@
 interface SmallButtonProps {
   mode: 'ACTIVE' | 'DESTRUCTIVE' | 'NON_ACTIVE';
   label: string;
-  onClick?: () => void;
+  handleClick?: () => void;
 }
 
 export default function SmallButton({
   mode,
   label,
+  handleClick,
   ...props
 }: SmallButtonProps) {
   let backgroundColor: string;
@@ -32,6 +33,7 @@ export default function SmallButton({
   return (
     <button
       className={`w-[14.4rem] h-[3rem] rounded-[0.8rem] text-custom-white custom-medium-text ${backgroundColor} ${hoverEvent}`}
+      onClick={handleClick}
       {...props}
     >
       {label}

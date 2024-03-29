@@ -1,15 +1,19 @@
 import { Ranking } from '@/components';
 import Image from 'next/image';
-import useStockStore from '../../_store';
 import { commaNum } from '@/utils/commaNum';
+import { useServerGetFetch } from '@/hooks/useServerFetch';
+import { RankType } from '../../_types';
 
-export default function Ranks() {
-  const { ranks, myRank } = useStockStore.getState();
+export default async function Ranks() {
+  const ranks = await useServerGetFetch({ api: '/stock/ranking/total' });
+  const ranksData = ranks.data.ranks;
+  const myRank = await useServerGetFetch({ api: '/stock/ranking/user' });
+  const myRankData = myRank.data;
 
   return (
     <div className="mt-[-1.2rem] flex flex-col gap-[0.5rem]">
       <div className="flex flex-col gap-[0.5rem]">
-        {ranks.slice(0, 3).map((rank, index) => {
+        {ranksData.slice(0, 3).map((rank: RankType, index: number) => {
           return (
             <Ranking
               mode={'HIGHLIGHT'}
@@ -21,8 +25,8 @@ export default function Ranks() {
           );
         })}
       </div>
-      <div className="flex flex-col gap-[0.5rem] justify-center items-center">
-        {ranks.slice(3, 10).map((rank, index) => {
+      <div className="mt-[0.5rem] flex flex-col gap-[1rem] justify-center items-center">
+        {ranksData.slice(3, 10).map((rank: RankType, index: number) => {
           return (
             <Ranking
               mode={'GENERAL'}
@@ -43,9 +47,9 @@ export default function Ranks() {
         />
         <Ranking
           mode={'HIGHLIGHT'}
-          rank={myRank.rank}
-          name={myRank.childName}
-          chocochip={commaNum(myRank.balance)}
+          rank={myRankData.rank}
+          name={myRankData.childName}
+          chocochip={commaNum(myRankData.balance)}
         />
       </div>
     </div>

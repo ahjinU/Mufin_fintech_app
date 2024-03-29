@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { Tag } from '@/components';
-import { getStockLineData } from '../_apis';
+import StockChartApis from '../_apis';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const smooth: 'smooth' = 'smooth';
@@ -14,17 +14,18 @@ interface StockData {
   price: number;
 }
 
-export function StockLineChart() {
+export function StockLineChart({ name }: { name: string }) {
   // ApexCharts에 넘겨야 하는 series형식은 배열 내에 하나의 객체를 넘기는 법
   // 서버에서 date도 넘겨주지만 필요 없음.
   const [data, setData] = useState<number[]>([0]);
   const [period, setPeriod] = useState<number>(30);
   const maxValueIndex = data.findIndex((num) => num === Math.max(...data));
   const minValueIndex = data.findIndex((num) => num === Math.min(...data));
+  const { getStockLineData } = StockChartApis();
 
   useEffect(() => {
     (async function () {
-      const data = await getStockLineData('바람막이', period);
+      const data = await getStockLineData(name, period);
       const prices = data.data.map((dataObj: StockData) => dataObj.price);
       setData(prices);
     })();

@@ -37,7 +37,6 @@ export default async function Company({
     data: { name: companyName },
   });
   const stockDetailData = stockDetail?.data;
-  console.log(stockDetailData);
 
   return (
     <main className="p-[1.2rem] flex flex-col gap-[1rem]">
@@ -45,7 +44,7 @@ export default async function Company({
         isDivided={false}
         topChildren={
           <OtherInfoElement
-            imageSrc="/images/icon-dollar.png"
+            imageSrc={stockDetailData?.imageUrl}
             leftHighlightText={companyName || ''}
             leftExplainText={`오늘 거래량 ${commaNum(
               stockDetailData?.transCnt,
@@ -68,12 +67,12 @@ export default async function Company({
         </p>
       </GuideAccordion>
 
-      {/* <Tab
+      <Tab
         tabs={[
           { label: '선 차트', component: <StockLineChart /> },
-          { label: '봉 차트', component: <StockCandleChart /> },
+          // { label: '봉 차트', component: <StockCandleChart /> },
         ]}
-      /> */}
+      />
 
       <StockCall />
 

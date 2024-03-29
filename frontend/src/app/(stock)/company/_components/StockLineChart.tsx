@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { Tag } from '@/components';
-import { getStockLineData } from '../_apis';
+import StockChartApis from '../_apis';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const smooth: 'smooth' = 'smooth';
@@ -21,6 +21,7 @@ export function StockLineChart() {
   const [period, setPeriod] = useState<number>(30);
   const maxValueIndex = data.findIndex((num) => num === Math.max(...data));
   const minValueIndex = data.findIndex((num) => num === Math.min(...data));
+  const { getStockLineData } = StockChartApis();
 
   useEffect(() => {
     (async function () {

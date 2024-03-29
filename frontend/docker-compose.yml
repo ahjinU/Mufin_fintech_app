@@ -1,6 +1,6 @@
 services:
   front:
-    image: slcloe/jasminfront
+    build: .
     ports:
       - '3000:3000'
     container_name: jasumin

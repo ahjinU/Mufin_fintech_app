@@ -1,11 +1,8 @@
 package com.a502.backend.application.controller;
 
 import com.a502.backend.application.config.dto.JWTokenDto;
-import com.a502.backend.application.config.generator.JwtProvider;
-import com.a502.backend.application.config.generator.JwtUtil;
-import com.a502.backend.application.facade.KeypadFacade;
+import com.a502.backend.application.facade.UserFacade;
 import com.a502.backend.domain.user.dto.*;
-import com.a502.backend.domain.user.UserService;
 import com.a502.backend.domain.user.response.AuthenticationDto;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
@@ -15,14 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.UUID;
 
@@ -36,18 +32,13 @@ import static com.a502.backend.global.response.ResponseCode.*;
 @RequestMapping("api/user")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
-    private final ModelMapper modelMapper;
-    private final KeypadFacade keypadFacade;
-
-    private final JwtProvider tokenProvider;
-    private final JwtUtil jwtUtil;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final UserFacade userFacade;
 
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
 
-        JWTokenDto jwt = userService.login(loginDto);
+
+        JWTokenDto jwt = userFacade.login(loginDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         Cookie refreshCookie = createCookie("refreshtoken", jwt.getRefreshToken());
@@ -89,26 +80,26 @@ public class UserController {
         }
 
         //return checkEmailAndRespond(email.getEmail(), request, response);
-        return checkEmailAndRespond(email.getEmail(), email.getTemporaryUserUuid().toString());
+        return checkEmailAndRespond(email.getEmail(), response,request);
     }
 
     @PostMapping("/signup/child/check/email")
     public ResponseEntity<ApiResponse<AuthenticationDto>> checkChildEmail(@Valid @RequestBody EmailDto email, HttpServletRequest request, HttpServletResponse response) {
 
         System.out.println("[UserController]: /signup/child/check/email" + email.toString());
-        return checkEmailAndRespond(email.getEmail(), email.getTemporaryUserUuid().toString());
+        return checkEmailAndRespond(email.getEmail(),response,request);
     }
 
     @PostMapping("/signup/parent")
-    public ResponseEntity<ApiResponse<String>> signupParent(@Valid @RequestBody SignUpDto signUpDto, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<ApiResponse<String>> signupParent(@Valid @RequestBody SignUpDto signUpDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         System.out.println("[UserController ]: /signup/parent" + signUpDto.toString());
 
-        return signup(signUpDto, null, request, response);
+        return signup(signUpDto, null,  request,response);
     }
 
     @PostMapping("/signup/child")
-    public ResponseEntity<ApiResponse<String>> signupChild(@Valid @RequestBody SignUpDto signUpDto, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<ApiResponse<String>> signupChild(@Valid @RequestBody SignUpDto signUpDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         // 현재 인증된 사용자의 Authentication 객체 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -122,15 +113,6 @@ public class UserController {
 
         return signup(signUpDto, parentEmail, request, response);
     }
-
-    /*public User userFindByEmail(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName(); // Username 추출
-
-        User user = UserRepository.findByEmail(email);
-
-        return user;
-    }*/
 
 
     public Cookie getCookieByName(HttpServletRequest request, String name) {
@@ -174,27 +156,21 @@ public class UserController {
     }
 
     private ResponseEntity<ApiResponse<AuthenticationDto>> checkTelephoneAndRespond(String telephone, HttpServletResponse response) {
-        UUID temporaryUserUuid = userService.checkDupleTelephone(telephone);
-
-        /*\
+        UUID temporaryUserUuid = userFacade.checkDupleTelephone(telephone);
 
         Cookie uuidCookie = createCookie("authenticationOnlyTelephone", temporaryUserUuid.toString());
         response.addCookie(uuidCookie);
 
-         */
-        AuthenticationDto authenticationDto = AuthenticationDto.builder()
-                .temporaroyUserUuid(temporaryUserUuid.toString())
-                .build();
-        ApiResponse<AuthenticationDto> apiResponse = new ApiResponse<>(API_SUCCESS_USER_CHECK_TELEPHONE, authenticationDto);
+        ApiResponse<AuthenticationDto> apiResponse = new ApiResponse<>(API_SUCCESS_USER_CHECK_TELEPHONE);
 
         return ResponseEntity.ok(apiResponse);
     }
 
-    private ResponseEntity<ApiResponse<AuthenticationDto>> checkEmailAndRespond(String email,String uuid) {
+    private ResponseEntity<ApiResponse<AuthenticationDto>> checkEmailAndRespond(String email,HttpServletResponse response, HttpServletRequest request) {
 
-        /*Cookie authenicationOnlyTelephoneCookie = getCookieByName(request, "authenticationOnlyTelephone");
+        Cookie authenicationOnlyTelephoneCookie = getCookieByName(request, "authenticationOnlyTelephone");
 
-        userService.checkDupleEmail(authenicationOnlyTelephoneCookie.getValue(), email);
+        userFacade.checkDupleEmail(authenicationOnlyTelephoneCookie.getValue(), email);
 
         Cookie uuidCookie = createCookie("temporaryUserUuid", authenicationOnlyTelephoneCookie.getValue());
         response.addCookie(uuidCookie);
@@ -202,23 +178,16 @@ public class UserController {
         Cookie oldCookie = deleteCookie(authenicationOnlyTelephoneCookie);
         response.addCookie(oldCookie);
 
-        ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_USER_CHECK_EMAIL);*/
-
-        userService.checkDupleEmail(uuid, email);
-        AuthenticationDto authentication = AuthenticationDto.builder()
-                .temporaroyUserUuid(uuid.toString())
-                .build();
-
-        ApiResponse<AuthenticationDto> apiResponse = new ApiResponse<>(API_SUCCESS_USER_CHECK_EMAIL,authentication);
+        ApiResponse<AuthenticationDto> apiResponse = new ApiResponse<>(API_SUCCESS_USER_CHECK_EMAIL);
         return ResponseEntity.ok(apiResponse);
     }
 
-    private ResponseEntity<ApiResponse<String>> signup(SignUpDto signUpDto, String parentName, HttpServletRequest request, HttpServletResponse response) {
+    private ResponseEntity<ApiResponse<String>> signup(SignUpDto signUpDto, String parentName, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie temporaryUserCookie = getCookieByName(request, "temporaryUserUuid");
 
         System.out.println("부모");
         System.out.println(parentName);
-        userService.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
+        userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
 
         response.addCookie(deleteCookie(temporaryUserCookie));
 

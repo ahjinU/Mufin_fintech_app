@@ -2,6 +2,8 @@ package com.a502.backend.domain.stock;
 
 import com.a502.backend.application.entity.Stock;
 import com.a502.backend.application.entity.StockDetail;
+import com.a502.backend.application.entity.StockHolding;
+import com.a502.backend.application.entity.User;
 import com.a502.backend.domain.weather.Weather;
 import com.a502.backend.global.code.StockCode;
 import com.a502.backend.global.error.BusinessException;
@@ -49,6 +51,17 @@ public class StockDetailsService {
         for(Stock stock: stocks){
             StockDetail detail = getLastDetail(stock);
             hashList.put(stock.getName(), detail.getPrice());
+        }
+        return hashList;
+    }
+
+    @Transactional
+    public HashMap<String, Integer> getStockStartPriceList(List<Stock> stocks){
+        HashMap<String, Integer> hashList = new HashMap<>();
+
+        for(Stock stock: stocks){
+            StockDetail detail = getLastDetail(stock);
+            hashList.put(stock.getName(), detail.getStartPrice());
         }
         return hashList;
     }
@@ -189,4 +202,5 @@ public class StockDetailsService {
 	public List<StockDetail> findAllByStockOrderByCreatedAtDesc(Stock stock){
 		return stockDetailsRepository.findAllByStockOrderByCreatedAtDesc(stock);
 	}
+
 }

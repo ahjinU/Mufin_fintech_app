@@ -6,12 +6,10 @@ import lombok.*;
 @NoArgsConstructor
 public class EmailDto{
     private String email;
-    private String temporaryUserUuid;
-
     @Builder
-
-    public EmailDto(String email, String temporaryUserUuid) {
+    public EmailDto(String email) {
         this.email = email;
-        this.temporaryUserUuid = temporaryUserUuid;
     }
+
+
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-interface ParkingRepository extends JpaRepository<Parking, Integer> {
+public interface ParkingRepository extends JpaRepository<Parking, Integer> {
     Optional<Parking> findByUser(User user);
     List<Parking> findAll();
 }

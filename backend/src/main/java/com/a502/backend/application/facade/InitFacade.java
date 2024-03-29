@@ -1,9 +1,12 @@
 package com.a502.backend.application.facade;
 
+import com.a502.backend.application.entity.Stock;
+import com.a502.backend.application.entity.User;
 import com.a502.backend.domain.numberimg.NumberImageService;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.account.AccountService;
 import com.a502.backend.domain.stock.StockDetailsService;
+import com.a502.backend.domain.stock.StockHoldingsService;
 import com.a502.backend.domain.stock.StocksService;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 @Transactional
 @RequiredArgsConstructor
@@ -22,13 +27,13 @@ public class InitFacade {
     private final UserService userService;
     private final CodeService codeService;
     private final StocksService stocksService;
-    private final StockDetailsService stockDetailsService;
     private final S3FileUploader s3FileUploader;
     private final NumberImageService numberImageService;
     private final AccountService accountService;
     private  final ParkingService parkngService;
+    private final StockHoldingsService stockHoldingsService;
+    private final StockDetailsService stockDetailsService;
 
-    private final SchedulerFacade schedulerFacade;
     public void run() throws IOException {
 
 //        List<Stock> stocks = stocksService.findAllList();
@@ -122,11 +127,63 @@ public class InitFacade {
 
     private void initUser() throws IOException {
 
-        userService.save("010-1111-1111","ssafy","은평","1234","여","몰루1","몰루2",null);
-        userService.save("010-2222-2222","mom","은평","1234","여","몰루1","몰루2",null);
-        userService.save("010-3333-3333","dad","한슬","1234","여","몰루1","몰루2",null);
-        userService.save("010-4444-4444","child1","지나","1234","여","몰루1","몰루2", userService.findById(1));
-        userService.save("010-4444-4444","child2","수민","1234","여","몰루1","몰루2", userService.findById(2));
+        User testUser = User.builder()
+                .email("jasumin")
+                .telephone("010-0000-0000")
+                .name("한평")
+                .address("몰루")
+                .address2("몰?루")
+                .gender("여")
+                .password("1234")
+                .build();
+        userService.save(testUser);
+
+        testUser = User.builder()
+                .email("mom")
+                .telephone("010-2222-2222")
+                .name("한평")
+                .address("몰루")
+                .address2("몰?루")
+                .gender("여")
+                .password("1234")
+                .build();
+        userService.save(testUser);
+
+        testUser = User.builder()
+                .email("dad")
+                .telephone("010-3333-3333")
+                .name("한평")
+                .address("몰루")
+                .address2("몰?루")
+                .gender("여")
+                .password("1234")
+                .build();
+        userService.save(testUser);
+
+        testUser = User.builder()
+                .email("child1")
+                .telephone("010-4444-4444")
+                .name("한평")
+                .address("몰루")
+                .address2("몰?루")
+                .gender("여")
+                .password("1234")
+                .parent(userService.findById(1))
+                .build();
+        userService.save(testUser);
+
+        testUser = User.builder()
+                .email("child2")
+                .telephone("010-5555-5555")
+                .name("한평")
+                .address("몰루")
+                .address2("몰?루")
+                .gender("여")
+                .password("1234")
+                .parent(userService.findById(2))
+                .build();
+        userService.save(testUser);
+
     }
 
     private void initAccount() throws IOException {
@@ -137,6 +194,14 @@ public class InitFacade {
     private void initParking() throws IOException {
         parkngService.createParkingAccount(userService.findById(1));
         parkngService.createParkingAccount(userService.findById(2));
+
+    }
+    private void initStockHolding() throws IOException {
+        List<Stock> stocks = stocksService.findAllList();
+        HashMap<String, Integer> stockStartPriceList = stockDetailsService.getStockStartPriceList(stocks);
+
+        stockHoldingsService.initStockHolding(userService.findById(1),stocks,stockStartPriceList);
+        stockHoldingsService.initStockHolding(userService.findById(2),stocks,stockStartPriceList);
 
     }
 

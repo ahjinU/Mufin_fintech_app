@@ -1,22 +1,28 @@
 package com.a502.backend.application.facade;
 
-import com.a502.backend.application.entity.Parking;
-import com.a502.backend.application.entity.ParkingDetail;
-import com.a502.backend.application.entity.User;
+import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.parking.ParkingDetailsService;
+import com.a502.backend.domain.parking.ParkingRepository;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.parking.response.MyParkingInfoResponse;
 import com.a502.backend.domain.parking.response.ParkingDetailList;
 import com.a502.backend.domain.parking.response.ParkingDetailListResponse;
+import com.a502.backend.domain.stock.StockDetailsService;
+import com.a502.backend.domain.stock.StockHoldingsService;
+import com.a502.backend.domain.stock.StocksService;
+import com.a502.backend.domain.stock.response.TotalStockList;
+import com.a502.backend.domain.stock.response.TotalStockListResponse;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.global.code.CodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -28,6 +34,11 @@ public class ParkingFacade {
 	private final ParkingService parkingService;
 	private final UserService userService;
 	private final CodeService codeService;
+	private final ParkingRepository parkingRepository;
+	private final StockFacade stockFacade;
+	private final StockHoldingsService stockHoldingsService;
+	private final StocksService stocksService;
+	private final StockDetailsService stockDetailsService;
 
 	// 파킹통장 내역 조회
 	public ParkingDetailListResponse getParkingDetails() {
@@ -94,5 +105,6 @@ public class ParkingFacade {
 				.ratio(ratio)
 				.build();
 	}
+
 
 }

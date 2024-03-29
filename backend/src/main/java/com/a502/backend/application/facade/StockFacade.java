@@ -4,6 +4,7 @@ import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.parking.ParkingDetailsService;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.stock.*;
+import com.a502.backend.domain.stock.request.StockNameRequest;
 import com.a502.backend.domain.stock.request.StockTransactionRequest;
 import com.a502.backend.domain.stock.response.*;
 import com.a502.backend.domain.user.UserService;
@@ -446,7 +447,8 @@ public class StockFacade {
 	}
 
 	// 주식 상세 정보 조회
-	public StockInfoResponse getStockInfo(String name) {
+	public StockInfoResponse getStockInfo(StockNameRequest stockNameRequest) {
+		String name = stockNameRequest.getName();
 		Stock stock = stocksService.findByName(name);
 
 		// 일별 주식 정보(오늘 기준)

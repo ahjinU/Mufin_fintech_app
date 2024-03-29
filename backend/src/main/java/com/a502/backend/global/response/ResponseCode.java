@@ -30,9 +30,9 @@ public enum ResponseCode {
 
 	// Stock
 	//receipt
-	API_SUCCESS_CONVERT_IMAGE("R001","영수증 분석을 완료햐였습니다."),
+	API_SUCCESS_CONVERT_IMAGE("R001", "영수증 분석을 완료햐였습니다."),
 
-   	// Stock
+	// Stock
 	API_SUCCESS_STOCK_BUY("S001", "성공적으로 매수 주문했습니다."),
 	API_SUCCESS_STOCK_SELL("S002", "성공적으로 매도 주문했습니다."),
 	API_SUCCESS_STOCK_PRICE_HISTORY_BAR("S003", "기간별 주가 조회(봉 그래프)에 성공하였습니다."),
@@ -46,27 +46,28 @@ public enum ResponseCode {
 
 	//Pay
 	API_SUCCESS_PAY_TRANSFER("P001", "송금에 성공하였습니다."),
+	API_SUCCESS_PAY_REQUEST("P002", "결제 요청에 성공하였습니다."),
 
 	// Loan
 	API_SUCCESS_LOAN_APPLY("L001", "대출 신청에 성공하였습니다."),
-	API_SUCCESS_LOAN_GET_ALL_FOR_CHILD("L002","전체 대출 내역 조회(아이기준)에 성공하였습니다."),
-	API_SUCCESS_LOAN_GET_DETAIL_FOR_CHILD("L003","대출 상세 내역 조회(아이기준)에 성공하였습니다."),
+	API_SUCCESS_LOAN_GET_ALL_FOR_CHILD("L002", "전체 대출 내역 조회(아이기준)에 성공하였습니다."),
+	API_SUCCESS_LOAN_GET_DETAIL_FOR_CHILD("L003", "대출 상세 내역 조회(아이기준)에 성공하였습니다."),
 	API_SUCCESS_LOAN_REPAY("L004", "정상적으로 상환되었습니다."),
 	API_SUCCESS_LOAN_GET_ALL_FOR_PARENTS("L005", "전체 대출 내역 조회(부모기준)에 성공하였습니다."),
 	API_SUCCESS_LOAN_GET_REQUESTED_FOR_PARENTS("L006", "대출 요청 내역 조회(부모기준)에 성공하였습니다."),
-	API_SUCCESS_LOAN_ACCEPT_REQUEST("L007","대출 승인에 성공하였습니다."),
-	API_SUCCESS_LOAN_REFUSE_REQUEST("L008","대출 거절에 성공하였습니다."),
+	API_SUCCESS_LOAN_ACCEPT_REQUEST("L007", "대출 승인에 성공하였습니다."),
+	API_SUCCESS_LOAN_REFUSE_REQUEST("L008", "대출 거절에 성공하였습니다."),
 
 	// savings
-	API_SUCCESS_SAVINGS_REGISTER("SV001","적금 등록에 성공하였습니다."),
-	API_SUCCESS_SAVINGS_DELETE("SV002","적금 삭제에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_REGISTER("SV001", "적금 등록에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_DELETE("SV002", "적금 삭제에 성공하였습니다."),
 	API_SUCCESS_SAVINGS_GET_ALL("SV003", "적금 상품 전체 조회에 성공하였습니다."),
 	API_SUCCESS_SAVINGS_JOIN("SV004", "적금 상품 가입에 성공하였습니다."),
-	API_SUCCESS_SAVINGS_GET_MY_CHILD("SV005","자녀가 가입한 적금 내역 조회에 성공하였습니다."),
-	API_SUCCESS_SAVINGS_DEPOSIT("SV006","적금 불입에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_GET_MY_CHILD("SV005", "자녀가 가입한 적금 내역 조회에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_DEPOSIT("SV006", "적금 불입에 성공하였습니다."),
 	API_SUCCESS_SAVINGS_CANCEL("SV007", "적금 중도 해지에 성공하였습니다."),
 	API_SUCCESS_SAVINGS_TERMINATE("SV008", "적금 만기 해지에 성공하였습니다."),
-	API_SUCCESS_SAVINGS_GET_ALL_MINE("SV009","가입중인 적금 상품 전체 조회에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_GET_ALL_MINE("SV009", "가입중인 적금 상품 전체 조회에 성공하였습니다."),
 	API_SUCCESS_SAVINGS_GET_DETAIL_MINE("SV010", "가입중인 적금 상세 조회에 성공하였습니다."),
 	API_SUCCESS_SAVINGS_GET_DETAIL("SV011", "적금 상품 상세 조회에 성공하였습니다."),
 

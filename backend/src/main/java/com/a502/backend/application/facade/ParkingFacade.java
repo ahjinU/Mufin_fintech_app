@@ -56,6 +56,8 @@ public class ParkingFacade {
 				cnt = pd.getCnt();
 				// 가격
 				price = pd.getAmount() / cnt;
+			} else {
+				price = pd.getAmount();
 			}
 			// 날짜
 			LocalDate date = pd.getCreatedAt().toLocalDate();
@@ -94,6 +96,4 @@ public class ParkingFacade {
 				.ratio(ratio)
 				.build();
 	}
-
-
 }

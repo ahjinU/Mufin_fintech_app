@@ -1,7 +1,6 @@
 package com.a502.backend.domain.parking;
 
 import com.a502.backend.application.entity.*;
-import com.a502.backend.domain.parking.response.ParkingDetailListResponse;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +54,10 @@ public class ParkingDetailsService {
 	}
 
 	public List<ParkingDetail> getParkingDetails(Parking parking) {
-		return parkingDetailsRepository.findAllByParkingOrderByCreatedAtDesc(parking).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_PARKING_DETAIL_NOT_EXIST));
+		List<ParkingDetail> parkingDetailsList = parkingDetailsRepository.findAllByParkingOrderByCreatedAtDesc(parking);
+		if (parkingDetailsList.isEmpty())
+			throw BusinessException.of(ErrorCode.API_ERROR_PARKING_DETAIL_NOT_EXIST);
+		return parkingDetailsList;
 	}
 
 	@Transactional
@@ -63,7 +65,7 @@ public class ParkingDetailsService {
 
 		String counterpartyName = "머핀";
 
-		ParkingDetail initParkingDetail= ParkingDetail.builder()
+		ParkingDetail initParkingDetail = ParkingDetail.builder()
 				.parking(newParkingAccount)
 				.balance(newParkingAccount.getBalance())
 				.counterpartyName(counterpartyName)

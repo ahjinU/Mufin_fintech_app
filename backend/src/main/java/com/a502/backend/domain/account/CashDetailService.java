@@ -20,6 +20,9 @@ public class CashDetailService {
 	private final CashDetailRepository cashDetailRepository;
 
 	public List<CashDetail> getAllCashDetailsByUserAndPeriod(User user, LocalDateTime startDay, LocalDateTime endDay) {
-		return cashDetailRepository.findByUserAndPeriod(user, startDay, endDay).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST));
+		List<CashDetail> cashDetailList = cashDetailRepository.findByUserAndPeriod(user, startDay, endDay);
+		if(cashDetailList.isEmpty())
+			throw BusinessException.of(ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST);
+		return cashDetailList;
 	}
 }

@@ -8,27 +8,28 @@ import {
   Tab,
 } from '@/components';
 import { commaNum } from '@/utils/commaNum';
-import StorageList from './_compoents/StorageList';
-import PendingList from './_compoents/PendingList';
-import useStockStore from '../_store';
-import { TransactionType } from '../_types';
-import { getParkingAccount, postStockOrderWait } from '../_apis';
-
-export interface DataType {
-  list: TransactionType[];
-}
+import StorageList from './_components/StorageList';
+import PendingList from './_components/PendingList';
+import { useServerPostFetch } from '@/hooks/useServerFetch';
 
 export default async function StockStroage() {
-  const { MyParking } = useStockStore.getState();
-  const { balanceToday, ratio, balanceTmrw } = MyParking;
+  // 내 파킹 통장 사용 내역 확인
+  const myParkingList = await useServerPostFetch({
+    api: '/parking/history',
+  });
+  const myParkingListData = myParkingList?.data?.transaction;
+  // console.log(myParkingListData);
 
-  // const storageRes = await getParkingAccount();
-  // const parkingList = storageRes?.data.transactions;
-  const parkingList: TransactionType[] = [];
+  // 미체결 주식 내역 확인
+  const waitStockList = await useServerPostFetch({
+    api: '/stock/order/wait',
+  });
+  const waitStockListData = waitStockList?.data?.transaction;
+  // console.log(waitStockListData);
 
-  // const waitStocksRes = await postStockOrderWait();
-  // const waitStockList = waitStocksRes?.data.transactions;
-  const waitStockList: TransactionType[] = [];
+  // 내 초코칩 보관함 정보 들고 오기
+  const myParking = await useServerPostFetch({ api: '/parking/account' });
+  const { balanceToday, ratio, balanceTmrw, interest } = myParking?.data;
 
   return (
     <div>
@@ -42,16 +43,16 @@ export default async function StockStroage() {
             <MoneyInfoElement
               imageSrc={'/images/icon-my-chocochips.png'}
               leftExplainText={'내 초코칩 보관함'}
-              leftHighlightText={`${commaNum(balanceToday)}초코칩`}
+              leftHighlightText={`${commaNum(balanceToday)} 초코칩`}
               buttonOption={'RATE'}
             />
           }
           bottomChildren={
             <OtherInfoElement
-              leftExplainText={`이자로 ${ratio}%를 더 받아요`}
-              leftHighlightText={`내일 내 초코칩`}
-              rightHighlightText={`${commaNum(balanceTmrw)}초코칩`}
-              rightExplainText={`+${ratio}초코칩`}
+              leftExplainText={`이자율은 ${ratio}%`}
+              leftHighlightText={`내일 갖게 될 초코칩`}
+              rightHighlightText={`${commaNum(balanceTmrw)} 초코칩`}
+              rightExplainText={`+${interest} 초코칩`}
               state={'DOWN'}
             />
           }
@@ -64,11 +65,11 @@ export default async function StockStroage() {
             tabs={[
               {
                 label: '보관함 내역',
-                component: <StorageList list={parkingList} />,
+                component: <StorageList list={myParkingListData} />,
               },
               {
                 label: '미체결 주식',
-                component: <PendingList list={waitStockList} />,
+                component: <PendingList list={waitStockListData} />,
               },
             ]}
           />

@@ -6,18 +6,19 @@ import {
   MoneyInfoElement,
 } from '@/components';
 import Ranks from './_components/Ranks';
-import useStockStore from '../_store';
 import { commaNum } from '@/utils/commaNum';
+import { useServerGetFetch } from '@/hooks/useServerFetch';
 
-export default function Rank() {
-  const { myRank } = useStockStore.getState();
+export default async function Rank() {
+  const myRank = await useServerGetFetch({ api: '/stock/ranking/user' });
+  const myRankData = myRank.data;
 
   return (
     <div>
       <Header>
         <BackButton label={'날씨 주식 랭킹'} />
       </Header>
-      <div className="px-[1rem] flex flex-col gap-[1rem]">
+      <div className="px-[1rem] flex flex-col gap-[1rem] mb-[1.2rem]">
         <FlexBox
           isDivided={false}
           topChildren={
@@ -25,7 +26,7 @@ export default function Rank() {
               link="/stock/storage"
               imageSrc={'/images/icon-all-cookies.png'}
               leftExplainText={'내 모든 초코칩'}
-              leftHighlightText={`${commaNum(myRank?.balance)}초코칩`}
+              leftHighlightText={`${commaNum(myRankData?.balance)} 초코칩`}
               buttonOption={'RIGHT_ARROW'}
             />
           }

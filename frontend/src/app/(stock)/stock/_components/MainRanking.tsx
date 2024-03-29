@@ -17,7 +17,7 @@ export default function MainRanking({
 }: OtherInfoElementProps) {
   return (
     <section className="w-full flex justify-between items-center">
-      <div className="w-full flex gap-[1rem] items-center">
+      <div className="w-full flex items-center gap-[1rem]">
         <Image
           src={'/images/icon-stock-main-rank.png'}
           width={42}
@@ -25,18 +25,18 @@ export default function MainRanking({
           alt={leftExplainText}
           className="w-[4.2rem] h-[4.2rem]"
         />
-        <div className="flex flex-col justify-between">
-          <span className="custom-semibold-text">{leftHighlightText}</span>
-          <span className="custom-medium-text">{leftExplainText}</span>
+        <div className="w-full grid grid-cols-2">
+          <span className="custom-medium-text">{leftHighlightText}</span>
+          <span className="custom-medium-text text-custom-purple text-right">
+            {rightHighlightText}
+          </span>
+          <span className="custom-light-text">{leftExplainText}</span>
+          <span
+            className={`custom-light-text text-custom-light-purple text-right`}
+          >
+            {rightExplainText}
+          </span>
         </div>
-      </div>
-      <div className="min-w-fit flex flex-col justify-between items-end">
-        <span className="custom-medium-text text-custom-purple">
-          {rightHighlightText}
-        </span>
-        <span className={`custom-light-text text-custom-purple`}>
-          {rightExplainText}
-        </span>
       </div>
     </section>
   );

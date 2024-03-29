@@ -33,7 +33,7 @@ function RateShow() {
       className={`min-w-fit h-[1.8rem] px-[0.8rem] rounded-[0.8rem]
         text-custom-white custom-light-text bg-custom-light-purple`}
     >
-      금리 연 2%
+      금리 일 0.2%
     </div>
   );
 }
@@ -75,7 +75,12 @@ export default function MoneyInfoElement({
         <ChevronRightIcon className="w-[1.6rem] h-[1.6rem] text-custom-medium-gray cursor-pointer" />
       );
     if (buttonOption === 'TINY_BUTTON' && tinyButtonLabel)
-      return <TinyButton label={tinyButtonLabel} onClick={handleTinyButton} />;
+      return (
+        <TinyButton
+          label={tinyButtonLabel}
+          onClick={() => link && router.push(link)}
+        />
+      );
     if (buttonOption === 'RATE') return <RateShow />;
     if (buttonOption === 'STOCK_DOWN' && stockPrice)
       return <StockDownShow stockDownPrice={stockPrice} />;

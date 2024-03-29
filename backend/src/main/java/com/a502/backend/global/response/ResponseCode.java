@@ -68,6 +68,7 @@ public enum ResponseCode {
 	API_SUCCESS_SAVINGS_TERMINATE("SV008", "적금 만기 해지에 성공하였습니다."),
 	API_SUCCESS_SAVINGS_GET_ALL_MINE("SV009","가입중인 적금 상품 전체 조회에 성공하였습니다."),
 	API_SUCCESS_SAVINGS_GET_DETAIL_MINE("SV010", "가입중인 적금 상세 조회에 성공하였습니다."),
+	API_SUCCESS_SAVINGS_GET_DETAIL("SV011", "적금 상품 상세 조회에 성공하였습니다."),
 
 	// ParkingDetail
 	API_SUCCESS_PARKING_DETAILS_GET("PD001", "성공적으로 파킹통장 내역을 조회하였습니다."),

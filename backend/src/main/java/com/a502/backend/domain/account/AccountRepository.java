@@ -35,6 +35,10 @@ interface AccountRepository extends JpaRepository<Account, Integer> {
 	@Query("select a from Account a where a.user = :child and a.typeCode.id = 'AT002' and (a.statusCode.id = 'AS002' or a.statusCode.id = 'AS004') and a.isDeleted = false")
 	List<Account> findAllSavingsByChild(User child);
 
-	@Query("select a from Account a where a.accountUuid = :uuid and a.typeCode.id= 'AT002' and a.statusCode.id = 'AS002'")
+	@Query("select a from Account a where a.accountUuid = :uuid and a.typeCode.id = 'AT002' and a.statusCode.id = 'AS002'")
 	Optional<Account> findByAccountUuid(UUID uuid);
+
+	@Query("select a from Account a where a.accountUuid = :uuid and a.savings != null and a.typeCode.id = 'AT002' and a.statusCode.id = 'AS001'")
+	Optional<Account>findExpiredSavingsAccountByUuid(UUID uuid);
 }
+

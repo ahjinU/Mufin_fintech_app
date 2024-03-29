@@ -164,4 +164,9 @@ public class UserService implements UserDetailsService{
 			throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST_MY_KIDS);
 		return myKids;
 	}
+
+	public User findByUserUuid(UUID uuid){
+
+		return userRepository.findByUserUuid(uuid).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST_MY_KIDS));
+	}
 }

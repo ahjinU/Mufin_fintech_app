@@ -1,8 +1,6 @@
 package com.a502.backend.application.facade;
 
-import com.a502.backend.application.entity.Parking;
-import com.a502.backend.application.entity.ParkingDetail;
-import com.a502.backend.application.entity.User;
+import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.parking.ParkingDetailsService;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.parking.response.MyParkingInfoResponse;
@@ -17,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -28,6 +27,7 @@ public class ParkingFacade {
 	private final ParkingService parkingService;
 	private final UserService userService;
 	private final CodeService codeService;
+
 
 	// 파킹통장 내역 조회
 	public ParkingDetailListResponse getParkingDetails() {
@@ -94,5 +94,6 @@ public class ParkingFacade {
 				.ratio(ratio)
 				.build();
 	}
+
 
 }

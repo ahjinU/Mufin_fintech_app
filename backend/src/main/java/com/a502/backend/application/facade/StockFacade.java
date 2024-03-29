@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class StockFacade {
@@ -56,23 +55,32 @@ public class StockFacade {
 		Stock stock = stocksService.findByName(name);
 
 		stockDetailsService.validStockPrice(stock, price);
-		int price1 = parkingService.getParkingBalance(user, price * cnt_total);
+		int price1 = parkingService.getParkingBalance(user);
 		int price2 = stockBuysService.getStockBuyWaitingList(user, stock, codeService.findByName("거래중"));
-		if (price1 - price2 < price)
+		if (price1 - price2 < price * cnt_total)
 			throw BusinessException.of(ErrorCode.API_ERROR_PARKING_NOT_ENOUGH_BALANCE);
+
+		log.info("거래 가능 상태 확인 완료!Buy");
 
 		Code code = codeService.findByName("거래중");
 
 		StockBuy stockBuy = stockBuysService.save(user, stock, price, cnt_total, code);
-		List<StockSell> list = stockSellsService.findTransactionList(stock, price);
-
-		if (list == null) return;
-		for (StockSell stockSell : list) {
-			if (cnt_total == 0) break;
-			cnt_total -= transaction(stockBuy, stockSell);
-		}
+		transSell(stock, price, cnt_total, stockBuy, code);
 
 		stockDetailsService.updateStockDetail(stock, price);
+	}
+
+	@Transactional
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+	synchronized void transSell(Stock stock, int price, int cnt_total, StockBuy stockBuy, Code code) {
+		List<StockSell> list = stockSellsService.findTransactionList(stock, price);
+
+		if (list.isEmpty()) return;
+		for (StockSell stockSell : list) {
+			if (cnt_total == 0) break;
+
+			cnt_total -= transaction(stockBuy, stockSell);
+		}
 	}
 
 	/**
@@ -81,6 +89,7 @@ public class StockFacade {
 	 * @param request
 	 */
 	@Transactional
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
 	public void stockSell(StockTransactionRequest request) {
 		String name = request.getName();
 		int price = request.getPrice();
@@ -91,21 +100,31 @@ public class StockFacade {
 		stockDetailsService.validStockPrice(stock, price);
 		int cnt1 = stockHoldingsService.getStockHolding(user, stock);
 		int cnt2 = stockSellsService.getStockSellWaitingList(user, stock, codeService.findByName("거래중"));
+
 		if (cnt1 - cnt2 < cnt_total)
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCK_HOLDING_NOT_EXIST);
 
 		Code code = codeService.findByName("거래중");
 		StockSell stockSell = stockSellsService.save(user, stock, price, cnt_total, code);
-		List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
-
-		if (list == null) return;
-		for (StockBuy stockBuy : list) {
-			if (cnt_total == 0) break;
-			cnt_total -= transaction(stockBuy, stockSell);
-		}
-
+		transBuy(stock, price, cnt_total, stockSell, code);
 		stockDetailsService.updateStockDetail(stock, price);
 	}
+
+
+	@Transactional
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+	synchronized void transBuy(Stock stock, int price, int cnt_total, StockSell stockSell, Code code) {
+		List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
+
+		if (list.isEmpty()) return;
+		for (StockBuy stockBuy : list) {
+			if (cnt_total == 0) break;
+
+			cnt_total -= transaction(stockBuy, stockSell);
+
+		}
+	}
+
 
 	/**
 	 * 매도-매수 거래, 거래 이후 정보 수정 메서드
@@ -120,15 +139,16 @@ public class StockFacade {
 	 */
 	@Transactional
 	public int transaction(StockBuy stockBuy, StockSell stockSell) {
-		int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
 		Code code = codeService.findByName("완료");
+
+		int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
+		if (transCnt == 0) return 0;
 
 		ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt, codeService.findByName("매도"));
 		ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt, codeService.findByName("매수"));
 
 		parkingService.updateParkingBalance(stockSell.getUser(), detailSell.getBalance());
 		parkingService.updateParkingBalance(stockBuy.getUser(), detailBuy.getBalance());
-
 
 		stockSellsService.stockSell(stockSell, transCnt, code);
 		stockBuysService.stockBuy(stockBuy, transCnt, code);
@@ -271,8 +291,9 @@ public class StockFacade {
 			for (StockBuy sb : stockBuyList) {
 				transCnt += (sb.getCntTotal() - sb.getCntNot());
 			}
-			/////////// 이미지 url 추가하기	///////////
-			TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).build();
+			String imgUrl = stock.getImageUrl();
+
+			TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).imageUrl(imgUrl).build();
 
 			totalStockList.add(stockInfo);
 		}
@@ -306,10 +327,12 @@ public class StockFacade {
 			// 손익
 			int income = totalPriceCur - totalPriceAvg;
 			// 손익률
-			double incomeRatio = Math.round(((float) income / priceCur) * 10000) / 100.0;
+			double incomeRatio = Math.round(((float) income / totalPriceAvg) * 10000) / 100.0;
 			totalIncome += income;
 			totalPrice += totalPriceCur;
-			myStockLists.add(MyStockList.builder().name(name).cnt(cnt).income(income).incomeRatio(incomeRatio).priceAvg(priceAvg).priceCur(priceCur).totalPriceAvg(totalPriceAvg).totalPriceCur(totalPriceCur).build());
+			// 이미지
+			String imgUrl = stock.getImageUrl();
+			myStockLists.add(MyStockList.builder().name(name).cnt(cnt).income(income).incomeRatio(incomeRatio).priceAvg(priceAvg).priceCur(priceCur).totalPriceAvg(totalPriceAvg).totalPriceCur(totalPriceCur).imageUrl(imgUrl).build());
 		}
 		return MyStockListResponse.builder().myStockList(myStockLists).totalIncome(totalIncome).totalPrice(totalPrice).build();
 	}
@@ -402,11 +425,10 @@ public class StockFacade {
 	 * 10위권 이하의 회원 : 동점자 처리X 순위 반영
 	 * 10위권 이상의 회원 : 동점자 처리 순위 반영
 	 *
-	 * @param userId 회원 id
 	 * @return 랭킹 정보
 	 */
-	public RankingDetail getRanking(int userId) {
-		User user = userService.findById(userId);
+	public RankingDetail getRanking() {
+		User user = userService.userFindByEmail();
 		int rank = Math.toIntExact(rankService.getUserRank(user));
 		int balance = (int) rankService.getUserScore(user);
 
@@ -440,8 +462,9 @@ public class StockFacade {
 		for (StockBuy sb : stockBuyList) {
 			transCnt += (sb.getCntTotal() - sb.getCntNot());
 		}
-		/////////// 이미지 url 추가하기	///////////
-		TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).build();
+		String imgUrl = stock.getImageUrl();
+
+		TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).imageUrl(imgUrl).build();
 
 		return StockInfoResponse.builder()
 				.price(price)

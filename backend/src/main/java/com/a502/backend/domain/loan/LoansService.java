@@ -36,4 +36,18 @@ public class LoansService {
 		UUID Uuid = UUID.fromString(loanUuid);
 		return loansRepository.findByUuid(Uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_LOAN_NOT_EXIST));
 	}
+
+	public List<Loan> getAllLoansForParents(User parents){
+		List<Loan> result =  loansRepository.findAllLoansInProgressByParents(parents);
+		if(result.isEmpty())
+			throw BusinessException.of(ErrorCode.API_ERROR_LOAN_NOT_EXIST_FOR_PARENTS);
+		return result;
+	}
+
+	public List<Loan> getRequestedLoansForParents(User parents){
+		List<Loan> result = loansRepository.findRequestedLoansByParents(parents);
+		if(result.isEmpty())
+			throw BusinessException.of(ErrorCode.API_ERROR_LOAN_REQUESTED_NOT_EXIST_FOR_PARENTS);
+		return result;
+	}
 }

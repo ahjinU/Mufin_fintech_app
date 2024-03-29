@@ -12,4 +12,7 @@ import java.util.Optional;
 interface LoanRefusalRepository extends JpaRepository<LoanRefusal, Integer> {
 	@Query("select lf from LoanRefusal lf where lf.loan = :loan")
 	LoanRefusal findByLoan(Loan loan);
+
+	@Override
+	<S extends LoanRefusal> S save(S entity);
 }

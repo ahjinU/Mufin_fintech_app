@@ -5,13 +5,17 @@ import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.config.generator.JwtUtil;
 import com.a502.backend.application.entity.TemporaryUser;
 import com.a502.backend.application.entity.User;
+import com.a502.backend.application.facade.ParkingFacade;
+import com.a502.backend.application.facade.UserFacade;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.user.dto.LoginDto;
 import com.a502.backend.domain.user.dto.SignUpDto;
 import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -25,66 +29,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService{
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private final JwtUtil jwtUtil;
-	private final TemporaryUserRepository temporaryUserRepository;
-	private final CodeService codeService;
-	private final ParkingService parkingService;
-
-
-	@Transactional
-	public UUID signup(String temporaryUserUuid, SignUpDto signUpDto, String parentName) {
-		System.out.println("[UserService] 회원가입: " + temporaryUserUuid + "/" + signUpDto.toString());
-
-
-		UUID uuid = convertToUuid(temporaryUserUuid);
-		TemporaryUser temporaryUser = findTemporaryUser(uuid);
-
-		checkDupleUser(temporaryUser);
-
-		User parent = findUser(parentName);
-		User user = convertToUserEntity(signUpDto, temporaryUser, parent);
-
-		userRepository.save(user);
-		temporaryUserRepository.delete(temporaryUser);
-
-		//"아이"라면 파킹통장 생성 후 주식 초기화
-		if (parent != null)
-			parkingService.createParkingAccount(user);
-
-		return user.getUserUuid();
-
-	}
-
-	private TemporaryUser findTemporaryUser(UUID uuid) {
-
-		TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
-				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
-
-		return temporaryUser;
-	}
-
-	private void checkDupleUser(TemporaryUser temporaryUser) {
-		findUserByTelephone(temporaryUser.getTelephone());
-		findUserByEmail(temporaryUser.getEmail());
-	}
-
-	private User findUser(String parentName) {
-		Optional<User> option = userRepository.findByEmail(parentName);
-
-		User parent = option.orElse(null);
-
-		return parent;
-	}
 
 	public JWTokenDto login(LoginDto loginDto) {
 
@@ -112,10 +68,6 @@ public class UserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-      /*
-        System.out.println("[service] email: "+username);
-       */
-
 		User findMember = userRepository.findByEmail(username)
 				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
 
@@ -126,39 +78,11 @@ public class UserService implements UserDetailsService {
 		return new CustomUserDetails(findMember);
 	}
 
-
-	public UUID checkDupleTelephone(String telephone) {
-		System.out.println("[UserService] /checkDupleTelephone telephone:" + telephone);
-
-		findUserByTelephone(telephone);
-
-		TemporaryUser newUser = TemporaryUser.builder()
-				.telephone(telephone)
-				.build();
-
-		System.out.println("[UserService] TemporaryUser:" + newUser.toString());
-
-		TemporaryUser temporaryUser = temporaryUserRepository.save(newUser);
-
-		return temporaryUser.getTemporaryUserUuid();
+	public void checkDupleUser(TemporaryUser temporaryUser) {
+		findUserByTelephone(temporaryUser.getTelephone());
+		findUserByEmail(temporaryUser.getEmail());
 	}
-
-	@Transactional
-	public void checkDupleEmail(String temporaryUserUuidString, String email) {
-		System.out.println("[UserService/이메일중복] 이메일: " + email);
-
-		UUID uuid = convertToUuid(temporaryUserUuidString);
-		System.out.println("[UserService] uuid: " + uuid.toString());
-
-		findUserByEmail(email);
-
-		TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
-				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
-
-		temporaryUser.updateEmail(email);
-	}
-
-	private UUID convertToUuid(String temporaryUserUuid) {
+	public UUID convertToUuid(String temporaryUserUuid) {
 		UUID uuid = null;
 
 		try {
@@ -170,7 +94,49 @@ public class UserService implements UserDetailsService {
 		return uuid;
 	}
 
-	private User convertToUserEntity(SignUpDto signUpDto, TemporaryUser temporaryUser, User parent) {
+
+	public User findUser(String parentName) {
+		Optional<User> option = userRepository.findByEmail(parentName);
+
+		User parent = option.orElse(null);
+
+		return parent;
+	}
+
+
+	public void findUserByTelephone(String telephone) {
+		userRepository.findByTelephone(telephone).ifPresent(user -> {
+			throw BusinessException.of(ErrorCode.API_ERROR_TELEPHONE_DUPLICATION_EXIST);
+		});
+	}
+
+	public void findUserByEmail(String email) {
+		userRepository.findByEmail(email).ifPresent(user -> {
+			throw BusinessException.of(ErrorCode.API_ERROR_EMAIL_DUPLICATION_EXIST);
+		});
+	}
+
+	public User findById(int id) {
+		return userRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+	}
+
+	public User userFindByEmail() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName(); // Username 추출
+
+		System.out.println("email: " + email);
+
+		return userRepository.findByEmail(email)
+				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+
+	}
+
+	public void save(User user) throws IOException {
+		userRepository.save(user);
+    }
+
+
+	public User convertToUserEntity(SignUpDto signUpDto, TemporaryUser temporaryUser, User parent) {
 
 		String encodedPassword = passwordEncoder.encode(signUpDto.getPassword());
 
@@ -192,60 +158,10 @@ public class UserService implements UserDetailsService {
 		return registUser;
 	}
 
-	private void findUserByTelephone(String telephone) {
-		userRepository.findByTelephone(telephone).ifPresent(user -> {
-			throw BusinessException.of(ErrorCode.API_ERROR_TELEPHONE_DUPLICATION_EXIST);
-		});
-	}
-
-	private void findUserByEmail(String email) {
-		userRepository.findByEmail(email).ifPresent(user -> {
-			throw BusinessException.of(ErrorCode.API_ERROR_EMAIL_DUPLICATION_EXIST);
-		});
-	}
-
-	public User findById(int id) {
-		return userRepository.findById(id).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
-	}
-
-	public User userFindByEmail() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String email = authentication.getName(); // Username 추출
-
-		System.out.println("email: " + email);
-
-		return userRepository.findByEmail(email)
-				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
-
-	}
-
-	public void save(String telephone, String email, String name, String password, String gender, String address, String address2, User parent) throws IOException {
-
-		User registUser = User.builder()
-				.telephone(telephone)
-				.email(email)
-				.name(name)
-				.password(password)
-				.gender(gender)
-				.address(address)
-				.address(address2)
-				.birth(LocalDate.now())
-				.build();
-
-		if (parent != null) {
-			registUser.addParent(parent); // 찾은 부모 사용자를 설정
-		}
-
-		userRepository.save(registUser);
-
-        if(parent!=null){
-            //파킹 통장 생성 및 주식 홀딩 초기화
-            parkingService.createParkingAccount(registUser);
-        }
-
-    }
-
-	public User findByUserUuid(String userUuid) {
-		return userRepository.findByUserUuid(userUuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
+	public List<User> findMyKidsByParents(User parents){
+		List<User> myKids = userRepository.findMyKidsByParents(parents);
+		if(myKids.isEmpty())
+			throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST_MY_KIDS);
+		return myKids;
 	}
 }

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class ParkingFacade {

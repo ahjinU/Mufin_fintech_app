@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class StockFacade {
@@ -73,7 +72,7 @@ public class StockFacade {
 
 	@Transactional
 //    @Lock(LockModeType.PESSIMISTIC_WRITE)
-	synchronized void transSell(Stock stock, int price, int cnt_total, StockBuy stockBuy, Code code){
+	synchronized void transSell(Stock stock, int price, int cnt_total, StockBuy stockBuy, Code code) {
 		List<StockSell> list = stockSellsService.findTransactionList(stock, price);
 
 		if (list.isEmpty()) return;
@@ -114,7 +113,7 @@ public class StockFacade {
 
 	@Transactional
 //    @Lock(LockModeType.PESSIMISTIC_WRITE)
-	synchronized void transBuy(Stock stock, int price, int cnt_total, StockSell stockSell, Code code){
+	synchronized void transBuy(Stock stock, int price, int cnt_total, StockSell stockSell, Code code) {
 		List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
 
 		if (list.isEmpty()) return;
@@ -125,7 +124,6 @@ public class StockFacade {
 
 		}
 	}
-
 
 
 	/**
@@ -293,8 +291,9 @@ public class StockFacade {
 			for (StockBuy sb : stockBuyList) {
 				transCnt += (sb.getCntTotal() - sb.getCntNot());
 			}
-			/////////// 이미지 url 추가하기	///////////
-			TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).build();
+			String imgUrl = stock.getImageUrl();
+
+			TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).imageUrl(imgUrl).build();
 
 			totalStockList.add(stockInfo);
 		}
@@ -331,7 +330,9 @@ public class StockFacade {
 			double incomeRatio = Math.round(((float) income / totalPriceAvg) * 10000) / 100.0;
 			totalIncome += income;
 			totalPrice += totalPriceCur;
-			myStockLists.add(MyStockList.builder().name(name).cnt(cnt).income(income).incomeRatio(incomeRatio).priceAvg(priceAvg).priceCur(priceCur).totalPriceAvg(totalPriceAvg).totalPriceCur(totalPriceCur).build());
+			// 이미지
+			String imgUrl = stock.getImageUrl();
+			myStockLists.add(MyStockList.builder().name(name).cnt(cnt).income(income).incomeRatio(incomeRatio).priceAvg(priceAvg).priceCur(priceCur).totalPriceAvg(totalPriceAvg).totalPriceCur(totalPriceCur).imageUrl(imgUrl).build());
 		}
 		return MyStockListResponse.builder().myStockList(myStockLists).totalIncome(totalIncome).totalPrice(totalPrice).build();
 	}
@@ -461,8 +462,9 @@ public class StockFacade {
 		for (StockBuy sb : stockBuyList) {
 			transCnt += (sb.getCntTotal() - sb.getCntNot());
 		}
-		/////////// 이미지 url 추가하기	///////////
-		TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).build();
+		String imgUrl = stock.getImageUrl();
+
+		TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).imageUrl(imgUrl).build();
 
 		return StockInfoResponse.builder()
 				.price(price)

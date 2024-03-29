@@ -37,4 +37,7 @@ interface AccountRepository extends JpaRepository<Account, Integer> {
 
 	@Query("select a from Account a where a.accountUuid = :uuid and a.typeCode.id= 'AT002' and a.statusCode.id = 'AS002'")
 	Optional<Account> findByAccountUuid(UUID uuid);
+
+	@Query("select a from Account a where a.typeCode.id = 'AT002' and a.statusCode.id = 'AS002' and a.isDeleted = false")
+	List<Account> findAllSavingAccount();
 }

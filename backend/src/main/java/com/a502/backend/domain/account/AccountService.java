@@ -170,4 +170,13 @@ public class AccountService {
 		UUID uuid = UUID.fromString(accountUuid);
 		return accountRepository.findByAccountUuid(uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
 	}
+
+	public List<Account>findAllByASavingAccount(){
+		return accountRepository.findAllSavingAccount();
+	}
+
+	public void updateStatusCode(Account account, Code code){
+		account.updateCode(code);
+		accountRepository.saveAndFlush(account);
+	}
 }

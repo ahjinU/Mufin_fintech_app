@@ -2,6 +2,7 @@ package com.a502.backend.application.controller;
 
 import com.a502.backend.application.entity.RankingDetail;
 import com.a502.backend.application.facade.StockFacade;
+import com.a502.backend.domain.stock.request.StockNameRequest;
 import com.a502.backend.domain.stock.request.StockPriceHistoryRequest;
 import com.a502.backend.domain.stock.request.StockTransactionRequest;
 import com.a502.backend.domain.stock.response.*;
@@ -97,8 +98,8 @@ public class StockController {
 
 	// 주식 상세 정보 조회(1개)
 	@PostMapping("/detail")
-	public ResponseEntity<ApiResponse<StockInfoResponse>> getStockInfo(@RequestParam String name) {
-		StockInfoResponse result = stockFacade.getStockInfo(name);
+	public ResponseEntity<ApiResponse<StockInfoResponse>> getStockInfo(@RequestBody StockNameRequest stockNameRequest) {
+		StockInfoResponse result = stockFacade.getStockInfo(stockNameRequest);
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_GET_ONE_INFO, result));
 	}
 }

@@ -34,69 +34,69 @@ export default function ChatArea() {
 
   const key = process.env.NEXT_PUBLIC_GPT_API_KEY;
 
-  const openai = new OpenAI({
-    apiKey: key,
-    dangerouslyAllowBrowser: true,
-  });
+  // const openai = new OpenAI({
+  //   apiKey: key,
+  //   dangerouslyAllowBrowser: true,
+  // });
 
-  async function chatGPT() {
-    const msg = input && [...messages, { role: 'user', content: input }];
-    const stream = await openai.chat.completions.create(
-      {
-        model: 'gpt-4',
-        messages: msg || messages,
-        stream: true,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_GPT_API_KEY}`,
-        },
-      },
-    );
-    let res: string = '';
-    for await (const chunk of stream) {
-      chunk?.choices[0]?.delta?.content &&
-        (res += chunk?.choices[0]?.delta?.content);
-    }
-    console.log(res);
+  // async function chatGPT() {
+  //   const msg = input && [...messages, { role: 'user', content: input }];
+  //   const stream = await openai.chat.completions.create(
+  //     {
+  //       model: 'gpt-4',
+  //       messages: msg || messages,
+  //       stream: true,
+  //     },
+  //     {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${process.env.NEXT_PUBLIC_GPT_API_KEY}`,
+  //       },
+  //     },
+  //   );
+  //   let res: string = '';
+  //   for await (const chunk of stream) {
+  //     chunk?.choices[0]?.delta?.content &&
+  //       (res += chunk?.choices[0]?.delta?.content);
+  //   }
+  //   console.log(res);
 
-    msg
-      ? setMessages([...msg, { role: 'assistant', content: res }])
-      : setMessages([...messages, { role: 'assistant', content: res }]);
+  //   msg
+  //     ? setMessages([...msg, { role: 'assistant', content: res }])
+  //     : setMessages([...messages, { role: 'assistant', content: res }]);
 
-    window.scrollTo(0, document.body.scrollHeight);
-  }
+  //   window.scrollTo(0, document.body.scrollHeight);
+  // }
 
-  useEffect(() => {
-    chatGPT();
-  }, []);
+  // useEffect(() => {
+  //   chatGPT();
+  // }, []);
 
-  useEffect(() => {
-    if (messages.length == 8) {
-      messages.map((msg, index) => {
-        if (index > 1) {
-          string += `${msg.content}!#@#!`;
-        }
-      });
-      addConversation(string);
-    }
-  }, [messages.length]);
+  // useEffect(() => {
+  //   if (messages.length == 8) {
+  //     messages.map((msg, index) => {
+  //       if (index > 1) {
+  //         string += `${msg.content}!#@#!`;
+  //       }
+  //     });
+  //     addConversation(string);
+  //   }
+  // }, [messages.length]);
 
-  useEffect(() => {
-    apply.conversation && router.replace('/loan/apply/check');
-  }, [apply, router]);
+  // useEffect(() => {
+  //   apply.conversation && router.replace('/loan/apply/check');
+  // }, [apply, router]);
 
-  const sendMessage = async () => {
-    setMessages([...messages, { role: 'user', content: input }]);
-    await chatGPT();
-    setInput('');
-    window.scrollTo(0, document.body.scrollHeight);
-  };
+  // const sendMessage = async () => {
+  //   setMessages([...messages, { role: 'user', content: input }]);
+  //   await chatGPT();
+  //   setInput('');
+  //   window.scrollTo(0, document.body.scrollHeight);
+  // };
 
   return (
     <div>
-      <div className="flex flex-col gap-[1rem] mb-[1rem]">
+      {/* <div className="flex flex-col gap-[1rem] mb-[1rem]">
         {messages.map((msg, index) => {
           if (msg.role !== 'system' && index > 1) {
             return (
@@ -115,7 +115,7 @@ export default function ChatArea() {
           className="text-custom-purple w-[4rem] cursor-pointer"
           onClick={sendMessage}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

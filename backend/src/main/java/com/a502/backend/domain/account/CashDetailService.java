@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -25,4 +26,12 @@ public class CashDetailService {
 			throw BusinessException.of(ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST);
 		return cashDetailList;
 	}
+
+    public CashDetail findTransaction(UUID transactionUUID) {
+		return  cashDetailRepository.findCashDetailByCashDetailUuid(transactionUUID).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST));
+    }
+
+    public CashDetail save(CashDetail cashDetail) {
+		return cashDetailRepository.save(cashDetail);
+    }
 }

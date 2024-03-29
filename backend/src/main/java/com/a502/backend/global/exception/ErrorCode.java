@@ -19,7 +19,7 @@ public enum ErrorCode {
     API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND(401, "U005", "쿠키가 만료되었습니다."),
     API_ERROR_TEMPORARY_UUID_NOT_EXIST(410, "U006", "존재하지 않는 UUID입니다."),
     API_ERROR_USER_ACCESSTOKEN_EXPIRED(401, "U007", "Access Token이 만료되었습니다."),
-    API_ERROR_USER_DELETE(410, "U008", "탈퇴한 회원입니다."),
+    API_ERROR_USER_DELETE(410, "U007",  "탈퇴한 회원입니다."),
     API_ERROR_USER_NOT_EXIST_MY_KIDS(400, "U009", "등록된 자녀가 없습니다."),
 
 
@@ -47,6 +47,7 @@ public enum ErrorCode {
 
     // Memo
     API_ERROR_MEMO_NOT_EXIST(400, "M001", "존재하지 않는 메모입니다."),
+    API_ERROR_MEMO_NOT_EXIST_CODE(400, "M002", "존재하지 않는 코드 입니다."),
 
     // Receipt
     API_ERROR_NOT_RECEIPT(404, "R001", "영수증 형식과 다릅니다. 사진을 다시 찍어주세요."),

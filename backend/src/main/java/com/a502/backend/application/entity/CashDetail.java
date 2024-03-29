@@ -13,50 +13,60 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "cash_details")
 public class CashDetail extends BaseEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "cash_detail_id")
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cash_detail_id")
+    private int id;
 
-	@Column(name = "trans_at")
-	private LocalDateTime transAt;
+    @Column(name = "trans_at")
+    private LocalDateTime transAt;
 
-	@Column(name = "cash_detail_uuid")
-	private UUID cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
-	@PrePersist
-	public void initUUID() {
-		if (cashDetailUuid == null)
-			cashDetailUuid = UUID.randomUUID();
-	}
+    @Column(name = "usage_name")
+    private String usageName;
 
-	@Column(name = "amount")
-	private int amount;
+    @Column(name = "cash_detail_uuid")
+    private UUID cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
 
-	@ManyToOne
-	@JoinColumn(name = "memo_id")
-	private Memo memo;
+    @PrePersist
+    public void initUUID() {
+        if (cashDetailUuid == null)
+            cashDetailUuid = UUID.randomUUID();
+    }
 
-	@ManyToOne
-	@JoinColumn(name = "receipt_id")
-	private Receipt receipt;
+    @Column(name = "amount")
+    private int amount;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+    @ManyToOne
+    @JoinColumn(name = "memo_id")
+    private Memo memo;
 
-	@ManyToOne
-	@JoinColumn(name = "category_id")
-	private Category category;
+    @ManyToOne
+    @JoinColumn(name = "receipt_id")
+    private Receipt receipt;
 
-	@ManyToOne
-	@JoinColumn(name = "code_id")
-	private Code code;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	@Builder
-	public CashDetail(int amount, User user, Category category, Code code) {
-		this.amount = amount;
-		this.user = user;
-		this.category = category;
-		this.code = code;
-	}
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+
+    @Builder
+    public CashDetail(int amount, User user, Category category, String usageName, LocalDateTime transAt) {
+        this.amount = amount;
+        this.user = user;
+        this.category = category;
+        this.transAt=transAt;
+        this.usageName = usageName;
+    }
+
+    public void updateMemo(Memo memo) {
+        this.memo = memo;
+    }
+
+    public void updateReceipt(Receipt receipt){
+        this.receipt=receipt;
+    }
 }

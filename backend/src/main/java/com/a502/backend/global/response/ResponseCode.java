@@ -27,6 +27,11 @@ public enum ResponseCode {
 
 	// allowance
 	API_SUCCESS_ALLOWANCE_GET_BY_MONTH("AW001", "가계부 정보(1달) 조회에 성공하였습니다."),
+	API_SUCCESS_ALLOWANCE_GET_BY_MONTH_DETAIL("AW002", "가계부 정보(1달) 상세 조회에 성공하였습니다."),
+	API_SUCCESS_ALLOWANCE_GET_BY_DAY("AW003", "가계부 정보(1일) 조회에 성공하였습니다."),
+	API_SUCCESS_ALLOWANCE_GET_BY_DETAIL("AW004", "거래내역 조회에 성공하였습니다."),
+	API_SUCCESS_ALLOWANCE_INSERT_CASH("AW005", "현금 거래내역 추가에 성공하였습니다."),
+	API_SUCCESS_ALLOWANCE_INSERT_MEMO("AW006", "메모 작성에 성공하였습니다."),
 
 	// Stock
 	//receipt

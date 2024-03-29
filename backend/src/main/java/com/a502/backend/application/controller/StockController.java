@@ -34,7 +34,6 @@ public class StockController {
 
 	@PostMapping("/buy")
 	public ResponseEntity<ApiResponse<Void>> stockBuy(@RequestBody StockTransactionRequest request) {
-		// 주식 매수 주문 넣을 때마다 sub/orders/name 으로 데이터 보내주기
 		stockFacade.stockBuy(request);
 		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(request.getName());
 		sendingOperations.convertAndSend("/sub/orders/" + request.getName(), result);
@@ -43,7 +42,6 @@ public class StockController {
 
 	@PostMapping("/sell")
 	public ResponseEntity<ApiResponse<Void>> stockSell(@RequestBody StockTransactionRequest request) {
-		// 주식 매도 주문 넣을 때마다 sub/orders/name 으로 데이터 보내주기
 		stockFacade.stockSell(request);
 		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(request.getName());
 		sendingOperations.convertAndSend("/sub/orders/" + request.getName(), result);
@@ -86,8 +84,8 @@ public class StockController {
 	}
 
 	@GetMapping("/ranking/user")
-	public ResponseEntity<ApiResponse<RankingDetail>> getRanking(@RequestParam(value = "userId") int userId) {
-		RankingDetail result = stockFacade.getRanking(userId);
+	public ResponseEntity<ApiResponse<RankingDetail>> getRanking() {
+		RankingDetail result = stockFacade.getRanking();
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_RANKING_USER, result));
 	}
 

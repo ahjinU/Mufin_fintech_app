@@ -16,7 +16,6 @@ import java.util.Hashtable;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class StockDetailsService {
 	private final StockDetailsRepository stockDetailsRepository;

@@ -14,8 +14,8 @@ interface AgreeBottomSheetProps {
   notice: string;
   conditions: string[];
   isOpen: boolean;
-  handleClickCloseButton?: () => void;
-  handleClickConfirmButton?: () => void;
+  handleClickCloseButton: () => void;
+  handleClickConfirmButton: () => void;
 }
 
 export default function AgreeBottomSheet({
@@ -23,6 +23,8 @@ export default function AgreeBottomSheet({
   notice,
   conditions,
   isOpen,
+  handleClickCloseButton,
+  handleClickConfirmButton,
   ...props
 }: AgreeBottomSheetProps) {
   const container = {
@@ -59,7 +61,10 @@ export default function AgreeBottomSheet({
       className={`fixed bottom-0 left-0 right-0 w-full min-w-[36rem] min-h-[30rem] rounded-t-[1.6rem] bg-custom-white text-custom-black p-[3rem] flex flex-col justify-between`}
       {...props}
     >
-      <XMarkIcon className="w-[2.4rem] h-[2.4rem] absolute top-[2rem] right-[2rem] cursor-pointer" />
+      <XMarkIcon
+        className="w-[2.4rem] h-[2.4rem] absolute top-[2rem] right-[2rem] cursor-pointer"
+        onClick={handleClickCloseButton}
+      />
 
       <section className="flex flex-col gap-[0.5rem]">
         <h1 className="custom-bold-text">{title}</h1>
@@ -107,6 +112,7 @@ export default function AgreeBottomSheet({
       <Button
         mode={checkIsAllTrue(isCheckedArray) ? 'ACTIVE' : 'NON_ACTIVE'}
         label="확인"
+        onClick={handleClickConfirmButton}
       />
     </motion.section>
   );

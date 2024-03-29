@@ -30,6 +30,7 @@ import SubGuideText from './SubGuideText/SubGuideText';
 import MoneyShow from './MoneyShow/MoneyShow';
 import Ranking from './Ranking/Ranking';
 import InfoShow from './InfoShow/InfoShow';
+import AlertConfirm from './AlertConfirmModal/AlertConfirmModal';
 import PlusButton from './PlusButton/PlusButton';
 import PayPasswordBox from './PayPasswordBox/PayPasswordBox';
 
@@ -66,6 +67,7 @@ export {
   MoneyShow,
   Ranking,
   InfoShow,
+  AlertConfirm,
   PlusButton,
   PayPasswordBox,
 };

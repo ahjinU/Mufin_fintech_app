@@ -9,9 +9,16 @@ interface SelectProps {
   min: number;
   max: number;
   initialValue?: number;
+  setValue: (value: number) => void;
 }
 
-export default function Select({ mode, min, max, initialValue }: SelectProps) {
+export default function Select({
+  mode,
+  min,
+  max,
+  initialValue,
+  setValue,
+}: SelectProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<number>(initialValue || 1);
 
@@ -91,11 +98,13 @@ export default function Select({ mode, min, max, initialValue }: SelectProps) {
               return (
                 <li
                   onClick={() => {
+                    setValue(number);
                     setSelected(number);
                     setIsOpen(false);
                   }}
                   key={`option-${index}`}
-                  className="p-[0.5rem] pl-[1rem] rounded-[0.8rem] custom-light-text hover:bg-custom-light-purple"
+                  className="p-[0.5rem] pl-[1rem] rounded-[0.8rem] 
+                  custom-light-text hover:bg-custom-light-purple"
                 >
                   {number}
                 </li>

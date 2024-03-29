@@ -1,7 +1,7 @@
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL + '/api/user/signup';
+const SIGNUP_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/signup`
 
 export const checkTelephoneParent = async (telephone: string) => {
-  const res = await fetch(`${API_URL}/parent/check/telephone`, {
+  const res = await fetch(`${SIGNUP_URL}/parent/check/telephone`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ export const checkTelephoneChild = async (
   AccessToken: string,
   telephone: string,
 ) => {
-  const res = await fetch(`${API_URL}/child/check/telephone`, {
+  const res = await fetch(`${SIGNUP_URL}/child/check/telephone`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ export const checkTelephoneChild = async (
 };
 
 export const checkEmailParent = async (email: string) => {
-  const res = await fetch(`${API_URL}/parent/check/email`, {
+  const res = await fetch(`${SIGNUP_URL}/parent/check/email`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const checkEmailParent = async (email: string) => {
 };
 
 export const checkEmailChild = async (AccessToken: string, email: string) => {
-  const res = await fetch(`${API_URL}/child/check/email`, {
+  const res = await fetch(`${SIGNUP_URL}/child/check/email`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export const signUpParent = async (
   address2: string,
   password: string,
 ) => {
-  const res = await fetch(`${API_URL}/parent`, {
+  const res = await fetch(`${SIGNUP_URL}/parent`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const signUpChild = async (
   address2: string,
   password: string,
 ) => {
-  const res = await fetch(`${API_URL}/child`, {
+  const res = await fetch(`${SIGNUP_URL}/child`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

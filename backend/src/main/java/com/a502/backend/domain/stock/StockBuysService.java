@@ -40,7 +40,7 @@ public class StockBuysService {
 //	@Transactional
 //	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public List<StockBuy> findTransactionList(Stock stock, int price) {
-		return stockBuysRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price).orElse(null);
+		return stockBuysRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price);
 	}
 
 	@Transactional

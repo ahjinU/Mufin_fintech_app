@@ -76,7 +76,7 @@ public class StockFacade {
 	synchronized void transSell(Stock stock, int price, int cnt_total, StockBuy stockBuy, Code code){
 		List<StockSell> list = stockSellsService.findTransactionList(stock, price);
 
-		if (list == null) return;
+		if (list.isEmpty()) return;
 		for (StockSell stockSell : list) {
 			if (cnt_total == 0) break;
 
@@ -117,7 +117,7 @@ public class StockFacade {
 	synchronized void transBuy(Stock stock, int price, int cnt_total, StockSell stockSell, Code code){
 		List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
 
-		if (list == null) return;
+		if (list.isEmpty()) return;
 		for (StockBuy stockBuy : list) {
 			if (cnt_total == 0) break;
 

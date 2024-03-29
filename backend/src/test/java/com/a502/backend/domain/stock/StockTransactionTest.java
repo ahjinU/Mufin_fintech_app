@@ -234,7 +234,7 @@
 //    synchronized void transSell(Stock stock, int price, int cnt_total, StockBuy stockBuy, Code code){
 //        List<StockSell> list = stockSellsService.findTransactionList(stock, price);
 //
-//        if (list == null) return;
+//        if (list.isEmpty()) return;
 //        for (StockSell stockSell : list) {
 //            log.info("StockSell list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockSell.getCntNot(), stockSell.getCntTotal(), stockSell.getPrice(), cnt_total);
 //            if (cnt_total == 0) break;
@@ -279,7 +279,7 @@
 //    synchronized void transBuy(Stock stock, int price, int cnt_total, StockSell stockSell, Code code){
 //        List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
 //
-//        if (list == null) return;
+//        if (list.isEmpty()) return;
 //        for (StockBuy stockBuy : list) {
 //            log.info("StockBuy list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum_{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
 //            if (cnt_total == 0) break;

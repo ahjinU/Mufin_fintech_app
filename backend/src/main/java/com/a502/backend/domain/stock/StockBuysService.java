@@ -58,10 +58,7 @@ public class StockBuysService {
 
 	public List<StockBuy> getTodayTransactions(Stock stock, LocalDateTime localDateTime) {
 		List<StockBuy> stockBuyList = stockBuysRepository.findAllByStockAndCreatedAtGreaterThan(stock, localDateTime);
-		if(stockBuyList.isEmpty())
-			throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_NOT_EXIST);
 		return stockBuyList;
-
 	}
 
 	public List<StockBuy> getWaitingStockOrders(User user, Code code, LocalDateTime localDateTime, int cnt){

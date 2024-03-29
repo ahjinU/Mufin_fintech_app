@@ -22,10 +22,10 @@ interface StockBuysRepository extends JpaRepository<StockBuy, Integer> {
 	List<StockBuy> findAllByStockAndPriceOrderByCreatedAtAsc(Stock stock, int price);
 
 	// 주식별 설정 기간 이후 총 매수 주문 조회
-	Optional<List<StockBuy>> findAllByStockAndCreatedAtGreaterThan(Stock stock, LocalDateTime localDateTime);
+	List<StockBuy> findAllByStockAndCreatedAtGreaterThan(Stock stock, LocalDateTime localDateTime);
 
 	// 미체결 주식 주문 조회
-	Optional<List<StockBuy>> findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(User user, Code code, LocalDateTime localDateTime, int cnt);
+	List<StockBuy> findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(User user, Code code, LocalDateTime localDateTime, int cnt);
 
 //	@Lock(LockModeType.PESSIMISTIC_WRITE)
 //	@Transactional

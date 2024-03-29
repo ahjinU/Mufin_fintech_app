@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -65,6 +66,21 @@ public class StockHoldingsService {
         return stockHoldingsRepository.findAllByUser(user).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_STOCK_HOLDING_NOT_EXIST));
     }
 
+    @Transactional
+    public void initStockHolding(User user, List<Stock> stocks,HashMap<String, Integer> stockStartPriceList) {
+
+        stocks.forEach(stock -> {
+            StockHolding holding = StockHolding.builder()
+                    .stock(stock)
+                    .user(user)
+                    .cnt(10)
+                    .total(stockStartPriceList.get(stock.getName())*10)
+                    .build();
+
+            stockHoldingsRepository.save(holding);
+
+        });
+    }
 
     public void save(StockHolding stockHolding) {
         stockHoldingsRepository.save(stockHolding);

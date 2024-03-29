@@ -27,12 +27,8 @@ public class Memo extends BaseEntity {
 	@Column(name = "content")
 	private String content;
 
-	@Column(name = "category")
-	private String category;
-
 	@Builder
-	public Memo(String content, String category) {
+	public Memo(String content) {
 		this.content = content;
-		this.category = category;
 	}
 }

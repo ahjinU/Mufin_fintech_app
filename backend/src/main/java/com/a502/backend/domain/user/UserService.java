@@ -135,10 +135,6 @@ public class UserService implements UserDetailsService{
 		userRepository.save(user);
     }
 
-	public User findByUserUuid(String userUuid) {
-		return userRepository.findByUserUuid(userUuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
-	}
-
 
 	public User convertToUserEntity(SignUpDto signUpDto, TemporaryUser temporaryUser, User parent) {
 

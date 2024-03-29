@@ -10,7 +10,7 @@ type dataType = {
 const useFetch = () => {
   const { data: session } = useSession();
 
-  const usePostFetch = async (data: dataType) => {
+  const postFetch = async (data: dataType) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api${data.api}`,
       {
@@ -25,7 +25,7 @@ const useFetch = () => {
     return res.json();
   };
 
-  const useGetFetch = async (data: dataType) => {
+  const getFetch = async (data: dataType) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api${data.api}`,
       {
@@ -39,7 +39,7 @@ const useFetch = () => {
     return res.json();
   };
 
-  return { usePostFetch, useGetFetch };
+  return { postFetch, getFetch };
 };
 
 export default useFetch;

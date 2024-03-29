@@ -16,9 +16,10 @@ public class MyStockList {
 	private int priceCur;
 	private int totalPriceAvg;
 	private int totalPriceCur;
+	private String imageUrl;
 
 	@Builder
-	public MyStockList(String name, int cnt, int income, double incomeRatio, int priceAvg, int priceCur, int totalPriceAvg, int totalPriceCur) {
+	public MyStockList(String name, int cnt, int income, double incomeRatio, int priceAvg, int priceCur, int totalPriceAvg, int totalPriceCur, String imageUrl) {
 		this.name = name;
 		this.cnt = cnt;
 		this.income = income;
@@ -27,5 +28,6 @@ public class MyStockList {
 		this.priceCur = priceCur;
 		this.totalPriceAvg = totalPriceAvg;
 		this.totalPriceCur = totalPriceCur;
+		this.imageUrl = imageUrl;
 	}
 }

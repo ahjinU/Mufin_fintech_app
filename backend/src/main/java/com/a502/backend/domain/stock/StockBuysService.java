@@ -57,11 +57,18 @@ public class StockBuysService {
 	}
 
 	public List<StockBuy> getTodayTransactions(Stock stock, LocalDateTime localDateTime) {
-		return stockBuysRepository.findAllByStockAndCreatedAtGreaterThan(stock, localDateTime).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_NOT_EXIST));
+		List<StockBuy> stockBuyList = stockBuysRepository.findAllByStockAndCreatedAtGreaterThan(stock, localDateTime);
+		if(stockBuyList.isEmpty())
+			throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_NOT_EXIST);
+		return stockBuyList;
+
 	}
 
 	public List<StockBuy> getWaitingStockOrders(User user, Code code, LocalDateTime localDateTime, int cnt){
-		return stockBuysRepository.findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(user, code, localDateTime, cnt).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_NOT_EXIST));
+		List<StockBuy> stockBuyList = stockBuysRepository.findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(user, code, localDateTime, cnt);
+		if(stockBuyList.isEmpty())
+			throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_NOT_EXIST);
+		return stockBuyList;
 	}
 
 	@Transactional

@@ -20,7 +20,7 @@ export default function ComplexInput({
 }: ComplexInput) {
   return (
     <div
-      className={`min-w-[16rem] ${width || 'w-full'} ${height || 'h-[10rem]'}`}
+      className={`min-w-[16rem] ${width || 'w-full'} ${height || 'h-full'}`}
       {...props}
     >
       <label className="custom-semibold-text text-custom-black">{label}</label>

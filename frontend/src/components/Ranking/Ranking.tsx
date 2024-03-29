@@ -16,7 +16,7 @@ export default function Ranking({ mode, rank, name, chocochip }: RankingProps) {
 
   switch (mode) {
     case 'HIGHLIGHT':
-      backgroundClass = 'w-full h-[3.6rem] px-6 rounded-[2rem] bg-custom-white';
+      backgroundClass = 'w-full h-[4rem] px-6 rounded-[2rem] bg-custom-white';
       nameClass = 'custom-semibold-text text-custom-black';
       chocochipClass = `custom-medium-text ${
         topRank ? 'text-custom-purple' : 'text-custom-black'
@@ -45,7 +45,9 @@ export default function Ranking({ mode, rank, name, chocochip }: RankingProps) {
   }
 
   return (
-    <div className={`flex justify-between items-center ${backgroundClass}`}>
+    <div
+      className={`h-[2.5rem] flex justify-between items-center ${backgroundClass}`}
+    >
       <div className="flex items-center gap-2">
         {topRank ? (
           <Image
@@ -61,7 +63,7 @@ export default function Ranking({ mode, rank, name, chocochip }: RankingProps) {
         <p className={nameClass}>{name}</p>
       </div>
       <div className="flex items-center">
-        <p className={chocochipClass}>{chocochip}초코칩</p>
+        <p className={chocochipClass}>{chocochip} 초코칩</p>
         {topRank ? (
           <SparklesIcon className="size-[2rem] fill-custom-light-purple" />
         ) : null}

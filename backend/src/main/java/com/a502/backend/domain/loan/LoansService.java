@@ -50,4 +50,13 @@ public class LoansService {
 			throw BusinessException.of(ErrorCode.API_ERROR_LOAN_REQUESTED_NOT_EXIST_FOR_PARENTS);
 		return result;
 	}
+
+	public List<Loan> findAllLoansInProgress(){
+		return loansRepository.findAllLoansInProgress();
+	}
+
+	public void updateOverdueCnt(Loan loan){
+		loan.updateOverdueCnt(loan.getOverdueCnt() + 1);
+		loansRepository.saveAndFlush(loan);
+	}
 }

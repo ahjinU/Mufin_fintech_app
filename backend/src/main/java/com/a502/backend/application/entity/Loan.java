@@ -110,4 +110,8 @@ public class Loan extends BaseEntity {
 	public void refuseLoan(Code code) {
 		this.code = code;
 	}
+
+	public void updateOverdueCnt(int cnt){
+		this.overdueCnt = cnt;
+	}
 }

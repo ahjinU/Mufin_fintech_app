@@ -4,7 +4,6 @@ import com.a502.backend.application.entity.Account;
 import com.a502.backend.application.entity.Code;
 import com.a502.backend.application.entity.Savings;
 import com.a502.backend.application.entity.User;
-import com.a502.backend.domain.account.dto.DepositWithdrawalAccountDto;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.user.UserRepository;
 import com.a502.backend.domain.user.UserService;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -74,14 +74,14 @@ public class AccountService {
 		Account createdAccount = saveAccount(account);
 	}
 
-	public void validCheckAccountIsCreated(User user){
-		if (accountRepository.existsByUserAndTypeCode(user, codeService.findTypeCode("입출금"))){
+	public void validCheckAccountIsCreated(User user) {
+		if (accountRepository.existsByUserAndTypeCode(user, codeService.findTypeCode("입출금"))) {
 			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_IS_ALREADY_EXIST);
 		}
 	}
 
 	// 적금 계좌 생성 메소드
-	public Account createSavingsAccount(Savings savings, int cycle, int date, int ammount, String password) {
+	public Account createSavingsAccount(Savings savings, int cycle, int date, int amount, String password) {
 
 		User user = userService.userFindByEmail();
 
@@ -89,7 +89,7 @@ public class AccountService {
 
 		String accountNumber = generateUniqueAccountNumber(true);
 
-		Code typeCode = codeService.findTypeCode("적금");
+		Code typeCode = codeService.findTypeCode("적금계좌");
 		Code statusCode = codeService.findTypeCode("정상");
 
 
@@ -102,8 +102,9 @@ public class AccountService {
 				.statusCode(statusCode)
 				.interestAmount(0)
 				.paymentCycle(cycle)
-				.paymentAmount(ammount)
+				.paymentAmount(amount)
 				.paymentDate(date)
+				.savings(savings)
 				.build();
 
 		Account createdAccount = accountRepository.save(account);
@@ -150,7 +151,23 @@ public class AccountService {
 		Account createdAccount = saveAccount(account);
 	}
 
-	public Account findByUser(User user){
-		return accountRepository.findByUser(user).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
+	public Account findByUser(User user) {
+		return accountRepository.findByUser(user).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
+	}
+
+	public List<Account> findAllSavingsBySaving(Savings savings) {
+		return accountRepository.findAllBySavings(savings);
+	}
+
+	public List<Account> findAllSavingsByChild(User child){
+		List<Account> accountList = accountRepository.findAllSavingsByChild(child);
+		for(Account a : accountList)
+			System.out.println(a.getAccountNumber());
+		return accountList;
+	}
+
+	public Account findByAccountUuid(String accountUuid){
+		UUID uuid = UUID.fromString(accountUuid);
+		return accountRepository.findByAccountUuid(uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
 	}
 }

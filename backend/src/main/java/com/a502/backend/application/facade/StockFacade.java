@@ -328,7 +328,7 @@ public class StockFacade {
 			// 손익
 			int income = totalPriceCur - totalPriceAvg;
 			// 손익률
-			double incomeRatio = Math.round(((float) income / priceCur) * 10000) / 100.0;
+			double incomeRatio = Math.round(((float) income / totalPriceAvg) * 10000) / 100.0;
 			totalIncome += income;
 			totalPrice += totalPriceCur;
 			myStockLists.add(MyStockList.builder().name(name).cnt(cnt).income(income).incomeRatio(incomeRatio).priceAvg(priceAvg).priceCur(priceCur).totalPriceAvg(totalPriceAvg).totalPriceCur(totalPriceCur).build());

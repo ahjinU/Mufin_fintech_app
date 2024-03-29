@@ -19,7 +19,8 @@ public enum ErrorCode {
     API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND(401, "U005", "쿠키가 만료되었습니다."),
     API_ERROR_TEMPORARY_UUID_NOT_EXIST(410, "U006", "존재하지 않는 UUID입니다."),
     API_ERROR_USER_ACCESSTOKEN_EXPIRED(401, "U007", "Access Token이 만료되었습니다."),
-    API_ERROR_USER_DELETE(410, "U007", "탈퇴한 회원입니다."),
+    API_ERROR_USER_DELETE(410, "U008", "탈퇴한 회원입니다."),
+    API_ERROR_USER_NOT_EXIST_MY_KIDS(400, "U009", "등록된 자녀가 없습니다."),
 
 
 
@@ -101,7 +102,9 @@ public enum ErrorCode {
     API_ERROR_LOAN_REFUSAL_NOT_EXIST(400, "LR01", "존재하지 않는 대출 거절입니다."),
 
     // Saving
-    API_ERROR_SAVING_NOT_EXIST(400, "SV01", "존재하지 않는 적금 상품입니다."),
+    API_ERROR_SAVINGS_NOT_EXIST(400, "SV01", "존재하지 않는 적금 상품입니다."),
+    API_ERROR_SAVINGS_DELETE(400, "SV02", "해당 적금 상품에 가입되어 있는 계좌가 존재합니다."),
+    API_ERROR_SAVINGS_NOT_EXIST_MY_CHILD(400,"SV03", "적금에 가입한 자녀가 없습니다."),
 
     // Ranking
     API_ERROR_RANKING_LIST_FAIL(400, "R001", "랭킹 정보를 불러오는데 실패했습니다."),

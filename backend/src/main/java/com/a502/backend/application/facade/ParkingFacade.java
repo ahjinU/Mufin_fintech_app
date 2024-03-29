@@ -1,6 +1,8 @@
 package com.a502.backend.application.facade;
 
-import com.a502.backend.application.entity.*;
+import com.a502.backend.application.entity.Parking;
+import com.a502.backend.application.entity.ParkingDetail;
+import com.a502.backend.application.entity.User;
 import com.a502.backend.domain.parking.ParkingDetailsService;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.parking.response.MyParkingInfoResponse;
@@ -15,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -50,8 +51,7 @@ public class ParkingFacade {
 			if (type.equals("이자")) {
 				// 파킹통장 이자율
 				ratio = pd.getRatio();
-				System.out.println(ratio);
-			} else {
+			} else if (type.equals("매수") || type.equals("매도")) {
 				// 체결 수
 				cnt = pd.getCnt();
 				// 가격

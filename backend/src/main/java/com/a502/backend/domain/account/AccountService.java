@@ -170,4 +170,9 @@ public class AccountService {
 		UUID uuid = UUID.fromString(accountUuid);
 		return accountRepository.findByAccountUuid(uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
 	}
+
+	public Account findExpiredSavingsAccountByUuid(String accountUuid){
+		UUID uuid = UUID.fromString(accountUuid);
+		return accountRepository.findExpiredSavingsAccountByUuid(uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
+	}
 }

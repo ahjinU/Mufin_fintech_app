@@ -2,10 +2,7 @@ package com.a502.backend.application.controller;
 
 import com.a502.backend.application.facade.SavingFacade;
 import com.a502.backend.domain.savings.Request.*;
-import com.a502.backend.domain.savings.Response.AllSavingsProductResponse;
-import com.a502.backend.domain.savings.Response.MyAllSavingsResponse;
-import com.a502.backend.domain.savings.Response.MyChildSavingsListResponse;
-import com.a502.backend.domain.savings.Response.MySavings;
+import com.a502.backend.domain.savings.Response.*;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +34,12 @@ public class SavingsController {
 	public ResponseEntity<ApiResponse<AllSavingsProductResponse>> getAllSavingsProduct() {
 		AllSavingsProductResponse result = savingFacade.getAllSavingProduct();
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_SAVINGS_GET_ALL, result));
+	}
+
+	@PostMapping("/search/detail")
+	public ResponseEntity<ApiResponse<SavingsDetail>> getSavingsProduct(@RequestBody SavingsUuidRequest savingsUuidRequest){
+		SavingsDetail result = savingFacade.getSavingsProduct(savingsUuidRequest);
+		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_SAVINGS_GET_DETAIL, result));
 	}
 
 	@PostMapping("/join")

@@ -41,9 +41,10 @@ public class StockHoldingsService {
         StockHolding stockHolding = findById(user, stock);
         int stockHoldingCnt = stockHolding.getCnt();
         int stockHoldingTotal = stockHolding.getTotal();
+        int unitPrice = stockHoldingTotal / stockHoldingCnt;
 
         stockHolding.setCnt(stockHoldingCnt - cnt);
-        stockHolding.setTotal(stockHoldingTotal - cnt * price);
+        stockHolding.setTotal(unitPrice * (stockHoldingCnt - cnt));
         stockHoldingsRepository.saveAndFlush(stockHolding);
     }
 
@@ -52,9 +53,10 @@ public class StockHoldingsService {
         StockHolding stockHolding = findById(user, stock);
         int stockHoldingCnt = stockHolding.getCnt();
         int stockHoldingTotal = stockHolding.getTotal();
+        int unitPrice = stockHoldingTotal / stockHoldingCnt;
 
         stockHolding.setCnt(stockHoldingCnt + cnt);
-        stockHolding.setTotal(stockHoldingTotal + cnt * price);
+        stockHolding.setTotal(unitPrice * (stockHoldingCnt + cnt));
         stockHoldingsRepository.saveAndFlush(stockHolding);
     }
 

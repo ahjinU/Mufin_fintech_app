@@ -52,10 +52,8 @@ public class StockTransactionTest {
     CodeService codeService;
     @Autowired
     UserService userService;
-
     @Autowired
     StockBuysRepository stockBuysRepository;
-
     @Autowired
     StockSellsRepository stockSellsRepository;
 
@@ -170,10 +168,6 @@ public class StockTransactionTest {
         for(User user : userList){
             Parking parking = parkingService.findByUser(user);
             ParkingDetail detail = parkingDetailsService.getLastDetail(parking);
-//            log.info("parkingBalance: {}",parking.getBalance());
-//            log.info("detailBalance: {}",detail.getBalance());
-//            log.info("parkingBalanceID: {}",parking.getId());
-//            log.info("detailBalanceID: {}",detail.getParking().getId());
             if (parking.getBalance() != detail.getBalance())
                 return false;
         }
@@ -231,24 +225,8 @@ public class StockTransactionTest {
 
         StockBuy stockBuy = stockBuysService.save(user, stock, price, cnt_total, code);
         transSell(stock, price, cnt_total, stockBuy, code);
-//        List<StockSell> list = stockSellsService.findTransactionList(stock, price);
-//
-//        if (list == null) return;
-//        for (StockSell stockSell : list) {
-//            log.info("StockSell list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockSell.getCntNot(), stockSell.getCntTotal(), stockSell.getPrice(), cnt_total);
-//            if (cnt_total == 0) break;
-//            int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
-//
-//            stockSellsService.stockSell(stockSell, transCnt, code);
-//            stockBuysService.stockBuy(stockBuy, transCnt, code);
-//
-//            cnt_total -= transCnt;
-////            cnt_total -= transaction(stockBuy, stockSell);
-//            log.info("StockSell list 값 검사 after : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockSell.getCntNot(), stockSell.getCntTotal(), stockSell.getPrice(), cnt_total);
-//
-//        }
 
-//        stockDetailsService.updateStockDetail(stock, price);
+        stockDetailsService.updateStockDetail(stock, price);
     }
 
     @Transactional
@@ -260,12 +238,7 @@ public class StockTransactionTest {
         for (StockSell stockSell : list) {
             log.info("StockSell list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockSell.getCntNot(), stockSell.getCntTotal(), stockSell.getPrice(), cnt_total);
             if (cnt_total == 0) break;
-//            int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
-//
-//            stockSellsService.stockSell(stockSell, transCnt, code);
-//            stockBuysService.stockBuy(stockBuy, transCnt, code);
-//
-//            cnt_total -= transCnt;
+
             cnt_total -= transaction(stockBuy, stockSell);
             log.info("StockSell list 값 검사 after : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum{}", stockSell.getCntNot(), stockSell.getCntTotal(), stockSell.getPrice(), cnt_total);
 
@@ -297,25 +270,7 @@ public class StockTransactionTest {
         Code code = codeService.findByName("거래중");
         StockSell stockSell = stockSellsService.save(user, stock, price, cnt_total, code);
         transBuy(stock, price, cnt_total, stockSell, code);
-//        List<StockBuy> list = stockBuysService.findTransactionList(stock, price);
-//
-//        if (list == null) return;
-//        for (StockBuy stockBuy : list) {
-//            log.info("StockBuy list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum_{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
-//            if (cnt_total == 0) break;
-//
-//            int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
-//
-//            stockSellsService.stockSell(stockSell, transCnt, code);
-//            stockBuysService.stockBuy(stockBuy, transCnt, code);
-//
-//            cnt_total -= transCnt;
-////            cnt_total -= transaction(stockBuy, stockSell);
-//            log.info("StockBuy list 값 검사 after : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum_{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
-//
-//        }
-
-//        stockDetailsService.updateStockDetail(stock, price);
+        stockDetailsService.updateStockDetail(stock, price);
     }
 
 
@@ -329,12 +284,6 @@ public class StockTransactionTest {
             log.info("StockBuy list 값 검사 before : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum_{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
             if (cnt_total == 0) break;
 
-//            int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
-//
-//            stockSellsService.stockSell(stockSell, transCnt, code);
-//            stockBuysService.stockBuy(stockBuy, transCnt, code);
-//
-//            cnt_total -= transCnt;
             cnt_total -= transaction(stockBuy, stockSell);
             log.info("StockBuy list 값 검사 after : cntNot_{} cntTotal_{} getPrice_{} curTransactionNum_{}", stockBuy.getCntNot(), stockBuy.getCntTotal(), stockBuy.getPrice(), cnt_total);
 
@@ -359,26 +308,20 @@ public class StockTransactionTest {
     public int transaction(StockBuy stockBuy, StockSell stockSell) {
         Code code = codeService.findByName("완료");
 
-        log.info("stockBuy : {}" , stockBuy.getCntNot());
-        log.info("stockSell : {}" , stockSell.getCntNot());
-//        StockBuy stockBuy1 = stockBuysService.findById(stockBuy.getId());
-//        StockSell stockSell1 = stockSellsService.findById(stockSell.getId());
         int transCnt = Math.min(stockBuy.getCntNot(), stockSell.getCntNot());
-//        log.info("stockBuy1 : {}" , stockBuy1.getCntNot());
-//        log.info("stockSell1 : {}" , stockSell1.getCntNot());
+        if (transCnt == 0) return 0;
 
+        ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt, codeService.findByName("매도"));
+        ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt, codeService.findByName("매수"));
 
-//        ParkingDetail detailSell = parkingDetailsService.saveStockSell(stockSell, parkingService.findByUser(stockSell.getUser()), transCnt, codeService.findByName("매도"));
-//        ParkingDetail detailBuy = parkingDetailsService.saveStockBuy(stockBuy, parkingService.findByUser(stockBuy.getUser()), transCnt, codeService.findByName("매수"));
-
-//        parkingService.updateParkingBalance(stockSell.getUser(), detailSell.getBalance());
-//        parkingService.updateParkingBalance(stockBuy.getUser(), detailBuy.getBalance());
+        parkingService.updateParkingBalance(stockSell.getUser(), detailSell.getBalance());
+        parkingService.updateParkingBalance(stockBuy.getUser(), detailBuy.getBalance());
 
         stockSellsService.stockSell(stockSell, transCnt, code);
         stockBuysService.stockBuy(stockBuy, transCnt, code);
 
-//        stockHoldingsService.stockSell(stockSell.getUser(), stockSell.getStock(), transCnt, stockSell.getPrice());
-//        stockHoldingsService.stockBuy(stockBuy.getUser(), stockBuy.getStock(), transCnt, stockBuy.getPrice());
+        stockHoldingsService.stockSell(stockSell.getUser(), stockSell.getStock(), transCnt, stockSell.getPrice());
+        stockHoldingsService.stockBuy(stockBuy.getUser(), stockBuy.getStock(), transCnt, stockBuy.getPrice());
         log.info("transCnt : {}", transCnt);
         return transCnt;
     }

@@ -60,11 +60,11 @@ public class InitFacade {
         codeService.save("AS004","정지");
         codeService.save("AS001","만기");
         codeService.save("AT001","입출금");
-        codeService.save("AT002","적금");
+        codeService.save("AT002","적금계좌");
         codeService.save("CD001","지출");
         codeService.save("CD002","수입");
         codeService.save("ADT001","대출");
-        codeService.save("ADT002","적금");
+        codeService.save("ADT002","적금이체");
         codeService.save("ADT003","결제");
         codeService.save("ADT004","이체");
         codeService.save("ADT005","용돈");

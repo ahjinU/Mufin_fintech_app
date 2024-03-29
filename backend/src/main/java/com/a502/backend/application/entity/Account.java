@@ -2,12 +2,12 @@ package com.a502.backend.application.entity;
 
 import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @Getter
@@ -21,54 +21,37 @@ public class Account extends BaseEntity {
 
 	@Column(name = "account_uuid")
 	private UUID accountUuid;
-	@PrePersist
-	public void initUUID() {
-		if (accountUuid == null)
-			accountUuid = UUID.randomUUID();
-	}
-
 	@Column(name = "account_number")
 	private String accountNumber;
-
 	@Column(name = "balance")
 	private int balance;
-
 	@Column(name = "interestAmount")
 	private int interestAmount; //이자수령액
-
 	@Column(name = "payment_amount")
 	private int paymentAmount;
-
 	@Column(name = "payment_date")
 	private int paymentDate;
-
 	@Column(name = "payment_cycle")
 	private int paymentCycle;
-
 	@Column(name = "password")
 	private String password;
-
 	@Column(name = "incorrect_cnt")
 	private int incorrectCount;
-
 	@ManyToOne
 	@JoinColumn(name = "saving_id")
 	private Savings savings;
-
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-
 	@ManyToOne
 	@JoinColumn(name = "status_code_id")
 	private Code statusCode;
-
 	@ManyToOne
 	@JoinColumn(name = "type_code_id")
 	private Code typeCode;
 
 	@Builder
-	public Account(String accountNumber, int balance, int interestAmount, int paymentAmount, int paymentDate, int paymentCycle, String password, int incorrectCount, User user, Code statusCode, Code typeCode) {
+	public Account(String accountNumber, int balance, int interestAmount, int paymentAmount, int paymentDate, int paymentCycle, String password, int incorrectCount, User user, Code statusCode, Code typeCode, Savings savings) {
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.interestAmount = interestAmount;
@@ -80,18 +63,35 @@ public class Account extends BaseEntity {
 		this.user = user;
 		this.statusCode = statusCode;
 		this.typeCode = typeCode;
+		this.savings = savings;
 	}
 
-	public void updateAccount(int balance){
+	@PrePersist
+	public void initUUID() {
+		if (accountUuid == null)
+			accountUuid = UUID.randomUUID();
+	}
+
+	public void updateAccount(int balance) {
 		this.balance = balance;
 	}
 
-	public void updateCode(Code code){
+	public void updateCode(Code code) {
 		this.statusCode = code;
 	}
 
-	public int updateIncorectCnt(int cnt){
+	public int updateIncorectCnt(int cnt) {
 		return this.incorrectCount = cnt;
 	}
 
+	public void depositSavings(int cnt, int amount) {
+		this.paymentCycle += cnt;
+		this.balance += amount;
+	}
+
+	public void cancelSavings(Code statusCode) {
+		this.statusCode = statusCode;
+		this.balance = 0;
+		this.setDeleted(true);
+	}
 }

@@ -21,6 +21,7 @@ public class SchedulerFacade {
     private final WeatherService weatherService;
     private final StockDetailsService stockDetailsService;
     private final StocksService stocksService;
+    private final StockFacade stockFacade;
 
 //    @Scheduled(cron = "${schedule.cron.test}")
 //    @Scheduled(cron = "${schedule.cron.start}")
@@ -31,6 +32,13 @@ public class SchedulerFacade {
         } catch (Exception e) {
             log.info("* 비상이다 비상사태! 공습경보! Message: {}", e.getMessage());
         }
+    }
+
+
+//    @Scheduled(cron = "${schedule.cron.test}")
+    public void calRank(){
+        log.info("start cal Rank()");
+        stockFacade.makeRankList();
     }
 
 

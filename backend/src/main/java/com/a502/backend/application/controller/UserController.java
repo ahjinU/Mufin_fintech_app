@@ -32,6 +32,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -91,6 +92,12 @@ public class UserController {
 
         System.out.println("[UserController]: /signup/parent/check/email"+email.toString());
 
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            System.out.println(headerName + ": " + request.getHeader(headerName));
+        }
+
         return checkEmailAndRespond(email.getEmail(), request, response);
     }
 
@@ -137,11 +144,14 @@ public class UserController {
     public  Cookie getCookieByName(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         Cookie findCookie = null;
+        if(cookies.length<1)
+            System.out.println("쿠키가 엄서용");
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (name.equals(cookie.getName())) {
                     findCookie=cookie;
+                    System.out.println("쿠키 찾았다 !");
                    return findCookie ;
                 }
             }

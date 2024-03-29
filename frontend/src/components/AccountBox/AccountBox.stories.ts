@@ -20,5 +20,6 @@ type Story = StoryObj<typeof meta>;
 export const Main: Story = {
   args: {
     text: '부모님 먼저 가입한 후 아이도 회원가입할 수 있어요!',
+    money: 12000,
   },
 };

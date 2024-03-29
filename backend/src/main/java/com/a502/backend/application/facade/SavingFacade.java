@@ -92,6 +92,19 @@ public class SavingFacade {
 				.build();
 	}
 
+	public SavingsDetail getSavingsProduct(SavingsUuidRequest savingsUuidRequest) {
+		String savingsUuid = savingsUuidRequest.getSavingsUuid();
+
+		Savings savings = savingsService.findByUuid(savingsUuid);
+		return SavingsDetail.builder()
+				.savingsUuid(savingsUuid)
+				.interest(savings.getInterest())
+				.period(savings.getPeriod())
+				.name(savings.getName())
+				.createdAt(savings.getCreatedAt())
+				.build();
+	}
+
 	@Transactional
 	public void joinSavings(JoinSavingsRequest joinSavingsRequest) {
 		String savingUuid = joinSavingsRequest.getSavingsUuid();
@@ -209,8 +222,71 @@ public class SavingFacade {
 	}
 
 	public void terminateSavings(CancelSavingsRequest cancelSavingsRequest) {
+		User user = userService.userFindByEmail();
+		User parents = user.getParent();
 		String accountUuid = cancelSavingsRequest.getAccountUuid();
-		// 계좌 테이블 업데이트 (삭제 여부, 이자 수령액, ....)
+		Account parentsAccount = accountService.findByUser(parents);
+		Account childAccount = accountService.findByUser(user);
+		Account savingsAccount = accountService.findExpiredSavingsAccountByUuid(accountUuid);
+		int originalAmount = savingsAccount.getBalance();
+		// 이자 수령액 계산하기 (이자 받을 수 있는 금액 제한하기)
+		List<AccountDetail> savingsDetail = accountDetailService.findSavingsAccountDetail(savingsAccount);
+		// 기간 계산해서 이자 계산하기
+		int interest = 0;
+		// 이자율
+		double interestRatio = savingsAccount.getSavings().getInterest();
+		// 오늘 날짜
+		LocalDate today = LocalDate.now();
+		for (AccountDetail ad : savingsDetail) {
+			// 적금 불입 날짜
+			LocalDate depositDate = ad.getCreatedAt().toLocalDate();
+			// 이자 계산 기간(일)
+			int interestPeriod = Period.between(today, depositDate).getDays();
+			// 불입 금액
+			int amount = ad.getAmount();
+			// 이자 계산
+			interest += (int) (amount * (interestPeriod / 365) * (interestRatio / 100));
+		}
+		// 이자 최대 금액
+		int maxLimitInterest = (int) (savingsAccount.getPaymentAmount() * (interestRatio / 100) * ((31 + 59 + 90 + 120 + 151 + 181 + 212 + 243 + 273 + 304 + 334 + 365) / 365));
+
+		if (interest > maxLimitInterest)
+			interest = maxLimitInterest;
+		// 이자 금액만큼 부모님 입출금 계좌에 존재하는지 체크 (없으면 해지 불가, 있으면 해지 가능)
+		if (parentsAccount.getBalance() < interest)
+			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE);
+		// 계좌 테이블(자식,부모) 업데이트 (삭제 여부, 이자 수령액, ....)
+		savingsAccount.terminateSavings(interest, codeService.findStatusCode("해지"));
+		parentsAccount.updateAccount(-interest);
+		childAccount.updateAccount(interest + savingsAccount.getBalance());
+		// 거래 내역 테이블(자식, 부모) 해당 이자 부모님 계좌에서 자식 입출금 계좌로 넣기
+		accountDetailService.save(AccountDetail.builder()
+				.amount(-originalAmount)
+				.balance(0)
+				.counterpartyAccount(childAccount.getAccountNumber())
+				.counterpartyName("적금 만기 해지")
+				.account(childAccount)
+				.accountDetailTypeCode(codeService.findTypeCode("적금이체"))
+				.accountDetailStatusCode(codeService.findStatusCode("거래완료"))
+				.build());
+		accountDetailService.save(AccountDetail.builder()
+				.amount(-interest)
+				.balance(parentsAccount.getBalance())
+				.counterpartyAccount(childAccount.getAccountNumber())
+				.counterpartyName("적금 이자 지급(" + user.getName() + ")")
+				.account(parentsAccount)
+				.accountDetailTypeCode(codeService.findTypeCode("적금이체"))
+				.accountDetailStatusCode(codeService.findStatusCode("거래완료"))
+				.build());
+		accountDetailService.save(AccountDetail.builder()
+				.amount(interest+savingsAccount.getBalance())
+				.balance(childAccount.getBalance())
+				.counterpartyAccount(parentsAccount.getAccountNumber())
+				.counterpartyName("적금 이자")
+				.account(childAccount)
+				.accountDetailTypeCode(codeService.findTypeCode("적금이체"))
+				.accountDetailStatusCode(codeService.findStatusCode("거래완료"))
+				.build());
 	}
 
 	public MyAllSavingsResponse getMyAllSavings() {

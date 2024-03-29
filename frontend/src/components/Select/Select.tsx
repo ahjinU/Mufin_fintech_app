@@ -40,7 +40,7 @@ export default function Select({
       break;
     }
     case 'SAVINGS': {
-      unitString = '일';
+      unitString = '개월';
       break;
     }
     default:
@@ -62,7 +62,7 @@ export default function Select({
       <div className="flex gap-[0.7rem] items-center">
         <button
           onClick={() => !isDisabled && setIsOpen((prev) => !prev)}
-          className={`relative w-[10rem] h-[3.2rem] custom-semibold-text bg-custom-white ${
+          className={`relative w-[10rem] h-[4.4rem] custom-semibold-text bg-custom-white ${
             isOpen ? 'border-custom-purple' : 'border-custom-medium-gray'
           } border-[0.1rem] rounded-[0.8rem] p-[1.5rem] focus:outline-none flex items-center ${
             isOpen ? 'text-custom-black' : 'text-custom-medium-gray'
@@ -92,7 +92,7 @@ export default function Select({
               damping: 40,
               stiffness: 400,
             }}
-            className="w-[10rem] h-[10rem] overflow-y-scroll scrollbar-hide mt-[0.5rem] flex flex-col g-[1rem] bg-custom-white border-custom-medium-gray border-[0.1rem] rounded-[0.8rem] p-[0.5rem] focus:text-custom-black absolute"
+            className="absolute w-[10rem] h-[10rem] overflow-y-scroll scrollbar-hide mt-[0.5rem] flex flex-col g-[1rem] bg-custom-white border-custom-medium-gray border-[0.1rem] rounded-[0.8rem] p-[0.5rem] focus:text-custom-black"
           >
             {numberArr.map((number, index) => {
               return (

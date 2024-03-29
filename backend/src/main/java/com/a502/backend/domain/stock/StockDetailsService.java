@@ -107,12 +107,12 @@ public class StockDetailsService {
 
         switch(weather.getHumidityLevel()){
             case 1:
-                result[1] -= StockCode.STOCK_PRICE_LV2;
-                result[2] += StockCode.STOCK_PRICE_LV3;
+                result[1] -= StockCode.STOCK_PRICE_LV1;
+                result[2] += StockCode.STOCK_PRICE_LV1;
                 break;
             case 2:
                 result[1] -= StockCode.STOCK_PRICE_LV1;
-                result[2] += StockCode.STOCK_PRICE_LV2;
+                result[2] += StockCode.STOCK_PRICE_LV1;
                 break;
             case 3:
                 result[1] += StockCode.STOCK_PRICE_LV3;
@@ -137,8 +137,6 @@ public class StockDetailsService {
         switch(weather.getRainLevel()){
             case 0:
                 result[0] += StockCode.STOCK_PRICE_LV1;
-                result[1] -= StockCode.STOCK_PRICE_LV1;
-                result[2] += StockCode.STOCK_PRICE_LV1;
                 result[3] -= StockCode.STOCK_PRICE_LV1;
                 break;
             case 1:
@@ -146,7 +144,7 @@ public class StockDetailsService {
                 result[3] -= StockCode.STOCK_PRICE_LV3;
                 break;
             case 2:
-                result[1] += StockCode.STOCK_PRICE_LV1;
+                result[1] += StockCode.STOCK_PRICE_LV2;
                 result[3] -= StockCode.STOCK_PRICE_LV1;
                 break;
             case 3:
@@ -158,25 +156,24 @@ public class StockDetailsService {
         switch(weather.getCloudLevel()){
             case 1:
                 result[1] -= StockCode.STOCK_PRICE_LV1;
-                result[2] += StockCode.STOCK_PRICE_LV3;
+                result[2] += StockCode.STOCK_PRICE_LV2;
                 result[3] -= StockCode.STOCK_PRICE_LV3;
                 break;
             case 2:
                 result[1] += StockCode.STOCK_PRICE_LV2;
-                result[2] += StockCode.STOCK_PRICE_LV2;
+                result[2] += StockCode.STOCK_PRICE_LV1;
                 result[3] += StockCode.STOCK_PRICE_LV1;
                 break;
             case 3:
                 result[1] += StockCode.STOCK_PRICE_LV3;
                 result[2] -= StockCode.STOCK_PRICE_LV1;
-                result[3] += StockCode.STOCK_PRICE_LV3;
+                result[3] += StockCode.STOCK_PRICE_LV1;
                 break;
         }
         switch(weather.getSnowLevel()){
             case 0:
                 result[0] += StockCode.STOCK_PRICE_LV1;
                 result[1] -= StockCode.STOCK_PRICE_LV1;
-                result[2] += StockCode.STOCK_PRICE_LV1;
                 result[3] -= StockCode.STOCK_PRICE_LV1;
                 break;
             case 1:

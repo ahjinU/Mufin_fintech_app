@@ -55,7 +55,6 @@ public class KeypadFacade {
         User user = userService.userFindByEmail();
         String password = numberImageService.decodePassword(user.getUserUuid().toString(), request.getPassword());
 
-        log.info("password : {}", password);
         accountService.createDepositWithdrawalAccount(password);
         numberImageService.deleteNumberList(user.getUserUuid().toString());
     }

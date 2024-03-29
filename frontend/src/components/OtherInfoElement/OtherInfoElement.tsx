@@ -8,6 +8,7 @@ interface OtherInfoElementProps {
   rightExplainText?: string;
   rightHighlightText?: string;
   money?: string;
+  handleClick?: () => void;
 }
 
 export default function OtherInfoElement({
@@ -18,9 +19,15 @@ export default function OtherInfoElement({
   rightHighlightText,
   state,
   money,
+  handleClick,
 }: OtherInfoElementProps) {
   return (
-    <section className="w-full flex justify-between items-center">
+    <section
+      className={`w-full flex justify-between items-center ${
+        handleClick && 'cursor-pointer'
+      }`}
+      onClick={handleClick}
+    >
       <div className="w-full flex gap-[1rem] items-center">
         {imageSrc && (
           <Image

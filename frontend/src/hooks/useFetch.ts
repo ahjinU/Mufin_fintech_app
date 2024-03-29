@@ -9,10 +9,8 @@ type dataType = {
 
 const useFetch = () => {
   const { data: session } = useSession();
-  // console.log(session);
 
-  const UsePostFetch = async (data: dataType) => {
-    // console.log(data);
+  const postFetch = async (data: dataType) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api${data.api}`,
       {
@@ -24,11 +22,10 @@ const useFetch = () => {
         body: JSON.stringify(data.data),
       },
     );
-    // console.log(res);
     return res.json();
   };
 
-  const UseGetFetch = async (data: dataType) => {
+  const getFetch = async (data: dataType) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api${data.api}`,
       {
@@ -42,7 +39,7 @@ const useFetch = () => {
     return res.json();
   };
 
-  return { UseGetFetch, UsePostFetch };
+  return { postFetch, getFetch };
 };
 
 export default useFetch;

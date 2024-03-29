@@ -11,6 +11,7 @@ import { StockInfo } from '../_types';
 import { useServerPostFetch } from '@/hooks/useServerFetch';
 
 export default async function StockList() {
+  // 내 주식 정보 가져오기
   const myStocks = await useServerPostFetch({ api: '/stock/mine' });
   const { totalPrice, totalIncome, myStockList } = myStocks?.data;
 
@@ -33,13 +34,14 @@ export default async function StockList() {
           }
         />
         {myStockList?.map((stock: StockInfo, index: number) => {
-          const { name, cnt, income, incomeRatio } = stock;
+          const { name, cnt, income, incomeRatio, imageUrl } = stock;
           return (
             <FlexBox
               key={`mystocks-${index}`}
               isDivided={true}
               topChildren={
                 <OtherInfoElement
+                  imageSrc={imageUrl}
                   leftExplainText={`${commaNum(cnt)}주`}
                   leftHighlightText={`${name}`}
                   state={`${incomeRatio < 0 ? 'DOWN' : 'UP'}`}

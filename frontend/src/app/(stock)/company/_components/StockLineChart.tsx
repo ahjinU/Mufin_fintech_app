@@ -24,7 +24,7 @@ export function StockLineChart() {
 
   useEffect(() => {
     (async function () {
-      const data = await getStockLineData('바람막이', period);
+      const data = await getStockLineData('바람개비', period);
       const prices = data.data.map((dataObj: StockData) => dataObj.price);
       setData(prices);
     })();

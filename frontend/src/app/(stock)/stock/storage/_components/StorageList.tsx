@@ -31,7 +31,9 @@ export default function StorageList({ list }: { list: TransactionType[] }) {
               key={`storage-list-${index}`}
               topChildren={
                 <OtherInfoElement
-                  leftExplainText={`${type} ${cnt}주`}
+                  leftExplainText={`${type} ${
+                    type !== '시드머니' ? cnt + '주' : ''
+                  }`}
                   leftHighlightText={`${transName}`}
                   rightExplainText={`${price && commaNum(price)} 초코칩`}
                   rightHighlightText={`${amount && commaNum(amount)} 초코칩`}

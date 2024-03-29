@@ -1,3 +1,5 @@
+'use client';
+
 import {
   AdBox,
   ComplexInput,
@@ -9,6 +11,7 @@ import { DataType } from '../page';
 import { commaNum } from '@/utils/commaNum';
 import MainRanking from './MainRanking';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const toWeatherDescript = (id: number) => {
   switch (Math.floor(id / 100)) {
@@ -27,8 +30,22 @@ const toWeatherDescript = (id: number) => {
   }
 };
 
+const toCompanyEnglishName = (name: string) => {
+  switch (name) {
+    case '눈오리':
+      return 'snowduck';
+    case '바람개비':
+      return 'pinwheel';
+    case '우산':
+      return 'umbrella';
+    case '아이스크림':
+      return 'icecream';
+  }
+};
+
 export default function MainStockList({ data }: { data: DataType }) {
   const { temp, description, stocks, ranks, myRank } = data;
+  const router = useRouter();
 
   return (
     <div className="p-[1.2rem] flex flex-col gap-[1rem] overflow-y-hidden">
@@ -81,20 +98,25 @@ export default function MainStockList({ data }: { data: DataType }) {
         <FlexBox
           isDivided={false}
           topChildren={
-            <div className="flex flex-col gap-[1rem]">
-              {stocks?.map(({ name, price, transCnt, incomeRatio }, index) => {
-                return (
-                  <OtherInfoElement
-                    key={`stocks-${index}`}
-                    imageSrc={'/images/icon-dollar.png'}
-                    leftExplainText={`오늘 거래량 ${commaNum(transCnt)}주`}
-                    leftHighlightText={name}
-                    state={`${incomeRatio < 0 ? 'DOWN' : 'UP'}`}
-                    rightExplainText={`${commaNum(incomeRatio)}%`}
-                    rightHighlightText={`${commaNum(price)} 초코칩`}
-                  />
-                );
-              })}
+            <div className="flex flex-col gap-[2rem]">
+              {stocks?.map(
+                ({ name, price, transCnt, incomeRatio, imageUrl }, index) => {
+                  return (
+                    <OtherInfoElement
+                      key={`stocks-${index}`}
+                      imageSrc={imageUrl}
+                      leftExplainText={`오늘 거래량 ${commaNum(transCnt)}주`}
+                      leftHighlightText={name}
+                      state={`${incomeRatio < 0 ? 'DOWN' : 'UP'}`}
+                      rightExplainText={`${commaNum(incomeRatio)}%`}
+                      rightHighlightText={`${commaNum(price)} 초코칩`}
+                      handleClick={() =>
+                        router.push(`/company/${toCompanyEnglishName(name)}`)
+                      }
+                    />
+                  );
+                },
+              )}
             </div>
           }
         />

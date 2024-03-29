@@ -6,10 +6,10 @@ type dataType = {
 };
 
 export const usePostLoanApply = async (data: dataType) => {
-  const { UsePostFetch } = useFetch();
+  const { usePostFetch } = useFetch();
 
   console.log(data);
-  const res = await UsePostFetch(data);
+  const res = await usePostFetch(data);
   console.log(res);
   return res.json();
 };

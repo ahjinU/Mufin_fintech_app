@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 export default function MakeSavingsStep1() {
   // const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
+  const [month, setMonth] = useState<number>();
 
   return (
     <>
@@ -22,7 +23,7 @@ export default function MakeSavingsStep1() {
           isMsg={true}
           message="최대 12개월까지 지정할 수 있어요."
         >
-          <Select min={1} max={12} mode="SAVINGS" />
+          <Select min={1} max={12} mode="SAVINGS" setValue={setMonth} />
         </ComplexInput>
 
         <ComplexInput

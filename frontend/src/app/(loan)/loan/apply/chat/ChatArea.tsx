@@ -82,10 +82,8 @@ export default function ChatArea() {
   }, [messages.length]);
 
   useEffect(() => {
-    // postFetch({ data: apply, api: '/loan/apply' });
-
     apply.conversation && router.replace('/loan/apply/check');
-  }, [apply]);
+  }, [apply, router]);
 
   const sendMessage = async () => {
     setMessages([...messages, { role: 'user', content: input }]);

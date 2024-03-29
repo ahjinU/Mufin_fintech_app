@@ -2,10 +2,13 @@
 
 import { AccountBox, ComplexInput, Select, Button } from '@/components';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 // 몇 개월치를 납부할까요?에 상한은 밀린 횟수
 export default function PaySavingsForm() {
   const router = useRouter();
+
+  const [month, setMonth] = useState<number>();
 
   return (
     <>
@@ -32,7 +35,7 @@ export default function PaySavingsForm() {
           isMsg={true}
           message="오늘은 2개월치 납부할게요!"
         >
-          <Select mode="SAVINGS_RETURN" min={1} max={3} />
+          <Select mode="SAVINGS_RETURN" min={1} max={3} setValue={setMonth} />
         </ComplexInput>
       </section>
 

@@ -94,4 +94,11 @@ public class Account extends BaseEntity {
 		this.balance = 0;
 		this.setDeleted(true);
 	}
+
+	public void terminateSavings(int interestAmount, Code code) {
+		this.balance = 0;
+		this.interestAmount = interestAmount;
+		this.setDeleted(true);
+		this.statusCode = code;
+	}
 }

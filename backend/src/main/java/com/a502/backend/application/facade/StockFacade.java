@@ -472,6 +472,7 @@ public class StockFacade {
 				.price(price)
 				.incomeRatio(incomeRatio)
 				.transCnt(transCnt)
+				.imageUrl(imgUrl)
 				.build();
 	}
 

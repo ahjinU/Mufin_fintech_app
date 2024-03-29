@@ -9,12 +9,12 @@ import useFetch from '@/hooks/useFetch';
 export default function Check() {
   const router = useRouter();
   const { apply } = useLoanApplyStore();
-  const { UsePostFetch } = useFetch();
+  const { usePostFetch } = useFetch();
 
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const useHandleOkay = async () => {
-    await UsePostFetch({ data: apply, api: '/loan/apply' });
+    await usePostFetch({ data: apply, api: '/loan/apply' });
     router.replace('/signup/complete');
   };
 

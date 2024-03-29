@@ -57,4 +57,19 @@ public class ParkingDetailsService {
 	public List<ParkingDetail> getParkingDetails(Parking parking) {
 		return parkingDetailsRepository.findAllByParkingOrderByCreatedAtDesc(parking).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_PARKING_DETAIL_NOT_EXIST));
 	}
+
+	@Transactional
+	public void initSeadMoney(Parking newParkingAccount, Code code) {
+
+		String counterpartyName = "머핀";
+
+		ParkingDetail initParkingDetail= ParkingDetail.builder()
+				.parking(newParkingAccount)
+				.balance(newParkingAccount.getBalance())
+				.counterpartyName(counterpartyName)
+				.code(code)
+				.build();
+
+		parkingDetailsRepository.save(initParkingDetail);
+	}
 }

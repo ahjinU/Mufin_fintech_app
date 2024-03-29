@@ -11,5 +11,5 @@ import java.util.Optional;
 interface ParkingDetailsRepository extends JpaRepository<ParkingDetail, Integer> {
     ParkingDetail findTopByParkingOrderByCreatedAtDesc(Parking parking);
 
-    Optional<List<ParkingDetail>> findAllByParkingOrderByCreatedAtDesc(Parking parking);
+    List<ParkingDetail> findAllByParkingOrderByCreatedAtDesc(Parking parking);
 }

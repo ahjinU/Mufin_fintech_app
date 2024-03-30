@@ -4,9 +4,11 @@ import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.facade.UserFacade;
 import com.a502.backend.domain.user.dto.*;
 import com.a502.backend.domain.user.response.AuthenticationDto;
+import com.a502.backend.domain.user.response.UserMyPageResponse;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import com.a502.backend.global.response.ApiResponse;
+import com.a502.backend.global.response.ResponseCode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -114,6 +116,11 @@ public class UserController {
         return signup(signUpDto, parentEmail, request, response);
     }
 
+    @PostMapping("/mypage")
+    public ResponseEntity<ApiResponse<UserMyPageResponse>> mypage(){
+        UserMyPageResponse response = userFacade.mypageInfo();
+        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_MYPAGE_LIST,response));
+    }
 
     public Cookie getCookieByName(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();

@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-interface AccountDetailRepository extends JpaRepository<AccountDetail, Integer> {
+interface        AccountDetailRepository extends JpaRepository<AccountDetail, Integer> {
 
 	@Query("select ad from AccountDetail ad where ad.account = :account and ad.amount>0")
 	List<AccountDetail> findSavingsAccountDetail(Account account);

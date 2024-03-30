@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class AllowanceFacade {

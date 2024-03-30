@@ -9,10 +9,13 @@ type DayProps = {
   children?: React.ReactNode;
   index?: number;
   day?: Date;
+  incomeDay?: string | null;
+  outcomeDay?: string | null;
 };
 
-const Day = (props: DayProps) => {
-  const { day } = props;
+const Day = (dayData: DayProps) => {
+  const { day, incomeDay, outcomeDay, index } = dayData;
+
   const { updateSelectDate } = useBookStore();
 
   const koreanDate =
@@ -27,18 +30,26 @@ const Day = (props: DayProps) => {
       <div className="flex w-full flex-col leading-[1rem] items-center">
         <p className="text-[2rem]">.</p>
       </div>
-      <Link
-        className="cursor-pointer"
-        onClick={() => {
-          day && updateSelectDate(day);
-        }}
-        href={`/book/${koreanDate}/list`}
-      >
-        {day && format(day, 'd')}
-      </Link>
+      {incomeDay || outcomeDay ? (
+        <Link
+          className="cursor-pointer"
+          onClick={() => {
+            day && updateSelectDate(day);
+          }}
+          href={`/book/${koreanDate}/list`}
+        >
+          {day && format(day, 'd')}
+        </Link>
+      ) : (
+        day && format(day, 'd')
+      )}
       <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center">
-        <p className="text-[0.7rem]">-20,000</p>
-        <p className="text-[0.7rem]">+30,000</p>
+        <p className="text-[0.75rem] text-custom-blue font-[200]">
+          {incomeDay && incomeDay !== '0' && `+${incomeDay}`}
+        </p>
+        <p className="text-[0.75rem] text-custom-red font-[200]">
+          {outcomeDay != '0' && outcomeDay}
+        </p>
       </div>
     </div>
   );

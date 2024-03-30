@@ -10,25 +10,31 @@ import {
 import Calendar from './_components/Calendar';
 import { commaNum } from '@/utils/commaNum';
 import useDate from '@/utils/date';
-import { format } from 'date-fns';
-import { useEffect } from 'react';
+import { format, getDay } from 'date-fns';
+import { useEffect, useState } from 'react';
 import BookApis from './_apis';
+import { getKorDay } from '@/utils/getKorDay';
 
 export default function Book() {
-  const { calculateDateRange } = useDate();
+  const { calculateDateRange, currentMonth } = useDate();
   const { startDate, endDate } = calculateDateRange();
-  const { postMonthBook } = BookApis();
+  const { getMonthBookDetail } = BookApis();
+
+  const [bookDetail, setBookDetail] = useState<MonthBookDetailType | null>(
+    null,
+  );
 
   useEffect(() => {
     (async function () {
-      const data = await postMonthBook({
+      const res = await getMonthBookDetail({
         startDate: format(startDate, 'yyyy-MM-dd'),
         endDate: format(endDate, 'yyyy-MM-dd'),
         childUuid: null,
       });
-      console.log(data);
+      console.log(res);
+      !bookDetail && setBookDetail(res?.data);
     })();
-  }, [endDate, startDate]);
+  }, [startDate, endDate]);
 
   return (
     <div>
@@ -41,36 +47,35 @@ export default function Book() {
           <MoneyShow
             mode={'DIVIDED'}
             text={['지출', '수입']}
-            money={[commaNum(-92000), commaNum(-92000)]}
+            money={[
+              commaNum(bookDetail?.monthOutcome),
+              `+${commaNum(bookDetail?.monthIncome)}`,
+            ]}
             unit={'원'}
           />
         </ComplexInput>
-        <FlexBox
-          isDivided={false}
-          mode="LIST"
-          date="5일 오늘"
-          topChildren={
-            <OtherInfoElement
-              leftExplainText={'화장품'}
-              leftHighlightText={'씨제이올리브영 주식회사'}
-              money={`${commaNum(3000)}원`}
-              state={'UP'}
-            />
-          }
-        />
-        <FlexBox
-          isDivided={false}
-          mode="LIST"
-          date="5일 오늘"
-          topChildren={
-            <OtherInfoElement
-              leftExplainText={'화장품'}
-              leftHighlightText={'씨제이올리브영 주식회사'}
-              money={`${commaNum(3000)}원`}
-              state={'UP'}
-            />
-          }
-        />
+        <div className="flex flex-col gap-[1.2rem] max-h-[30rem] overflow-y-scroll scrollbar-hidden">
+          {bookDetail?.transactionDtoList?.map((trans, index) => {
+            return (
+              <FlexBox
+                key={`tarns-${index}`}
+                isDivided={false}
+                mode="LIST"
+                date={`${format(trans?.date, 'd')}일 ${getKorDay(
+                  getDay(trans?.date),
+                )}`}
+                topChildren={
+                  <OtherInfoElement
+                    leftExplainText={trans?.code}
+                    leftHighlightText={trans?.counterpartyName}
+                    money={`${commaNum(trans?.amount)}원`}
+                    state={trans.amount > 0 ? 'UP' : 'DOWN'}
+                  />
+                }
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

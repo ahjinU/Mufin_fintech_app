@@ -15,11 +15,17 @@ import {
 import { commaNum } from '@/utils/commaNum';
 import Link from 'next/link';
 import { useState } from 'react';
+import BookApis from '../../../_apis';
+import { usePathname } from 'next/navigation';
 
 export default function BookListPost() {
+  var currentUrl = usePathname();
+  var id = currentUrl?.split('/')[3];
   const [title, setTitle] = useState();
   const [amount, setAmount] = useState();
   const [image, setImage] = useState<File | null>(null);
+
+  const { postReceipt } = BookApis();
   const data = {
     storeName: '상점 A',
     transactionUUID: 'uuid1',
@@ -42,6 +48,20 @@ export default function BookListPost() {
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     category: '식료품',
   };
+
+  const analysis = async () => {
+    console.log(image);
+    const res =
+      image &&
+      id &&
+      (await postReceipt({
+        file: image,
+        transactionUuid: id,
+        type: '현금',
+      }));
+    console.log(res);
+  };
+
   return (
     <div className="p-[1.2rem] w-full flex flex-col gap-[10rem]">
       <div className="w-full flex flex-col gap-[1rem]">
@@ -95,7 +115,9 @@ export default function BookListPost() {
           {data.content}
         </p>
       </div>
-      {image && <Button mode={'ACTIVE'} label={'영수증 분석하기'} />}
+      {image && (
+        <Button onClick={analysis} mode={'ACTIVE'} label={'영수증 분석하기'} />
+      )}
     </div>
   );
 }

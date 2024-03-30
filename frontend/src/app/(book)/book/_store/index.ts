@@ -8,8 +8,13 @@ const useBookStore = create<Model>((set) => ({
   updateCurrentMonth: (month) => set(() => ({ currentMonth: month })),
 
   selectedDate: new Date(),
-  updateSelectDate: (date) => set(() =>({ selectedDate: date}))
+  updateSelectDate: (date) => set(() => ({ selectedDate: date })),
 
+  currentStartDate: new Date(),
+  updateCurrentStartDate: (date) => set(() => ({ currentStartDate: date })),
+
+  currentEndDate: new Date(),
+  updateCurrentEndDate: (date) => set(() => ({ currentEndDate: date })),
 }));
 
 export interface Model {
@@ -21,6 +26,12 @@ export interface Model {
 
   selectedDate: Date;
   updateSelectDate: (date: Date) => void;
+
+  currentStartDate: Date;
+  updateCurrentStartDate: (date: Date) => void;
+
+  currentEndDate: Date;
+  updateCurrentEndDate: (date: Date) => void;
 }
 
 export default useBookStore;

@@ -2,26 +2,30 @@
 
 import { Button, ComplexInput, Input, MoneyShow } from '@/components';
 import { commaNum } from '@/utils/commaNum';
+import { decodingDate } from '@/utils/decodingDate';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import BookApis from '../../../_apis';
+import { format } from 'date-fns';
 
 export default function BookListPost() {
   const [title, setTitle] = useState();
   const [amount, setAmount] = useState();
 
-  const path = usePathname();
-  const postIndex = path?.indexOf('/post');
-  const prePostPath = path?.slice(0, postIndex);
-  const parts = prePostPath?.split('/');
-  const lastPart = parts && parts[parts.length - 1];
+  const currentUrl = usePathname();
+  const date = currentUrl && decodingDate(currentUrl);
+
+  const { postDayCash } = BookApis();
 
   const savehandler = () => {
-    const data = {
-      date: lastPart,
-      childUUID: 'hi',
-      storeName: title,
-      amount: amount,
-    };
+    date &&
+      title &&
+      amount &&
+      postDayCash({
+        date: date && format(date, 'yyyy-MM-dd'),
+        usage: title,
+        amount: amount,
+      });
   };
   return (
     <div className="p-[1.2rem] w-full flex flex-col gap-[26rem]">

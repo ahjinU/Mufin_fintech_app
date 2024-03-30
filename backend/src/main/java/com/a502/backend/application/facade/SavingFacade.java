@@ -72,9 +72,6 @@ public class SavingFacade {
 	public AllSavingsProductResponse getAllSavingProduct() {
 		User child = userService.userFindByEmail();
 		User parents = child.getParent();
-		// 부모는 접근 못함
-		if (parents == null)
-			throw BusinessException.of(ErrorCode.API_ERROR_NO_AUTHORIZATION);
 		List<Savings> savingsList = savingsService.findAllByParents(parents);
 		List<SavingsDetail> detail = new ArrayList<>();
 		for (Savings s : savingsList) {

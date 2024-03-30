@@ -14,6 +14,7 @@ import MainHeader from './MainHeader';
 import { useEffect } from 'react';
 import useFetch from '@/hooks/useFetch';
 import useUserStore from '../_store/store';
+import { useRouter } from 'next/navigation';
 
 function MainBoxText({
   img,
@@ -44,18 +45,20 @@ function MainBoxText({
 export default function Main() {
   const { postFetch } = useFetch();
   const { userData, setUserData } = useUserStore();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const res = await postFetch({ api: '/user/mypage' });
+        console.log(res.data);
         setUserData(res.data);
       } catch (error) {
         console.error('사용자 정보 가져오기 에러', error);
       }
     };
     fetchUserData();
-  }, [postFetch, setUserData]);
+  }, []);
 
   return (
     <div className="relative">

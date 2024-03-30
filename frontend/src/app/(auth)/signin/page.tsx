@@ -7,8 +7,7 @@ import SignOut from './_component/SignOut';
 export default function Page() {
   const { data: session } = useSession();
 
-  // 여기 바꿔
-  if (!session) {
+  if (session) {
     return <SignOut />;
   }
   return <SignIn />;

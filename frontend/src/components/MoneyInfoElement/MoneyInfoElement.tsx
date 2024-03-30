@@ -78,7 +78,10 @@ export default function MoneyInfoElement({
       return (
         <TinyButton
           label={tinyButtonLabel}
-          onClick={() => link && router.push(link)}
+          onClick={() => {
+            if (link) router.push(link);
+            if (handleTinyButton) handleTinyButton();
+          }}
         />
       );
     if (buttonOption === 'RATE') return <RateShow />;

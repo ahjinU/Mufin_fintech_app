@@ -11,7 +11,7 @@ export default function UserMenuLayout({
         <h1 className="custom-bold-text text-custom-black">전체 메뉴</h1>
       </Header>
       {children}
-      <NavBar mode="CHILD" />
+      <NavBar mode="PARENT" />
     </section>
   );
 }

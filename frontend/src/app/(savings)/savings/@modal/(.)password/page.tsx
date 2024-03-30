@@ -14,7 +14,7 @@ export default function Password() {
       <PayPasswordBox
         handleConfirmButton={() => router.push('/result/savings/pay')}
         handleCloseButton={() => router.back()}
-        mode="CHECK"
+        mode="ACCOUNT"
       />
     </div>
   );

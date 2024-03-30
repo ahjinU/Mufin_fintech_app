@@ -80,7 +80,7 @@ export default function NavBar({ mode }: NavBarProps) {
         {
           id: 4,
           icon: <Bars3Icon className="h-[2.4rem] w-[2.4rem] 4" />,
-          path: '/',
+          path: '/user',
           label: '전체',
         },
       ];
@@ -108,7 +108,7 @@ export default function NavBar({ mode }: NavBarProps) {
         {
           id: 3,
           icon: <Bars3Icon className="h-[2.4rem] w-[2.4rem] 4" />,
-          path: '/',
+          path: '/user',
           label: '전체',
         },
       ];

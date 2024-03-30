@@ -16,11 +16,11 @@ export default function UserMenu() {
           '대출 보기 & 상환하기',
         ]
       : [
-          '아이 회원가입하기',
-          '아이를 위한 적금 상품 만들기',
-          '적금 현황 확인하기',
-          '아이의 대출 요청 확인하기',
-          '대출 현황 확인하기',
+          ['아이 회원가입하기', '/'],
+          ['아이를 위한 적금 상품 만들기', '/savings/list'],
+          ['적금 현황 확인하기', '/'],
+          ['아이의 대출 요청 확인하기', '/'],
+          ['대출 현황 확인하기', '/'],
         ];
 
   useEffect(() => {
@@ -30,15 +30,15 @@ export default function UserMenu() {
 
   // 아이와 부모에 따라 다른 메뉴 및 NavBar
   return (
-    <section className="p-[1.2rem] flex flex-col gap-[1rem]">
+    <section className="p-[1.2rem] flex flex-col gap-[1rem] min-h-screen">
       <NavButton mode="HIGHLIGHT" label="김지니" link="/" />
       {data.map((menu, index) => {
         return (
           <NavButton
             key={`menu-${index}`}
             mode="GENERAL"
-            label={menu}
-            link="/"
+            label={menu[0]}
+            link={menu[1]}
           />
         );
       })}

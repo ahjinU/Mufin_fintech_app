@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -53,8 +54,9 @@ public class KeypadFacade {
 
     public void craeteAccount(AccountPasswordRequest request){
         User user = userService.userFindByEmail();
+        log.info("REQUEST INTEGER LIST : {}", request.getPassword().toString());
         String password = numberImageService.decodePassword(user.getUserUuid().toString(), request.getPassword());
-
+        log.info("PASSWORD : {}", password);
         accountService.createDepositWithdrawalAccount(password);
         numberImageService.deleteNumberList(user.getUserUuid().toString());
     }

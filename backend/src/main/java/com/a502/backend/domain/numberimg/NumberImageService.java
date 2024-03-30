@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class NumberImageService {
     private final NumberImageRepository numberImageRepository;
@@ -29,6 +29,7 @@ public class NumberImageService {
                 .build());
     }
 
+    @Transactional
     public List<String> getKeypadList(String uuid){
         List<NumberImage> images = numberImageRepository.findAll();
         Collections.shuffle(images);

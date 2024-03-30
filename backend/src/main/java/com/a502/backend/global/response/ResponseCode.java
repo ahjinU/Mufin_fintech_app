@@ -16,6 +16,10 @@ public enum ResponseCode {
 	API_SUCCESS_LOGIN("U003", "로그인 되었습니다."),
 	API_SUCCESS_SIGNUP("U004", "회원가입 되었습니다."),
 	API_SUCCESS_KEYPAD_LIST("U005", "성공적으로 키패드가 반환되었습니다."),
+	API_SUCCESS_MYPAGE_LIST("U006", "회원의 금융정보가 조회되었습니다."),
+	API_SUCCESS_MYINFO_LIST("U006", "회원정보가 조회되었습니다."),
+	API_SUCCESS_CHILDINFO_LIST("U007", "아이 정보가 조회되었습니다."),
+	API_SUCCESS_ACCOUNTINFO("U008", "계좌 정보가 조회되었습니다."),
 
 	// account
 	API_SUCCESS_ACCOUNT_EXIST("A001", "존재하는 계좌입니다."),

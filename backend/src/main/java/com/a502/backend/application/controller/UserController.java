@@ -3,10 +3,11 @@ package com.a502.backend.application.controller;
 import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.facade.UserFacade;
 import com.a502.backend.domain.user.dto.*;
-import com.a502.backend.domain.user.response.AuthenticationDto;
+import com.a502.backend.domain.user.response.*;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import com.a502.backend.global.response.ApiResponse;
+import com.a502.backend.global.response.ResponseCode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -114,6 +115,28 @@ public class UserController {
         return signup(signUpDto, parentEmail, request, response);
     }
 
+    @PostMapping("/mypage")
+    public ResponseEntity<ApiResponse<UserMyPageResponse>> mypage(){
+        UserMyPageResponse response = userFacade.mypageInfo();
+        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_MYPAGE_LIST,response));
+    }
+
+    @PostMapping("/info")
+    public ResponseEntity<ApiResponse<UserInfoResponse>> myinfo(){
+        UserInfoResponse response = userFacade.userInfo();
+        return ResponseEntity.ok(new ApiResponse<>(API_SUCCESS_MYINFO_LIST, response));
+    }
+
+    @PostMapping("/child")
+    public ResponseEntity<ApiResponse<UserChildrenInfoResponse>> childinfo(){
+        UserChildrenInfoResponse response = userFacade.getChildrenInfo();
+        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_CHILDINFO_LIST, response));
+    }
+    @PostMapping("/account")
+    public ResponseEntity<ApiResponse<UserAccountInfoResponse>> accountinfo(){
+        UserAccountInfoResponse response = userFacade.getUserAccountInfo();
+        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_ACCOUNTINFO, response));
+    }
 
     public Cookie getCookieByName(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
@@ -133,6 +156,8 @@ public class UserController {
 
         throw BusinessException.of(API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND);
     }
+
+
 
     public Cookie createCookie(String name, String value) {
 

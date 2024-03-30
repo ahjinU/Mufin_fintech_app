@@ -15,18 +15,18 @@ interface StockCandleData {
   y: number[];
 }
 
-export function StockCandleChart() {
+export function StockCandleChart({ name }: { name: string }) {
   // y는 [시가, 고가, 저가, 종가]
   const [data, setData] = useState<StockCandleData[]>([
     { x: Date.now(), y: [0, 0, 0, 0] },
   ]);
-  const [period, setPeriod] = useState<number>(0);
+  const [period, setPeriod] = useState<number>(1);
   const series = [{ data }];
   const { getStockCandleData } = StockChartApis();
 
   useEffect(() => {
     (async function () {
-      const data = await getStockCandleData('바람개비', period);
+      const data = await getStockCandleData(name, period);
       setData(data.data);
     })();
   }, [period]);
@@ -78,7 +78,7 @@ export function StockCandleChart() {
     yaxis: {
       opposite: true,
       show: true,
-      tickAmount: 3,
+      tickAmount: 4,
       labels: {
         style: {
           colors: '#d4d4d8',
@@ -86,6 +86,9 @@ export function StockCandleChart() {
         },
         formatter: (value: number) => value.toFixed(0),
         offsetX: -5,
+      },
+      min: function () {
+        return Number(getMaxMinValueIndex(series)[1]) - 1000;
       },
     },
     annotations: {
@@ -118,7 +121,7 @@ export function StockCandleChart() {
           },
         },
         {
-          y: series[0].data[series[0].data.length - 1].y[3],
+          y: series[0].data[0].y[3],
           borderColor: '#0be881',
           label: {
             borderColor: '#0be881',
@@ -178,10 +181,6 @@ export function StockCandleChart() {
           {
             label: '4일',
             onClick: () => setPeriod(4),
-          },
-          {
-            label: '1주',
-            onClick: () => setPeriod(7),
           },
         ]}
       />

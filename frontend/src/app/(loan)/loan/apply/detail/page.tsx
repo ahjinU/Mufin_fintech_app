@@ -79,10 +79,15 @@ export default function LoanApplyDetail() {
           mode={'ERROR'}
           isMsg={isError}
           message="15자를 넘길 수 없어요"
+          height="h-[10rem]"
         >
           <Input value={reason} setValue={setReason} />
         </ComplexInput>
-        <ComplexInput label={'원하는 대출 금액을 입력해주세요'} mode={'NONE'}>
+        <ComplexInput
+          label={'원하는 대출 금액을 입력해주세요'}
+          mode={'NONE'}
+          height="h-[10rem]"
+        >
           <div className="flex flex-row gap-[1rem] items-end">
             <Input
               value={amount}
@@ -96,6 +101,7 @@ export default function LoanApplyDetail() {
         <ComplexInput
           label={'대출 기한을 설정해주세요(최대 12개월)'}
           mode={'NONE'}
+          height="h-[10rem]"
         >
           <div className="flex flex-row items-end">
             <Select mode={''} min={1} max={12} setValue={setPaymentTotalCnt} />

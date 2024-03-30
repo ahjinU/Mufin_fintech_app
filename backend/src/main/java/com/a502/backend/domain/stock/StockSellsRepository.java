@@ -4,6 +4,7 @@ import com.a502.backend.application.entity.*;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ interface StockSellsRepository extends JpaRepository<StockSell, Integer> {
 	List<StockSell> findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(int id, int cnt, LocalDateTime localDateTime);
 //	@Lock(LockModeType.PESSIMISTIC_WRITE)
 //	@Transactional
+	@Query("select ss from StockSell ss where ss.code.id = 'S001' and ss.stock = :stock and ss.price = :price order by ss.createdAt asc")
 	List<StockSell> findAllByStockAndPriceOrderByCreatedAtAsc(Stock stock, int price);
 
 	// 미체결 매도 주문 조회
@@ -23,6 +25,7 @@ interface StockSellsRepository extends JpaRepository<StockSell, Integer> {
 //	@Transactional
 	List<StockSell> findAllByUserAndStockAndCode(User user, Stock stock, Code code);
 	List<StockSell> findAllByStock(Stock stock);
-
+	@Query("select ss from StockSell ss where ss.code.id = 'S001'")
+	List<StockSell> findAllTransactionIsOpened();
 	void deleteAll();
 }

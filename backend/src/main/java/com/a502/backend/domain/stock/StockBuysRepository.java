@@ -19,6 +19,7 @@ interface StockBuysRepository extends JpaRepository<StockBuy, Integer> {
 	List<StockBuy> findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(int id, int cnt , LocalDateTime localDateTime);
 //    @Lock(LockModeType.PESSIMISTIC_WRITE)
 //	@Transactional
+	@Query("select sb from StockBuy sb where sb.code.id = 'S001' and sb.stock = :stock and sb.price = :price order by sb.createdAt asc")
 	List<StockBuy> findAllByStockAndPriceOrderByCreatedAtAsc(Stock stock, int price);
 
 	// 주식별 설정 기간 이후 총 매수 주문 조회
@@ -31,5 +32,7 @@ interface StockBuysRepository extends JpaRepository<StockBuy, Integer> {
 //	@Transactional
 	List<StockBuy> findAllByUserAndStockAndCode(User user, Stock stock, Code code);
 	List<StockBuy> findAllByStock(Stock stock);
+	@Query("select sb from StockBuy sb where sb.code.id = 'S001'")
+	List<StockBuy> findAllTransactionIsOpened();
 	void deleteAll();
 }

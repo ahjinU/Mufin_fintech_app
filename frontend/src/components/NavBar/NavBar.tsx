@@ -36,6 +36,7 @@ const setIndex = (path: string | null) => {
     case '/stock/storage':
       return 3;
     case '/menus':
+    case '/loan/list':
       return 4;
     default:
       return 0;

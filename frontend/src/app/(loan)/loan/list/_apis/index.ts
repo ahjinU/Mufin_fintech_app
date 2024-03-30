@@ -9,9 +9,7 @@ export default function LoanListApis() {
   const { postFetch } = useFetch();
 
   const postLoanList = async (data: dataType) => {
-    const res = await postFetch(data);
-    console.log(res);
-    return res;
+    return await postFetch(data);
   };
 
   return { postLoanList };

@@ -1,52 +1,62 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.domain.allowance.OcrDto.ReceiptDto;
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "receipts")
-public class Receipt {
+public class Receipt extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "receipt_id")
 	private int id;
 
 	@Column(name = "receipt_uuid")
-	private byte[] receiptUuid;
+	private UUID receiptUuid;
+	@PrePersist
+	public void initUUID() {
+		if (receiptUuid == null)
+			receiptUuid = UUID.randomUUID();
+	}
 
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
+	@Column(name = "price")
+	private int price;
 
-	@OneToOne
-	@JoinColumn(name = "memo_id")
-	private Memo memo;
+	@Column(name = "store_name")
+	private String storeName;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+	@Column(name = "store_adress")
+	private String storeAddress;
 
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ReceiptDetail> receiptDetails;
+	private List<ReceiptDetail> receiptDetails = new ArrayList<>();
+
+	public void addReceiptDetail(ReceiptDetail receiptDetail) {
+		receiptDetails.add(receiptDetail);
+		receiptDetail.addReceipt(this);
+	}
 
 	@Builder
-	public Receipt(int id, byte[] receiptUuid, LocalDateTime createdAt, Memo memo, User user, boolean isDeleted, List<ReceiptDetail> receiptDetails) {
-		this.id = id;
-		this.receiptUuid = receiptUuid;
-		this.createdAt = createdAt;
-		this.memo = memo;
-		this.user = user;
-		this.isDeleted = isDeleted;
-		this.receiptDetails = receiptDetails;
+	public Receipt(int price, String storeName, String storeAddress) {
+		this.price = price;
+		this.storeName = storeName;
+		this.storeAddress = storeAddress;
 	}
+	public static Receipt createReceipt(ReceiptDto receiptDto) {
+		return Receipt.builder()
+				.storeName(receiptDto.getStoreInfo().getName())
+				.storeAddress(receiptDto.getStoreInfo().getAddress())
+				.price(receiptDto.getPaymentInfo().getPrice())
+				.build();
+	}
+
 }

@@ -1,46 +1,40 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_buys")
-public class StockBuy {
+public class StockBuy extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "sotck_buy_id")
+	@Column(name = "stock_buy_id")
 	private int id;
 
 	@Column(name = "stock_buy_uuid")
-	private byte[] stockBuyUuid;
+	@UuidGenerator
+	private UUID stockBuyUuid;
+	@PrePersist
+	public void initUUID() {
+		if (stockBuyUuid == null)
+			stockBuyUuid = UUID.randomUUID();
+	}
 
-	@Column()
+	@Column(name = "price")
 	private int price;
 
 	@Column(name = "cnt_total")
 	private int cntTotal;
 
+	@Setter
 	@Column(name = "cnt_not")
 	private int cntNot;
-
-	@Column()
-	private int status;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@ManyToOne
 	@JoinColumn(name = "stock_id")
@@ -50,19 +44,22 @@ public class StockBuy {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@ManyToOne
+	@JoinColumn(name = "code_id")
+	private Code code;
+
 	@Builder
-	public StockBuy(int id, byte[] stockBuyUuid, int price, int cntTotal, int cntNot, int status, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock, User user) {
-		this.id = id;
-		this.stockBuyUuid = stockBuyUuid;
+	public StockBuy(int price, int cntTotal, Stock stock, User user, Code code) {
 		this.price = price;
 		this.cntTotal = cntTotal;
-		this.cntNot = cntNot;
-		this.status = status;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
+		this.cntNot = cntTotal;
 		this.stock = stock;
 		this.user = user;
+		this.code = code;
+	}
+
+	public void updateCode(Code code){
+		this.code = code;
 	}
 
 }

@@ -1,32 +1,35 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.domain.allowance.OcrDto.OrderItem;
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "receipt_details")
-public class ReceiptDetail {
-
+public class ReceiptDetail extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "receipt_detail_id")
 	private int id;
 
 	@Column(name = "receipt_detail_uuid")
-	private byte[] receiptDetailUuid;
+	private UUID receiptDetailUuid;
+	@PrePersist
+	public void initUUID() {
+		if (receiptDetailUuid == null)
+			receiptDetailUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "item")
 	private String item;
-
-	@Column(name = "price")
-	private int price;
 
 	@Column(name = "cnt")
 	private int cnt;
@@ -34,31 +37,46 @@ public class ReceiptDetail {
 	@Column(name = "total")
 	private int total;
 
+	@Column(name = "unit_price")
+	private int unitPrice;
+
 	@ManyToOne
 	@JoinColumn(name = "receipt_id")
 	private Receipt receipt;
 
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
 	@Builder
-
-	public ReceiptDetail(int id, byte[] receiptDetailUuid, String item, int price, int cnt, int total, Receipt receipt, boolean isDeleted, LocalDateTime createdAt, LocalDateTime modifiedAt) {
-		this.id = id;
-		this.receiptDetailUuid = receiptDetailUuid;
+	public ReceiptDetail(String item, int cnt, int total, int unitPrice, Receipt receipt) {
 		this.item = item;
-		this.price = price;
 		this.cnt = cnt;
 		this.total = total;
+		this.unitPrice = unitPrice;
 		this.receipt = receipt;
-		this.isDeleted = isDeleted;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
+	}
+
+	public void addReceipt(Receipt receipt) {
+		this.receipt=receipt;
+	}
+
+
+	public List<ReceiptDetail> convertFromDtoList(List<OrderItem> orderItems, Receipt receipt) {
+
+		List<ReceiptDetail> details = new ArrayList<>();
+
+		for(OrderItem orderItem : orderItems){
+			convertFromDto(orderItem,receipt);
+		}
+
+		return details;
+	}
+
+	private ReceiptDetail convertFromDto(OrderItem item,Receipt receipt){
+
+		return ReceiptDetail.builder()
+				.item(item.getItem())
+				.cnt(item.getCnt())
+				.total(item.getTotal())
+				.unitPrice(item.getUnitPrice())
+				.receipt(receipt)
+				.build();
 	}
 }

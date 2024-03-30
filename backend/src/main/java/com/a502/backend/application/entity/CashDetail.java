@@ -1,59 +1,72 @@
 package com.a502.backend.application.entity;
 
 
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "cash_details")
-public class CashDetail {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "cash_detail_id")
-	private int id;
+public class CashDetail extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cash_detail_id")
+    private int id;
 
-	@Column(name = "cash_detail_uuid")
-	private byte[] cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
+    @Column(name = "trans_at")
+    private LocalDateTime transAt;
 
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
+    @Column(name = "usage_name")
+    private String usageName;
 
-	@Column(name = "type")
-	private String type;
+    @Column(name = "cash_detail_uuid")
+    private UUID cashDetailUuid; // Assuming binary UUID storage, adjust if using a different type
 
-	@ManyToOne
-	@JoinColumn(name = "memo_id")
-	private Memo memo;
+    @PrePersist
+    public void initUUID() {
+        if (cashDetailUuid == null)
+            cashDetailUuid = UUID.randomUUID();
+    }
 
-	@ManyToOne
-	@JoinColumn(name = "receipt_id")
-	private Receipt receipt;
+    @Column(name = "amount")
+    private int amount;
 
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
+    @ManyToOne
+    @JoinColumn(name = "memo_id")
+    private Memo memo;
 
-	@ManyToOne
-	@JoinColumn(name = "account_id", nullable = false)
-	private Account account;
+    @ManyToOne
+    @JoinColumn(name = "receipt_id")
+    private Receipt receipt;
 
-	@Builder
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	public CashDetail(int id, byte[] cashDetailUuid, LocalDateTime createdAt, String type, Memo memo, Receipt receipt, boolean isDeleted, Account account) {
-		this.id = id;
-		this.cashDetailUuid = cashDetailUuid;
-		this.createdAt = createdAt;
-		this.type = type;
-		this.memo = memo;
-		this.receipt = receipt;
-		this.isDeleted = isDeleted;
-		this.account = account;
-	}
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+
+    @Builder
+    public CashDetail(int amount, User user, Category category, String usageName, LocalDateTime transAt) {
+        this.amount = amount;
+        this.user = user;
+        this.category = category;
+        this.transAt=transAt;
+        this.usageName = usageName;
+    }
+
+    public void updateMemo(Memo memo) {
+        this.memo = memo;
+    }
+
+    public void updateReceipt(Receipt receipt){
+        this.receipt=receipt;
+    }
 }

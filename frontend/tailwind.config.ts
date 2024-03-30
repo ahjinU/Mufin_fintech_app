@@ -16,6 +16,7 @@ const config: Config = {
       colors: {
         'custom-white': '#ffffff',
         'custom-red': '#cd2626',
+        'custom-dark-red': '#a80101',
         'custom-blue': '#5969ff',
         'custom-light-sky': '#e4fbff',
         'custom-purple': '#7868e6',
@@ -29,8 +30,17 @@ const config: Config = {
         'custom-red-with-opacity': 'rgba(205, 38, 38, 0.2)',
         'custom-blue-with-opacity': 'rgba(89, 105, 255, 0.2)',
       },
+      animation: {
+        'border-blink': 'blink 1s infinite',
+      },
+      keyframes: {
+        blink: {
+          '0%, 100%': { borderColor: 'transparent' },
+          '50%': { borderColor: '#7868e6' },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar-hide')],
 };
 export default config;

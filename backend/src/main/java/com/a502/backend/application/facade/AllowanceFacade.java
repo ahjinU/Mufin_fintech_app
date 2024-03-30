@@ -44,20 +44,28 @@ public class AllowanceFacade {
         LocalDateTime start = convertToStartLocalDateTime(calendarDTO.getStartDate());
         LocalDateTime end = convertToEndLocalDateTime(calendarDTO.getEndDate());
 
+        System.out.println("시작/끝 타임");
         User holderUser = findHolderUser(calendarDTO.getChildUuid());
         List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, start, end);
         List<CashDetail> cashDetails = cashDetailService.getAllCashDetailsByUserAndPeriod(holderUser, start, end);
 
+        System.out.println("현금/게좌 조회 완료");
         transactions.addAll(TransactionDto.convertFromAccountDetails(accountDetails));
         transactions.addAll(TransactionDto.convertFromCashetails(cashDetails));
 
+        System.out.println("거래내역들 변환 완료");
 
         CalendarSummary summary = calculateTransactions(transactions);
 
+
+        System.out.println("계산 완료");
         return summary;
     }
 
     private LocalDateTime convertToStartLocalDateTime(String startDate) {
+        if (startDate == null) {
+            throw BusinessException.of(ErrorCode.API_ERROR_NOT_TIME_FORMAT);
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(startDate, formatter).atStartOfDay();
     }
@@ -77,8 +85,10 @@ public class AllowanceFacade {
     }
 
     private User findHolderUser(String childUuid) {
-        if (childUuid == null)
+        if (childUuid == null){
+            System.out.println("아이가 없으니 부모로 조회하겠읍니다.");
             return userService.userFindByEmail();
+        }
 
         return userService.findByUserUuid(convertToUuid(childUuid));
     }

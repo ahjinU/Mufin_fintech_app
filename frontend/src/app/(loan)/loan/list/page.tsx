@@ -4,14 +4,16 @@ import {
   MoneyShow,
   OtherInfoElement,
 } from '@/components';
-import { useServerPostFetch } from '@/hooks/useServerFetch';
+import { serverPostFetch } from '@/hooks/useServerFetch';
 import { commaNum } from '@/utils/commaNum';
 import Image from 'next/image';
 import { LoanType } from '../_types';
 
 export default async function LoanList() {
-  const res = await useServerPostFetch({ api: '/loan/total/child' });
+  const res = await serverPostFetch({ api: '/loan/total/child' });
   const LoansList: LoanType[] = res?.data?.loansList;
+
+  console.log(LoansList);
 
   return (
     <div className="flex flex-col gap-[1rem]">
@@ -60,9 +62,11 @@ export default async function LoanList() {
               </div>
             }
             bottomChildren={
-              <div className="flex flex-row gap-[1rem] px-[1.2rem] my-[-0.5rem] justify-between">
+              <div className="flex flex-row gap-[1rem] px-[1.2rem] my-[-0.5rem] mb-[-1rem] justify-between custom-medium-text items-center">
                 <p className="text-custom-red">거절 사유</p>
-                <p>{loan.loanRefusalReason}</p>
+                <p className="font-[300] text-[1.4rem]">
+                  {loan.loanRefusalReason}
+                </p>
               </div>
             }
           />
@@ -76,7 +80,9 @@ export default async function LoanList() {
                     ? '/images/icon-repay-sad.png'
                     : '/images/icon-repay-smile.png'
                 }
-                leftHighlightText={`납부 ${loan.paymentNowCnt}개월/ 총 ${loan.paymentTotalCnt}개월`}
+                leftHighlightText={`잔액 ${commaNum(
+                  loan.remainderAmount,
+                )}원/ 총 ${commaNum(loan.amount)}원`}
                 leftExplainText={loan.reason}
                 buttonOption={'TINY_BUTTON'}
                 tinyButtonLabel={`납부하기`}

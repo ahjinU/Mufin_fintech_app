@@ -39,8 +39,7 @@ public class SchedulerFacade {
     private final ParkingService parkingService;
     private final ParkingDetailsService parkingDetailsService;
 
-//    @Scheduled(cron = "${schedule.cron.test}")
-//    @Scheduled(cron = "${schedule.cron.start}")
+    @Scheduled(cron = "${schedule.cron.start}")
     public void marketStart() {
         try {
             Weather weather = weatherService.weatherApi();
@@ -50,13 +49,13 @@ public class SchedulerFacade {
         }
     }
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "${schedule.cron.rank}")
     public void calRank(){
         log.info("start cal Rank()");
         stockFacade.makeRankList();
     }
 
-//    @Scheduled(cron = "${schedule.cron.test}")
+    @Scheduled(cron = "${schedule.cron.saving}")
     public void checkSavingMaturity(){
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
@@ -75,7 +74,7 @@ public class SchedulerFacade {
     }
 
 
-//    @Scheduled(cron = "${schedule.cron.test}")
+    @Scheduled(cron = "${schedule.cron.loan}")
     public void checkLoanArrears(){
         Date now = new Date();
         List<Loan> loans = loansService.findAllLoansInProgress();
@@ -94,7 +93,7 @@ public class SchedulerFacade {
 
     }
 
-    //    @Scheduled(cron = "${schedule.cron.test}")
+    @Scheduled(cron = "${schedule.cron.interest}")
     public void checkParkingAccountInterest(){
         List<Parking> parkingList = parkingService.findAllList();
 
@@ -105,7 +104,7 @@ public class SchedulerFacade {
         }
     }
 
-    @Scheduled(cron = "${schedule.cron.test}")
+    @Scheduled(cron = "${schedule.cron.end}")
     public void marketEnd(){
         List<StockBuy> stockBuys = stockBuysService.getStockTransListOpend();
         List<StockSell> stockSells = stockSellsService.getStockTransListOpend();
@@ -119,8 +118,5 @@ public class SchedulerFacade {
         }
 
     }
-
-
-
 
 }

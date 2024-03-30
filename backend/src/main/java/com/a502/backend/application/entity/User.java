@@ -1,28 +1,31 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private int id;
 
 	@Column(name = "user_uuid")
-	private byte[] userUuid;
+	private UUID userUuid;
+	@PrePersist
+	public void initUUID() {
+		if (userUuid == null)
+			userUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "name")
 	private String name;
@@ -42,17 +45,14 @@ public class User {
 	@Column(name = "address2")
 	private String address2;
 
-	@Column(name = "type")
-	private int type;
-
 	@Column(name = "telephone")
 	private String telephone;
 
 	@Column(name = "birth")
-	private LocalDateTime birth;
+	private LocalDate birth;
 
 	@Column(name = "failed")
-	private Short failed;
+	private int failed;
 
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
@@ -60,9 +60,6 @@ public class User {
 
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
 	private List<User> childrens = new ArrayList<>();
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<Account> accounts = new ArrayList<>();
@@ -74,24 +71,24 @@ public class User {
 	private List<StockHolding> stockHoldings = new ArrayList<>();
 
 	@Builder
-
-	public User(int id, byte[] userUuid, String name, String email, String password, String gender, String address, String address2, int type, String telephone, LocalDateTime birth, Short failed, User parent, List<User> childrens, boolean isDeleted, List<Account> accounts, List<Alert> alerts) {
-		this.id = id;
-		this.userUuid = userUuid;
+	public User(String name, String email, String password, String gender, String address, String address2, String telephone, LocalDate birth, User parent) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.gender = gender;
 		this.address = address;
 		this.address2 = address2;
-		this.type = type;
 		this.telephone = telephone;
 		this.birth = birth;
-		this.failed = failed;
 		this.parent = parent;
-		this.childrens = childrens;
-		this.isDeleted = isDeleted;
-		this.accounts = accounts;
-		this.alerts = alerts;
 	}
+
+	public boolean checkPassword(String password) {
+
+		return this.password.equals(password);
+	}
+
+    public void addParent(User parent) {
+		this.parent = parent;
+    }
 }

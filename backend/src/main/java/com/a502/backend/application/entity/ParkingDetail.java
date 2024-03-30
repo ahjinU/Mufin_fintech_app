@@ -1,59 +1,61 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "parking_details")
-public class ParkingDetail {
+public class ParkingDetail extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "parking_details_id")
 	private int id;
 
 	@Column(name = "parking_details_uuid")
-	private byte[] parkingDetailUuid;
+	private UUID parkingDetailUuid;
+	@PrePersist
+	public void initUUID() {
+		if (parkingDetailUuid == null)
+			parkingDetailUuid = UUID.randomUUID();
+	}
 
-	@Column(name = "trans_code")
-	private int transCode;
+	@Column(name = "counterparty_name")
+	private String counterpartyName;
 
-	@Column()
+	@Column(name = "cnt")
+	private int cnt;
+
+	@Column(name = "amount")
 	private int amount;
 
-	@Column()
+	@Column(name = "balance")
 	private int balance;
 
-	@Column()
-	private String memo;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
+	@Column(name="ratio")
+	private double ratio;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parking_id")
 	private Parking parking;
 
+	// 이자, 매도, 매수
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "code_id")
+	private Code code;
+
 	@Builder
-	public ParkingDetail(int id, byte[] parkingDetailUuid, int transCode, int amount, int balance, String memo, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Parking parking) {
-		this.id = id;
-		this.parkingDetailUuid = parkingDetailUuid;
-		this.transCode = transCode;
+	public ParkingDetail(String counterpartyName, int cnt, int amount, int balance, double ratio, Parking parking, Code code) {
+		this.counterpartyName = counterpartyName;
+		this.cnt = cnt;
 		this.amount = amount;
 		this.balance = balance;
-		this.memo = memo;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
+		this.ratio = ratio;
 		this.parking = parking;
+		this.code = code;
 	}
 }

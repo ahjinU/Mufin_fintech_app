@@ -1,26 +1,28 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "savings")
-public class Savings {
+public class Savings extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "saving_id")
 	private int id;
 
 	@Column(name = "saving_uuid")
-	private byte[] savingUuid;
+	private UUID savingUuid;
+	@PrePersist
+	public void initUUID() {
+		if (savingUuid == null)
+			savingUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "interest")
 	private double interest;
@@ -31,29 +33,19 @@ public class Savings {
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
-
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private User user;
+	private User parent;
 
 	@Builder
-	public Savings(int id, byte[] savingUuid, double interest, int period, String name, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, User user) {
-		this.id = id;
-		this.savingUuid = savingUuid;
+	public Savings(double interest, int period, String name, User parent) {
 		this.interest = interest;
 		this.period = period;
 		this.name = name;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
-		this.user = user;
+		this.parent = parent;
+	}
+
+	public void delete(){
+		this.setDeleted(true);
 	}
 }

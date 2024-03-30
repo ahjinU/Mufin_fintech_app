@@ -1,49 +1,34 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "memos")
-public class Memo {
+public class Memo extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "memo_id")
 	private int id;
 
 	@Column(name = "memo_uuid")
-	private byte[] memoUuid;
+	private UUID memoUuid;
+	@PrePersist
+	public void initUUID() {
+		if (memoUuid == null)
+			memoUuid = UUID.randomUUID();
+	}
 
 	@Column(name = "content")
 	private String content;
 
-	@Column(name = "category")
-	private String category;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private Boolean isDeleted;
-
 	@Builder
-	public Memo(int id, byte[] memoUuid, String content, String category, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
-		this.id = id;
-		this.memoUuid = memoUuid;
+	public Memo(String content) {
 		this.content = content;
-		this.category = category;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
 	}
 }

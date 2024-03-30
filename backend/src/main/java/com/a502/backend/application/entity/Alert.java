@@ -1,53 +1,41 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
+import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "alerts")
-public class Alert {
+public class Alert extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "alert_id")
 	private int id;
 
 	@Column(name = "alert_uuid")
-	private byte[] alertUuid;
-
-	@Column(name = "created_at")
-	@Temporal(TemporalType.DATE)
-	private LocalDateTime createdAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
-
-	@Column(name = "content")
-	private String content;
-
-	@Column(name = "type")
-	private String type;
+	private UUID alertUuid;
+	@PrePersist
+	public void initUUID() {
+		if (alertUuid == null)
+			alertUuid = UUID.randomUUID();
+	}
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	//  AL001 적금, AL002 적금만기, AL003 대출요청
+	@ManyToOne
+	@JoinColumn(name = "code_id")
+	private Code code;
+
 	@Builder
-	public Alert(int id, byte[] alertUuid, LocalDateTime createdAt, boolean isDeleted, String content, String type, User user) {
-		this.id = id;
-		this.alertUuid = alertUuid;
-		this.createdAt = createdAt;
-		this.isDeleted = isDeleted;
-		this.content = content;
-		this.type = type;
+	public Alert(User user,Code code) {
 		this.user = user;
+		this.code = code;
 	}
 }

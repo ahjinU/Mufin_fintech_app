@@ -28,17 +28,17 @@ export default function LoanRepay() {
     overDueCnt: 0,
   };
 
-  useEffect(() => {
-    const fetchLoan = async () => {
-      const res = await postFetch({
-        data: { loanUuid: '987bafb9-b6f6-4e9a-9ea1-93f4b6d44d3c' },
-        api: '/loan/detail/child',
-      });
-      loan = res?.data;
-    };
+  // useEffect(() => {
+  //   const fetchLoan = async () => {
+  //     const res = await postFetch({
+  //       data: { loanUuid: '987bafb9-b6f6-4e9a-9ea1-93f4b6d44d3c' },
+  //       api: '/loan/detail/child',
+  //     });
+  //     loan = res?.data;
+  //   };
 
-    fetchLoan();
-  }, []);
+  //   fetchLoan();
+  // }, []);
 
   return (
     <>

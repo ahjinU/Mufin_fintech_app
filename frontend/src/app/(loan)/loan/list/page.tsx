@@ -66,7 +66,7 @@ export default async function LoanList() {
               </div>
             }
           />
-        ) : loan.status == '심사중' ? (
+        ) : loan.status !== '심사중' ? (
           <FlexBox
             isDivided={false}
             topChildren={

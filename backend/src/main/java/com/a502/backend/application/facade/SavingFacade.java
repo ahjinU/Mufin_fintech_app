@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -72,7 +73,9 @@ public class SavingFacade {
 	public AllSavingsProductResponse getAllSavingProduct() {
 		User child = userService.userFindByEmail();
 		User parents = child.getParent();
-		List<Savings> savingsList = savingsService.findAllByParents(parents);
+		List<Savings> savingsList = new ArrayList<>();
+		// 부모는 접근 못함
+		savingsList = savingsService.findAllByParents(Objects.requireNonNullElse(parents, child));
 		List<SavingsDetail> detail = new ArrayList<>();
 		for (Savings s : savingsList) {
 			SavingsDetail savingsDetail = SavingsDetail.builder()
@@ -276,7 +279,7 @@ public class SavingFacade {
 				.accountDetailStatusCode(codeService.findStatusCode("거래완료"))
 				.build());
 		accountDetailService.save(AccountDetail.builder()
-				.amount(interest+savingsAccount.getBalance())
+				.amount(interest + savingsAccount.getBalance())
 				.balance(childAccount.getBalance())
 				.counterpartyAccount(parentsAccount.getAccountNumber())
 				.counterpartyName("적금 이자")

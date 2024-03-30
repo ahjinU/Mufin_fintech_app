@@ -4,16 +4,24 @@ import com.a502.backend.application.config.dto.CustomUserDetails;
 import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.config.generator.JwtUtil;
 import com.a502.backend.application.entity.*;
+import com.a502.backend.domain.account.AccountService;
+import com.a502.backend.domain.allowance.request.CalendarDTO;
+import com.a502.backend.domain.allowance.response.CalendarSummary;
+import com.a502.backend.domain.allowance.response.TransactionDto;
 import com.a502.backend.domain.parking.ParkingDetailsService;
 import com.a502.backend.domain.parking.ParkingService;
+import com.a502.backend.domain.savings.SavingsService;
+import com.a502.backend.domain.stock.RankService;
 import com.a502.backend.domain.stock.StockDetailsService;
 import com.a502.backend.domain.stock.StockHoldingsService;
 import com.a502.backend.domain.stock.StocksService;
+import com.a502.backend.domain.stock.response.MyStockList;
 import com.a502.backend.domain.user.TemporaryUserRepository;
 import com.a502.backend.domain.user.UserRepository;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.domain.user.dto.LoginDto;
 import com.a502.backend.domain.user.dto.SignUpDto;
+import com.a502.backend.domain.user.response.UserMyPageResponse;
 import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
@@ -30,17 +38,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Slf4j
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserFacade {
 
     private final UserService userService;
+    private final AccountService accountService;
     private final TemporaryUserRepository temporaryUserRepository;
     private final ParkingService parkingService;
     private final CodeService codeService;
@@ -48,6 +59,9 @@ public class UserFacade {
     private final StocksService stocksService;
     private final StockDetailsService stockDetailsService;
     private final StockHoldingsService stockHoldingsService;
+    private final RankService rankService;
+    private final SavingsService savingsService;
+    private final AllowanceFacade allowanceFacade;
 
 
 
@@ -141,5 +155,72 @@ public class UserFacade {
 
         return temporaryUser;
     }
+
+    public UserMyPageResponse mypageInfo(){
+        User user = userService.userFindByEmail();
+        String name = user.getName();
+        boolean isParent = ( user.getParent() == null ) ? false : true;
+        String accountNumber = accountService.findByUser(user).getAccountNumber();
+        int balance = accountService.findByUser(user).getBalance();
+        int savings = accountService.findSavingsMoneyByChild(user); // 내가 모은 돈
+        int ranking = getMyRanking(user);
+        int chocochip = parkingService.getParkingBalance(user);
+        String[] date = getMonthDate();
+        int monthAmounts = allowanceFacade.getTransactionsForPeriod(CalendarDTO.builder()
+                .startDate(date[0])
+                .endDate(date[1])
+                .childUuid(user.getUserUuid().toString())
+                .build()).getIncomeMonth();
+        int totalIncome = 0;
+        int totalPrice = 0;
+        double totalIncomePercent;
+        List<StockHolding> stockHoldingList = stockHoldingsService.findAllByUser(user);
+        for (StockHolding sh : stockHoldingList) {
+            Stock stock = stocksService.findById(sh.getStock().getId());
+            StockDetail stockDetail = stockDetailsService.getLastDetail(stock);
+            int totalPriceAvg = sh.getTotal();
+            int totalPriceCur = sh.getCnt() * stockDetail.getPrice();
+            int income = totalPriceCur - totalPriceAvg;
+            totalIncome += income;
+            totalPrice += totalPriceCur;
+        }
+
+        if (totalPrice - totalIncome == 0)
+            totalIncomePercent = 0;
+        else totalIncomePercent = (double) totalIncome / (totalPrice - totalIncome) * 100.0;
+
+        String formatted = String.format("%.2f", totalIncomePercent);
+        return new UserMyPageResponse(name, isParent, accountNumber, balance, savings, monthAmounts, ranking, chocochip, totalIncome, totalPrice, formatted);
+    }
+
+    public String[] getMonthDate(){
+        Date today = new Date();
+        LocalDate localDate = new java.sql.Date(today.getTime()).toLocalDate();
+
+        LocalDate firstDayOfMonth = localDate.withDayOfMonth(1);
+        LocalDate lastDayOfMonth = localDate.withDayOfMonth(localDate.lengthOfMonth());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        String formattedFirstDay = firstDayOfMonth.format(formatter);
+        String formattedLastDay = lastDayOfMonth.format(formatter);
+        return new String[] {formattedFirstDay, formattedLastDay};
+    }
+
+    public int getMyRanking(User user) {
+        int rank = Math.toIntExact(rankService.getUserRank(user));;
+
+        List<RankingDetail> rankingList = rankService.getTop10UserRankings();
+        for (RankingDetail detail : rankingList) {
+            if (detail.getChildName().equals(user.getName()))
+                return detail.getRank();
+        }
+
+        return rank;
+    }
+
+
+
+
 
 }

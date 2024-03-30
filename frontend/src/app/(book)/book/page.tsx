@@ -1,3 +1,5 @@
+'use client';
+
 import {
   ComplexInput,
   FlexBox,
@@ -7,8 +9,27 @@ import {
 } from '@/components';
 import Calendar from './_components/Calendar';
 import { commaNum } from '@/utils/commaNum';
+import useDate from '@/utils/date';
+import { format } from 'date-fns';
+import { useEffect } from 'react';
+import BookApis from './_apis';
 
-export default async function Book() {
+export default function Book() {
+  const { calculateDateRange } = useDate();
+  const { startDate, endDate } = calculateDateRange();
+  const { postMonthBook } = BookApis();
+
+  useEffect(() => {
+    (async function () {
+      const data = await postMonthBook({
+        startDate: format(startDate, 'yyyy-MM-dd'),
+        endDate: format(endDate, 'yyyy-MM-dd'),
+        childUuid: null,
+      });
+      console.log(data);
+    })();
+  }, [endDate, startDate]);
+
   return (
     <div>
       <Header>

@@ -4,11 +4,11 @@ export interface LoanType {
   amount: number;
   paymentTotalCnt: number;
   paymentNowCnt: number;
+  remainderAmount: number;
   status: string;
   overDueCnt: number;
-  loanRefusalReason: string | null;
+  loanRefusalReason: string;
 }
-
 export interface LoanDetailType {
   reason: string;
   totalAmount: number;
@@ -17,4 +17,5 @@ export interface LoanDetailType {
   remainderDay: string;
   paymentDate: number;
   overDueCnt: number;
+  paymentAmount: number;
 }

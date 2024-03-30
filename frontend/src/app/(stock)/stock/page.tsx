@@ -3,7 +3,7 @@ import MainMyStock from './_components/MainMyStock';
 import MainStockList from './_components/MainStockList';
 import { StockAllType, RankType } from './_types';
 const url = `${process.env.REACT_APP_WEATHER_API}?q=Seoul&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
-import { useServerGetFetch, useServerPostFetch } from '@/hooks/useServerFetch';
+import { serverGetFetch, serverPostFetch } from '@/hooks/useServerFetch';
 
 export interface DataType {
   temp: number;
@@ -15,23 +15,23 @@ export interface DataType {
 
 export default async function Stock() {
   // 전체 주식 정보 가져오기
-  const stocks = await useServerPostFetch({ api: '/stock/all' });
+  const stocks = await serverPostFetch({ api: '/stock/all' });
   // console.log(stocks.data);
 
   // 내 보유 주식 정보 가져오기
-  const myStocks = await useServerPostFetch({ api: '/stock/mine' });
+  const myStocks = await serverPostFetch({ api: '/stock/mine' });
   // console.log(myStocks);
 
   // 내 파킹 통장 정보 가져오기
-  const myParking = await useServerPostFetch({ api: '/parking/account' });
+  const myParking = await serverPostFetch({ api: '/parking/account' });
   // console.log(myParking.data);
 
   // 전체 랭킹 정보 가져오기
-  const ranks = await useServerGetFetch({ api: '/stock/ranking/total' });
+  const ranks = await serverGetFetch({ api: '/stock/ranking/total' });
   // console.log(ranks.data);
 
   // 내 랭킹 정보 가져오기
-  const myRank = await useServerGetFetch({ api: '/stock/ranking/user' });
+  const myRank = await serverGetFetch({ api: '/stock/ranking/user' });
   // console.log(myRank.data);
 
   // 날씨 정보 가져오기

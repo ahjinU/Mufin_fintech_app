@@ -23,6 +23,8 @@ public enum ErrorCode {
     API_ERROR_USER_NOT_EXIST_MY_KIDS(400, "U009", "등록된 자녀가 없습니다."),
 
 
+    //Allowance
+    API_ERROR_NOT_TIME_FORMAT(400, "AL001", "시간 포맷이 아닙니다."),
 
     // Account
     API_ERROR_ACCOUNT_NOT_EXIST(400, "A001", "존재하지 않는 계좌 입니다."),

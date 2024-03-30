@@ -35,6 +35,7 @@ public class AllowanceController {
     @PostMapping("/calender")
     public ResponseEntity<ApiResponse<CalendarSummary>> calender(@RequestBody CalendarDTO calendarDTO) {
 
+        System.out.println("allowance 컨트롤러 진입");
        CalendarSummary summary = allowanceFacade.getTransactionsForPeriod(calendarDTO);
         System.out.println(summary.getOutcomeMonth());
        ApiResponse<CalendarSummary> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_ALLOWANCE_GET_BY_MONTH, summary);

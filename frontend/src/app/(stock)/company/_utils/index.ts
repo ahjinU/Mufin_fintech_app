@@ -3,6 +3,7 @@ export const getMaxMinValueIndex = (series: any) => {
   let minValue: number = -1;
   let maxValueIndex: number | undefined = undefined;
   let minValueIndex: number | undefined = undefined;
+  let currentValue: number = -1;
 
   series[0].data.forEach((obj: any, index: number) => {
     if (maxValue === -1 || minValue === -1) {
@@ -20,6 +21,9 @@ export const getMaxMinValueIndex = (series: any) => {
         minValueIndex = index;
       }
     }
+
+    if (currentValue === -1 && index === series[0].data.length - 1)
+      currentValue = obj.y[3];
   });
 
   return [
@@ -27,5 +31,6 @@ export const getMaxMinValueIndex = (series: any) => {
     minValue.toFixed(0),
     maxValueIndex,
     minValueIndex,
+    currentValue,
   ];
 };

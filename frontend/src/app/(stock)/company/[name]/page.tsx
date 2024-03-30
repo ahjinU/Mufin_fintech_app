@@ -73,7 +73,10 @@ export default async function Company({
             label: '선 차트',
             component: companyName && <StockLineChart name={companyName} />,
           },
-          // { label: '봉 차트', component: <StockCandleChart /> },
+          {
+            label: '봉 차트',
+            component: companyName && <StockCandleChart name={companyName} />,
+          },
         ]}
       />
 

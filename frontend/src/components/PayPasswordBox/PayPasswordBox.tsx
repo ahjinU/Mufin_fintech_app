@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { XMarkIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
 import PasswordApis from '@/services/password';
-import useFetch from '@/hooks/useFetch';
 
 interface PayPasswordBoxProps {
   handleConfirmButton: () => void;
   handleCloseButton: () => void;
+  mode: 'ACCOUNT' | 'CHECK';
 }
 
 function EachInputBox({
@@ -35,6 +35,7 @@ function EachInputBox({
 export default function PayPasswordBox({
   handleConfirmButton,
   handleCloseButton,
+  mode,
   ...props
 }: PayPasswordBoxProps) {
   const [password, setPassword] = useState<number[]>([]);
@@ -44,16 +45,33 @@ export default function PayPasswordBox({
   const [wrongCnt, setWrongCnt] = useState<number>(0);
   console.log(password);
 
-  const { getKeyPadImage, checkPayPassword } = PasswordApis();
+  const keypadRef = useRef<boolean>(false);
+
+  const {
+    getKeyPadImage,
+    checkPayPassword,
+    getAccountKeyPadImage,
+    setPayPassword,
+  } = PasswordApis();
 
   useEffect(() => {
-    (async () => {
-      const data = await getKeyPadImage('5021-5653-78-3742');
-      const keyPadData = data.data.keypad;
-      keyPadData.splice(3, 0, 'delete');
-      keyPadData.splice(11, 0, 'confirm');
-      setKeyPadImage(keyPadData);
-    })();
+    !keypadRef.current &&
+      (async () => {
+        let data;
+        if (mode === 'ACCOUNT') {
+          data = await getAccountKeyPadImage();
+        } else {
+          data = await getKeyPadImage('5021-1099-80-6902');
+        }
+        const keyPadData = data.data.keypad;
+        keyPadData.splice(3, 0, 'delete');
+        keyPadData.splice(11, 0, 'confirm');
+        setKeyPadImage(keyPadData);
+      })();
+
+    return () => {
+      keypadRef.current = true;
+    };
   }, []);
 
   const container = {
@@ -64,6 +82,22 @@ export default function PayPasswordBox({
   const closeBox = () => {
     setIsBoxOpen(false);
     handleCloseButton();
+  };
+
+  const confirmPassword = () => {
+    (async () => {
+      let data;
+      if (mode === 'ACCOUNT') {
+        data = await setPayPassword(password);
+      } else {
+        data = await checkPayPassword('5021-1099-80-6902', password);
+      }
+      console.log(data);
+
+      if (mode === 'CHECK') setWrongCnt(data.data.incorrectCnt);
+      if (data.message === '계좌 비밀번호가 일치합니다.' || mode === 'ACCOUNT')
+        handleConfirmButton();
+    })();
   };
 
   return (
@@ -96,9 +130,11 @@ export default function PayPasswordBox({
             />
           ))}
         </div>
-        <p className="text-custom-red custom-light-text self-end">
-          계좌 비밀번호 틀린 횟수({wrongCnt} / 5)
-        </p>
+        {mode === 'CHECK' && (
+          <p className="text-custom-red custom-light-text self-end">
+            계좌 비밀번호 틀린 횟수({wrongCnt} / 5)
+          </p>
+        )}
       </div>
 
       <div className="mx-auto w-[31rem] h-[23rem] grid grid-cols-4 grid-rows-3">
@@ -144,17 +180,7 @@ export default function PayPasswordBox({
                     ? 'bg-custom-light-purple'
                     : 'bg-custom-blue-with-opacity'
                 } rounded-[0.8rem] text-custom-black custom-semibold-text`}
-                onClick={
-                  // password.length === 6 ? handleConfirmButton : undefined
-                  async () => {
-                    const data = await checkPayPassword(
-                      '5021-5653-78-3742',
-                      password,
-                    );
-                    console.log(data);
-                    setWrongCnt(data.data.incorrectCnt);
-                  }
-                }
+                onClick={password.length === 6 ? confirmPassword : undefined}
               >
                 {'확인'}
               </button>

@@ -166,6 +166,14 @@ public class AccountService {
 		return accountList;
 	}
 
+	public int findSavingsMoneyByChild(User child){
+		List<Account> accountList = accountRepository.findAllSavingsByChild(child);
+		int result = 0;
+		for(Account a : accountList)
+			result += a.getBalance();
+		return result;
+	}
+
 	public Account findByAccountUuid(String accountUuid){
 		UUID uuid = UUID.fromString(accountUuid);
 		return accountRepository.findByAccountUuid(uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));

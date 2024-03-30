@@ -6,7 +6,7 @@ type dataType = {
   api: string;
 };
 
-export async function useServerPostFetch(data: dataType) {
+export async function serverPostFetch(data: dataType) {
   const session = await getServerSession(authOptions);
 
   const res = await fetch(
@@ -23,7 +23,7 @@ export async function useServerPostFetch(data: dataType) {
   return res.json();
 }
 
-export async function useServerGetFetch(data: dataType) {
+export async function serverGetFetch(data: dataType) {
   const session = await getServerSession(authOptions);
 
   const res = await fetch(

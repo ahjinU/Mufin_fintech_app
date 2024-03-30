@@ -10,25 +10,25 @@ import {
 import { commaNum } from '@/utils/commaNum';
 import StorageList from './_components/StorageList';
 import PendingList from './_components/PendingList';
-import { useServerPostFetch } from '@/hooks/useServerFetch';
+import { serverPostFetch } from '@/hooks/useServerFetch';
 
 export default async function StockStroage() {
   // 내 파킹 통장 사용 내역 확인
-  const myParkingList = await useServerPostFetch({
+  const myParkingList = await serverPostFetch({
     api: '/parking/history',
   });
   const myParkingListData = myParkingList?.data?.transaction;
   // console.log(myParkingListData);
 
   // 미체결 주식 내역 확인
-  const waitStockList = await useServerPostFetch({
+  const waitStockList = await serverPostFetch({
     api: '/stock/order/wait',
   });
   const waitStockListData = waitStockList?.data?.transaction;
   // console.log(waitStockListData);
 
   // 내 초코칩 보관함 정보 들고 오기
-  const myParking = await useServerPostFetch({ api: '/parking/account' });
+  const myParking = await serverPostFetch({ api: '/parking/account' });
   const { balanceToday, ratio, balanceTmrw, interest } = myParking?.data;
 
   return (

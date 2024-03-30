@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static com.a502.backend.global.exception.ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -22,13 +24,11 @@ public class CashDetailService {
 
 	public List<CashDetail> getAllCashDetailsByUserAndPeriod(User user, LocalDateTime startDay, LocalDateTime endDay) {
 		List<CashDetail> cashDetailList = cashDetailRepository.findByUserAndPeriod(user, startDay, endDay);
-		if(cashDetailList.isEmpty())
-			throw BusinessException.of(ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST);
 		return cashDetailList;
 	}
 
     public CashDetail findTransaction(UUID transactionUUID) {
-		return  cashDetailRepository.findCashDetailByCashDetailUuid(transactionUUID).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST));
+		return  cashDetailRepository.findCashDetailByCashDetailUuid(transactionUUID).orElseThrow(() -> BusinessException.of(API_ERROR_CASHDETAIL_NOT_EXIST));
     }
 
     public CashDetail save(CashDetail cashDetail) {

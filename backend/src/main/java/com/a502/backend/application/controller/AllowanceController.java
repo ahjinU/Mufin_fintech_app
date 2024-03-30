@@ -9,6 +9,7 @@ import com.a502.backend.domain.user.dto.LoginDto;
 import com.a502.backend.global.response.ApiResponse;
 import com.a502.backend.global.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class AllowanceController {
     public ResponseEntity<ApiResponse<CalendarSummary>> calender(@RequestBody CalendarDTO calendarDTO) {
 
         System.out.println("allowance 컨트롤러 진입");
+        System.out.println(calendarDTO.toString());
        CalendarSummary summary = allowanceFacade.getTransactionsForPeriod(calendarDTO);
         System.out.println(summary.getOutcomeMonth());
        ApiResponse<CalendarSummary> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_ALLOWANCE_GET_BY_MONTH, summary);

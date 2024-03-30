@@ -63,6 +63,9 @@ public class AllowanceFacade {
     }
 
     private LocalDateTime convertToStartLocalDateTime(String startDate) {
+        if (startDate == null) {
+            throw BusinessException.of(ErrorCode.API_ERROR_NOT_TIME_FORMAT);
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(startDate, formatter).atStartOfDay();
     }

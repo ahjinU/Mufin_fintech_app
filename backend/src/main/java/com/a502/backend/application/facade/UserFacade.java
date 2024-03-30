@@ -21,6 +21,7 @@ import com.a502.backend.domain.user.UserRepository;
 import com.a502.backend.domain.user.UserService;
 import com.a502.backend.domain.user.dto.LoginDto;
 import com.a502.backend.domain.user.dto.SignUpDto;
+import com.a502.backend.domain.user.response.UserInfoResponse;
 import com.a502.backend.domain.user.response.UserMyPageResponse;
 import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
@@ -41,6 +42,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -156,10 +158,11 @@ public class UserFacade {
         return temporaryUser;
     }
 
+
     public UserMyPageResponse mypageInfo(){
         User user = userService.userFindByEmail();
         String name = user.getName();
-        boolean isParent = ( user.getParent() == null ) ? false : true;
+        boolean isParent = ( user.getParent() == null ) ? true : false;
         String accountNumber = accountService.findByUser(user).getAccountNumber();
         int balance = accountService.findByUser(user).getBalance();
         int savings = accountService.findSavingsMoneyByChild(user); // 내가 모은 돈
@@ -191,6 +194,22 @@ public class UserFacade {
 
         String formatted = String.format("%.2f", totalIncomePercent);
         return new UserMyPageResponse(name, isParent, accountNumber, balance, savings, monthAmounts, ranking, chocochip, totalIncome, totalPrice, formatted);
+    }
+
+    public UserInfoResponse userInfo() {
+        User user = userService.userFindByEmail();
+        String userUuid = user.getUserUuid().toString();
+        String name = user.getName();
+        String email = user.getEmail();
+        boolean isParent = (user.getParent() == null) ? true : false;
+        Date createdAt = Date.from(user.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant());
+        String address = user.getAddress();
+        String address2 = user.getAddress2();
+        String telephone = user.getTelephone();
+        Account account = accountService.findByUser(user);
+        String accountNumber = account.getAccountNumber();
+        String accountUuid = account.getAccountUuid().toString();
+        return new UserInfoResponse(userUuid, name, email, isParent, createdAt, address, address2, telephone, accountNumber, accountUuid);
     }
 
     public String[] getMonthDate(){

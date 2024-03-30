@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +22,7 @@ public class RankService {
     }
     public void addUserScore(User user, double score) {
         redisTemplate.opsForZSet().add(RANKING_KEY, user.getName(), score);
+        redisTemplate.expire(RANKING_KEY, 1, TimeUnit.HOURS);
     }
 
     public Set<ZSetOperations.TypedTuple<String>> getTop10Users() {

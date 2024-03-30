@@ -4,6 +4,7 @@ import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.facade.UserFacade;
 import com.a502.backend.domain.user.dto.*;
 import com.a502.backend.domain.user.response.AuthenticationDto;
+import com.a502.backend.domain.user.response.UserInfoResponse;
 import com.a502.backend.domain.user.response.UserMyPageResponse;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
@@ -122,6 +123,12 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_MYPAGE_LIST,response));
     }
 
+    @PostMapping("/info")
+    public ResponseEntity<ApiResponse<UserInfoResponse>> myinfo(){
+        UserInfoResponse response = userFacade.userInfo();
+        return ResponseEntity.ok(new ApiResponse<>(API_SUCCESS_MYINFO_LIST, response));
+    }
+
     public Cookie getCookieByName(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         Cookie findCookie = null;
@@ -140,6 +147,8 @@ public class UserController {
 
         throw BusinessException.of(API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND);
     }
+
+
 
     public Cookie createCookie(String name, String value) {
 

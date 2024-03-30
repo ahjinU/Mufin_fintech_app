@@ -105,11 +105,13 @@ public class LoanFacade {
 		String loanUuid = loanUuidRequest.getLoanUuid();
 
 		Loan loan = loansService.findByUuid(loanUuid);
-
+		String remainderDay = null;
 		int totalCnt = loan.getPaymentTotalCnt();
-		LocalDate endDate = loan.getStartDate().plusMonths(totalCnt);
-		Period period = Period.between(LocalDate.now(), endDate);
-		String remainderDay = period.getMonths() + "개월 " + period.getDays() + "일";
+		if (loan.getStartDate() != null) {
+			LocalDate endDate = loan.getStartDate().plusMonths(totalCnt);
+			Period period = Period.between(LocalDate.now(), endDate);
+			remainderDay = period.getMonths() + "개월 " + period.getDays() + "일";
+		}
 
 		int amountByMonth = loan.getAmount() / loan.getPaymentTotalCnt();
 
@@ -199,7 +201,7 @@ public class LoanFacade {
 		List<RequestedLoanDetail> requestedLoanDetail = new ArrayList<>();
 		List<Loan> loans = loansService.getRequestedLoansForParents(parent);
 		for (Loan l : loans) {
-		String[] loanConversation = l.getLoanConversation().getContent().split("!#@#!");
+			String[] loanConversation = l.getLoanConversation().getContent().split("!#@#!");
 			RequestedLoanDetail loanDetail = RequestedLoanDetail.builder()
 					.reason(l.getReason())
 					.loanUuid(l.getLoanUuid().toString())

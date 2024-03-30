@@ -3,9 +3,7 @@ package com.a502.backend.application.controller;
 import com.a502.backend.application.config.dto.JWTokenDto;
 import com.a502.backend.application.facade.UserFacade;
 import com.a502.backend.domain.user.dto.*;
-import com.a502.backend.domain.user.response.AuthenticationDto;
-import com.a502.backend.domain.user.response.UserInfoResponse;
-import com.a502.backend.domain.user.response.UserMyPageResponse;
+import com.a502.backend.domain.user.response.*;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import com.a502.backend.global.response.ApiResponse;
@@ -127,6 +125,17 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserInfoResponse>> myinfo(){
         UserInfoResponse response = userFacade.userInfo();
         return ResponseEntity.ok(new ApiResponse<>(API_SUCCESS_MYINFO_LIST, response));
+    }
+
+    @PostMapping("/child")
+    public ResponseEntity<ApiResponse<UserChildrenInfoResponse>> childinfo(){
+        UserChildrenInfoResponse response = userFacade.getChildrenInfo();
+        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_CHILDINFO_LIST, response));
+    }
+    @PostMapping("/account")
+    public ResponseEntity<ApiResponse<UserAccountInfoResponse>> accountinfo(){
+        UserAccountInfoResponse response = userFacade.getUserAccountInfo();
+        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_ACCOUNTINFO, response));
     }
 
     public Cookie getCookieByName(HttpServletRequest request, String name) {

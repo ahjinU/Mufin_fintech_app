@@ -99,7 +99,7 @@ public class SchedulerFacade {
         List<Parking> parkingList = parkingService.findAllList();
 
         for (Parking parking : parkingList) {
-            int interest = (int) (parking.getBalance() * parking.getInterest());
+            int interest = (int) (parking.getBalance() * parking.getInterest() * 0.01);
             parkingService.updateParkingBalance(parking, interest + parking.getBalance());
             parkingDetailsService.saveInterest(parking, interest, codeService.findByName("이자"));
         }

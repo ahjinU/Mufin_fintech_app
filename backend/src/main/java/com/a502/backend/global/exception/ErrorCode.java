@@ -19,8 +19,10 @@ public enum ErrorCode {
     API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND(401, "U005", "토큰이 존재하지 않습니다."),
     API_ERROR_TEMPORARY_UUID_NOT_EXIST(410, "U006", "존재하지 않는 UUID입니다."),
     API_ERROR_USER_ACCESSTOKEN_EXPIRED(401, "U007", "Access Token이 만료되었습니다."),
-    API_ERROR_USER_DELETE(410, "U007",  "탈퇴한 회원입니다."),
+    API_ERROR_USER_DELETE(410, "U008",  "탈퇴한 회원입니다."),
     API_ERROR_USER_NOT_EXIST_MY_KIDS(400, "U009", "등록된 자녀가 없습니다."),
+    API_ERROR_USER_NOT_COMPLETE_TELEPHONE_CHECK(401, "U010", "핸드폰 중복 검사를 먼저 해 주세요."),
+    API_ERROR_USER_NOT_COMPLETE_EMAIL_CHECK(401, "U011", "이메일 중복 검사 및 핸드폰 중복 검사를 확인해 주세요."),
 
 
     //Allowance

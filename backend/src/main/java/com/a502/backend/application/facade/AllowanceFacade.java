@@ -44,23 +44,29 @@ public class AllowanceFacade {
         LocalDateTime start = convertToStartLocalDateTime(calendarDTO.getStartDate());
         LocalDateTime end = convertToEndLocalDateTime(calendarDTO.getEndDate());
 
-        System.out.println("시작/끝 타임");
-        User holderUser = findHolderUser(calendarDTO.getChildUuid());
-        List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, start, end);
-        List<CashDetail> cashDetails = cashDetailService.getAllCashDetailsByUserAndPeriod(holderUser, start, end);
+        User holderUser=userService.userFindByEmail();
+        List<childDto> childs = null;
 
-        System.out.println("현금/게좌 조회 완료");
+        if(userService.isParent(holderUser)){
+            if(calendarDTO.getChildUuid()==null){
+                List<User> childUser = holderUser.getChildrens();
+
+                holderUser=childUser.get(0);
+
+                childs=childDto.convertFromEntitys(childUser);
+            }
+        }
+
+        List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, start, end);
         transactions.addAll(TransactionDto.convertFromAccountDetails(accountDetails));
+
+        List<CashDetail> cashDetails = cashDetailService.getAllCashDetailsByUserAndPeriod(holderUser, start, end);
         transactions.addAll(TransactionDto.convertFromCashetails(cashDetails));
 
-        System.out.println("거래내역들 변환 완료");
 
-        CalendarSummary summary = calculateTransactions(transactions);
-
-
-        System.out.println("계산 완료");
-        return summary;
+        return calculateTransactions(transactions,childs,holderUser.getName());
     }
+
 
     private LocalDateTime convertToStartLocalDateTime(String startDate) {
         if (startDate == null) {
@@ -71,6 +77,9 @@ public class AllowanceFacade {
     }
 
     private LocalDateTime convertToEndLocalDateTime(String endDate) {
+        if (endDate == null) {
+            throw BusinessException.of(ErrorCode.API_ERROR_NOT_TIME_FORMAT);
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(endDate, formatter).atTime(23, 59, 59);
     }
@@ -85,15 +94,10 @@ public class AllowanceFacade {
     }
 
     private User findHolderUser(String childUuid) {
-        if (childUuid == null){
-            System.out.println("아이가 없으니 부모로 조회하겠읍니다.");
-            return userService.userFindByEmail();
-        }
-
         return userService.findByUserUuid(convertToUuid(childUuid));
     }
 
-    private CalendarSummary calculateTransactions(List<TransactionDto> transactions) {
+    private CalendarSummary calculateTransactions(List<TransactionDto> transactions, List<childDto> childs, String holderName) {
         HashMap<String, DailySummary> map = new HashMap<>();
 
         for (TransactionDto transaction : transactions) {
@@ -123,7 +127,7 @@ public class AllowanceFacade {
             monthIncomeTotal += summary.getIncomeDay();
             monthOutcomeTotal += summary.getOutcomeDay();
         }
-        return CalendarSummary.builder().incomeMonth(monthIncomeTotal).outcomeMonth(monthOutcomeTotal).dayDetailList(dailySummaries).build();
+        return CalendarSummary.builder().incomeMonth(monthIncomeTotal).outcomeMonth(monthOutcomeTotal).dayDetailList(dailySummaries).childs(childs).holderName(holderName).build();
 
     }
 
@@ -137,6 +141,7 @@ public class AllowanceFacade {
         LocalDateTime end = convertToEndLocalDateTime(calendarDTO.getEndDate());
 
         User holderUser = findHolderUser(calendarDTO.getChildUuid());
+
         List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, start, end);
         List<CashDetail> cashDetails = cashDetailService.getAllCashDetailsByUserAndPeriod(holderUser, start, end);
 

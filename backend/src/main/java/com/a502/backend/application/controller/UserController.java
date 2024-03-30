@@ -125,14 +125,11 @@ public class UserController {
     public Cookie getCookieByName(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         Cookie findCookie = null;
-        if (cookies.length < 1)
-            System.out.println("쿠키가 엄서용");
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (name.equals(cookie.getName())) {
                     findCookie = cookie;
-                    System.out.println("쿠키 찾았다 !");
                     return findCookie;
                 }
             }
@@ -177,6 +174,9 @@ public class UserController {
 
         Cookie authenicationOnlyTelephoneCookie = getCookieByName(request, "authenticationOnlyTelephone");
 
+        if(authenicationOnlyTelephoneCookie==null)
+            throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_COMPLETE_TELEPHONE_CHECK);
+
         userFacade.checkDupleEmail(authenicationOnlyTelephoneCookie.getValue(), email);
 
         Cookie uuidCookie = createCookie("temporaryUserUuid", authenicationOnlyTelephoneCookie.getValue());
@@ -191,6 +191,9 @@ public class UserController {
 
     private ResponseEntity<ApiResponse<String>> signup(SignUpDto signUpDto, String parentName, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie temporaryUserCookie = getCookieByName(request, "temporaryUserUuid");
+
+        if(temporaryUserCookie==null)
+            throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_COMPLETE_EMAIL_CHECK);
 
         System.out.println("부모");
         System.out.println(parentName);

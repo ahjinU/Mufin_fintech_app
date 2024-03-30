@@ -56,7 +56,7 @@ public class StockSellsService {
 	}
 
 	public List<StockSell> getWaitingStockOrders(User user, Code code, LocalDateTime localDateTime, int cnt) {
-		List<StockSell> stockSellList = stockSellsRepository.findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(user, code, localDateTime, 0);
+		List<StockSell> stockSellList = stockSellsRepository.findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThanOrderByPriceDesc(user, code, localDateTime, 0);
 		if(stockSellList.isEmpty())
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCKSELL_NOT_EXIST);
 		return stockSellList;

@@ -1,13 +1,13 @@
 import { Ranking } from '@/components';
 import Image from 'next/image';
 import { commaNum } from '@/utils/commaNum';
-import { useServerGetFetch } from '@/hooks/useServerFetch';
+import { serverGetFetch } from '@/hooks/useServerFetch';
 import { RankType } from '../../_types';
 
 export default async function Ranks() {
-  const ranks = await useServerGetFetch({ api: '/stock/ranking/total' });
+  const ranks = await serverGetFetch({ api: '/stock/ranking/total' });
   const ranksData = ranks.data.ranks;
-  const myRank = await useServerGetFetch({ api: '/stock/ranking/user' });
+  const myRank = await serverGetFetch({ api: '/stock/ranking/user' });
   const myRankData = myRank.data;
 
   return (

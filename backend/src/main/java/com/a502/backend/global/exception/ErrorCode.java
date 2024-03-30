@@ -21,6 +21,7 @@ public enum ErrorCode {
     API_ERROR_USER_ACCESSTOKEN_EXPIRED(401, "U007", "Access Token이 만료되었습니다."),
     API_ERROR_USER_DELETE(410, "U007",  "탈퇴한 회원입니다."),
     API_ERROR_USER_NOT_EXIST_MY_KIDS(400, "U009", "등록된 자녀가 없습니다."),
+    API_ERROR_USER_NOT_PARENT(400, "U010", "부모 회원만 요청할 수 있는 기능입니다."),
 
 
     //Allowance

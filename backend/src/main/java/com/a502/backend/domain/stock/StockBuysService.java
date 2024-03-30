@@ -1,11 +1,12 @@
 package com.a502.backend.domain.stock;
 
-import com.a502.backend.application.entity.*;
+import com.a502.backend.application.entity.Code;
+import com.a502.backend.application.entity.Stock;
+import com.a502.backend.application.entity.StockBuy;
+import com.a502.backend.application.entity.User;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
-import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +36,10 @@ public class StockBuysService {
 	}
 
 	public List<StockBuy> getBuyOrderList(int id, int cnt, LocalDateTime localDateTime) {
-		return stockBuysRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(id, cnt, localDateTime);
+		return stockBuysRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThanOrderByPriceDesc(id, cnt, localDateTime);
 	}
-//	@Transactional
+
+	//	@Transactional
 //	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public List<StockBuy> findTransactionList(Stock stock, int price) {
 		return stockBuysRepository.findAllByStockAndPriceOrderByCreatedAtAsc(stock, price);
@@ -50,7 +52,7 @@ public class StockBuysService {
 		if (cntNot - cnt < 0)
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_STOCK_IS_NOT_ENOUGH);
 		stockBuy.setCntNot(cntNot - cnt);
-        if (cntNot - cnt == 0)
+		if (cntNot - cnt == 0)
 			stockBuy.updateCode(code);
 		stockBuysRepository.saveAndFlush(stockBuy);
 	}
@@ -60,32 +62,32 @@ public class StockBuysService {
 		return stockBuyList;
 	}
 
-	public List<StockBuy> getWaitingStockOrders(User user, Code code, LocalDateTime localDateTime, int cnt){
+	public List<StockBuy> getWaitingStockOrders(User user, Code code, LocalDateTime localDateTime, int cnt) {
 		List<StockBuy> stockBuyList = stockBuysRepository.findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(user, code, localDateTime, cnt);
-		if(stockBuyList.isEmpty())
+		if (stockBuyList.isEmpty())
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_NOT_EXIST);
 		return stockBuyList;
 	}
 
 	@Transactional
-	public int getStockBuyWaitingList(User user, Stock stock, Code code){
+	public int getStockBuyWaitingList(User user, Stock stock, Code code) {
 		List<StockBuy> list = stockBuysRepository.findAllByUserAndStockAndCode(user, stock, code);
 		int price = 0;
-		for(StockBuy stockBuy : list){
+		for (StockBuy stockBuy : list) {
 			price += stockBuy.getPrice() * stockBuy.getCntNot();
 		}
 		return price;
 	}
 
-	public List<StockBuy> getStockTransListByStock(Stock stock){
+	public List<StockBuy> getStockTransListByStock(Stock stock) {
 		return stockBuysRepository.findAllByStock(stock);
 	}
 
-	public List<StockBuy> getStockTransListOpend(){
+	public List<StockBuy> getStockTransListOpend() {
 		return stockBuysRepository.findAllTransactionIsOpened();
 	}
 
-	public void updateCode(StockBuy stockBuy, Code code){
+	public void updateCode(StockBuy stockBuy, Code code) {
 		stockBuy.updateCode(code);
 		stockBuysRepository.saveAndFlush(stockBuy);
 	}

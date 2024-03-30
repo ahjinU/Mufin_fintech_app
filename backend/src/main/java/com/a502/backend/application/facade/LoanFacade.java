@@ -276,7 +276,7 @@ public class LoanFacade {
 		loanRefusalService.save(loanRefusal);
 
 		// 대출 상태 = 거절 업데이트
-		Code code = codeService.findByName("거절");
-		loan.refuseLoan(code);
+		Code code = codeService.findStatusCode("거절");
+		loansService.refuseLoan(loan, code);
 	}
 }

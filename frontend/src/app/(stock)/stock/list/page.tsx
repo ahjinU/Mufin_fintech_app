@@ -8,11 +8,11 @@ import {
 import { commaNum } from '@/utils/commaNum';
 import MyStockInfo from './MyStockInfo';
 import { StockInfo } from '../_types';
-import { useServerPostFetch } from '@/hooks/useServerFetch';
+import { serverPostFetch } from '@/hooks/useServerFetch';
 
 export default async function StockList() {
   // 내 주식 정보 가져오기
-  const myStocks = await useServerPostFetch({ api: '/stock/mine' });
+  const myStocks = await serverPostFetch({ api: '/stock/mine' });
   const { totalPrice, totalIncome, myStockList } = myStocks?.data;
 
   return (

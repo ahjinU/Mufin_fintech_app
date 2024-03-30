@@ -37,7 +37,7 @@ public class AllowanceFacade {
     private final ReceiptService receiptService;
     private final MemoService memoService;
 
-    public CalendarSummary ㅌgetTransactionsForPeriod(CalendarDTO calendarDTO) {
+    public CalendarSummary getTransactionsForPeriod(CalendarDTO calendarDTO) {
 
         List<TransactionDto> transactions = new ArrayList<>();
 

@@ -7,10 +7,10 @@ import {
 } from '@/components';
 import Ranks from './_components/Ranks';
 import { commaNum } from '@/utils/commaNum';
-import { useServerGetFetch } from '@/hooks/useServerFetch';
+import { serverGetFetch } from '@/hooks/useServerFetch';
 
 export default async function Rank() {
-  const myRank = await useServerGetFetch({ api: '/stock/ranking/user' });
+  const myRank = await serverGetFetch({ api: '/stock/ranking/user' });
   const myRankData = myRank.data;
 
   return (

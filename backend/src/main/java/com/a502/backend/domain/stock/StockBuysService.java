@@ -46,7 +46,6 @@ public class StockBuysService {
 	@Transactional
 //	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public void stockBuy(StockBuy stockBuy, int cnt, Code code) {
-//		StockBuy sb = stockBuysRepository.findById(stockBuy.getId()).orElse(null);
 		int cntNot = stockBuy.getCntNot();
 		if (cntNot - cnt < 0)
 			throw BusinessException.of(ErrorCode.API_ERROR_STOCKBUY_STOCK_IS_NOT_ENOUGH);
@@ -80,5 +79,14 @@ public class StockBuysService {
 
 	public List<StockBuy> getStockTransListByStock(Stock stock){
 		return stockBuysRepository.findAllByStock(stock);
+	}
+
+	public List<StockBuy> getStockTransListOpend(){
+		return stockBuysRepository.findAllTransactionIsOpened();
+	}
+
+	public void updateCode(StockBuy stockBuy, Code code){
+		stockBuy.updateCode(code);
+		stockBuysRepository.saveAndFlush(stockBuy);
 	}
 }

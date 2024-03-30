@@ -53,6 +53,12 @@ public class ParkingService {
         parkingRepository.saveAndFlush(parking);
     }
 
+    @Transactional
+    public void updateParkingBalance(Parking parking, int balance) {
+        parking.setBalance(balance);
+        parkingRepository.saveAndFlush(parking);
+    }
+
     public void saveParkingAccount(Parking newParkingAccount) {
         parkingRepository.save(newParkingAccount);
     }

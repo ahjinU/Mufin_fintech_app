@@ -130,7 +130,11 @@ export default function Main() {
           }
           bottomChildren={
             <div className="flex flex-col gap-[2rem]">
-              <ProgressBar barGage={64.8} height="h-[2.4rem]" />
+              <ProgressBar
+                barGage={64.8}
+                height="h-[2.4rem]"
+                boundary="rounded-none"
+              />
               <div className="flex justify-between items-center">
                 <div className="flex gap-[1rem]">
                   <div className="size-[3rem] rounded-full bg-custom-purple"></div>

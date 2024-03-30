@@ -107,7 +107,6 @@ public class LoanFacade {
 		Loan loan = loansService.findByUuid(loanUuid);
 
 		int totalCnt = loan.getPaymentTotalCnt();
-
 		LocalDate endDate = loan.getStartDate().plusMonths(totalCnt);
 		Period period = Period.between(LocalDate.now(), endDate);
 		String remainderDay = period.getMonths() + "개월 " + period.getDays() + "일";
@@ -121,6 +120,7 @@ public class LoanFacade {
 				.startDate(loan.getStartDate())
 				.remainderDay(remainderDay)
 				.paymentDate(loan.getPaymentDate())
+				.paymentAmount(amountByMonth)
 				.overDueCnt(loan.getOverdueCnt())
 				.build();
 	}

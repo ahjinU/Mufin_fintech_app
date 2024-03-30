@@ -185,13 +185,16 @@ public class UserFacade {
             totalPrice += totalPriceCur;
         }
 
-        totalIncomePercent = (double) totalIncome / (totalPrice - totalIncome) * 100.0;
-        return new UserMyPageResponse(name, isParent, accountNumber, balance, savings, monthAmounts, ranking, chocochip, totalIncome, totalPrice, totalIncomePercent);
+        if (totalPrice - totalIncome == 0)
+            totalIncomePercent = 0;
+        else totalIncomePercent = (double) totalIncome / (totalPrice - totalIncome) * 100.0;
+
+        String formatted = String.format("%.2f", totalIncomePercent);
+        return new UserMyPageResponse(name, isParent, accountNumber, balance, savings, monthAmounts, ranking, chocochip, totalIncome, totalPrice, formatted);
     }
 
     public String[] getMonthDate(){
         Date today = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         LocalDate localDate = new java.sql.Date(today.getTime()).toLocalDate();
 
         LocalDate firstDayOfMonth = localDate.withDayOfMonth(1);

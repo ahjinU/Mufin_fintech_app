@@ -19,5 +19,5 @@ public class UserMyPageResponse {
     int chocochip;
     int totalIncome;
     int totalPrice;
-    double totalIncomePercent;
+    String totalIncomePercent;
 }

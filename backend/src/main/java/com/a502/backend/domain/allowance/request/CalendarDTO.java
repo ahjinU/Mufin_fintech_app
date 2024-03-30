@@ -1,12 +1,10 @@
 package com.a502.backend.domain.allowance.request;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class CalendarDTO{
     private String startDate;
     private String endDate;

@@ -22,8 +22,6 @@ public class CashDetailService {
 
 	public List<CashDetail> getAllCashDetailsByUserAndPeriod(User user, LocalDateTime startDay, LocalDateTime endDay) {
 		List<CashDetail> cashDetailList = cashDetailRepository.findByUserAndPeriod(user, startDay, endDay);
-		if(cashDetailList.isEmpty())
-			throw BusinessException.of(ErrorCode.API_ERROR_CASHDETAIL_NOT_EXIST);
 		return cashDetailList;
 	}
 

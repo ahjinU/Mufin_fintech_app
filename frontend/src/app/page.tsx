@@ -1,5 +1,17 @@
+'use client';
+
+import { useSession } from 'next-auth/react';
+import Main from './_component/Main';
+import MainWithoutSignIn from './_component/MainWithoutSignIn';
+
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
-    <main className="flex min-h-screen flex-col items-center px-[1.2rem]"></main>
+    <main>
+      <div className="flex flex-col items-center">
+        {session ? <Main /> : <MainWithoutSignIn />}
+      </div>
+    </main>
   );
 }

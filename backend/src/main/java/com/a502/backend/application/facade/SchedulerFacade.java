@@ -3,6 +3,7 @@ package com.a502.backend.application.facade;
 import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.account.AccountService;
 import com.a502.backend.domain.loan.LoansService;
+import com.a502.backend.domain.parking.ParkingDetailsService;
 import com.a502.backend.domain.parking.ParkingService;
 import com.a502.backend.domain.savings.SavingsService;
 import com.a502.backend.domain.stock.*;
@@ -30,9 +31,13 @@ public class SchedulerFacade {
     private final StockDetailsService stockDetailsService;
     private final StocksService stocksService;
     private final StockFacade stockFacade;
+    private final StockSellsService stockSellsService;
+    private final StockBuysService stockBuysService;
     private final AccountService accountService;
     private final CodeService codeService;
     private final LoansService loansService;
+    private final ParkingService parkingService;
+    private final ParkingDetailsService parkingDetailsService;
 
 //    @Scheduled(cron = "${schedule.cron.test}")
 //    @Scheduled(cron = "${schedule.cron.start}")
@@ -85,6 +90,32 @@ public class SchedulerFacade {
             if (loan.getPaymentNowCnt() < diffDays){
                 loansService.updateOverdueCnt(loan);
             }
+        }
+
+    }
+
+    //    @Scheduled(cron = "${schedule.cron.test}")
+    public void checkParkingAccountInterest(){
+        List<Parking> parkingList = parkingService.findAllList();
+
+        for (Parking parking : parkingList) {
+            int interest = (int) (parking.getBalance() * parking.getInterest() * 0.01);
+            parkingService.updateParkingBalance(parking, interest + parking.getBalance());
+            parkingDetailsService.saveInterest(parking, interest, codeService.findByName("이자"));
+        }
+    }
+
+    @Scheduled(cron = "${schedule.cron.test}")
+    public void marketEnd(){
+        List<StockBuy> stockBuys = stockBuysService.getStockTransListOpend();
+        List<StockSell> stockSells = stockSellsService.getStockTransListOpend();
+        Code code = codeService.findByName("취소");
+
+        for (StockBuy stockBuy: stockBuys) {
+            stockBuysService.updateCode(stockBuy, code);
+        }
+        for (StockSell stockSell: stockSells) {
+            stockSellsService.updateCode(stockSell, code);
         }
 
     }

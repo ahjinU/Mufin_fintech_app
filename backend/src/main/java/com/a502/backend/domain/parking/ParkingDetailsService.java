@@ -22,7 +22,6 @@ public class ParkingDetailsService {
 	@Transactional
 	public ParkingDetail saveStockBuy(StockBuy stockBuy, Parking parking, int cnt, Code code) {
 		ParkingDetail last = getLastDetail(parking);
-		// 거래 주식회사 이름
 		String counterpartyName = stockBuy.getStock().getName();
 		int amount = -stockBuy.getPrice() * cnt;
 		return parkingDetailsRepository.save(ParkingDetail.builder()
@@ -39,7 +38,6 @@ public class ParkingDetailsService {
 	@Transactional
 	public ParkingDetail saveStockSell(StockSell stockSell, Parking parking, int cnt, Code code) {
 		ParkingDetail last = getLastDetail(parking);
-		// 거래 주식회사 이름
 		String counterpartyName = stockSell.getStock().getName();
 		int amount = stockSell.getPrice() * cnt;
 		return parkingDetailsRepository.save(ParkingDetail.builder()
@@ -49,6 +47,19 @@ public class ParkingDetailsService {
 				.counterpartyName(counterpartyName)
 				.code(code)
 				.cnt(cnt)
+				.build()
+		);
+	}
+	@Transactional
+	public ParkingDetail saveInterest(Parking parking, int amount, Code code) {
+		ParkingDetail last = getLastDetail(parking);
+		return parkingDetailsRepository.save(ParkingDetail.builder()
+				.parking(parking)
+				.amount(amount)
+				.balance(last.getBalance() + amount)
+				.counterpartyName("쟈수민의 요술 오븐")
+				.code(code)
+				.cnt(0)
 				.build()
 		);
 	}

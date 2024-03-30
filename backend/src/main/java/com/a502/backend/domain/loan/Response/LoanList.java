@@ -13,23 +13,25 @@ public class LoanList {
 	private int amount;
 	private int paymentTotalCnt;
 	private int paymentNowCnt;
+	private int remainderAmount;
 	private String status;
 	private int overDueCnt;
 	private String loanRefusalReason;
 
 	@Builder
-	public LoanList(String reason, String loanUuid, int amount, int paymentTotalCnt, int paymentNowCnt, String status, int overDueCnt, String loanRefusalReason) {
+	public LoanList(String reason, String loanUuid, int amount, int paymentTotalCnt, int paymentNowCnt, String status, int overDueCnt, String loanRefusalReason, int remainderAmount) {
 		this.reason = reason;
 		this.loanUuid = loanUuid;
 		this.amount = amount;
 		this.paymentTotalCnt = paymentTotalCnt;
 		this.paymentNowCnt = paymentNowCnt;
+		this.remainderAmount = remainderAmount;
 		this.status = status;
 		this.overDueCnt = overDueCnt;
 		this.loanRefusalReason = loanRefusalReason;
 	}
 
-	public void updateLoanDetail(String loanRefusalReason){
+	public void updateLoanDetail(String loanRefusalReason) {
 		this.loanRefusalReason = loanRefusalReason;
 	}
 }

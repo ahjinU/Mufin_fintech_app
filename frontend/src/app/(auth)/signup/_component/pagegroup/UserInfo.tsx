@@ -1,28 +1,78 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ComplexInput, Input, Button } from '@/components';
+import {
+  isValidName,
+  isValidYear,
+  isValidMonth,
+  isValidDay,
+} from '../../_utils/validator';
 import DateInput from './DateInput';
 
 export default function UserInfo({ onNext }: { onNext: (data: any) => void }) {
   const [info, setInfo] = useState({ name: '', year: '', month: '', day: '' });
   const [gender, setGender] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({ nameMessage: '', birthMessage: '' });
+  const [buttonMode, setButtonMode] = useState<'ACTIVE' | 'NON_ACTIVE'>(
+    'NON_ACTIVE',
+  );
 
   const onChangeInput = (e: { target: { name: string; value: string } }) => {
-    setInfo({ ...info, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setInfo({ ...info, [name]: value });
+
+    if (name === 'name') {
+      setMessage({
+        ...message,
+        nameMessage: isValidName(value)
+          ? ''
+          : '이름은 2자 이상 6자 이하의 문자로 입력해주세요!',
+      });
+    } else if (name === 'year' || name === 'month' || name === 'day') {
+      setMessage({
+        ...message,
+        birthMessage:
+          isValidYear(info.year) &&
+          isValidMonth(info.month) &&
+          isValidDay(info.day)
+            ? ''
+            : '올바른 날짜를 입력해주세요!',
+      });
+    }
   };
 
+  useEffect(() => {
+    if (
+      isValidName(info.name) &&
+      isValidYear(info.year) &&
+      isValidMonth(info.month) &&
+      isValidDay(info.day) &&
+      gender !== ''
+    ) {
+      setButtonMode('ACTIVE');
+    } else {
+      setButtonMode('NON_ACTIVE');
+    }
+  }, [info, gender]);
+
   const handleNext = () => {
-    const data = {
-      name: info.name,
-      gender: gender,
-      birth: info.year + '-' + info.month + '-' + info.day,
-    };
-    onNext(data);
+    if (buttonMode == 'ACTIVE') {
+      const data = {
+        name: info.name,
+        gender: gender,
+        birth: info.year + '-' + info.month + '-' + info.day,
+      };
+      onNext(data);
+    }
   };
 
   return (
     <div className="flex flex-col gap-[2rem]">
-      <ComplexInput label="이름" mode="ERROR" isMsg message={message}>
+      <ComplexInput
+        label="이름"
+        mode="ERROR"
+        isMsg
+        message={message.nameMessage}
+      >
         <Input
           placeholder="이름을 입력해주세요"
           name="name"
@@ -43,7 +93,12 @@ export default function UserInfo({ onNext }: { onNext: (data: any) => void }) {
           />
         </div>
       </ComplexInput>
-      <ComplexInput label="생년월일" mode="NONE">
+      <ComplexInput
+        label="생년월일"
+        mode="ERROR"
+        isMsg
+        message={message.birthMessage}
+      >
         <div className="flex justify-between items-center">
           <DateInput name="year" onChange={onChangeInput} />
           <DateInput name="month" onChange={onChangeInput} />
@@ -51,7 +106,7 @@ export default function UserInfo({ onNext }: { onNext: (data: any) => void }) {
         </div>
       </ComplexInput>
       <div className="fixed bottom-0 inset-x-0 p-[1.2rem]">
-        <Button label="다음" mode="ACTIVE" onClick={handleNext} />
+        <Button label="다음" mode={buttonMode} onClick={handleNext} />
       </div>
     </div>
   );

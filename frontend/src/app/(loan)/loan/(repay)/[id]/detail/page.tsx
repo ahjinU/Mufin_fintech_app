@@ -1,17 +1,29 @@
+'use client';
+
 import { Button, ComplexInput, FlexBox, GuideText } from '@/components';
-import { useServerPostFetch } from '@/hooks/useServerFetch';
+import { serverPostFetch } from '@/hooks/useServerFetch';
 import Image from 'next/image';
 import { LoanDetailType } from '../../../_types';
 import { format } from 'date-fns';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import LoanAPI from '../../../_api';
+import { commaNum } from '@/utils/commaNum';
 
-export default async function LoanDetail() {
-  const res = await useServerPostFetch({
-    data: { loanUuid: '987bafb9-b6f6-4e9a-9ea1-93f4b6d44d3c' },
-    api: '/loan/detail/child',
-  });
+export default function LoanDetail() {
+  var currentUrl = usePathname();
+  var id = currentUrl?.split('/')[2];
 
-  const loan: LoanDetailType = res?.data;
+  const { getLoanDetail } = LoanAPI();
+  const [loan, setLoan] = useState<LoanDetailType>();
+
+  useEffect(() => {
+    (async function () {
+      const res = id && (await getLoanDetail({ loanUuid: id }));
+      setLoan(res?.data);
+    })();
+  }, [id]);
 
   return (
     <div className="flex flex-col gap-[1rem]">
@@ -36,11 +48,11 @@ export default async function LoanDetail() {
               </div>
               <div className="flex justify-between custom-medium-text text-custom-black">
                 <p>대출 금액</p>
-                <p>{loan?.totalAmount}원</p>
+                <p>{commaNum(loan?.totalAmount)} 원</p>
               </div>
               <div className="flex justify-between custom-medium-text text-custom-black">
                 <p>남은 금액</p>
-                <p>{loan?.remainderAmount}원</p>
+                <p>{commaNum(loan?.remainderAmount)} 원</p>
               </div>
               <div className="flex justify-between custom-medium-text text-custom-black">
                 <p>대출 일자</p>
@@ -56,7 +68,7 @@ export default async function LoanDetail() {
               </div>
               <div className="flex justify-between custom-medium-text text-custom-black">
                 <p>연체 횟수</p>
-                <p className="text-custom-red">{loan?.overDueCnt}</p>
+                <p className="text-custom-red">{loan?.overDueCnt}회</p>
               </div>
             </div>
           }

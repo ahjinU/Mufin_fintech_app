@@ -7,6 +7,7 @@ import {
   FlexBox,
   NavBar,
   OtherInfoElement,
+  ProgressBar,
   SmallButton,
   TinyButton,
 } from '@/components';
@@ -38,21 +39,9 @@ function MainBoxText({
   );
 }
 
-// 공통 컴포넌트 수정하기 - h, rounded
-function ProgressBarGraph({ barGage }: { barGage: number }) {
-  return (
-    <div className="w-full h-[2.4rem] rounded-[2rem] bg-custom-light-purple overflow-hidden">
-      <div
-        className="h-full rounded-none bg-custom-purple"
-        style={{ width: `${barGage}%` }}
-      ></div>
-    </div>
-  );
-}
-
 export default function Main() {
   return (
-    <div className="w-full">
+    <div className="w-full mb-[1rem]">
       <MainHeader></MainHeader>
       <div className="px-[1.2rem] flex flex-col gap-[1rem]">
         <Link
@@ -140,10 +129,44 @@ export default function Main() {
             </div>
           }
           bottomChildren={
-            <div className="flex flex-col gap-[1rem]">
-              <ProgressBarGraph barGage={64.8} />
-              <div className="">
-                <div className=""></div>
+            <div className="flex flex-col gap-[2rem]">
+              <ProgressBar barGage={64.8} height="h-[2.4rem]" />
+              <div className="flex justify-between items-center">
+                <div className="flex gap-[1rem]">
+                  <div className="size-[3rem] rounded-full bg-custom-purple"></div>
+                  <div>
+                    <p className="custom-medium-text text-custom-black">
+                      초코칩 저장소
+                    </p>
+                    <p className="custom-light-text text-custom-dark-gray">
+                      64.8%
+                    </p>
+                  </div>
+                </div>
+                <p className="custom-medium-text text-custom-black">
+                  100,181,100초코칩
+                </p>
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="flex gap-[1rem]">
+                  <div className="size-[3rem] rounded-full bg-custom-light-purple"></div>
+                  <div>
+                    <p className="custom-medium-text text-custom-black">
+                      주식 평가
+                    </p>
+                    <p className="custom-light-text text-custom-dark-gray">
+                      64.8%
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p className="custom-medium-text text-custom-black">
+                    100,181,100초코칩
+                  </p>
+                  <p className="custom-light-text text-custom-blue">
+                    -250,400초코칩(-53.2%)
+                  </p>
+                </div>
               </div>
             </div>
           }

@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/allowance")
+@RequestMapping("api/allowance")
 public class AllowanceController {
     @Value("${receipt.apiURL}")
     String apiURL;

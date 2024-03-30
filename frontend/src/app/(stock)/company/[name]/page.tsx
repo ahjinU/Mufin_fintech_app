@@ -8,7 +8,7 @@ import {
 import { StockLineChart } from '../_components/StockLineChart';
 import { StockCandleChart } from '../_components/StockCandleChart';
 import { StockCall } from '../_components/StockCall';
-import { useServerPostFetch } from '@/hooks/useServerFetch';
+import { serverPostFetch } from '@/hooks/useServerFetch';
 import { commaNum } from '@/utils/commaNum';
 
 const toCompanyKoreanName = (name: string) => {
@@ -32,7 +32,7 @@ export default async function Company({
   const companyName = toCompanyKoreanName(params.name);
 
   // 주식 상세 정보 불러오기
-  const stockDetail = await useServerPostFetch({
+  const stockDetail = await serverPostFetch({
     api: '/stock/detail',
     data: { name: companyName },
   });
@@ -73,7 +73,10 @@ export default async function Company({
             label: '선 차트',
             component: companyName && <StockLineChart name={companyName} />,
           },
-          // { label: '봉 차트', component: <StockCandleChart /> },
+          {
+            label: '봉 차트',
+            component: companyName && <StockCandleChart name={companyName} />,
+          },
         ]}
       />
 

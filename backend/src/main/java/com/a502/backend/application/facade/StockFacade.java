@@ -177,16 +177,42 @@ public class StockFacade {
 		// 매도 / 매수 주문 리스트
 		List<StockOrderList> stockOrderList = new ArrayList<>();
 		// 주식 id에 해당하는 매도 주문 리스트 조회
-		List<StockSell> buyList = stockSellsService.getSellOrderList(id, 0, LocalDate.now().atStartOfDay());
-		for (StockSell stockSell : buyList) {
-			stockOrderList.add(StockOrderList.builder().buyOrderCnt(stockSell.getCntNot()).price(stockSell.getPrice()).build());
+		List<StockSell> sellList = stockSellsService.getSellOrderList(id, 0, LocalDate.now().atStartOfDay());
+		if (!sellList.isEmpty()) {
+			int sellPrice = sellList.get(0).getPrice();
+			int sellCnt = 0;
+			for (int i = 0; i < sellList.size(); i++) {
+				if (sellPrice == sellList.get(i).getPrice()) {
+					sellCnt += sellList.get(i).getCntNot();
+				} else {
+					stockOrderList.add(StockOrderList.builder().sellOrderCnt(sellCnt).price(sellPrice).build());
+					sellCnt = sellList.get(i).getCntNot();
+					sellPrice = sellList.get(i).getPrice();
+				}
+				if (i == sellList.size() - 1) {
+					stockOrderList.add(StockOrderList.builder().sellOrderCnt(sellCnt).price(sellPrice).build());
+				}
+			}
+
 		}
 		// 주식 id에 해당하는 매수 주문 리스트 조회
-		List<StockBuy> sellList = stockBuysService.getBuyOrderList(id, 0, LocalDate.now().atStartOfDay());
-		for (StockBuy stockBuy : sellList) {
-			stockOrderList.add(StockOrderList.builder().sellOrderCnt(stockBuy.getCntNot()).price(stockBuy.getPrice()).build());
+		List<StockBuy> buyList = stockBuysService.getBuyOrderList(id, 0, LocalDate.now().atStartOfDay());
+		if (!buyList.isEmpty()) {
+			int buyPrice = buyList.get(0).getPrice();
+			int buyCnt = 0;
+			for (int i = 0; i < buyList.size(); i++) {
+				if (buyPrice == buyList.get(i).getPrice()) {
+					buyCnt += buyList.get(i).getCntNot();
+				} else {
+					stockOrderList.add(StockOrderList.builder().buyOrderCnt(buyCnt).price(buyPrice).build());
+					buyCnt = buyList.get(i).getCntNot();
+					buyPrice = buyList.get(i).getPrice();
+				}
+				if (i == buyList.size() - 1) {
+					stockOrderList.add(StockOrderList.builder().buyOrderCnt(buyCnt).price(buyPrice).build());
+				}
+			}
 		}
-
 		return PriceAndStockOrderList.builder().price(price).stockOrderList(stockOrderList).build();
 	}
 

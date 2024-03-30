@@ -16,7 +16,7 @@ import java.util.Optional;
 
 interface StockBuysRepository extends JpaRepository<StockBuy, Integer> {
 	// 주식 하나당 매도 주문 들어온 것 리스트 조회
-	List<StockBuy> findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(int id, int cnt , LocalDateTime localDateTime);
+	List<StockBuy> findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThanOrderByPriceDesc(int id, int cnt , LocalDateTime localDateTime);
 //    @Lock(LockModeType.PESSIMISTIC_WRITE)
 //	@Transactional
 	@Query("select sb from StockBuy sb where sb.code.id = 'S001' and sb.stock = :stock and sb.price = :price order by sb.createdAt asc")

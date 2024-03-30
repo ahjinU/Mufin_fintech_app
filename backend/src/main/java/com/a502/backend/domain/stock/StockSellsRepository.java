@@ -20,7 +20,7 @@ interface StockSellsRepository extends JpaRepository<StockSell, Integer> {
 	List<StockSell> findAllByStockAndPriceOrderByCreatedAtAsc(Stock stock, int price);
 
 	// 미체결 매도 주문 조회
-	List<StockSell> findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThan(User user, Code code, LocalDateTime localDateTime, int cnt);
+	List<StockSell> findAllByUserAndCodeAndCreatedAtGreaterThanAndCntNotGreaterThanOrderByPriceDesc(User user, Code code, LocalDateTime localDateTime, int cnt);
 //	@Lock(LockModeType.PESSIMISTIC_WRITE)
 //	@Transactional
 	List<StockSell> findAllByUserAndStockAndCode(User user, Stock stock, Code code);

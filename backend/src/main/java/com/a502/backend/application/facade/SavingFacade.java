@@ -110,7 +110,6 @@ public class SavingFacade {
 		String savingUuid = joinSavingsRequest.getSavingsUuid();
 		int paymentAmount = joinSavingsRequest.getPaymentAmount();
 		int paymentDate = joinSavingsRequest.getPaymentDate();
-		String password = joinSavingsRequest.getPassword();
 
 		Savings savings = savingsService.findByUuid(savingUuid);
 		// 계좌 테이블 추가

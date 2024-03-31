@@ -11,13 +11,11 @@ public class JoinSavingsRequest {
 	private String savingsUuid;
 	private int paymentAmount;
 	private int paymentDate;
-	private String password;
 
 	@Builder
-	public JoinSavingsRequest(String savingsUuid, int paymentAmount, int paymentDate, String password) {
+	public JoinSavingsRequest(String savingsUuid, int paymentAmount, int paymentDate) {
 		this.savingsUuid = savingsUuid;
 		this.paymentAmount = paymentAmount;
 		this.paymentDate = paymentDate;
-		this.password = password;
 	}
 }

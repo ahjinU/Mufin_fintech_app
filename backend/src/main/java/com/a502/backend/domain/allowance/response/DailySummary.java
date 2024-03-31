@@ -16,14 +16,17 @@ public class DailySummary {
     private String date;
     private int incomeDay;
     private int outcomeDay;
+    private boolean isSavingsDay; // '적금내는 날' to English for better readability
+    private boolean isLoanPaymentDay; // '대출값는날' to English for better readability
 
     @Builder
-    public DailySummary(String date, int incomeDay, int outcomeDay) {
+    public DailySummary(String date, int incomeDay, int outcomeDay, boolean isSavingsDay, boolean isLoanPaymentDay) {
         this.date = date;
         this.incomeDay = incomeDay;
         this.outcomeDay = outcomeDay;
+        this.isSavingsDay = isSavingsDay;
+        this.isLoanPaymentDay = isLoanPaymentDay;
     }
-
 
     public void updateTransactionAmount(int amount) {
 
@@ -33,5 +36,12 @@ public class DailySummary {
         }
 
         this.outcomeDay += amount;
+    }
+    public void markAsSavingsDay() {
+        this.isSavingsDay = true;
+    }
+
+    public void markAsLoanPaymentDay() {
+        this.isLoanPaymentDay = true;
     }
 }

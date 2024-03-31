@@ -9,11 +9,11 @@ export default function UserMenu() {
   const data =
     userType === 'CHILD'
       ? [
-          '최근 결제 내역 확인하기',
-          '적금 신청하기',
-          '적금 보기 & 납부하기',
-          '대출 받기',
-          '대출 보기 & 상환하기',
+          ['최근 결제 내역 확인하기', '/'],
+          ['적금 신청하기', '/savings/apply'],
+          ['적금 보기 & 납부하기', '/savings/mine'],
+          ['대출 받기', '/'],
+          ['대출 보기 & 상환하기', '/'],
         ]
       : [
           ['아이 회원가입하기', '/'],
@@ -25,7 +25,7 @@ export default function UserMenu() {
 
   useEffect(() => {
     // 여기에 아이의 유형 불러오기 fetch문
-    setUserType('PARENT');
+    setUserType('CHILD');
   }, []);
 
   // 아이와 부모에 따라 다른 메뉴 및 NavBar

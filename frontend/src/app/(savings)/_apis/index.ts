@@ -3,7 +3,7 @@ import useFetch from '@/hooks/useFetch';
 export default function SavingsApis() {
   const { postFetch } = useFetch();
 
-  // 적금 상품 등록 (완료)
+  // 적금 상품 등록
   const registerSavingsProduct = async (
     name: string,
     period: number,
@@ -53,13 +53,47 @@ export default function SavingsApis() {
 
   // 적금 상품 가입
   const applySavingsProduct = async (
-    savingsUuId: string,
+    savingsUuid: string,
     paymentAmount: number,
     paymentDate: number,
   ) => {
     const res = await postFetch({
       api: '/savings/join',
-      data: { savingsUuId, paymentAmount, paymentDate },
+      data: { savingsUuid, paymentAmount, paymentDate },
+    });
+    return res;
+  };
+
+  // 내가 가입한 적금 보기(아이)
+  const getAppliedSavingsProduct = async () => {
+    const res = await postFetch({
+      api: '/savings/search/mine/total',
+    });
+    return res;
+  };
+
+  // 내가 가입한 적금 상세
+  const getAppliedSavingsProductDetail = async (accountUuid: string) => {
+    const res = await postFetch({
+      api: '/savings/search/mine/detail',
+      data: { accountUuid },
+    });
+    return res;
+  };
+
+  // 적금 납부하기
+  const paySavings = async (accountUuid: string, cnt: number) => {
+    const res = await postFetch({
+      api: '/savings/deposit',
+      data: { accountUuid, cnt },
+    });
+    return res;
+  };
+
+  // 내 자녀의 적금 현황 파악하기(부모)
+  const getChildrenSavingsState = async () => {
+    const res = await postFetch({
+      api: '/savings/search/mychild',
     });
     return res;
   };
@@ -71,5 +105,9 @@ export default function SavingsApis() {
     applySavingsProduct,
     terminateSavings,
     cancelSavings,
+    getAppliedSavingsProduct,
+    getAppliedSavingsProductDetail,
+    paySavings,
+    getChildrenSavingsState,
   };
 }

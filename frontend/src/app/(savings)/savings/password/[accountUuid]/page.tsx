@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default function Password() {
-  redirect('/completePaySavings');
+  redirect('/result/savings/pay');
 }

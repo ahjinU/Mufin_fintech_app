@@ -78,7 +78,7 @@ export default function MoneyInfoElement({
       return (
         <TinyButton
           label={tinyButtonLabel}
-          onClick={() => {
+          handleClick={() => {
             if (link) router.push(link);
             if (handleTinyButton) handleTinyButton();
           }}

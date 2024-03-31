@@ -37,30 +37,31 @@ export default function SavingsList() {
         </Header>
 
         <section className="w-full p-[1.2rem] flex flex-col gap-[1rem]">
-          {savingsList?.map((savings, index) => {
-            return (
-              <FlexBox
-                key={`적금상품-${index}`}
-                isDivided={false}
-                topChildren={
-                  <MoneyInfoElement
-                    leftHighlightText={savings.name.slice(0, 15) + ' ...'}
-                    leftExplainText={`${new Date(
-                      savings.createdAt,
-                    ).getFullYear()}년 ${
-                      new Date(savings.createdAt).getMonth() + 1
-                    }월 ${new Date(savings.createdAt).getDate()}일`}
-                    buttonOption="TINY_BUTTON"
-                    tinyButtonLabel="삭제하기"
-                    handleTinyButton={() => {
-                      setIsModalOpen(true);
-                      setTargetSavingsUuid(savings.savingsUuid);
-                    }}
-                  />
-                }
-              />
-            );
-          })}
+          {savingsList &&
+            savingsList.map((savings, index) => {
+              return (
+                <FlexBox
+                  key={`적금상품-${index}`}
+                  isDivided={false}
+                  topChildren={
+                    <MoneyInfoElement
+                      leftHighlightText={savings.name.slice(0, 15) + ' ...'}
+                      leftExplainText={`${new Date(
+                        savings.createdAt,
+                      ).getFullYear()}년 ${
+                        new Date(savings.createdAt).getMonth() + 1
+                      }월 ${new Date(savings.createdAt).getDate()}일`}
+                      buttonOption="TINY_BUTTON"
+                      tinyButtonLabel="삭제하기"
+                      handleTinyButton={() => {
+                        setIsModalOpen(true);
+                        setTargetSavingsUuid(savings.savingsUuid);
+                      }}
+                    />
+                  }
+                />
+              );
+            })}
 
           <PlusButton
             label="적금 상품 더 만들기"

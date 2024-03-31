@@ -66,7 +66,7 @@ export default function MakeSavingsStep1() {
             text="적금 상품을 만드시겠어요?"
             isOpen={isModalOpen}
             handleClickOkay={async () => {
-              registerSavingsProduct(name, month, parseFloat(rate));
+              await registerSavingsProduct(name, month, parseFloat(rate));
               router.replace('/result/savings/make');
             }}
             handleClickNo={() => setIsModalOpen(false)}

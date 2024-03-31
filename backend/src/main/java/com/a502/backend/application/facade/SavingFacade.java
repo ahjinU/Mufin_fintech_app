@@ -75,6 +75,7 @@ public class SavingFacade {
 		User parents = child.getParent();
 		List<Savings> savingsList = new ArrayList<>();
 		// 부모는 접근 못함
+
 		savingsList = savingsService.findAllByParents(Objects.requireNonNullElse(parents, child));
 		List<SavingsDetail> detail = new ArrayList<>();
 		for (Savings s : savingsList) {

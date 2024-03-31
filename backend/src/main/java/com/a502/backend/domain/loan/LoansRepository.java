@@ -1,5 +1,6 @@
 package com.a502.backend.domain.loan;
 
+import com.a502.backend.application.entity.Code;
 import com.a502.backend.application.entity.Loan;
 import com.a502.backend.application.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,4 +29,8 @@ public interface LoansRepository extends JpaRepository<Loan, Integer> {
 
 	@Query("select l from Loan l where l.code.id = 'L002'")
 	List<Loan> findAllLoansInProgress();
+
+	List<Loan> findByChildAndCode(User user, Code code);
+
+
 }

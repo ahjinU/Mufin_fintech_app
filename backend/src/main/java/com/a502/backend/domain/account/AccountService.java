@@ -81,11 +81,10 @@ public class AccountService {
 	}
 
 	// 적금 계좌 생성 메소드
-	public Account createSavingsAccount(Savings savings, int cycle, int date, int amount, String password) {
+	public Account createSavingsAccount(Savings savings, int cycle, int date, int amount) {
 
 		User user = userService.userFindByEmail();
 
-		String encodedPassword = passwordEncoder.encode(password);
 
 		String accountNumber = generateUniqueAccountNumber(true);
 
@@ -94,7 +93,6 @@ public class AccountService {
 
 
 		Account account = Account.builder()
-				.password(encodedPassword)
 				.accountNumber(accountNumber)
 				.balance(0)
 				.user(user)

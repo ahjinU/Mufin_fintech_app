@@ -114,7 +114,7 @@ public class SavingFacade {
 
 		Savings savings = savingsService.findByUuid(savingUuid);
 		// 계좌 테이블 추가
-		accountService.createSavingsAccount(savings, 0, paymentDate, paymentAmount, password);
+		accountService.createSavingsAccount(savings, 0, paymentDate, paymentAmount);
 	}
 
 	public MyChildSavingsListResponse getMyChildSavings() {

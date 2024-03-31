@@ -65,4 +65,9 @@ public class LoansService {
 		loan.refuseLoan(code);
 		loansRepository.saveAndFlush(loan);
 	}
+
+
+	public List<Loan> findLoansByUserAndCode(User user, Code code){
+		return loansRepository.findByChildAndCode(user, code);
+	}
 }

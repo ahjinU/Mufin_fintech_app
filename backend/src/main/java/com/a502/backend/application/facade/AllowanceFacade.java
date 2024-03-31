@@ -48,16 +48,18 @@ public class AllowanceFacade {
         LocalDateTime start = convertToStartLocalDateTime(calendarDTO.getStartDate());
         LocalDateTime end = convertToEndLocalDateTime(calendarDTO.getEndDate());
 
-        User holderUser=userService.userFindByEmail();
+        User holderUser = userService.userFindByEmail();
         List<childDto> childs = null;
 
-        if(userService.isParent(holderUser)){
-            if(calendarDTO.getChildUuid()==null){
+        if (userService.isParent(holderUser)) {
+            if (calendarDTO.getChildUuid() == null) {
                 List<User> childUser = holderUser.getChildrens();
 
-                holderUser=childUser.get(0);
+                holderUser = childUser.get(0);
 
-                childs=childDto.convertFromEntitys(childUser);
+                childs = childDto.convertFromEntitys(childUser);
+            } else {
+                holderUser = userService.findByUserUuid(convertToUuid(calendarDTO.getChildUuid()));
             }
         }
 
@@ -74,7 +76,7 @@ public class AllowanceFacade {
         code = codeService.findTypeCode("정상");
         List<Account> savings = accountService.searchActiveSavings(holderUser, code);
 
-        return calculateTransactions(calendarDTO.getStartDate(), calendarDTO.getEndDate(),transactions,childs,holderUser.getName(),loans,savings);
+        return calculateTransactions(calendarDTO.getStartDate(), calendarDTO.getEndDate(), transactions, childs, holderUser.getName(), loans, savings);
     }
 
     private LocalDateTime convertToStartLocalDateTime(String startDate) {
@@ -132,18 +134,19 @@ public class AllowanceFacade {
                 current = current.plusMonths(1);
             }
 
-            int cnt= 0;
+            int cnt = 0;
 
             while (!current.isAfter(endDate)) { // 종료 날짜까지 반복
 
-                if(cnt + loan.getPaymentNowCnt() > cnt + loan.getPaymentTotalCnt())
-                    break;;
+                if (cnt + loan.getPaymentNowCnt() > cnt + loan.getPaymentTotalCnt())
+                    break;
+                ;
                 String date = formatDateAsIso(current); // LocalDate를 ISO 형식 문자열로 변환
                 DailySummary dailySummary = map.computeIfAbsent(date, k -> DailySummary.builder().date(date).build());
                 dailySummary.markAsLoanPaymentDay();
 
                 current = current.plusMonths(1); // 다음 납부일(다음 달)로 이동
-                cnt++ ;
+                cnt++;
             }
         }
 
@@ -156,7 +159,7 @@ public class AllowanceFacade {
             int cnt = 0;
 
             while (!current.isAfter(endDate)) { // 종료 날짜까지 반복
-                if(cnt + saving.getPaymentCycle() > saving.getSavings().getPeriod())
+                if (cnt + saving.getPaymentCycle() > saving.getSavings().getPeriod())
                     break;
 
                 String date = formatDateAsIso(current); // LocalDate를 ISO 형식 문자열로 변환
@@ -168,7 +171,6 @@ public class AllowanceFacade {
                 cnt++;
             }
         }
-
 
 
         List<DailySummary> dailySummaries = new ArrayList<>(map.values());
@@ -186,7 +188,6 @@ public class AllowanceFacade {
     }
 
 
-
     public CalendarDetailSummary getTransactionsDetailForMonth(CalendarDTO calendarDTO) {
 
         List<TransactionDto> transactions = new ArrayList<>();
@@ -194,7 +195,11 @@ public class AllowanceFacade {
         LocalDateTime start = convertToStartLocalDateTime(calendarDTO.getStartDate());
         LocalDateTime end = convertToEndLocalDateTime(calendarDTO.getEndDate());
 
-        User holderUser = findHolderUser(calendarDTO.getChildUuid());
+        User holderUser = userService.userFindByEmail();
+
+        if (userService.isParent(holderUser)) {
+            holderUser = userService.findByUserUuid(convertToUuid(calendarDTO.getChildUuid()));
+        }
 
         List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, start, end);
         List<CashDetail> cashDetails = cashDetailService.getAllCashDetailsByUserAndPeriod(holderUser, start, end);
@@ -230,7 +235,12 @@ public class AllowanceFacade {
         LocalDateTime start = convertToStartLocalDateTime(dayDto.getDate());
         LocalDateTime end = convertToEndLocalDateTime(dayDto.getDate());
 
-        User holderUser = findHolderUser(dayDto.getChildUuid());
+        User holderUser = userService.userFindByEmail();
+
+        if (userService.isParent(holderUser)) {
+            holderUser = userService.findByUserUuid(convertToUuid(dayDto.getChildUuid()));
+        }
+
         List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, start, end);
         List<CashDetail> cashDetails = cashDetailService.getAllCashDetailsByUserAndPeriod(holderUser, start, end);
 
@@ -251,6 +261,8 @@ public class AllowanceFacade {
             dayIncome += price;
         }
 
+        System.out.println(dayIncome);
+        System.out.println(dayOutcome);
 
         return DaySummary.builder()
                 .dayIncome(dayIncome)

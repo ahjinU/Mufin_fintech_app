@@ -169,4 +169,12 @@ public class UserService implements UserDetailsService{
 
 		return userRepository.findByUserUuid(uuid).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST_MY_KIDS));
 	}
+
+    public boolean isParent(User holderUser) {
+
+		if(holderUser.getParent()==null)
+			return true;
+		return false;
+    }
+
 }

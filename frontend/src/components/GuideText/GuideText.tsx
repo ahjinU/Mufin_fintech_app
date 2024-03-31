@@ -8,11 +8,11 @@ export default function GuideText({ text, ...props }: GuideTextProps) {
   return (
     <div
       className="flex gap-[0.5rem] items-center custom-light-text
-       text-custom-black leading-[1.4rem]"
+       text-custom-black"
       {...props}
     >
       <InformationCircleIcon className="w-[2rem] h-[2rem] text-custom-purple" />
-      {text}
+      <span className="mt-[0.1rem]">{text}</span>
     </div>
   );
 }

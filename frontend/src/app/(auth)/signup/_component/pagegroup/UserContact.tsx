@@ -23,12 +23,20 @@ export default function UserContact({
     const { name, value } = e.target;
     setContact({ ...contact, [name]: value });
 
-    if (name === 'telephone') {
-      setMessage(
-        isValidPhoneNumber(value)
-          ? ''
-          : '전화번호는 11자리의 숫자로 입력해주세요!',
-      );
+  const checkTelephone = async () => {
+    try {
+      const fetchedData = await checkTelephoneParent(contact.telephone);
+      if (fetchedData.ok) {
+        setIsValid(true);
+        setMessage('사용 가능한 번호입니다😀');
+        console.log(fetchedData.headers.getSetCookie);
+      } else {
+        setIsValid(false);
+        setMessage('중복된 번호입니다😢');
+        console.log(fetchedData);
+      }
+    } catch (error) {
+      console.error('전화번호 중복 검사 에러', error);
     }
   };
 
@@ -84,7 +92,7 @@ export default function UserContact({
             name="telephone"
             onChange={onChangeInput}
           />
-          <TinyButton label="중복 확인" onClick={checkTelephone} />
+          <TinyButton label="중복 확인" handleClick={checkTelephone} />
         </div>
       </ComplexInput>
       <ComplexInput label="주소" mode="NONE">
@@ -95,7 +103,7 @@ export default function UserContact({
               name="address"
               onChange={onChangeInput}
             />
-            <TinyButton label="주소 찾기" onClick={() => {}} />
+            <TinyButton label="주소 찾기" handleClick={() => {}} />
           </div>
           <Input
             placeholder="상세 주소를 입력해주세요"

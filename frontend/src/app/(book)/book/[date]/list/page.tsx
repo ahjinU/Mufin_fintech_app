@@ -13,54 +13,31 @@ import {
 import { commaNum } from '@/utils/commaNum';
 import Link from 'next/link';
 import ListDeal from '../_components/ListDeal';
+import { useEffect, useState } from 'react';
+import BookApis from '../../_apis';
+import { format } from 'date-fns';
+import useBookStore from '../../_store';
 export default function BookList() {
-  const details = [
-    {
-      storeName: '상점 A',
-      transactionUUID: 'uuid1',
-      type: '현금',
-      amount: 50000,
-      receptDetails: [
-        {
-          item: '상품 A',
-          cnt: 2,
-          price: 10000,
-          total: 20000,
-        },
-        {
-          item: '상품 B',
-          cnt: 1,
-          price: 20000,
-          total: 20000,
-        },
-      ],
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      category: '식료품',
-    },
-    {
-      storeName: '상점 B',
-      transactionUUID: 'uuid2',
-      type: '계좌',
-      amount: 80000,
-      receptDetails: [
-        {
-          item: '상품 C',
-          cnt: 1,
-          price: 30000,
-          total: 30000,
-        },
-        {
-          item: '상품 D',
-          cnt: 3,
-          price: 15000,
-          total: 45000,
-        },
-      ],
-      content:
-        'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      category: '의류',
-    },
-  ];
+  const [dayData, setDayData] = useState<TransactionType[]>();
+  const [totalIncome, setTotalIncom] = useState();
+  const [totalOutcome, setTotalOutcome] = useState();
+  const { selectedDate, updateSelectedTransaction } = useBookStore();
+
+  const { getDayBook } = BookApis();
+
+  useEffect(() => {
+    console.log(selectedDate && format(selectedDate, 'yyyy-MM-dd'));
+    selectedDate &&
+      (async function () {
+        const res = await getDayBook({
+          date: format(selectedDate, 'yyyy-MM-dd'),
+          childUuid: null,
+        });
+        console.log(res);
+        setDayData(res?.data?.TransactionDetails);
+      })();
+  }, [selectedDate]);
+
   return (
     <div>
       <div className="p-[1.2rem] flex flex-col gap-[1rem]">
@@ -80,33 +57,30 @@ export default function BookList() {
             <TinyButton label={'직접 추가'} />
           </Link>
         </div>
-        {details.map((deal, index) => (
+        {dayData?.map((deal, index) => (
           <Link
             className="cursor-pointer"
-            href={`./${deal.transactionUUID}/detail`}
+            href={`./${deal?.transactionUuid}/detail`}
             key={`deal-${index}`}
+            onClick={() => updateSelectedTransaction(deal)}
           >
             <FlexBox
-              isDivided={deal.content ? true : false}
+              isDivided={deal?.memo ? true : false}
               mode="LIST"
               topChildren={
                 <div>
                   <OtherInfoElement
-                    leftExplainText={`${deal.category}`}
-                    leftHighlightText={`${deal.storeName}`}
+                    leftExplainText={`${deal.code}`}
+                    leftHighlightText={`${deal?.counterpartyName}`}
                     money={`${commaNum(deal.amount)}원`}
                     state={`${deal.amount > 0 ? 'UP' : 'DOWN'}`}
                   />
-                  {deal.receptDetails && (
-                    <ListDeal deals={deal.receptDetails} />
-                  )}
+                  {deal.receipts && <ListDeal deals={deal.receipts} />}
                 </div>
               }
               bottomChildren={
                 <>
-                  {deal.content && (
-                    <p className="mt-[-1rem]">{`${deal.content}`}</p>
-                  )}
+                  {deal.memo && <p className="mt-[-1rem]">{`${deal.memo}`}</p>}
                 </>
               }
             />

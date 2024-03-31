@@ -249,6 +249,7 @@ public class AllowanceFacade {
 
         Collections.sort(transactions, Comparator.comparing(TransactionDetailDto::getDate));
 
+
         int dayIncome = 0;
         int dayOutcome = 0;
 
@@ -261,13 +262,18 @@ public class AllowanceFacade {
             dayIncome += price;
         }
 
-        System.out.println(dayIncome);
-        System.out.println(dayOutcome);
+        Code code = codeService.findTypeCode("정상");
+        List<Account> savings = accountService.searchActiveSavings(holderUser,code);
+
+        code = codeService.findTypeCode("진행중");
+        List<Loan> loans = loansService.findLoansByUserAndCode(holderUser, code);
 
         return DaySummary.builder()
                 .dayIncome(dayIncome)
                 .dayOutcome(dayOutcome)
                 .transactionDetails(transactions)
+                .savings(SavingsDto.convertFromAcounts(savings))
+                .loan(LoanDto.convertFromLoans(loans))
                 .build();
     }
 

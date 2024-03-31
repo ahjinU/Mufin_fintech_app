@@ -18,12 +18,16 @@ public class DaySummary {
     private List<TransactionDetailDto> transactionDetails;
     private int dayIncome;
     private int dayOutcome;
+    private List<LoanDto> loan;
+    private List<SavingsDto> savings;
 
 
     @Builder
-    public DaySummary(List<TransactionDetailDto> transactionDetails, int dayIncome, int dayOutcome) {
+    public DaySummary(List<TransactionDetailDto> transactionDetails, int dayIncome, int dayOutcome, List<LoanDto> loan, List<SavingsDto> savings) {
         this.transactionDetails = transactionDetails;
         this.dayIncome = dayIncome;
         this.dayOutcome = dayOutcome;
+        this.loan = loan;
+        this.savings = savings;
     }
 }

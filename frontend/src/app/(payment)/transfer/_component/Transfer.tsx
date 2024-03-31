@@ -1,35 +1,94 @@
-import Link from 'next/link';
+import useFetch from '@/hooks/useFetch';
 import useUserStore from '../../../_store/store';
 import { useState } from 'react';
-import { AccountBox, Button, Input } from '@/components';
+import {
+  AccountBox,
+  BottomSheet,
+  Button,
+  Input,
+  PayPasswordBox,
+} from '@/components';
+import router from 'next/router';
 
 export default function Transfer() {
   const { userData } = useUserStore();
+  const { postFetch } = useFetch();
 
   const [state, setState] = useState<
-    'INPUT_ACCOUNT' | 'INPUT_MONEY' | 'NO_ACCOUNT' | 'NO_MONEY' |'PASSWORD'
+    | 'INPUT_ACCOUNT'
+    | 'INPUT_MONEY'
+    | 'NO_ACCOUNT'
+    | 'PASSWORD'
+    | 'SUCCESS'
+    | 'FAIL'
   >('INPUT_ACCOUNT');
-  const [transferData, setTransferData] = useState({ account: '', money: '' });
+  const [transferData, setTransferData] = useState({ account: '', money: 0 });
   const [message, setMessage] = useState('');
+
+  let transferAccount = '';
 
   const onChangeInput = (e: { target: { name: string; value: string } }) => {
     setTransferData({ ...transferData, [e.target.name]: e.target.value });
   };
 
-  const handleNext = () => {
-    // 계좌 확인 fetch
-    setState('INPUT_MONEY');
-    // if(){
-    //   setState('NO_ACCOUNT'); // 없는 계좌
-    // }
+  const handleNext = async () => {
+    const account = transferData.account;
+    try {
+      const res = await postFetch({
+        api: '/pay/transfer',
+        data: { account },
+      });
+      if (res.message == '실제 존재하는 계좌입니다.') {
+        transferAccount = transferData.account;
+        setState('INPUT_MONEY');
+      } else {
+        setState('NO_ACCOUNT');
+      }
+    } catch (error) {
+      console.error('송금 계좌 유효성 검사 에러', error);
+    }
   };
 
-  const handleTransfer = () => {
-    // 돈, 송금 계좌 확인 fetch
-    // setState('PASSWORD');
-    // if(){
-    //   setState('NO_MONEY') // 돈 없음
-    // }
+  const handleTransfer = async () => {
+    try {
+      const res = await postFetch({
+        api: '/pay/withdraw',
+        data: {
+          accountNumberOut: userData.accountNumber,
+          amount: transferData.money,
+        },
+      });
+      if (res.message == '정상적으로 출금이 가능합니다.') {
+        // setState('PASSWORD');
+      } else if (res.message == '거래가 정지된 계좌입니다.') {
+        setMessage('거래가 정지된 계좌입니다. 고객센터로 문의해주세요!');
+      } else {
+        setMessage('내 잔액보다 큰 금액은 보낼 수 없어요!');
+      }
+    } catch (error) {
+      console.error('출금 계좌 유효성 검사 에러', error);
+    }
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const res = await postFetch({
+        api: '/pay/accout',
+        data: {
+          accountNumberIn: transferAccount,
+          accountNumberOut: userData.accountNumber,
+          amount: transferData.money,
+          transType: 'ADT004',
+        },
+      });
+      if (res.message == '거래가 정상적으로 종료되었습니다.') {
+        setState('NO_ACCOUNT');
+      } else {
+        setState('INPUT_MONEY');
+      }
+    } catch (error) {
+      console.error('송금 계좌 유효성 검사 에러', error);
+    }
   };
 
   const whiteBoxClass =
@@ -69,8 +128,50 @@ export default function Transfer() {
           <Button label="돈 보내기" mode="ACTIVE" onClick={handleTransfer} />
         )}
       </div>
-      {state == 'NO_ACCOUNT' ? <div className={modalBackground}></div> : null}
-      {state == 'PASSWORD' ? <div className={modalBackground}></div> : null}
+      {state == 'NO_ACCOUNT' ? (
+        <div className={modalBackground}>
+          <BottomSheet
+            size="MEDIUM"
+            title="예금주를 확인할 수 없습니다."
+            content="계좌번호를 확인하고 다시 입력해주세요."
+            imageSrc="/images/icon-warning.png"
+            isXButtonVisible={false}
+            isOpen={true}
+            onConfirm={() => setState('INPUT_ACCOUNT')}
+          />
+        </div>
+      ) : null}
+      {state == 'PASSWORD' ? (
+        <div className={modalBackground}>
+          <PayPasswordBox
+            mode="CHECK"
+            handleConfirmButton={handleConfirm}
+            handleCloseButton={() => router.back()}
+          />
+        </div>
+      ) : null}
+      {state == 'SUCCESS' ? (
+        <div className={modalBackground}>
+          <BottomSheet
+            size="SMALL"
+            title="송금이 완료됐어요!"
+            imageSrc="/images/icon-gold.png"
+            isXButtonVisible={true}
+            isOpen={true}
+          />
+        </div>
+      ) : null}
+      {state == 'FAIL' ? (
+        <div className={modalBackground}>
+          <BottomSheet
+            size="SMALL"
+            title="송금에 실패했습니다."
+            imageSrc="/images/icon-warning.png"
+            isXButtonVisible={true}
+            isOpen={true}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -292,7 +292,9 @@ public class SavingFacade {
 		User user = userService.userFindByEmail();
 		List<Account> savingsAccountList = accountService.findAllSavingsByChild(user);
 		List<MySavings> myAllSavings = new ArrayList<>();
+		int savingsTotalBalance = 0;
 		for (Account a : savingsAccountList) {
+			savingsTotalBalance += a.getBalance();
 			LocalDate today = LocalDate.now();
 			// 생성 월
 			int createdDay = a.getCreatedAt().getDayOfMonth();
@@ -340,6 +342,7 @@ public class SavingFacade {
 			myAllSavings.add(savings);
 		}
 		return MyAllSavingsResponse.builder()
+				.savingsTotalBalance(savingsTotalBalance)
 				.savingsList(myAllSavings)
 				.build();
 	}

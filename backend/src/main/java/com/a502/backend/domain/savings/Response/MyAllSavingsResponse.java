@@ -10,10 +10,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyAllSavingsResponse {
+	private int savingsTotalBalance;
 	List<MySavings> savingsList;
 
 	@Builder
-	public MyAllSavingsResponse(List<MySavings> savingsList) {
+	public MyAllSavingsResponse(int savingsTotalBalance, List<MySavings> savingsList) {
+		this.savingsTotalBalance =  savingsTotalBalance;
 		this.savingsList = savingsList;
 	}
 }

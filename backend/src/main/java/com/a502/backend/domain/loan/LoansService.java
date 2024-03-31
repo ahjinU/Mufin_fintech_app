@@ -1,5 +1,6 @@
 package com.a502.backend.domain.loan;
 
+import com.a502.backend.application.entity.Code;
 import com.a502.backend.application.entity.Loan;
 import com.a502.backend.application.entity.User;
 import com.a502.backend.global.error.BusinessException;
@@ -58,5 +59,10 @@ public class LoansService {
 	public void updateOverdueCnt(Loan loan){
 		loan.updateOverdueCnt(loan.getOverdueCnt() + 1);
 		loansRepository.saveAndFlush(loan);
+	}
+
+
+	public List<Loan> findLoansByUserAndCode(User user, Code code){
+		return loansRepository.findByChildAndCode(user, code);
 	}
 }

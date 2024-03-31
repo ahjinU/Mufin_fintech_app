@@ -1,17 +1,18 @@
 package com.a502.backend.application.facade;
 
-import com.a502.backend.application.entity.AccountDetail;
-import com.a502.backend.application.entity.CashDetail;
-import com.a502.backend.application.entity.Memo;
-import com.a502.backend.application.entity.User;
+import com.a502.backend.application.entity.*;
 import com.a502.backend.domain.account.AccountDetailService;
+import com.a502.backend.domain.account.AccountService;
 import com.a502.backend.domain.account.CashDetailService;
 import com.a502.backend.domain.allowance.MemoService;
 import com.a502.backend.domain.allowance.OcrDto.ReceiptDto;
 import com.a502.backend.domain.allowance.ReceiptService;
 import com.a502.backend.domain.allowance.request.*;
 import com.a502.backend.domain.allowance.response.*;
+import com.a502.backend.domain.loan.LoansService;
+import com.a502.backend.domain.savings.SavingsService;
 import com.a502.backend.domain.user.UserService;
+import com.a502.backend.global.code.CodeService;
 import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,9 @@ public class AllowanceFacade {
     private final CashDetailService cashDetailService;
     private final ReceiptService receiptService;
     private final MemoService memoService;
+    private final CodeService codeService;
+    private final LoansService loansService;
+    private final AccountService accountService;
 
     public CalendarSummary getTransactionsForPeriod(CalendarDTO calendarDTO) {
 
@@ -58,15 +62,20 @@ public class AllowanceFacade {
         }
 
         List<AccountDetail> accountDetails = accountDetailService.findAccountDetailsForUserAndPeriod(holderUser, start, end);
+
         transactions.addAll(TransactionDto.convertFromAccountDetails(accountDetails));
 
         List<CashDetail> cashDetails = cashDetailService.getAllCashDetailsByUserAndPeriod(holderUser, start, end);
         transactions.addAll(TransactionDto.convertFromCashetails(cashDetails));
 
+        Code code = codeService.findTypeCode("진행중");
+        List<Loan> loans = loansService.findLoansByUserAndCode(holderUser, code);
 
-        return calculateTransactions(transactions,childs,holderUser.getName());
+        code = codeService.findTypeCode("정상");
+        List<Account> savings = accountService.searchActiveSavings(holderUser, code);
+
+        return calculateTransactions(calendarDTO.getStartDate(), calendarDTO.getEndDate(),transactions,childs,holderUser.getName(),loans,savings);
     }
-
 
     private LocalDateTime convertToStartLocalDateTime(String startDate) {
         if (startDate == null) {
@@ -86,39 +95,84 @@ public class AllowanceFacade {
 
     public String formatDateAsIso(LocalDateTime localDateTime) {
         if (localDateTime == null) {
-            System.err.println("널포인터!!");
             return null;
         }
 
         return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
+    public String formatDateAsIso(LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
+
+        return localDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
     private User findHolderUser(String childUuid) {
         return userService.findByUserUuid(convertToUuid(childUuid));
     }
 
-    private CalendarSummary calculateTransactions(List<TransactionDto> transactions, List<childDto> childs, String holderName) {
+    private CalendarSummary calculateTransactions(String start, String end, List<TransactionDto> transactions, List<childDto> childs, String holderName, List<Loan> loans, List<Account> savings) {
         HashMap<String, DailySummary> map = new HashMap<>();
+
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
 
         for (TransactionDto transaction : transactions) {
             String date = formatDateAsIso(transaction.getDate());
-
-            DailySummary dailySummary = map.get(date);
-
-            if (dailySummary != null) {
-                dailySummary = map.get(date);
-            } else {
-                dailySummary = DailySummary.builder()
-                        .date(date)
-                        .build();
-            }
+            DailySummary dailySummary = map.computeIfAbsent(date, k -> DailySummary.builder().date(date).build());
             dailySummary.updateTransactionAmount(transaction.getAmount());
-            map.put(date, dailySummary);
         }
+
+        for (Loan loan : loans) {
+
+            LocalDate current = startDate.withDayOfMonth(loan.getPaymentDate()); // 시작 날짜의 월에 대출 납부일 설정
+            if (current.isBefore(startDate)) { // 시작 날짜 이전이면, 다음 달로 설정
+                current = current.plusMonths(1);
+            }
+
+            int cnt= 0;
+
+            while (!current.isAfter(endDate)) { // 종료 날짜까지 반복
+
+                if(cnt + loan.getPaymentNowCnt() > cnt + loan.getPaymentTotalCnt())
+                    break;;
+                String date = formatDateAsIso(current); // LocalDate를 ISO 형식 문자열로 변환
+                DailySummary dailySummary = map.computeIfAbsent(date, k -> DailySummary.builder().date(date).build());
+                dailySummary.markAsLoanPaymentDay();
+
+                current = current.plusMonths(1); // 다음 납부일(다음 달)로 이동
+                cnt++ ;
+            }
+        }
+
+        for (Account saving : savings) {
+            LocalDate current = startDate.withDayOfMonth(saving.getPaymentDate()); // 저축 납부일 설정
+            if (current.isBefore(startDate)) { // 시작 날짜 이전이면, 다음 달로 설정
+                current = current.plusMonths(1);
+            }
+
+            int cnt = 0;
+
+            while (!current.isAfter(endDate)) { // 종료 날짜까지 반복
+                if(cnt + saving.getPaymentCycle() > saving.getSavings().getPeriod())
+                    break;
+
+                String date = formatDateAsIso(current); // LocalDate를 ISO 형식 문자열로 변환
+                DailySummary dailySummary = map.computeIfAbsent(date, k -> DailySummary.builder().date(date).build());
+                dailySummary.markAsSavingsDay(); // 저축 납부일로 마킹
+
+                current = current.plusMonths(1); // 다음 납부일(다음 달)로 이동
+
+                cnt++;
+            }
+        }
+
+
 
         List<DailySummary> dailySummaries = new ArrayList<>(map.values());
         Collections.sort(dailySummaries, Comparator.comparing(DailySummary::getDate));
-
 
         int monthIncomeTotal = 0;
         int monthOutcomeTotal = 0;

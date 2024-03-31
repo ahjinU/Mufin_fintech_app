@@ -1,13 +1,16 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { addDays, addMonths, format, subMonths } from 'date-fns';
 import useDate from '@/utils/date';
 import DateList from './DateList';
 import DayList from './DayList';
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
+import useBookStore from '../_store';
 
 export default function Calendar() {
+  const { updateCurrentMonth, updateCurrentStartDate, updateCurrentEndDate } =
+    useBookStore();
   const { currentMonth, setCurrentMonth, calculateDateRange } = useDate();
   const { startDate, endDate } = calculateDateRange();
 
@@ -19,15 +22,22 @@ export default function Calendar() {
     day = addDays(day, 1);
   }
 
+  useEffect(() => {
+    updateCurrentStartDate(startDate);
+    updateCurrentEndDate(endDate);
+  }, [currentMonth]);
+
   const movePrevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
+    updateCurrentMonth(subMonths(currentMonth, 1));
   };
   const moveNextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
+    updateCurrentMonth(addMonths(currentMonth, 1));
   };
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full mb-[1rem]">
       <div className="flex w-full justify-around h-[2rem]">
         <ChevronLeftIcon
           onClick={movePrevMonth}

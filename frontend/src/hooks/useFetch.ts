@@ -25,6 +25,20 @@ const useFetch = () => {
     return res.json();
   };
 
+  const postImageFetch = async (data: dataType) => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api${data.api}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `${session?.Authorization}`,
+        },
+        body: data.data,
+      },
+    );
+    return res.json();
+  };
+
   const getFetch = async (data: dataType) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api${data.api}`,
@@ -39,7 +53,7 @@ const useFetch = () => {
     return res.json();
   };
 
-  return { postFetch, getFetch };
+  return { postFetch, getFetch, postImageFetch };
 };
 
 export default useFetch;

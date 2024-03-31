@@ -18,6 +18,6 @@ public interface SavingsRepository extends JpaRepository<Savings, Integer> {
 	@Query("select s from Savings s where s.savingUuid = :savingsUuid")
 	Optional<Savings> findSavingsListByUuid(UUID savingsUuid);
 
-	@Query("select s from Savings s where s.isDeleted = false")
+	@Query("select s from Savings s where s.isDeleted = false and s.parent = :parents")
 	List<Savings> findAllByParents(User parents);
 }

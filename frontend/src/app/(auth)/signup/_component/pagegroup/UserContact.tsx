@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ComplexInput, Input, Button, TinyButton } from '@/components';
 import { checkTelephoneParent, checkTelephoneChild } from '../../_apis/apis';
+import { isValidPhoneNumber } from '../../_utils/validator';
 
 export default function UserContact({
   onNext,
@@ -14,10 +15,13 @@ export default function UserContact({
   });
   const [isValid, setIsValid] = useState(false);
   const [message, setMessage] = useState('');
+  const [buttonMode, setButtonMode] = useState<'ACTIVE' | 'NON_ACTIVE'>(
+    'NON_ACTIVE',
+  );
 
   const onChangeInput = (e: { target: { name: string; value: string } }) => {
-    setContact({ ...contact, [e.target.name]: e.target.value });
-  };
+    const { name, value } = e.target;
+    setContact({ ...contact, [name]: value });
 
   const checkTelephone = async () => {
     try {
@@ -36,7 +40,41 @@ export default function UserContact({
     }
   };
 
+  const checkTelephone = async () => {
+    if (isValidPhoneNumber(contact.telephone)) {
+      try {
+        const fetchedData = await checkTelephoneParent(contact.telephone);
+        if (fetchedData.ok) {
+          setIsValid(true);
+          setMessage('사용 가능한 번호입니다😀');
+          console.log(fetchedData.headers.getSetCookie);
+        } else {
+          setIsValid(false);
+          setMessage('중복된 번호입니다😢');
+          console.log(fetchedData);
+        }
+      } catch (error) {
+        console.error('전화번호 중복 검사 에러', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (
+      isValidPhoneNumber(contact.telephone) &&
+      isValid &&
+      contact.address !== ''
+    ) {
+      setButtonMode('ACTIVE');
+    } else {
+      setButtonMode('NON_ACTIVE');
+    }
+  }, [contact, isValid]);
+
   const handleNext = () => {
+    // if (buttonMode == 'ACTIVE') {
+    //   onNext(contact);
+    // }
     onNext(contact);
   };
 
@@ -50,7 +88,7 @@ export default function UserContact({
       >
         <div className="flex items-center gap-[1rem]">
           <Input
-            placeholder="전화번호를 입력해주세요"
+            placeholder="'-'를 제외하고 입력해주세요"
             name="telephone"
             onChange={onChangeInput}
           />
@@ -75,7 +113,7 @@ export default function UserContact({
         </div>
       </ComplexInput>
       <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
-        <Button label="다음" mode="ACTIVE" onClick={handleNext} />
+        <Button label="다음" mode={buttonMode} onClick={handleNext} />
       </div>
     </div>
   );

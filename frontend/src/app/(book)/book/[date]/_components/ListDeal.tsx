@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 interface DealType {
   item: string;
   cnt: number;
@@ -25,7 +27,7 @@ export default function ListDeal({ deals }: DealListProps) {
       </div>
       {deals.map(({ item, cnt, total }, index) => {
         return (
-          <>
+          <React.Fragment key={index}>
             <div className="col-span-4 text-[1.2rem] font-normal pl-[0.3rem] text-custom-dark-gray">
               <p>{item}</p>
             </div>
@@ -35,7 +37,7 @@ export default function ListDeal({ deals }: DealListProps) {
             <div className="col-span-2 text-[1.2rem] font-normal text-right pr-[0.5rem] text-custom-dark-gray">
               <p>{total}원</p>
             </div>
-          </>
+          </React.Fragment>
         );
       })}
     </div>

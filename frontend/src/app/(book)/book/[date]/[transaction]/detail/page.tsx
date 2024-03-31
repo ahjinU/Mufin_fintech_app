@@ -14,34 +14,47 @@ import {
 } from '@/components';
 import { commaNum } from '@/utils/commaNum';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import BookApis from '../../../_apis';
+import { usePathname } from 'next/navigation';
+import useBookStore from '../../../_store';
 
 export default function BookListPost() {
+  var currentUrl = usePathname();
+  var id = currentUrl?.split('/')[3];
   const [title, setTitle] = useState();
   const [amount, setAmount] = useState();
   const [image, setImage] = useState<File | null>(null);
-  const data = {
-    storeName: '상점 A',
-    transactionUUID: 'uuid1',
-    type: '현금',
-    amount: 50000,
-    receptDetails: [
-      {
-        item: '상품 A',
-        cnt: 2,
-        price: 10000,
-        total: 20000,
-      },
-      {
-        item: '상품 B',
-        cnt: 1,
-        price: 20000,
-        total: 20000,
-      },
-    ],
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    category: '식료품',
+  const { selectedTransaction } = useBookStore();
+  const { postReceipt, getOneTransaction } = BookApis();
+  const [data, setData] = useState<OneTransactionType>();
+
+  useEffect(() => {
+    (async function () {
+      const res = await getOneTransaction({
+        transactionUUID: selectedTransaction.transactionUuid,
+        type: selectedTransaction.code,
+      });
+      console.log(data);
+      // setData(res?.data)
+    })();
+  }, [selectedTransaction]);
+
+  const analysis = async () => {
+    if (image && id) {
+      const formData = new FormData();
+      formData.append('file', image);
+      formData.append('transactionUuid', id);
+      formData.append('type', '현금');
+      try {
+        const res = await postReceipt(formData);
+        console.log(res);
+      } catch (error) {
+        console.error('Error analyzing receipt:', error);
+      }
+    }
   };
+
   return (
     <div className="p-[1.2rem] w-full flex flex-col gap-[10rem]">
       <div className="w-full flex flex-col gap-[1rem]">
@@ -50,19 +63,19 @@ export default function BookListPost() {
           mode="LIST"
           topChildren={
             <OtherInfoElement
-              leftExplainText={`${data.category}`}
-              leftHighlightText={`${data.storeName}`}
-              money={`${commaNum(data.amount)}원`}
-              state={`${data.amount > 0 ? 'UP' : 'DOWN'}`}
+              leftExplainText={`${data?.type}`}
+              leftHighlightText={`${data?.storeName}`}
+              money={`${commaNum(data?.amount)}원`}
+              state={`${data && data?.amount > 0 ? 'UP' : 'DOWN'}`}
             />
           }
         />
-        {data.amount > 0 && (
+        {data && data?.amount > 0 && (
           <ComplexInput label={'상세 사용 내역'} mode={'NONE'}>
             <div className="p-[0.3rem]">
               {!data.receptDetails ? (
                 <div>
-                  <DealList mode={'READONLY'} deals={data.receptDetails} />
+                  <DealList mode={'READONLY'} deals={data?.receptDetails} />
                   <div className="border-b border-gray-400 mt-[1rem]" />
                 </div>
               ) : (
@@ -80,7 +93,7 @@ export default function BookListPost() {
             <div className="flex justify-end mt-[-2.5rem]">
               <Link href="./memo">
                 <TinyButton
-                  label={`${data.content ? '수정하기' : '작성하기'}`}
+                  label={`${data && data?.memo ? '수정하기' : '작성하기'}`}
                 />
               </Link>
             </div>
@@ -92,10 +105,12 @@ export default function BookListPost() {
           </div>
         </ComplexInput>
         <p className="text-custom-black custom-medium-text pl-[1rem]">
-          {data.content}
+          {data && data?.memo}
         </p>
       </div>
-      {image && <Button mode={'ACTIVE'} label={'영수증 분석하기'} />}
+      {image && (
+        <Button onClick={analysis} mode={'ACTIVE'} label={'영수증 분석하기'} />
+      )}
     </div>
   );
 }

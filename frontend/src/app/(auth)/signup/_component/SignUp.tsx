@@ -13,7 +13,7 @@ import UserInfo from './pagegroup/UserInfo';
 import UserContact from './pagegroup/UserContact';
 import UserAccount from './pagegroup/UserAccount';
 
-export default function SignUp() {
+export default function SignUp(isParent: boolean) {
   const [state, setState] = useState('first');
   const [barGage, setBarGage] = useState(100 / 3);
   const { registerData, setRegisterData } = useRegisterStore();

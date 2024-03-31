@@ -15,7 +15,7 @@ export default function Complete({
 }) {
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem]">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] min-h-screen">
         <Header>
           <h1 className="custom-bold-text">{title}</h1>
         </Header>

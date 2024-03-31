@@ -7,20 +7,36 @@ import {
   MoneyInfoElement,
   TinyButton,
   MoneyShow,
+  AlertConfirmModal,
 } from '@/components';
 import Image from 'next/image';
-
-function ContentRow({ keyName, value }: { keyName: string; value: string }) {
-  return (
-    <section className="flex justify-between custom-medium-text">
-      <span>{keyName}</span>
-      <span>{value}</span>
-    </section>
-  );
-}
+import { useState, useEffect } from 'react';
+import { AppliedSavingsListType } from '../../_types';
+import SavingsApis from '../../_apis';
+import { commaNum } from '@/utils/commaNum';
+import { useRouter } from 'next/navigation';
 
 export default function MySavings() {
-  // 아이의 적금 보기
+  const [appliedSavingsList, setAppliedSavingsList] = useState<
+    AppliedSavingsListType[]
+  >([]);
+  const { getAppliedSavingsProduct, cancelSavings, terminateSavings } =
+    SavingsApis();
+  const totalPayment = appliedSavingsList.reduce(
+    (prev, curr) => prev + curr.balance,
+    0,
+  );
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [targetAccountUuid, setTargetAccountUuid] = useState<string>('');
+  const router = useRouter();
+
+  useEffect(() => {
+    (async () => {
+      const appliedSavingsListData = await getAppliedSavingsProduct();
+      setAppliedSavingsList(appliedSavingsListData?.data?.savingsList);
+    })();
+  }, []);
+
   return (
     <>
       <Header>
@@ -30,8 +46,8 @@ export default function MySavings() {
         <MoneyShow
           mode="UNDIVIDED"
           text={['적금 누적 총액']}
-          money={['20,1000 ']}
-          unit="원"
+          money={[`${commaNum(totalPayment)}`]}
+          unit=" 원"
         />
 
         <div className="w-fit flex gap-[0.5rem] items-center custom-medium-text self-end">
@@ -51,24 +67,86 @@ export default function MySavings() {
           <span className="text-custom-red">연체 횟수 남음</span>
         </div>
 
-        <FlexBox
-          isDivided={true}
-          topChildren={
-            <MoneyInfoElement
-              imageSrc="/images/icon-smile.png"
-              leftExplainText="아들아 너는 돈을 내거라, 나는 이자를..."
-              leftHighlightText="12,000원"
-              buttonOption="NO"
-            />
-          }
-          bottomChildren={
-            <div className="flex gap-[1rem] self-end">
-              <TinyButton label="납부하기" />
-              <TinyButton isWarning={true} label="중도 해지하기" />
-            </div>
-          }
-        />
+        {appliedSavingsList &&
+          appliedSavingsList.map((appliedSavings, index) => {
+            return (
+              <FlexBox
+                key={`appliedSavings-${index}`}
+                isDivided={true}
+                topChildren={
+                  <MoneyInfoElement
+                    imageSrc={
+                      appliedSavings.state === '정상' ||
+                      appliedSavings.state === '만기'
+                        ? '/images/icon-smile.png'
+                        : '/images/icon-sad.png'
+                    }
+                    leftExplainText={
+                      appliedSavings.savingsName.slice(0, 20) + ' ...'
+                    }
+                    leftHighlightText={`${commaNum(
+                      appliedSavings.balance,
+                    )}원 / ${commaNum(
+                      appliedSavings.paymentAmount *
+                        appliedSavings.savingsPeriod,
+                    )}원`}
+                    buttonOption="NO"
+                  />
+                }
+                bottomChildren={
+                  <div className="flex gap-[1rem] self-end">
+                    <TinyButton
+                      label={
+                        appliedSavings.state === '만기'
+                          ? '이자까지 전부 받기'
+                          : '납부하기'
+                      }
+                      handleClick={async () => {
+                        if (appliedSavings.state === '만기') {
+                          const result = await terminateSavings(
+                            appliedSavings.accountUuid,
+                          ); // 아직 확인이 어려움
+                          console.log(result);
+
+                          router.push('/result/savings/success');
+                        } else {
+                          router.push(
+                            `/savings/pay/${appliedSavings.accountUuid}`,
+                          );
+                        }
+                      }}
+                    />
+                    {appliedSavings.state !== '만기' && (
+                      <TinyButton
+                        isWarning={true}
+                        label="중도 해지하기"
+                        handleClick={() => {
+                          setTargetAccountUuid(appliedSavings.accountUuid);
+                          setIsModalOpen(true);
+                        }}
+                      />
+                    )}
+                  </div>
+                }
+              />
+            );
+          })}
       </section>
+
+      {isModalOpen && (
+        <div className="absolute top-0 left-0 size-full bg-custom-black-with-opacity flex justify-center">
+          <AlertConfirmModal
+            text="적금 상품을 중도에 해지하시겠어요?"
+            isOpen={isModalOpen}
+            handleClickOkay={async () => {
+              const result = await cancelSavings(targetAccountUuid);
+              setIsModalOpen(false);
+              router.refresh(); // 추후에 변경해야 함
+            }}
+            handleClickNo={() => setIsModalOpen(false)}
+          />
+        </div>
+      )}
     </>
   );
 }

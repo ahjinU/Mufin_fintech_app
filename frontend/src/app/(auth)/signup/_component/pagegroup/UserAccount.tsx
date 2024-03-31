@@ -90,7 +90,7 @@ export default function UserAccount({
             name="email"
             onChange={onChangeInput}
           />
-          <TinyButton label="중복 확인" onClick={checkEmail} />
+          <TinyButton label="중복 확인" handleClick={checkEmail} />
         </div>
       </ComplexInput>
       <ComplexInput

@@ -18,7 +18,7 @@ interface DayDetail {
   outcomeDay: string;
 }
 
-interface DayData {
+interface TransactionType {
   amount: number;
   code: string;
   counterpartyName: string;
@@ -26,4 +26,20 @@ interface DayData {
   memo: string | null;
   receipts: any;
   transactionUuid: string;
+}
+
+interface ReceptDetail {
+  item: string;
+  cnt: number;
+  price: number;
+  total: number;
+}
+
+interface OneTransactionType {
+  storeName: string;
+  transactionUUID: string;
+  type: string;
+  amount: number;
+  receptDetails: ReceptDetail[];
+  memo: string;
 }

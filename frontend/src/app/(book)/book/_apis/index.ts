@@ -61,7 +61,7 @@ export default function BookApis() {
 
   const getOneTransaction = async (data: {
     transactionUUID: string;
-    childUuid: string;
+    type: string;
   }) => {
     const res = await postFetch({
       api: '/allowance/detail',

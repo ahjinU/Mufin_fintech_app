@@ -12,9 +12,9 @@ export default function Password() {
     flex justify-center"
     >
       <PayPasswordBox
-        handleConfirmButton={() => router.push('/result/savings/pay')}
+        mode={'ACCOUNT'}
+        handleConfirmButton={() => router.push('/account/complete')}
         handleCloseButton={() => router.back()}
-        mode="CHECK"
       />
     </div>
   );

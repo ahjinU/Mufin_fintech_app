@@ -12,9 +12,9 @@ export default function BookLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <div className="relative">
       <div className="min-h-[calc(100vh-6rem)]">{children}</div>
       <NavBar mode={'CHILD'} />
-    </>
+    </div>
   );
 }

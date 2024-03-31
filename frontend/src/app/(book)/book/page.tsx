@@ -9,15 +9,14 @@ import {
 } from '@/components';
 import Calendar from './_components/Calendar';
 import { commaNum } from '@/utils/commaNum';
-import useDate from '@/utils/date';
 import { format, getDay } from 'date-fns';
 import { useEffect, useState } from 'react';
 import BookApis from './_apis';
 import { getKorDay } from '@/utils/getKorDay';
+import useBookStore from './_store';
 
 export default function Book() {
-  const { calculateDateRange, currentMonth } = useDate();
-  const { startDate, endDate } = calculateDateRange();
+  const { currentStartDate, currentEndDate } = useBookStore();
   const { getMonthBookDetail } = BookApis();
 
   const [bookDetail, setBookDetail] = useState<MonthBookDetailType | null>(
@@ -27,14 +26,13 @@ export default function Book() {
   useEffect(() => {
     (async function () {
       const res = await getMonthBookDetail({
-        startDate: format(startDate, 'yyyy-MM-dd'),
-        endDate: format(endDate, 'yyyy-MM-dd'),
+        startDate: format(currentStartDate, 'yyyy-MM-dd'),
+        endDate: format(currentEndDate, 'yyyy-MM-dd'),
         childUuid: null,
       });
-      console.log(res);
-      !bookDetail && setBookDetail(res?.data);
+      setBookDetail(res?.data);
     })();
-  }, [startDate, endDate]);
+  }, [currentStartDate, currentEndDate]);
 
   return (
     <div>
@@ -48,13 +46,17 @@ export default function Book() {
             mode={'DIVIDED'}
             text={['지출', '수입']}
             money={[
-              commaNum(bookDetail?.monthOutcome),
-              `+${commaNum(bookDetail?.monthIncome)}`,
+              bookDetail?.monthOutcome
+                ? commaNum(bookDetail?.monthOutcome)
+                : '0',
+              bookDetail?.monthIncome
+                ? `+${commaNum(bookDetail?.monthIncome)}`
+                : '0',
             ]}
             unit={'원'}
           />
         </ComplexInput>
-        <div className="flex flex-col gap-[1.2rem] max-h-[30rem] overflow-y-scroll scrollbar-hidden">
+        <div className="flex flex-col gap-[1.2rem] max-h-[30rem] overflow-y-scroll  scrollbar-hide">
           {bookDetail?.transactionDtoList?.map((trans, index) => {
             return (
               <FlexBox

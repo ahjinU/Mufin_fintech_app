@@ -15,40 +15,28 @@ import Link from 'next/link';
 import ListDeal from '../_components/ListDeal';
 import { useEffect, useState } from 'react';
 import BookApis from '../../_apis';
-import { usePathname } from 'next/navigation';
 import { format } from 'date-fns';
-import { decodingDate } from '@/utils/decodingDate';
+import useBookStore from '../../_store';
 export default function BookList() {
-  const [dayData, setDayData] = useState<DayData[]>();
-
-  // var currentUrl = usePathname();
-  // var dateString = currentUrl && decodeURI(currentUrl?.split('/')[2]);
-  // const dateParts =
-  //   dateString && dateString.match(/(\d{4})년 (\d{1,2})월 (\d{1,2})일/);
-
-  // const year = dateParts && parseInt(dateParts[1]);
-  // const month = dateParts && parseInt(dateParts[2]) - 1;
-  // const day = dateParts && parseInt(dateParts[3]);
-
-  // const date = year && month && day && new Date(year, month, day);
-
-  const currentUrl = usePathname();
-  const date = currentUrl && decodingDate(currentUrl);
+  const [dayData, setDayData] = useState<TransactionType[]>();
+  const [totalIncome, setTotalIncom] = useState();
+  const [totalOutcome, setTotalOutcome] = useState();
+  const { selectedDate, updateSelectedTransaction } = useBookStore();
 
   const { getDayBook } = BookApis();
 
   useEffect(() => {
-    console.log(date && format(date, 'yyyy-MM-dd'));
-    (async function () {
-      const res = await getDayBook({
-        startDate: date && format(date, 'yyyy-MM-dd'),
-        endDate: date && format(date, 'yyyy-MM-dd'),
-        childUuid: null,
-      });
-      console.log(res);
-      setDayData(res?.data?.TransactionDetails);
-    })();
-  }, [currentUrl]);
+    console.log(selectedDate && format(selectedDate, 'yyyy-MM-dd'));
+    selectedDate &&
+      (async function () {
+        const res = await getDayBook({
+          date: format(selectedDate, 'yyyy-MM-dd'),
+          childUuid: null,
+        });
+        console.log(res);
+        setDayData(res?.data?.TransactionDetails);
+      })();
+  }, [selectedDate]);
 
   return (
     <div>
@@ -74,6 +62,7 @@ export default function BookList() {
             className="cursor-pointer"
             href={`./${deal?.transactionUuid}/detail`}
             key={`deal-${index}`}
+            onClick={() => updateSelectedTransaction(deal)}
           >
             <FlexBox
               isDivided={deal?.memo ? true : false}

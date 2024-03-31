@@ -6,7 +6,6 @@ import useDate from '@/utils/date';
 import DateList from './DateList';
 import DayList from './DayList';
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
-import BookApis from '../_apis';
 import useBookStore from '../_store';
 
 export default function Calendar() {
@@ -23,17 +22,18 @@ export default function Calendar() {
     day = addDays(day, 1);
   }
 
+  useEffect(() => {
+    updateCurrentStartDate(startDate);
+    updateCurrentEndDate(endDate);
+  }, [currentMonth]);
+
   const movePrevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
     updateCurrentMonth(subMonths(currentMonth, 1));
-    updateCurrentStartDate(startDate);
-    updateCurrentEndDate(endDate);
   };
   const moveNextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
     updateCurrentMonth(addMonths(currentMonth, 1));
-    updateCurrentStartDate(startDate);
-    updateCurrentEndDate(endDate);
   };
 
   return (

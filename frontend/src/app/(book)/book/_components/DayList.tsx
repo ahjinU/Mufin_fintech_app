@@ -9,23 +9,23 @@ import useBookStore from '../_store';
 
 const DayList = ({ list }: { list: Date[] }) => {
   const { calculateDateRange } = useDate();
-  const { currentMonth } = useBookStore();
   const { startDate, endDate } = calculateDateRange();
+  const { currentEndDate, currentStartDate } = useBookStore();
 
   const { getMonthBook } = BookApis();
 
-  const [bookDetail, setBookDetail] = useState<DayDetail[] | null>(null);
+  const [bookList, setBookList] = useState<DayDetail[] | null>(null);
 
   useEffect(() => {
     (async function () {
       const res = await getMonthBook({
-        startDate: format(startDate, 'yyyy-MM-dd'),
-        endDate: format(endDate, 'yyyy-MM-dd'),
+        startDate: format(currentStartDate, 'yyyy-MM-dd'),
+        endDate: format(currentEndDate, 'yyyy-MM-dd'),
         childUuid: null,
       });
-      !bookDetail && setBookDetail(res?.data?.dayDetailList);
+      setBookList(res?.data?.dayDetailList);
     })();
-  }, [startDate, endDate]);
+  }, [currentStartDate, currentEndDate]);
 
   const cal: Date[][] = [];
   let num = 0;
@@ -43,10 +43,9 @@ const DayList = ({ list }: { list: Date[] }) => {
           key={`cal-${rowIndex}`}
         >
           {dayRow?.map((day, colIndex) => {
-            for (let ind = num; ind < (bookDetail?.length || 0); ind++) {
+            for (let ind = num; ind < (bookList?.length || 0); ind++) {
               if (
-                (bookDetail && bookDetail[ind]?.date) ===
-                format(day, 'yyyy-MM-dd')
+                (bookList && bookList[ind]?.date) === format(day, 'yyyy-MM-dd')
               ) {
                 num = ind;
                 return (
@@ -54,8 +53,8 @@ const DayList = ({ list }: { list: Date[] }) => {
                     day={day}
                     index={colIndex}
                     key={`day-${rowIndex}-${colIndex}`}
-                    incomeDay={bookDetail && bookDetail[ind]?.incomeDay}
-                    outcomeDay={bookDetail && bookDetail[ind]?.outcomeDay}
+                    incomeDay={bookList && bookList[ind]?.incomeDay}
+                    outcomeDay={bookList && bookList[ind]?.outcomeDay}
                   />
                 );
               }

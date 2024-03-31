@@ -45,7 +45,7 @@ const Day = (dayData: DayProps) => {
       )}
       <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center">
         <p className="text-[0.75rem] text-custom-blue font-[200]">
-          {incomeDay && incomeDay !== '0' && `+${incomeDay}`}
+          {incomeDay != '0' && incomeDay}
         </p>
         <p className="text-[0.75rem] text-custom-red font-[200]">
           {outcomeDay != '0' && outcomeDay}

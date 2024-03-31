@@ -1,7 +1,7 @@
 import useFetch from '@/hooks/useFetch';
 
 export default function BookApis() {
-  const { postFetch } = useFetch();
+  const { postFetch, postImageFetch } = useFetch();
 
   const getMonthBookDetail = async (data: {
     startDate: null | string;
@@ -28,8 +28,7 @@ export default function BookApis() {
   };
 
   const getDayBook = async (data: {
-    endDate: null | string | 0;
-    startDate: null | string | 0;
+    date: string;
     childUuid: null | string;
   }) => {
     const res = await postFetch({
@@ -40,9 +39,9 @@ export default function BookApis() {
   };
 
   const postDayCash = async (data: {
-    date: string;
-    usage: string;
-    amount: number;
+    date: string | undefined;
+    usage: string | undefined;
+    amount: number | undefined;
   }) => {
     const res = await postFetch({
       api: '/allowance/cash',
@@ -51,13 +50,21 @@ export default function BookApis() {
     return res;
   };
 
-  const postReceipt = async (data: {
-    file: File | null;
-    transactionUuid: string;
-    type: string;
+  const postReceipt = async (data: FormData) => {
+    console.log(data);
+    const res = await postImageFetch({
+      api: '/allowance/receipt/save',
+      data: data,
+    });
+    return res;
+  };
+
+  const getOneTransaction = async (data: {
+    transactionUUID: string;
+    childUuid: string;
   }) => {
     const res = await postFetch({
-      api: '/allowance/cash',
+      api: '/allowance/detail',
       data: data,
     });
     return res;
@@ -69,5 +76,6 @@ export default function BookApis() {
     getDayBook,
     postDayCash,
     postReceipt,
+    getOneTransaction,
   };
 }

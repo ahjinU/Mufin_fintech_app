@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { AppliedSavingsListType } from '@/app/(savings)/_types';
 import SavingsApis from '@/app/(savings)/_apis';
 import { commaNum } from '@/utils/commaNum';
+import useUserStore from '@/app/_store/store';
 
 export default function PaySavingsForm({
   params,
@@ -18,6 +19,7 @@ export default function PaySavingsForm({
   const [appliedSavingsDetail, setAppliedSavingsDetail] =
     useState<AppliedSavingsListType>();
   const { getAppliedSavingsProductDetail } = SavingsApis();
+  const { userData } = useUserStore();
 
   useEffect(() => {
     (async () => {
@@ -34,15 +36,15 @@ export default function PaySavingsForm({
         <AccountBox
           text="내 계좌에서 돈이 빠져나가요!"
           isGrayBackground={true}
-          money={appliedSavingsDetail?.balance || 0}
+          money={userData?.balance || 0}
         />
 
-        <ComplexInput mode="NONE" label="납부가 완료된 개월 수">
+        <ComplexInput mode="NONE" label="납부 완료된 개월 수">
           <span className="custom-medium-text">
             <span className="text-custom-purple">
               {appliedSavingsDetail?.paymentCycle}
             </span>
-            개월 / 6개월
+            개월 / {appliedSavingsDetail?.savingsPeriod}개월
           </span>
         </ComplexInput>
 
@@ -63,7 +65,12 @@ export default function PaySavingsForm({
           <Select
             mode="SAVINGS_RETURN"
             min={1}
-            max={appliedSavingsDetail?.overdueCnt || 1}
+            max={
+              (appliedSavingsDetail &&
+                appliedSavingsDetail?.savingsPeriod -
+                  appliedSavingsDetail?.paymentCycle) ||
+              1
+            }
             setValue={setMonth}
           />
         </ComplexInput>

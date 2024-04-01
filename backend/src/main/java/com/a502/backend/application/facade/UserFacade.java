@@ -155,37 +155,41 @@ public class UserFacade {
 
     public UserMyPageResponse getfinInfo(User user, String startDate, String endDate){
         String name = user.getName();
-        boolean isParent = ( user.getParent() == null ) ? true : false;
-        String accountNumber = accountService.findByUser(user).getAccountNumber();
-        int balance = accountService.findByUser(user).getBalance();
-        int savings = accountService.findSavingsMoneyByChild(user); // 내가 모은 돈
-        int ranking = getMyRanking(user);
-        int chocochip = parkingService.getParkingBalance(user);
-        int monthAmounts = allowanceFacade.getTransactionsForPeriod(CalendarDTO.builder()
-                .startDate(startDate)
-                .endDate(endDate)
-                .childUuid(user.getUserUuid().toString())
-                .build()).getIncomeMonth();
-        int totalIncome = 0;
-        int totalPrice = 0;
-        double totalIncomePercent;
-        List<StockHolding> stockHoldingList = stockHoldingsService.findAllByUser(user);
-        for (StockHolding sh : stockHoldingList) {
-            Stock stock = stocksService.findById(sh.getStock().getId());
-            StockDetail stockDetail = stockDetailsService.getLastDetail(stock);
-            int totalPriceAvg = sh.getTotal();
-            int totalPriceCur = sh.getCnt() * stockDetail.getPrice();
-            int income = totalPriceCur - totalPriceAvg;
-            totalIncome += income;
-            totalPrice += totalPriceCur;
+        boolean isParent = (user.getParent() == null) ? true : false;
+        String accountNumber = accountService.findDefaultAccountByUser(user).getAccountNumber();
+        int balance = accountService.findDefaultAccountByUser(user).getBalance();
+
+        if (!isParent){
+            int savings = accountService.findSavingsMoneyByChild(user);
+            int ranking = getMyRanking(user);
+            int chocochip = parkingService.getParkingBalance(user);
+            int monthAmounts = allowanceFacade.getTransactionsForPeriod(CalendarDTO.builder()
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .childUuid(user.getUserUuid().toString())
+                    .build()).getIncomeMonth();
+            int totalIncome = 0;
+            int totalPrice = 0;
+            double totalIncomePercent;
+            List<StockHolding> stockHoldingList = stockHoldingsService.findAllByUser(user);
+            for (StockHolding sh : stockHoldingList) {
+                Stock stock = stocksService.findById(sh.getStock().getId());
+                StockDetail stockDetail = stockDetailsService.getLastDetail(stock);
+                int totalPriceAvg = sh.getTotal();
+                int totalPriceCur = sh.getCnt() * stockDetail.getPrice();
+                int income = totalPriceCur - totalPriceAvg;
+                totalIncome += income;
+                totalPrice += totalPriceCur;
+            }
+
+            if (totalPrice - totalIncome == 0)
+                totalIncomePercent = 0;
+            else totalIncomePercent = (double) totalIncome / (totalPrice - totalIncome) * 100.0;
+
+            String formatted = String.format("%.2f", totalIncomePercent);
+            return new UserMyPageResponse(name, isParent, accountNumber, balance, savings, monthAmounts, ranking, chocochip, totalIncome, totalPrice, formatted);
         }
-
-        if (totalPrice - totalIncome == 0)
-            totalIncomePercent = 0;
-        else totalIncomePercent = (double) totalIncome / (totalPrice - totalIncome) * 100.0;
-
-        String formatted = String.format("%.2f", totalIncomePercent);
-        return new UserMyPageResponse(name, isParent, accountNumber, balance, savings, monthAmounts, ranking, chocochip, totalIncome, totalPrice, formatted);
+        else return new UserMyPageResponse(name, isParent, accountNumber, balance, -1, -1, -1, -1, -1, -1, "");
     }
 
     public UserInfoResponse userInfo() {
@@ -214,7 +218,7 @@ public class UserFacade {
         String address = user.getAddress();
         String address2 = user.getAddress2();
         String telephone = user.getTelephone();
-        Account account = accountService.findByUser(user);
+        Account account = accountService.findDefaultAccountByUser(user);
         String accountNumber = account.getAccountNumber();
         String accountUuid = account.getAccountUuid().toString();
         return new UserInfoResponse(userUuid, name, email, isParent, createdAt, address, address2, telephone, accountNumber, accountUuid);
@@ -222,7 +226,7 @@ public class UserFacade {
 
     public UserAccountInfoResponse getUserAccountInfo(){
         User user = userService.userFindByEmail();
-        Account account = accountService.findByUser(user);
+        Account account = accountService.findDefaultAccountByUser(user);
         String accountUuid = account.getAccountUuid().toString();
         int balance = account.getBalance();
         int savings = accountService.findSavingsMoneyByChild(user);

@@ -15,7 +15,8 @@ export default function Check() {
 
   const useHandleOkay = async () => {
     await postFetch({ data: apply, api: '/loan/apply' });
-    router.replace('/signup/complete');
+    setIsOpen(false);
+    router.replace('/loan/apply/success');
   };
 
   return (
@@ -29,7 +30,7 @@ export default function Check() {
           setIsOpen(false);
         }}
         isOpen={isOpen}
-        text="대출 신청하시겠어요?"
+        text="대화 내용은 부모님께 전달돼요. 대출을 신청할까요?"
       />
     </div>
   );

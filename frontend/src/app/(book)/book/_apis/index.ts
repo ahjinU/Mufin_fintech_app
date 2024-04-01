@@ -70,6 +70,18 @@ export default function BookApis() {
     return res;
   };
 
+  const postMemo = async (data: {
+    type: string;
+    transactionUuid: string;
+    memo: string;
+  }) => {
+    const res = await postFetch({
+      api: '/allowance/memo',
+      data: data,
+    });
+    return res;
+  };
+
   return {
     getMonthBookDetail,
     getMonthBook,
@@ -77,5 +89,6 @@ export default function BookApis() {
     postDayCash,
     postReceipt,
     getOneTransaction,
+    postMemo,
   };
 }

@@ -1,6 +1,8 @@
 'use client';
 
 import {
+  AlertConfirmModal,
+  BottomSheet,
   Button,
   ComplexInput,
   DealList,
@@ -18,16 +20,19 @@ import { useEffect, useState } from 'react';
 import BookApis from '../../../_apis';
 import { usePathname } from 'next/navigation';
 import useBookStore from '../../../_store';
+import { useRouter } from 'next/navigation';
 
 export default function BookListPost() {
+  const router = useRouter();
+
   var currentUrl = usePathname();
   var id = currentUrl?.split('/')[3];
-  const [title, setTitle] = useState();
-  const [amount, setAmount] = useState();
+  const [isOpen, setIsOpen] = useState<boolean>();
   const [image, setImage] = useState<File | null>(null);
   const { selectedTransaction } = useBookStore();
   const { postReceipt, getOneTransaction } = BookApis();
-  const [data, setData] = useState<OneTransactionType>();
+  const [data, setData] = useState<TransactionType>();
+  const [isBottomSheet, setIsBottomSheet] = useState<boolean>();
 
   useEffect(() => {
     (async function () {
@@ -35,47 +40,50 @@ export default function BookListPost() {
         transactionUUID: selectedTransaction.transactionUuid,
         type: selectedTransaction.code,
       });
-      console.log(data);
-      // setData(res?.data)
+      setData(res?.data);
     })();
   }, [selectedTransaction]);
 
-  const analysis = async () => {
+  const handleClickOkay = async () => {
     if (image && id) {
+      setIsOpen(false);
+      setIsBottomSheet(true);
+
       const formData = new FormData();
       formData.append('file', image);
       formData.append('transactionUuid', id);
-      formData.append('type', '현금');
-      try {
-        const res = await postReceipt(formData);
-        console.log(res);
-      } catch (error) {
-        console.error('Error analyzing receipt:', error);
+      formData.append('type', selectedTransaction?.code);
+      const res = await postReceipt(formData);
+      console.log(res);
+
+      if (res?.message === '영수증 분석을 완료햐였습니다.') {
+        setIsBottomSheet(false);
+        router.back();
       }
     }
   };
 
   return (
-    <div className="p-[1.2rem] w-full flex flex-col gap-[10rem]">
+    <div className="p-[1.2rem] flex flex-col gap-[1rem])">
       <div className="w-full flex flex-col gap-[1rem]">
         <FlexBox
           isDivided={false}
           mode="LIST"
           topChildren={
             <OtherInfoElement
-              leftExplainText={`${data?.type}`}
-              leftHighlightText={`${data?.storeName}`}
+              leftExplainText={`${data?.code}`}
+              leftHighlightText={`${data?.counterpartyName}`}
               money={`${commaNum(data?.amount)}원`}
               state={`${data && data?.amount > 0 ? 'UP' : 'DOWN'}`}
             />
           }
         />
-        {data && data?.amount > 0 && (
+        {data && data?.amount < 0 && (
           <ComplexInput label={'상세 사용 내역'} mode={'NONE'}>
             <div className="p-[0.3rem]">
-              {!data.receptDetails ? (
+              {data?.receipts ? (
                 <div>
-                  <DealList mode={'READONLY'} deals={data?.receptDetails} />
+                  <DealList mode={'READONLY'} deals={data?.receipts} />
                   <div className="border-b border-gray-400 mt-[1rem]" />
                 </div>
               ) : (
@@ -108,8 +116,38 @@ export default function BookListPost() {
           {data && data?.memo}
         </p>
       </div>
+
       {image && (
-        <Button onClick={analysis} mode={'ACTIVE'} label={'영수증 분석하기'} />
+        <div className="fixed bottom-[6rem] left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+          <Button
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            mode={'ACTIVE'}
+            label={'영수증 등록하기'}
+          />
+        </div>
+      )}
+      {isOpen && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <AlertConfirmModal
+            isOpen={isOpen}
+            handleClickOkay={handleClickOkay}
+            text={'영수증을 저장할까요?'}
+            handleClickNo={() => setIsOpen(false)}
+          />
+        </div>
+      )}
+      {isBottomSheet && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <BottomSheet
+            size={'SMALL'}
+            title={'영수증을 분석중입니다'}
+            imageSrc={'/images/icon-search.png'}
+            isXButtonVisible={false}
+            isOpen={isBottomSheet}
+          />
+        </div>
       )}
     </div>
   );

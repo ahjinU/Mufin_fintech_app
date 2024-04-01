@@ -27,7 +27,7 @@ export default function ListDeal({ deals }: DealListProps) {
       </div>
       {deals.map(({ item, cnt, total }, index) => {
         return (
-          <React.Fragment key={index}>
+          <React.Fragment key={`item-deal-${index}`}>
             <div className="col-span-4 text-[1.2rem] font-normal pl-[0.3rem] text-custom-dark-gray">
               <p>{item}</p>
             </div>

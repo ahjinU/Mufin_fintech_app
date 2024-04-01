@@ -39,7 +39,7 @@ public class SchedulerFacade {
     private final ParkingService parkingService;
     private final ParkingDetailsService parkingDetailsService;
 
-    @Scheduled(cron = "${schedule.cron.test}")
+    @Scheduled(cron = "${schedule.cron.start}")
     public void marketStart() {
         try {
             Weather weather = weatherService.weatherApi();

@@ -49,7 +49,7 @@ public class SchedulerFacade {
         }
     }
 
-//    @Scheduled(cron = "${schedule.cron.test}")
+    @Scheduled(cron = "${schedule.cron.test}")
     public void calRank(){
         log.info("start cal Rank()");
         stockFacade.makeRankList();

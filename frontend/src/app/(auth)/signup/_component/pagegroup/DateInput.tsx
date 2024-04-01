@@ -10,6 +10,7 @@ export default function DateInput({
   return (
     <div className="flex items-center gap-[0.4rem]">
       <Input
+        isNumber={true}
         placeholder={name === 'year' ? '1998' : name === 'month' ? '04' : '22'}
         name={name}
         onChange={(e) => onChange(e)}

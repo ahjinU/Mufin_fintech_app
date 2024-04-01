@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Transactional
@@ -442,7 +444,7 @@ public class StockFacade {
 	 * @return 랭킹 정보 리스트
 	 */
 	public RankingResponse getRanknigList() {
-		List<RankingDetail> rankingList = rankService.getTop10UserRankings();
+		List<RankingDetail> rankingList = getTop10UserRankings();
 		return RankingResponse.of(rankingList);
 	}
 
@@ -459,7 +461,7 @@ public class StockFacade {
 		int rank = Math.toIntExact(rankService.getUserRank(user));
 		int balance = (int) rankService.getUserScore(user);
 
-		List<RankingDetail> rankingList = rankService.getTop10UserRankings();
+		List<RankingDetail> rankingList = getTop10UserRankings();
 		for (RankingDetail detail : rankingList) {
 			if (detail.getChildName().equals(user.getName()))
 				return detail;
@@ -502,5 +504,28 @@ public class StockFacade {
 				.build();
 	}
 
+	public List<RankingDetail> getTop10UserRankings() {
+		Set<ZSetOperations.TypedTuple<String>> top10UsersWithScores = rankService.getTop10Users();
+		List<RankingDetail> userRankings = new ArrayList<>();
+		int rank = 1;
+		int prevRank = 1;
+		int prevBalance = 0;
+		for (ZSetOperations.TypedTuple<String> userWithScore : top10UsersWithScores) {
+			if (prevBalance == 0)
+				prevBalance = userWithScore.getScore().intValue();
+			int balance = userWithScore.getScore().intValue();
+			int curRank = (balance == prevBalance) ? prevRank : rank;
+			RankingDetail userRanking = RankingDetail.builder()
+					.childName(userWithScore.getValue())
+					.rank(curRank)
+					.balance(balance)
+					.build();
+			userRankings.add(userRanking);
 
+			prevBalance = balance;
+			prevRank = curRank;
+			rank++;
+		}
+		return userRankings;
+	}
 }

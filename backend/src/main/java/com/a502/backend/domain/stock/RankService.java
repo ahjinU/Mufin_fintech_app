@@ -21,7 +21,7 @@ public class RankService {
         redisTemplate.delete(RANKING_KEY);
     }
     public void addUserScore(User user, double score) {
-        redisTemplate.opsForZSet().add(RANKING_KEY, user.getName(), score);
+        redisTemplate.opsForZSet().add(RANKING_KEY, user.getUserUuid().toString(), score);
         redisTemplate.expire(RANKING_KEY, 1, TimeUnit.HOURS);
     }
 
@@ -30,35 +30,11 @@ public class RankService {
     }
 
     public double getUserScore(User user) {
-        return redisTemplate.opsForZSet().score(RANKING_KEY, user.getName());
+        return redisTemplate.opsForZSet().score(RANKING_KEY, user.getUserUuid().toString());
     }
 
     public Long getUserRank(User user) {
-        return redisTemplate.opsForZSet().reverseRank(RANKING_KEY, user.getName());
+        return redisTemplate.opsForZSet().reverseRank(RANKING_KEY, user.getUserUuid().toString());
     }
 
-    public List<RankingDetail> getTop10UserRankings() {
-        Set<ZSetOperations.TypedTuple<String>> top10UsersWithScores = getTop10Users();
-        List<RankingDetail> userRankings = new ArrayList<>();
-        int rank = 1;
-        int prevRank = 1;
-        int prevBalance = 0;
-        for (ZSetOperations.TypedTuple<String> userWithScore : top10UsersWithScores) {
-            if (prevBalance == 0)
-                prevBalance = userWithScore.getScore().intValue();
-            int balance = userWithScore.getScore().intValue();
-            int curRank = (balance == prevBalance) ? prevRank : rank;
-            RankingDetail userRanking = RankingDetail.builder()
-                    .childName(userWithScore.getValue())
-                    .rank(curRank)
-                    .balance(balance)
-                    .build();
-            userRankings.add(userRanking);
-
-            prevBalance = balance;
-            prevRank = curRank;
-            rank++;
-        }
-        return userRankings;
-    }
 }

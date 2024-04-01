@@ -34,3 +34,29 @@ export const getMaxMinValueIndex = (series: any) => {
     currentValue,
   ];
 };
+
+export const toCompanyKoreanName = (name: string) => {
+  switch (name) {
+    case 'snowduck':
+      return '눈오리';
+    case 'pinwheel':
+      return '바람개비';
+    case 'umbrella':
+      return '우산';
+    case 'icecream':
+      return '아이스크림';
+  }
+};
+
+export const toCompanyEnglishName = (name: string) => {
+  switch (name) {
+    case '눈오리':
+      return 'snowduck';
+    case '바람개비':
+      return 'pinwheel';
+    case '우산':
+      return 'umbrella';
+    case '아이스크림':
+      return 'icecream';
+  }
+};

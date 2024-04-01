@@ -27,7 +27,7 @@ export default async function LoanList() {
             src={'/images/icon-repay-smile.png'}
             width={200}
             height={200}
-            alt={'정상 연체 중'}
+            alt={'정상 납부 중'}
             className="w-[2rem] h-[2rem]"
           />
           <p className="custom-light-text text-custom-dark-purple">

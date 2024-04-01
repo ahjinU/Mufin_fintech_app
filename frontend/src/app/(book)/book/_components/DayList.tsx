@@ -55,6 +55,8 @@ const DayList = ({ list }: { list: Date[] }) => {
                     key={`day-${rowIndex}-${colIndex}`}
                     incomeDay={bookList && bookList[ind]?.incomeDay}
                     outcomeDay={bookList && bookList[ind]?.outcomeDay}
+                    loanPaymentDay={bookList && bookList[ind]?.loanPaymentDay}
+                    savingsDay={bookList && bookList[ind]?.savingsDay}
                   />
                 );
               }

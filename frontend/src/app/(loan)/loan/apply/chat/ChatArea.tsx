@@ -7,6 +7,7 @@ import OpenAI from 'openai';
 import ChatBox from '@/components/ChatBox/ChatBox';
 import useLoanApplyStore from '../_store';
 import { useRouter } from 'next/navigation';
+import useUserStore from '@/app/_store/store';
 
 type ChatMessage = {
   role: 'user' | 'assistant' | 'system';
@@ -16,6 +17,7 @@ type ChatMessage = {
 export default function ChatArea() {
   const router = useRouter();
   const { apply, addConversation } = useLoanApplyStore();
+  const { userData } = useUserStore();
 
   let string = '';
   const [input, setInput] = useState<any>();
@@ -103,6 +105,7 @@ export default function ChatArea() {
               <ChatBox
                 key={`chat-${index}`}
                 mode={msg.role === 'assistant' ? 'BOT' : 'USER'}
+                nickname={msg.role === 'user' ? userData?.name || '나' : '챗봇'}
                 message={msg.content}
               />
             );

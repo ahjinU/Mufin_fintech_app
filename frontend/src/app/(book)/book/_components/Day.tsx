@@ -11,10 +11,12 @@ type DayProps = {
   day?: Date;
   incomeDay?: string | null;
   outcomeDay?: string | null;
+  loanPaymentDay?: boolean | null;
+  savingsDay?: boolean | null;
 };
 
 const Day = (dayData: DayProps) => {
-  const { day, incomeDay, outcomeDay, index } = dayData;
+  const { day, incomeDay, outcomeDay, loanPaymentDay, savingsDay } = dayData;
 
   const { updateSelectDate } = useBookStore();
 
@@ -27,22 +29,27 @@ const Day = (dayData: DayProps) => {
       text-[1.5rem] items-center text-custom-medium-gray
       `}
     >
-      <div className="flex w-full flex-col leading-[1rem] items-center">
-        <p className="text-[2rem]">.</p>
+      <div className="flex w-full flex-col leading-[1rem] items-center h-[0.9rem]">
+        {(savingsDay || loanPaymentDay) && (
+          <div className="flex flex-row">
+            {savingsDay && (
+              <p className="text-[2.2rem] p-[-2rem] text-custom-blue">.</p>
+            )}
+            {loanPaymentDay && (
+              <p className="text-[2.2rem] p-[-2rem] text-custom-red">.</p>
+            )}
+          </div>
+        )}
       </div>
-      {incomeDay || outcomeDay ? (
-        <Link
-          className="cursor-pointer"
-          onClick={() => {
-            day && updateSelectDate(day);
-          }}
-          href={`/book/${koreanDate}/list`}
-        >
-          {day && format(day, 'd')}
-        </Link>
-      ) : (
-        day && format(day, 'd')
-      )}
+      <Link
+        className="cursor-pointer"
+        onClick={() => {
+          day && updateSelectDate(day);
+        }}
+        href={`/book/${koreanDate}/list`}
+      >
+        {day && format(day, 'd')}
+      </Link>
       <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center">
         <p className="text-[0.75rem] text-custom-blue font-[200]">
           {incomeDay != '0' && incomeDay}

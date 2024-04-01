@@ -18,11 +18,12 @@ export default function LoanApplyDetail() {
   const { updateApply } = useLoanApplyStore();
 
   const [isError, setIsError] = useState<boolean>(false);
+  const [isActive, setIsActivie] = useState<boolean>(false);
 
   const [reason, setReason] = useState<string>('');
   const [amount, setAmount] = useState<number>();
-  const [paymentTotalCnt, setPaymentTotalCnt] = useState<number>(0);
-  const [paymentDate, setPaymentDate] = useState<number>(0);
+  const [paymentTotalCnt, setPaymentTotalCnt] = useState<number>(1);
+  const [paymentDate, setPaymentDate] = useState<number>(1);
   const [penalty, setPenalty] = useState<string>('');
 
   const [expectAmount, setExpectAmount] = useState<number>(0);
@@ -43,6 +44,12 @@ export default function LoanApplyDetail() {
   useEffect(() => {
     reason && reason.length > 15 ? setIsError(true) : setIsError(false);
   }, [reason]);
+
+  useEffect(() => {
+    reason !== '' && amount && penalty !== ''
+      ? setIsActivie(true)
+      : setIsActivie(false);
+  }, [reason, penalty, amount]);
 
   const saveLoanApplyData = () => {
     if (!amount) return;
@@ -154,7 +161,7 @@ export default function LoanApplyDetail() {
         href={'/loan/apply/chat'}
         onClick={saveLoanApplyData}
       >
-        <Button mode={'ACTIVE'} label={'다음'} />
+        <Button mode={isActive ? 'ACTIVE' : 'NON_ACTIVE'} label={'다음'} />
       </Link>
     </>
   );

@@ -24,6 +24,7 @@ import com.a502.backend.global.error.BusinessException;
 import com.a502.backend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -253,7 +254,7 @@ public class UserFacade {
         if (temp == null) return 0;
         int rank = Math.toIntExact(temp);;
 
-        List<RankingDetail> rankingList = rankService.getTop10UserRankings();
+        List<RankingDetail> rankingList = getTop10UserRankings();
         for (RankingDetail detail : rankingList) {
             if (detail.getChildName().equals(user.getName()))
                 return detail.getRank();
@@ -262,7 +263,30 @@ public class UserFacade {
         return rank;
     }
 
+    public List<RankingDetail> getTop10UserRankings() {
+        Set<ZSetOperations.TypedTuple<String>> top10UsersWithScores = rankService.getTop10Users();
+        List<RankingDetail> userRankings = new ArrayList<>();
+        int rank = 1;
+        int prevRank = 1;
+        int prevBalance = 0;
+        for (ZSetOperations.TypedTuple<String> userWithScore : top10UsersWithScores) {
+            if (prevBalance == 0)
+                prevBalance = userWithScore.getScore().intValue();
+            int balance = userWithScore.getScore().intValue();
+            int curRank = (balance == prevBalance) ? prevRank : rank;
+            RankingDetail userRanking = RankingDetail.builder()
+                    .childName(userWithScore.getValue())
+                    .rank(curRank)
+                    .balance(balance)
+                    .build();
+            userRankings.add(userRanking);
 
+            prevBalance = balance;
+            prevRank = curRank;
+            rank++;
+        }
+        return userRankings;
+    }
 
 
 

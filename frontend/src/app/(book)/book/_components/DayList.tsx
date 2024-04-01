@@ -2,15 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import Day from './Day';
-import useDate from '@/utils/date';
 import BookApis from '../_apis';
 import { format } from 'date-fns';
 import useBookStore from '../_store';
 
 const DayList = ({ list }: { list: Date[] }) => {
-  const { calculateDateRange } = useDate();
-  const { startDate, endDate } = calculateDateRange();
-  const { currentEndDate, currentStartDate } = useBookStore();
+  const { currentEndDate, currentStartDate, curChild } = useBookStore();
 
   const { getMonthBook } = BookApis();
 
@@ -21,11 +18,12 @@ const DayList = ({ list }: { list: Date[] }) => {
       const res = await getMonthBook({
         startDate: format(currentStartDate, 'yyyy-MM-dd'),
         endDate: format(currentEndDate, 'yyyy-MM-dd'),
-        childUuid: null,
+        childUuid: curChild.childUuid || null,
       });
+      console.log(res);
       setBookList(res?.data?.dayDetailList);
     })();
-  }, [currentStartDate, currentEndDate]);
+  }, [curChild, currentEndDate, currentStartDate]);
 
   const cal: Date[][] = [];
   let num = 0;

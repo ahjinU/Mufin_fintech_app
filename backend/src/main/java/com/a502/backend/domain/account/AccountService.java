@@ -81,11 +81,10 @@ public class AccountService {
 	}
 
 	// 적금 계좌 생성 메소드
-	public Account createSavingsAccount(Savings savings, int cycle, int date, int amount, String password) {
+	public Account createSavingsAccount(Savings savings, int cycle, int date, int amount) {
 
 		User user = userService.userFindByEmail();
 
-		String encodedPassword = passwordEncoder.encode(password);
 
 		String accountNumber = generateUniqueAccountNumber(true);
 
@@ -94,7 +93,6 @@ public class AccountService {
 
 
 		Account account = Account.builder()
-				.password(encodedPassword)
 				.accountNumber(accountNumber)
 				.balance(0)
 				.user(user)
@@ -154,6 +152,9 @@ public class AccountService {
 	public Account findByUser(User user) {
 		return accountRepository.findByUser(user).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
 	}
+	public Account findDefaultAccountByUser(User user) {
+		return accountRepository.findDefaultAccountByUser(user).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_DEFAULT_ACCOUNT_NOT_EXIST));
+	}
 
 	public List<Account> findAllSavingsBySaving(Savings savings) {
 		return accountRepository.findAllBySavings(savings);
@@ -191,5 +192,11 @@ public class AccountService {
 	public Account findExpiredSavingsAccountByUuid(String accountUuid){
 		UUID uuid = UUID.fromString(accountUuid);
 		return accountRepository.findExpiredSavingsAccountByUuid(uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
+	}
+
+	public List<Account> searchActiveSavings(User user, Code statusCode) {
+
+		Code typeCode = codeService.findTypeCode("적금계좌");
+		return accountRepository.findByUserAndStatusCodeAndTypeCode(user, statusCode, typeCode);
 	}
 }

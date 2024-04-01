@@ -5,6 +5,7 @@ import com.a502.backend.application.entity.User;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -15,5 +16,7 @@ interface ParkingRepository extends JpaRepository<Parking, Integer> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Transactional
     Optional<Parking> findByUser(User user);
+
+    @Query("select p from Parking p")
     List<Parking> findAll();
 }

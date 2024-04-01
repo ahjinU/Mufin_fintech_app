@@ -21,16 +21,19 @@ export default function Check() {
 
   return (
     <div
-      className="absolute top-0 left-0 size-full bg-custom-black-with-opacity
-    flex justify-center"
+      className={`absolute top-0 left-0 size-full ${
+        isOpen && 'bg-custom-black-with-opacity'
+      } 
+    flex justify-center`}
     >
       <AlertConfirm
         handleClickOkay={useHandleOkay}
         handleClickNo={() => {
           setIsOpen(false);
+          router.push('/');
         }}
         isOpen={isOpen}
-        text="대화 내용은 부모님께 전달돼요. 대출을 신청할까요?"
+        text={`대출을 부모님께 신청할까요? 신청하지 않으면 홈화면으로 돌아가요.`}
       />
     </div>
   );

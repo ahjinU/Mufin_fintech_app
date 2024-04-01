@@ -3,12 +3,15 @@
 import { motion } from 'framer-motion';
 import ConfimButton from './ConfirmButton';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface AlertConfirmProps {
   text: string;
   isOpen?: boolean;
   handleClickOkay: () => void;
   handleClickNo: () => void;
+  handleClickClose?: () => void;
+  mode?: 'DEFAULT' | 'ONLYCLOSE';
 }
 
 export default function AlertConfirm({
@@ -16,8 +19,11 @@ export default function AlertConfirm({
   isOpen = false,
   handleClickOkay,
   handleClickNo,
+  handleClickClose,
+  mode = 'DEFAULT',
 }: AlertConfirmProps) {
   const [isClose, setIsClose] = useState<boolean>(false);
+  const router = useRouter();
 
   const container = {
     show: { y: 0, opacity: 1 },
@@ -46,10 +52,16 @@ export default function AlertConfirm({
       flex flex-col justify-between`}
     >
       <p className="custom-semibold-text">{text}</p>
-      <div className="flex gap-[1rem] justify-end">
-        <ConfimButton label="네" mode={'OKAY'} onClick={handleClickOkay} />
-        <ConfimButton label="아니오" mode={'CANCEL'} onClick={onClickNo} />
-      </div>
+      {mode === 'ONLYCLOSE' ? (
+        <div className="flex gap-[1rem] justify-end">
+          <ConfimButton label="닫기" mode={'OKAY'} onClick={handleClickClose} />
+        </div>
+      ) : (
+        <div className="flex gap-[1rem] justify-end">
+          <ConfimButton label="네" mode={'OKAY'} onClick={handleClickOkay} />
+          <ConfimButton label="아니오" mode={'CANCEL'} onClick={onClickNo} />
+        </div>
+      )}
     </motion.section>
   );
 }

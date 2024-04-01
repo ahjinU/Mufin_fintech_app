@@ -45,7 +45,6 @@ export default function Password({
                 appliedSavingsDetail.accountUuid,
                 parseInt(period),
               );
-              console.log(result);
               setUserData({
                 ...userData,
                 balance:
@@ -57,7 +56,6 @@ export default function Password({
           }}
           handleCloseButton={() => router.back()}
           mode="CHECK"
-          accountNumber={userData.accountNumber}
         />
       )}
     </div>

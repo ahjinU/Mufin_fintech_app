@@ -9,9 +9,10 @@ import useLoanRepayStore from '../_store';
 import { commaNum } from '@/utils/commaNum';
 import { format } from 'date-fns';
 import Link from 'next/link';
+import useUserStore from '@/app/_store/store';
 
 export default function LoanRepayDoc() {
-  const userName = '김한슝';
+  const { userData } = useUserStore();
 
   var currentUrl = usePathname();
   var id = currentUrl?.split('/')[2];
@@ -37,7 +38,7 @@ export default function LoanRepayDoc() {
             <p className="custom-semibold-text">대출 상환서</p>
             <div className="w-[28rem]">
               <span className="custom-medium-text leading-[3.7rem]">
-                <p>{`나(${userName})는 부모님께 빌린돈`}</p>
+                <p>{`나(${userData.name})는 부모님께 빌린돈`}</p>
                 <p>
                   {commaNum(loan?.totalAmount)}원 중{' '}
                   <span className="text-custom-purple">
@@ -73,13 +74,13 @@ export default function LoanRepayDoc() {
             </div>
             <div className="w-[30rem] flex flex-col items-end justify-end custom-medium-text">
               {format(new Date(), 'yyyy-MM-dd')}
-              <p>{userName}</p>
+              <p>{userData?.name}</p>
             </div>
           </div>
         }
       />
       <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
-        <Link href={''}>
+        <Link href={'password'}>
           <Button mode={'ACTIVE'} label={'동의하기'} />
         </Link>
       </div>

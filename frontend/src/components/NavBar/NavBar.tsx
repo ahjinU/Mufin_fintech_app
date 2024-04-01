@@ -37,6 +37,7 @@ const setIndex = (path: string | null) => {
       return 3;
     case '/user':
     case '/loan/list':
+    case '/loan/apply/success':
       return 4;
     default:
       return 0;
@@ -62,8 +63,8 @@ export default function NavBar({ mode }: NavBarProps) {
         {
           id: 1,
           icon: <Squares2X2Icon className="h-[2.4rem] w-[2.4rem] 4" />,
-          path: '/',
-          label: '결제',
+          path: '/transfer',
+          label: '송금',
         },
         {
           id: 2,
@@ -91,18 +92,18 @@ export default function NavBar({ mode }: NavBarProps) {
           id: 0,
           icon: <HomeIcon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
-          label: '결제',
+          label: '홈',
         },
         {
           id: 1,
           icon: <Squares2X2Icon className="h-[2.4rem] w-[2.4rem] 4" />,
-          path: '/',
+          path: '/transfer',
           label: '송금',
         },
         {
           id: 2,
           icon: <CalendarIcon className="h-[2.4rem] w-[2.4rem] 4" />,
-          path: '/',
+          path: '/book',
           label: '가계부',
         },
         {

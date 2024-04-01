@@ -97,7 +97,7 @@ export default function Transfer() {
 
   return (
     <div className="mt-[0.4rem] flex flex-col gap-[1rem]">
-      <AccountBox text={'내 잔액'} money={userData.balance}></AccountBox>
+      <AccountBox />
       <div className={whiteBoxClass}>
         <p className="custom-bold-text text-custom-black">
           어디로 돈을 보낼까요?
@@ -146,7 +146,6 @@ export default function Transfer() {
             mode="CHECK"
             handleConfirmButton={handleConfirm}
             handleCloseButton={() => setState('INPUT_MONEY')}
-            accountNumber={userData.accountNumber}
           />
         </div>
       ) : null}

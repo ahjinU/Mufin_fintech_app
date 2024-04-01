@@ -4,7 +4,7 @@ import { TransactionType } from '../../_types';
 
 export default function StorageList({ list }: { list: TransactionType[] }) {
   return (
-    <div className="flex flex-col gap-[1rem] py-[1.2rem]">
+    <div className="flex flex-col gap-[1rem] py-[1.2rem]  min-h-screen">
       {list?.map(
         ({ type, transName, date, amount, ratio, cnt, price }, index) => {
           return type === '이자' ? (
@@ -19,7 +19,7 @@ export default function StorageList({ list }: { list: TransactionType[] }) {
                   leftHighlightText={`${transName}`}
                   rightExplainText={`(${ratio}%)`}
                   rightHighlightText={`${amount && commaNum(amount)} 초코칩`}
-                  state={'DOWN'}
+                  state={'UP'}
                 />
               }
             />

@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Tag } from '@/components';
 import StockChartApis from '../_apis';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import { commaNum } from '@/utils/commaNum';
 
 const smooth: 'smooth' = 'smooth';
 const easeout: 'easeout' = 'easeout';
@@ -27,7 +28,7 @@ export function StockLineChart({ name }: { name: string }) {
     (async function () {
       const data = await getStockLineData(name, period);
       const prices = data.data.map((dataObj: StockData) => dataObj.price);
-      setData(prices);
+      setData(prices.reverse());
     })();
   }, [period]);
 
@@ -92,7 +93,7 @@ export function StockLineChart({ name }: { name: string }) {
         show: false,
       },
       y: {
-        formatter: (value: number) => value + '초코칩',
+        formatter: (value: number) => commaNum(value) + '초코칩',
       },
       marker: {
         show: false,
@@ -109,7 +110,7 @@ export function StockLineChart({ name }: { name: string }) {
               color: '#fff',
               background: '#cd2626',
             },
-            text: `최고: ${data[maxValueIndex]}`,
+            text: `최고: ${commaNum(data[maxValueIndex])}`,
             offsetX: -6,
           },
         },
@@ -122,7 +123,7 @@ export function StockLineChart({ name }: { name: string }) {
               color: '#fff',
               background: '#5969ff',
             },
-            text: `최저: ${data[minValueIndex]}`,
+            text: `최저: ${commaNum(data[minValueIndex])}`,
             offsetX: -6,
             offsetY: 19,
           },
@@ -136,7 +137,7 @@ export function StockLineChart({ name }: { name: string }) {
       <ApexChart
         type="line"
         options={option}
-        series={[{ name: '바람막이', data }]}
+        series={[{ name, data }]}
         height={300}
         width={336}
       />

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { NavBar } from '@/components';
+import useUserStore from '@/app/_store/store';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -11,10 +12,12 @@ export default function BookLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { userData } = useUserStore.getState();
+  console.log(userData);
   return (
     <div className="relative">
       <div className="min-h-[calc(100vh-6rem)]">{children}</div>
-      <NavBar mode={'CHILD'} />
+      <NavBar mode={userData.isParent ? 'PARENT' : 'CHILD'} />
     </div>
   );
 }

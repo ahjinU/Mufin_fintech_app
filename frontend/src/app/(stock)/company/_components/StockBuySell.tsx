@@ -1,16 +1,21 @@
 'use client';
 
 import { ComplexInput, Input, InfoShow } from '@/components';
+import { commaNum } from '@/utils/commaNum';
 
 interface StockBuySellType {
   mode: 'BUY' | 'SELL';
-  handlePrice: React.Dispatch<React.SetStateAction<number>>;
-  handleQuantity: React.Dispatch<React.SetStateAction<number>>;
-  totalPrice: number;
+  handlePrice: React.Dispatch<React.SetStateAction<number | undefined>>;
+  handleQuantity: React.Dispatch<React.SetStateAction<number | undefined>>;
+  totalPrice: number | undefined;
+  price: number | undefined;
+  quantity: number | undefined;
 }
 
 export function StockBuySell({
   mode,
+  price,
+  quantity,
   handlePrice,
   handleQuantity,
   totalPrice,
@@ -22,7 +27,11 @@ export function StockBuySell({
         label={`${mode === 'BUY' ? '구매' : '판매'}할 가격`}
         mode="INFORM"
       >
-        <Input placeholder="단가를 입력해주세요." setValue={handlePrice} />
+        <Input
+          placeholder="단가를 입력해주세요."
+          value={price}
+          setValue={handlePrice}
+        />
       </ComplexInput>
 
       <ComplexInput
@@ -30,7 +39,11 @@ export function StockBuySell({
         label={`${mode === 'BUY' ? '구매' : '판매'}할 수량`}
         mode="INFORM"
       >
-        <Input placeholder="수량을 입력해주세요." setValue={handleQuantity} />
+        <Input
+          placeholder="수량을 입력해주세요."
+          value={quantity}
+          setValue={handleQuantity}
+        />
       </ComplexInput>
 
       <ComplexInput
@@ -41,7 +54,7 @@ export function StockBuySell({
           mode === 'BUY' ? '구매' : '판매'
         }할 가격과 수량을 모두 입력해주세요!`}
       >
-        <InfoShow text={`${totalPrice} 초코칩`} copyIcon={false} />
+        <InfoShow text={`${commaNum(totalPrice)} 초코칩`} copyIcon={false} />
       </ComplexInput>
     </section>
   );

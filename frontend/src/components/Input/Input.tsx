@@ -67,6 +67,7 @@ export default function Input({
         placeholder={inputPlaceholder}
         name={name}
         value={value || inputValue}
+        type={typeof value === 'number' ? 'number' : 'text'}
         ref={inputRef}
         disabled={disabled}
         onChange={handleChange}

@@ -265,8 +265,32 @@ public class AllowanceFacade {
         Code code = codeService.findTypeCode("정상");
         List<Account> savings = accountService.searchActiveSavings(holderUser,code);
 
+        LocalDate currentDateParsed = LocalDate.parse(dayDto.getDate()); // "YYYY-MM-DD" 형식의 문자열을 LocalDate 객체로 변환
+        int currentDayOfMonth = currentDateParsed.getDayOfMonth(); // 현재 날짜의 '일' 부분 추출
+
+        Iterator<Account> savingsIterator = savings.iterator();
+        while (savingsIterator.hasNext()) {
+            Account account = savingsIterator.next();
+            int paymentDay = account.getPaymentDate(); // 적금의 지불 날짜
+
+            if (paymentDay != currentDayOfMonth) {
+                savingsIterator.remove(); // 지불 날짜가 현재 '일'과 다르면 목록에서 제거
+            }
+        }
+
+
         code = codeService.findTypeCode("진행중");
         List<Loan> loans = loansService.findLoansByUserAndCode(holderUser, code);
+
+        Iterator<Loan> loanIterator = loans.iterator();
+        while (loanIterator.hasNext()) {
+            Loan loan = loanIterator.next();
+            int paymentDay = loan.getPaymentDate(); // 대출의 납부일
+
+            if (paymentDay != currentDayOfMonth) {
+                loanIterator.remove(); // 납부일이 현재 '일'과 다르면 목록에서 제거
+            }
+        }
 
         return DaySummary.builder()
                 .dayIncome(dayIncome)

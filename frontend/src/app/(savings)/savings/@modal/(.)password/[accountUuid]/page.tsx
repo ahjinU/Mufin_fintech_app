@@ -5,6 +5,7 @@ import { PayPasswordBox } from '@/components';
 import { useState, useEffect } from 'react';
 import { AppliedSavingsListType } from '@/app/(savings)/_types';
 import SavingsApis from '@/app/(savings)/_apis';
+import useUserStore from '@/app/_store/store';
 
 export default function Password({
   params,
@@ -19,6 +20,7 @@ export default function Password({
   const [appliedSavingsDetail, setAppliedSavingsDetail] =
     useState<AppliedSavingsListType>();
   const { getAppliedSavingsProductDetail, paySavings } = SavingsApis();
+  const { userData, setUserData } = useUserStore();
 
   useEffect(() => {
     (async () => {
@@ -38,16 +40,24 @@ export default function Password({
       {appliedSavingsDetail && (
         <PayPasswordBox
           handleConfirmButton={async () => {
-            if (period)
-              await paySavings(
+            if (period) {
+              const result = await paySavings(
                 appliedSavingsDetail.accountUuid,
                 parseInt(period),
               );
+              console.log(result);
+              setUserData({
+                ...userData,
+                balance:
+                  userData.balance -
+                  appliedSavingsDetail.paymentAmount * parseInt(period),
+              });
+            }
             router.push('/result/savings/pay');
           }}
           handleCloseButton={() => router.back()}
           mode="CHECK"
-          accountNumber={appliedSavingsDetail.accountNumber}
+          accountNumber={userData.accountNumber}
         />
       )}
     </div>

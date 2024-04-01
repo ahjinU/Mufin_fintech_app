@@ -15,6 +15,7 @@ import { AppliedSavingsListType } from '../../_types';
 import SavingsApis from '../../_apis';
 import { commaNum } from '@/utils/commaNum';
 import { useRouter } from 'next/navigation';
+import useUserStore from '@/app/_store/store';
 
 export default function MySavings() {
   const [appliedSavingsList, setAppliedSavingsList] = useState<
@@ -29,6 +30,7 @@ export default function MySavings() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [targetAccountUuid, setTargetAccountUuid] = useState<string>('');
   const router = useRouter();
+  const { userData, setUserData } = useUserStore();
 
   useEffect(() => {
     (async () => {
@@ -123,6 +125,10 @@ export default function MySavings() {
                         handleClick={() => {
                           setTargetAccountUuid(appliedSavings.accountUuid);
                           setIsModalOpen(true);
+                          setUserData({
+                            ...userData,
+                            balance: userData.balance + appliedSavings.balance,
+                          });
                         }}
                       />
                     )}

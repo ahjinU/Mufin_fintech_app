@@ -1,18 +1,19 @@
 import useFetch from '@/hooks/useFetch';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { BackButton, Header, TinyButton } from '@/components';
 import { RequestListType } from '../../_types/types';
 
 export default function Assesment() {
   const router = useRouter();
+  const path = usePathname();
   const [requestList, setRequestList] = useState<RequestListType[]>([]);
 
   const { postFetch } = useFetch();
   useEffect(() => {
     const fetchLoanData = async () => {
       try {
-        const res = await postFetch({ api: '/loan/total/parents' });
+        const res = await postFetch({ api: '/loan/requests/parents' });
         if (res?.data?.loansList) {
           setRequestList(res.data.loansList);
         }
@@ -53,7 +54,7 @@ export default function Assesment() {
                   <TinyButton
                     label="심사하기"
                     handleClick={() => {
-                      router.push(`loan/parent/assesment/${k}`);
+                      router.push(`${path}/${k}`);
                     }}
                   />
                 </div>

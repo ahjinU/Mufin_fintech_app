@@ -20,5 +20,5 @@ export type RequestListType = {
   paymentDate: number;
   penalty: string;
   paymentTotalCnt: number;
-  chatBotConversation: string;
+  chatBotConversation: string[];
 };

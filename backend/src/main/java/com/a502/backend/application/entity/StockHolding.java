@@ -1,55 +1,52 @@
 package com.a502.backend.application.entity;
 
+import com.a502.backend.domain.stock.StockHoldingsId;
+import com.a502.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock_holdings")
-public class StockHolding {
-	@Column(name = "stock_holding_uuid")
-	private byte[] stockHoldingUuid;
+public class StockHolding extends BaseEntity {
 
-	@Column()
+	@EmbeddedId
+	private StockHoldingsId id;
+
+	@Column(name = "stock_holding_uuid")
+	private UUID stockHoldingUuid;
+	@PrePersist
+	public void initUUID() {
+		if (stockHoldingUuid == null)
+			stockHoldingUuid = UUID.randomUUID();
+	}
+
+	@Setter
+	@Column(name = "cnt")
 	private int cnt;
 
-	@Column()
+	@Setter
+	@Column(name = "total")
 	private int total;
 
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
-
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
-
-	@Id
-	@ManyToOne
-	@JoinColumn(name = "stock_id")
-	private Stock stock;
-
-	@Id
+	@MapsId("user")
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@MapsId("stock")
+	@ManyToOne
+	@JoinColumn(name = "stock_id")
+	private Stock stock;
+
 	@Builder
-	public StockHolding(byte[] stockHoldingUuid, int cnt, int total, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, Stock stock, User user) {
-		this.stockHoldingUuid = stockHoldingUuid;
+	public StockHolding(int cnt, int total, Stock stock, User user) {
 		this.cnt = cnt;
 		this.total = total;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-		this.isDeleted = isDeleted;
-		this.stock = stock;
-		this.user = user;
+		this.id = StockHoldingsId.builder().
+				user(user).stock(stock).build();
 	}
 }

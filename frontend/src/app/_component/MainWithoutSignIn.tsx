@@ -6,23 +6,34 @@ export default function MainWithoutSignIn() {
   return (
     <div className="h-screen">
       <div className="h-[84%] flex flex-col justify-center items-center gap-[1rem]">
-        <Image
-          src={'/images/icon-app-logo.png'}
-          width={300}
-          height={260}
-          alt={'mufin'}
-          className="w-[8rem] m-[2rem]"
-        ></Image>
+        <div className="relative">
+          <Image
+            src={'/images/icon-mufin.png'}
+            width={160}
+            height={50}
+            alt={'mufin'}
+            className="w-[16rem] m-[2rem]"
+          ></Image>
+          <div className="absolute -top-7 -right-10">
+            <Image
+              src={'/images/icon-app-logo.png'}
+              width={30}
+              height={25}
+              alt={'heart'}
+              className="w-[3rem] m-[2rem]"
+            ></Image>
+          </div>
+        </div>
         <p className="custom-bold-text text-custom-black">
           나의 첫 경제생활 도우미
         </p>
         <div className="flex flex-col items-center custom-medium-text text-custom-black">
-          <p>복잡한 송금, 결제, 용돈기입장, 어려운 주식 공부까지</p>
-          <p>자스민페이에서 쉽고 재미있게 시작해 보세요!</p>
+          <p>복잡한 송금, 결제, 가계부 관리, 어려운 주식 공부까지</p>
+          <p>머핀에서 쉽고 재미있게 시작해 보세요!</p>
         </div>
       </div>
       <div className="h-[16%] flex flex-col justify-start items-center gap-[1rem]">
-        <Link href="/signup" className='w-full'>
+        <Link href="/signup" className="w-full">
           <Button mode="ACTIVE" label="시작하기" />
         </Link>
         <div className="flex gap-[1rem]">

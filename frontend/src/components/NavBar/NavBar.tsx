@@ -35,7 +35,7 @@ const setIndex = (path: string | null) => {
     case '/stock/rank':
     case '/stock/storage':
       return 3;
-    case '/menus':
+    case '/user':
     case '/loan/list':
       return 4;
     default:
@@ -91,7 +91,7 @@ export default function NavBar({ mode }: NavBarProps) {
           id: 0,
           icon: <HomeIcon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/',
-          label: '결제',
+          label: '홈',
         },
         {
           id: 1,
@@ -102,7 +102,7 @@ export default function NavBar({ mode }: NavBarProps) {
         {
           id: 2,
           icon: <CalendarIcon className="h-[2.4rem] w-[2.4rem] 4" />,
-          path: '/',
+          path: '/book',
           label: '가계부',
         },
         {

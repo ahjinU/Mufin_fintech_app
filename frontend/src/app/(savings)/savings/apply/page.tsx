@@ -5,12 +5,22 @@ import { useState, useEffect } from 'react';
 import { SavingsListType } from '../../_types';
 import SavingsApis from '../../_apis';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 function Title({ name }: { name: string }) {
   return (
-    <section>
-      <h2 className="custom-medium-text">{name}</h2>
-      <span className="custom-light-text">적금</span>
+    <section className="flex items-center gap-[1rem]">
+      <Image
+        src={'/images/icon-smile.png'}
+        width={42}
+        height={42}
+        alt={'웃음 아이콘'}
+        className="w-[4.2rem] h-[4.2rem]"
+      />
+      <div>
+        <h2 className="custom-medium-text">{name}</h2>
+        <span className="custom-light-text">적금</span>
+      </div>
     </section>
   );
 }

@@ -10,7 +10,7 @@ export default function Page() {
   const { userData } = useUserStore();
   const router = useRouter();
 
-  if (session) {
+  if (session && !userData.isParent) {
     router.replace('/');
   } else {
     return <SignUp forParent={!userData.isParent} />;

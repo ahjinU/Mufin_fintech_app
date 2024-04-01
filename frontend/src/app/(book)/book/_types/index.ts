@@ -16,6 +16,8 @@ interface DayDetail {
   date: string;
   incomeDay: string;
   outcomeDay: string;
+  savingsDay: boolean;
+  loanPaymentDay: boolean;
 }
 
 interface TransactionType {
@@ -42,4 +44,25 @@ interface OneTransactionType {
   amount: number;
   receptDetails: ReceptDetail[];
   memo: string;
+}
+
+interface LoanType {
+  currentPaymentAmount: number;
+  hasOverdue: boolean;
+  loanUuid: string;
+  name: string;
+  totalPaymentAmount: number;
+}
+
+interface SavingType {
+  accountUuid: string;
+  amount: number;
+  hasOverdue: boolean;
+  name: string;
+}
+
+interface childType {
+  name: string;
+  childUuid: string;
+  index: number;
 }

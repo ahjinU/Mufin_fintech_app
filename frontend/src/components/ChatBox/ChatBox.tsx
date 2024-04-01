@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-interface ButtonProps {
+interface ChatProps {
   mode: 'USER' | 'BOT';
   message: string | React.ReactElement;
   nickname?: string;
@@ -10,8 +10,7 @@ export default function ChatBox({
   mode = 'BOT',
   message,
   nickname = '챗봇',
-  ...props
-}: ButtonProps) {
+}: ChatProps) {
   let icon: string;
   switch (mode) {
     case 'USER':

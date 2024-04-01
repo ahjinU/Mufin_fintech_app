@@ -38,7 +38,7 @@ export default function MainMyStock({
             </div>
             <div className="custom-light-text whitespace-pre">
               <p>주식에 투자하지 않고 보관함에 저장할 수도 있어요.</p>
-              <p>보관함에 있는 초코칩에는 연 2%의 이자가 붙어요.</p>
+              <p>보관함에 있는 초코칩에는 매일 0.2%의 이자가 붙어요.</p>
             </div>
           </div>
           <div className="mt-4 grid gap-2">
@@ -81,13 +81,20 @@ export default function MainMyStock({
           <div className="flex flex-col gap-[1rem]">
             {myStockList?.map(
               (
-                { cnt, name, incomeRatio, totalPriceAvg, totalPriceCur },
+                {
+                  cnt,
+                  name,
+                  incomeRatio,
+                  totalPriceAvg,
+                  totalPriceCur,
+                  imageUrl,
+                },
                 index,
               ) => {
                 return (
                   <OtherInfoElement
                     key={`myStock-${index}`}
-                    imageSrc={'/images/icon-dollar.png'}
+                    imageSrc={imageUrl}
                     leftExplainText={`${commaNum(cnt)}주`}
                     leftHighlightText={`${name}`}
                     state={`${incomeRatio >= 0 ? 'UP' : 'DOWN'}`}

@@ -26,9 +26,9 @@ export default function LoanDetail() {
   }, [id]);
 
   return (
-    <div className="flex flex-col gap-[1rem]">
+    <div className="flex flex-col">
       <GuideText text={`부모님께 빌렸던 돈을 갚아요.`} />
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center mb-[-3rem]">
         <Image
           src={'/images/icon-loan-repay.png'}
           width={200}
@@ -41,7 +41,7 @@ export default function LoanDetail() {
         <FlexBox
           isDivided={false}
           topChildren={
-            <div className="my-[-1rem] px-[1rem] rounded-b-[2rem] bg-custom-light-gray h-fit flex flex-col gap-[0.5rem]">
+            <div className="my-[-0.5rem] px-[0.5rem] rounded-b-[2rem] bg-custom-light-gray h-fit flex flex-col gap-[0.5rem]">
               <div className="flex justify-between custom-medium-text text-custom-black">
                 <p className="">대출 목적</p>
                 <p>{loan?.reason}</p>
@@ -73,10 +73,12 @@ export default function LoanDetail() {
             </div>
           }
         />
-      </ComplexInput>
-      <Link href={'repay'}>
-        <Button mode={'ACTIVE'} label={'다음'} />
-      </Link>
+      </ComplexInput>{' '}
+      <div className="fixed bottom-0 inset-x-0 p-[1.2rem]">
+        <Link href={'repay'}>
+          <Button mode={'ACTIVE'} label={'다음'} />
+        </Link>
+      </div>
     </div>
   );
 }

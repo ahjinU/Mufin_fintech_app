@@ -2,7 +2,7 @@
 
 import { Input } from '@/components';
 import { PaperAirplaneIcon } from '@heroicons/react/16/solid';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import OpenAI from 'openai';
 import ChatBox from '@/components/ChatBox/ChatBox';
 import useLoanApplyStore from '../_store';
@@ -15,6 +15,7 @@ type ChatMessage = {
 };
 
 export default function ChatArea() {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { apply, addConversation } = useLoanApplyStore();
   const { userData } = useUserStore();
@@ -33,6 +34,10 @@ export default function ChatArea() {
       ${apply?.paymentTotalCnt}개월동안 갚을게`,
     },
   ]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const key = process.env.NEXT_PUBLIC_GPT_API_KEY;
 
@@ -61,13 +66,10 @@ export default function ChatArea() {
       chunk?.choices[0]?.delta?.content &&
         (res += chunk?.choices[0]?.delta?.content);
     }
-    console.log(res);
 
     msg
       ? setMessages([...msg, { role: 'assistant', content: res }])
       : setMessages([...messages, { role: 'assistant', content: res }]);
-
-    window.scrollTo(0, document.body.scrollHeight);
   }
 
   useEffect(() => {
@@ -93,12 +95,14 @@ export default function ChatArea() {
     setMessages([...messages, { role: 'user', content: input }]);
     await chatGPT();
     setInput('');
-    window.scrollTo(0, document.body.scrollHeight);
   };
 
   return (
     <div>
-      <div className="flex flex-col gap-[1rem] mb-[1rem]">
+      <div
+        className="flex flex-col gap-[1rem] mb-[1rem] overflow-y-scroll"
+        ref={messagesEndRef}
+      >
         {messages.map((msg, index) => {
           if (msg.role !== 'system' && index > 1) {
             return (

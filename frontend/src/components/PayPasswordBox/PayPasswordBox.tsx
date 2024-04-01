@@ -5,12 +5,14 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { XMarkIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
 import PasswordApis from '@/services/password';
+import useUserStore from '@/app/_store/store';
+import { AlertConfirm, AlertConfirmModal } from '..';
 
 interface PayPasswordBoxProps {
   handleConfirmButton: () => void;
   handleCloseButton: () => void;
   mode: 'ACCOUNT' | 'CHECK';
-  accountNumber?: string;
+  isBoxOpenValue?: boolean;
 }
 
 function EachInputBox({
@@ -37,14 +39,15 @@ export default function PayPasswordBox({
   handleConfirmButton,
   handleCloseButton,
   mode,
-  accountNumber,
   ...props
 }: PayPasswordBoxProps) {
+  const { userData } = useUserStore();
   const [password, setPassword] = useState<number[]>([]);
   const [focusIndex, setFocusIndex] = useState<number>(0);
   const [isBoxOpen, setIsBoxOpen] = useState<boolean>(true);
   const [keyPadImage, setKeyPadImage] = useState<string[]>([]);
   const [wrongCnt, setWrongCnt] = useState<number>(0);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   console.log(password);
 
   const keypadRef = useRef<boolean>(false);
@@ -63,7 +66,8 @@ export default function PayPasswordBox({
         if (mode === 'ACCOUNT') {
           data = await getAccountKeyPadImage();
         } else {
-          if (accountNumber) data = await getKeyPadImage(accountNumber);
+          if (userData?.accountNumber)
+            data = await getKeyPadImage(userData?.accountNumber);
         }
         const keyPadData = data.data.keypad;
         keyPadData.splice(3, 0, 'delete');
@@ -92,18 +96,26 @@ export default function PayPasswordBox({
       if (mode === 'ACCOUNT') {
         data = await setPayPassword(password);
       } else {
-        if (accountNumber)
-          data = await checkPayPassword(accountNumber, password);
+        if (userData?.accountNumber)
+          data = await checkPayPassword(userData?.accountNumber, password);
       }
       console.log(data);
 
-      if (mode === 'CHECK') setWrongCnt(data.data.incorrectCnt);
-      if (data.message === '계좌 비밀번호가 일치합니다.' || mode === 'ACCOUNT')
+      if (mode === 'CHECK') setWrongCnt(data?.data?.incorrectCnt);
+      if (data.errorMessage === '키패드 요청 시간이 만료되었습니다.') {
+        setIsOpen(true);
+      }
+      if (
+        data.message === '계좌 비밀번호가 일치합니다.' ||
+        mode === 'ACCOUNT'
+      ) {
+        setIsBoxOpen(false);
         handleConfirmButton();
+      }
     })();
   };
 
-  return (
+  return !isOpen ? (
     <motion.section
       variants={container}
       initial="hidden"
@@ -192,5 +204,20 @@ export default function PayPasswordBox({
         })}
       </div>
     </motion.section>
+  ) : (
+    <div className="flex items-center justify-center">
+      <AlertConfirmModal
+        mode="ONLYCLOSE"
+        text={'요청 시간이 만료되었어요'}
+        handleClickOkay={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+        handleClickNo={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+        handleClickClose={() => closeBox()}
+        isOpen={isOpen}
+      />
+    </div>
   );
 }

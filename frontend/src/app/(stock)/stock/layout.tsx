@@ -13,7 +13,7 @@ export default function StockLayout({
 }>) {
   return (
     <>
-      <div className="pb-[6rem]">{children}</div>
+      <div>{children}</div>
       <NavBar mode={'CHILD'} />
     </>
   );

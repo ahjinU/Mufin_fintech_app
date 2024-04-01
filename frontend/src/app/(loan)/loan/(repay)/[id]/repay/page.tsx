@@ -38,7 +38,7 @@ export default function LoanRepay() {
     <>
       <div className="flex flex-col gap-[1.5rem] pb-[6rem]">
         <GuideText text={'부모님께 빌렸던 돈을 갚아요.'} />
-        <AccountBox isGrayBackground text={''} money={0} />
+        <AccountBox isGrayBackground />
         <ComplexInput
           label={'남은 전체 약속 금액'}
           mode={'NONE'}
@@ -77,9 +77,11 @@ export default function LoanRepay() {
           />
         </ComplexInput>
       </div>
-      <Link href={'doc'}>
-        <Button mode={'ACTIVE'} label={'다음'} />
-      </Link>
+      <div className="fixed bottom-0 inset-x-0 p-[1.2rem]">
+        <Link href={'doc'}>
+          <Button mode={'ACTIVE'} label={'다음'} />
+        </Link>
+      </div>
     </>
   );
 }

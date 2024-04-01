@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { format, getMonth } from 'date-fns';
+import { format } from 'date-fns';
 import Link from 'next/link';
 import useBookStore from '../_store';
 

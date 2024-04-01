@@ -7,10 +7,7 @@ import {
   ComplexInput,
   DealList,
   FlexBox,
-  GuideText,
   ImageUploadBox,
-  Input,
-  MoneyShow,
   OtherInfoElement,
   TinyButton,
 } from '@/components';

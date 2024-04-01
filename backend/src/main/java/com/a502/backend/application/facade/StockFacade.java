@@ -66,8 +66,6 @@ public class StockFacade {
 
 		StockBuy stockBuy = stockBuysService.save(user, stock, price, cnt_total, code);
 		transSell(stock, price, cnt_total, stockBuy, code);
-
-		stockDetailsService.updateStockDetail(stock, price);
 	}
 
 	@Transactional
@@ -78,9 +76,9 @@ public class StockFacade {
 		if (list.isEmpty()) return;
 		for (StockSell stockSell : list) {
 			if (cnt_total == 0) break;
-
 			cnt_total -= transaction(stockBuy, stockSell);
 		}
+		stockDetailsService.updateStockDetail(stock, price);
 	}
 
 	/**
@@ -107,7 +105,7 @@ public class StockFacade {
 		Code code = codeService.findByName("거래중");
 		StockSell stockSell = stockSellsService.save(user, stock, price, cnt_total, code);
 		transBuy(stock, price, cnt_total, stockSell, code);
-		stockDetailsService.updateStockDetail(stock, price);
+
 	}
 
 
@@ -119,10 +117,9 @@ public class StockFacade {
 		if (list.isEmpty()) return;
 		for (StockBuy stockBuy : list) {
 			if (cnt_total == 0) break;
-
 			cnt_total -= transaction(stockBuy, stockSell);
-
 		}
+		stockDetailsService.updateStockDetail(stock, price);
 	}
 
 

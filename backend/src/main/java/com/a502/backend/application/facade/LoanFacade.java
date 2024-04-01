@@ -81,9 +81,11 @@ public class LoanFacade {
 		List<Loan> loans = loansService.getAllLoansForChild(child);
 		// 결과값 담을 리스트
 		List<LoanList> loansList = new ArrayList<>();
+		int totalRemainderAmount = 0;
 		for (Loan l : loans) {
 			LoanRefusal loanRefusal = loanRefusalService.findByLoan(l);
 			int remainderAmount = l.getAmount() - l.getPaymentNowCnt() * (l.getAmount() / l.getPaymentTotalCnt());
+			totalRemainderAmount += remainderAmount;
 			LoanList loanDetail = LoanList.builder()
 					.reason(l.getReason())
 					.loanUuid(String.valueOf(l.getLoanUuid()))
@@ -99,7 +101,7 @@ public class LoanFacade {
 			}
 			loansList.add(loanDetail);
 		}
-		return LoanListForChildResponse.builder().loansList(loansList).build();
+		return LoanListForChildResponse.builder().totalRemainderAmount(totalRemainderAmount).loansList(loansList).build();
 	}
 
 	public LoanDetailResponse getLoanDetailForChild(LoanUuidRequest loanUuidRequest) {
@@ -180,6 +182,7 @@ public class LoanFacade {
 		User user = userService.userFindByEmail();
 		List<LoanDetailForParents> loanDetailList = new ArrayList<>();
 		List<Loan> loanList = loansService.getAllLoansForParents(user);
+
 		for (Loan l : loanList) {
 			LoanDetailForParents loanDetailForParents = LoanDetailForParents.builder()
 					.reason(l.getReason())

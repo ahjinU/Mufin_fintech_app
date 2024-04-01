@@ -5,8 +5,6 @@ import { NavButton } from '@/components';
 import { useState, useEffect } from 'react';
 
 export default function UserMenu() {
-  const [userType, setUserType] = useState<'CHILD' | 'PARENT'>('CHILD');
-
   const { userData } = useUserStore();
 
   const data = !userData.isParent
@@ -14,7 +12,7 @@ export default function UserMenu() {
         ['최근 결제 내역 확인하기', '/'],
         ['적금 신청하기', '/savings/apply'],
         ['적금 보기 & 납부하기', '/savings/mine'],
-        ['대출 받기', '/'],
+        ['대출 받기', '/loan/apply'],
         ['대출 보기 & 상환하기', '/loan/list'],
       ]
     : [
@@ -26,7 +24,7 @@ export default function UserMenu() {
       ];
 
   return (
-    <section className="p-[1.2rem] flex flex-col gap-[1rem] min-h-screen">
+    <section className="p-[1.2rem] flex flex-col gap-[1rem] min-h-[calc(100vh-12rem)]">
       <NavButton mode="HIGHLIGHT" label="김지니" link="/" />
       {data.map((menu, index) => {
         return (

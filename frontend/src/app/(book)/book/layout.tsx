@@ -17,7 +17,7 @@ export default function BookLayout({
   return (
     <div className="relative">
       <div className="min-h-[calc(100vh-6rem)]">{children}</div>
-      <NavBar mode={!userData.isParent ? 'PARENT' : 'CHILD'} />
+      <NavBar mode={userData.isParent ? 'PARENT' : 'CHILD'} />
     </div>
   );
 }

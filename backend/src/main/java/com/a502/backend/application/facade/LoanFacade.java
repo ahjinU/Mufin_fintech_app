@@ -185,6 +185,7 @@ public class LoanFacade {
 
 		for (Loan l : loanList) {
 			LoanDetailForParents loanDetailForParents = LoanDetailForParents.builder()
+					.childName(l.getChild().getName())
 					.reason(l.getReason())
 					.amount(l.getAmount())
 					.paymentDate(l.getPaymentDate())
@@ -208,6 +209,7 @@ public class LoanFacade {
 		for (Loan l : loans) {
 			String[] loanConversation = l.getLoanConversation().getContent().split("!#@#!");
 			RequestedLoanDetail loanDetail = RequestedLoanDetail.builder()
+					.childName(l.getChild().getName())
 					.reason(l.getReason())
 					.loanUuid(l.getLoanUuid().toString())
 					.amount(l.getAmount())

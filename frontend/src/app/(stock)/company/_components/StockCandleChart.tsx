@@ -6,6 +6,7 @@ const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 import { Tag } from '@/components';
 import { getMaxMinValueIndex } from '../_utils';
 import StockChartApis from '../_apis';
+import { commaNum } from '@/utils/commaNum';
 
 const datetime: 'datetime' = 'datetime';
 const pan: 'pan' = 'pan';
@@ -27,7 +28,7 @@ export function StockCandleChart({ name }: { name: string }) {
   useEffect(() => {
     (async function () {
       const data = await getStockCandleData(name, period);
-      setData(data.data);
+      setData(data.data.reverse());
     })();
   }, [period]);
 
@@ -102,7 +103,7 @@ export function StockCandleChart({ name }: { name: string }) {
               color: '#fff',
               background: '#cd2626',
             },
-            text: `최고: ${getMaxMinValueIndex(series)[0]}`,
+            text: `최고: ${commaNum(Number(getMaxMinValueIndex(series)[0]))}`,
             offsetX: -6,
           },
         },
@@ -115,13 +116,13 @@ export function StockCandleChart({ name }: { name: string }) {
               color: '#fff',
               background: '#5969ff',
             },
-            text: `최저: ${getMaxMinValueIndex(series)[1]}`,
+            text: `최저: ${commaNum(Number(getMaxMinValueIndex(series)[1]))}`,
             offsetX: -6,
             offsetY: 19,
           },
         },
         {
-          y: series[0].data[0].y[3],
+          y: series[0].data[data.length - 1].y[3],
           borderColor: '#0be881',
           label: {
             borderColor: '#0be881',
@@ -144,18 +145,18 @@ export function StockCandleChart({ name }: { name: string }) {
           }월 ${new Date(
             w.config.series[0].data[dataPointIndex].x,
           ).getDate()}일</span>` +
-          `<span>시가: <strong class='tooltip-bold'>${w.config.series[0].data[
-            dataPointIndex
-          ].y[0].toFixed(0)}초코칩</strong></span>` +
-          `<span class='tooltip-blue'>저가: <strong class='tooltip-bold'>${w.config.series[0].data[
-            dataPointIndex
-          ].y[2].toFixed(0)}초코칩</strong></span>` +
-          `<span class='tooltip-red'>고가: <strong class='tooltip-bold'>${w.config.series[0].data[
-            dataPointIndex
-          ].y[1].toFixed(0)}초코칩</strong></span>` +
-          `<span>종가: <strong class='tooltip-bold'>${w.config.series[0].data[
-            dataPointIndex
-          ].y[3].toFixed(0)}초코칩</strong></span>` +
+          `<span>시가: <strong class='tooltip-bold'>${commaNum(
+            w.config.series[0].data[dataPointIndex].y[0].toFixed(0),
+          )}초코칩</strong></span>` +
+          `<span class='tooltip-blue'>저가: <strong class='tooltip-bold'>${commaNum(
+            w.config.series[0].data[dataPointIndex].y[2].toFixed(0),
+          )}초코칩</strong></span>` +
+          `<span class='tooltip-red'>고가: <strong class='tooltip-bold'>${commaNum(
+            w.config.series[0].data[dataPointIndex].y[1].toFixed(0),
+          )}초코칩</strong></span>` +
+          `<span>종가: <strong class='tooltip-bold'>${commaNum(
+            w.config.series[0].data[dataPointIndex].y[3].toFixed(0),
+          )}초코칩</strong></span>` +
           '</article>'
         );
       },

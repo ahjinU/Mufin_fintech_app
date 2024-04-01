@@ -4,9 +4,10 @@ import { useRouter } from 'next/navigation';
 import { SmallButton } from '@/components';
 import { StockInfo } from '../_types';
 import { commaNum } from '@/utils/commaNum';
+import { toCompanyEnglishName } from '../../company/_utils';
 
 export default function MyStockInfo({ stock }: { stock: StockInfo }) {
-  const { totalPriceAvg, totalPriceCur, priceAvg, priceCur } = stock;
+  const { totalPriceAvg, totalPriceCur, priceAvg, priceCur, name } = stock;
   const router = useRouter();
 
   return (
@@ -47,12 +48,16 @@ export default function MyStockInfo({ stock }: { stock: StockInfo }) {
         <SmallButton
           mode={'ACTIVE'}
           label={'더 사기'}
-          handleClick={() => router.push('/company/buy')}
+          handleClick={() =>
+            router.push(`/company/buy/${toCompanyEnglishName(name)}`)
+          }
         />
         <SmallButton
           mode={'ACTIVE'}
           label={'팔기'}
-          handleClick={() => router.push('/company/sell')}
+          handleClick={() =>
+            router.push(`/company/sell/${toCompanyEnglishName(name)}`)
+          }
         />
       </div>
     </>

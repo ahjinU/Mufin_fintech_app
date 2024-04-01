@@ -33,11 +33,7 @@ export default function PaySavingsForm({
   return (
     <>
       <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] relative">
-        <AccountBox
-          text="내 계좌에서 돈이 빠져나가요!"
-          isGrayBackground={true}
-          money={userData?.balance || 0}
-        />
+        <AccountBox isGrayBackground={true} />
 
         <ComplexInput mode="NONE" label="납부 완료된 개월 수">
           <span className="custom-medium-text">

@@ -17,7 +17,7 @@ export default async function LoanList() {
     <div className="flex flex-col gap-[1rem]">
       <MoneyShow
         mode={'UNDIVIDED'}
-        text={['남은 대출액']}
+        text={['남은 대출금']}
         money={[commaNum(30000)]}
         unit={'원'}
       />
@@ -78,7 +78,7 @@ export default async function LoanList() {
                     ? '/images/icon-repay-sad.png'
                     : '/images/icon-repay-smile.png'
                 }
-                leftHighlightText={`잔액 ${commaNum(
+                leftHighlightText={`잔금 ${commaNum(
                   loan.remainderAmount,
                 )}원/ 총 ${commaNum(loan.amount)}원`}
                 leftExplainText={loan.reason}

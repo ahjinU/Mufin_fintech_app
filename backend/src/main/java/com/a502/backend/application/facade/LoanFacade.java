@@ -184,6 +184,15 @@ public class LoanFacade {
 		List<Loan> loanList = loansService.getAllLoansForParents(user);
 
 		for (Loan l : loanList) {
+			LocalDate endDate = null;
+			//
+			if (l.getStartDate().getDayOfMonth() > l.getPaymentDate()) {
+				endDate = l.getStartDate().plusMonths(l.getPaymentTotalCnt()).withDayOfMonth(l.getPaymentDate());
+			} else if (l.getStartDate().getDayOfMonth() < l.getPaymentDate()) {
+				endDate = l.getStartDate().plusMonths(l.getPaymentTotalCnt() - 1).withDayOfMonth(l.getPaymentDate());
+			} else {
+				endDate = l.getStartDate().plusMonths(l.getPaymentTotalCnt());
+			}
 			LoanDetailForParents loanDetailForParents = LoanDetailForParents.builder()
 					.childName(l.getChild().getName())
 					.reason(l.getReason())
@@ -194,6 +203,8 @@ public class LoanFacade {
 					.paymentNowCnt(l.getPaymentNowCnt())
 					.statusCode(l.getCode().getName())
 					.overdueCnt(l.getOverdueCnt())
+					.startDate(l.getStartDate())
+					.endDate(endDate)
 					.build();
 			loanDetailList.add(loanDetailForParents);
 		}

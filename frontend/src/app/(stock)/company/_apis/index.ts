@@ -21,32 +21,47 @@ export default function StockChartApis() {
     return res;
   };
 
-  return { getStockLineData, getStockCandleData };
+  // 내 초코칩 보관함 확인하기
+  const getChocoChipPocketData = async () => {
+    const res = await postFetch({
+      api: '/parking/account',
+    });
+    return res;
+  };
+
+  // 매수하기
+  const buyStock = async (name: string, price: number, cnt_total: number) => {
+    const res = await postFetch({
+      api: '/stock/buy',
+      data: { name, price, cnt_total },
+    });
+    return res;
+  };
+
+  // 매도하기
+  const sellStock = async (name: string, price: number, cnt_total: number) => {
+    const res = await postFetch({
+      api: '/stock/sell',
+      data: { name, price, cnt_total },
+    });
+    return res;
+  };
+
+  // 회사 개별 주식 가져오기
+  const getStockDetail = async (name: string) => {
+    const res = await postFetch({
+      api: '/stock/detail',
+      data: { name },
+    });
+    return res;
+  };
+
+  return {
+    getStockLineData,
+    getStockCandleData,
+    getChocoChipPocketData,
+    buyStock,
+    sellStock,
+    getStockDetail,
+  };
 }
-
-// // 내 파킹통장 정보 조회
-// export const getChocoChipPocketData = async () => {
-//   const res = await fetch(`${commonUrl}/parking/account`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   });
-//   return res.json();
-// };
-
-// // 매수하기
-// export const buyStock = async (
-//   name: string,
-//   price: number,
-//   cnt_total: number,
-// ) => {
-//   const res = await fetch(`${commonUrl}/stock/buy`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ name, price, cnt_total }),
-//   });
-//   return res.json();
-// };

@@ -23,20 +23,12 @@ export default function UserContact({
     const { name, value } = e.target;
     setContact({ ...contact, [name]: value });
 
-  const checkTelephone = async () => {
-    try {
-      const fetchedData = await checkTelephoneParent(contact.telephone);
-      if (fetchedData.ok) {
-        setIsValid(true);
-        setMessage('사용 가능한 번호입니다😀');
-        console.log(fetchedData.headers.getSetCookie);
-      } else {
-        setIsValid(false);
-        setMessage('중복된 번호입니다😢');
-        console.log(fetchedData);
-      }
-    } catch (error) {
-      console.error('전화번호 중복 검사 에러', error);
+    if (name === 'telephone') {
+      setMessage(
+        isValidPhoneNumber(value)
+          ? ''
+          : '전화번호는 11자리의 숫자로 입력해주세요!',
+      );
     }
   };
 
@@ -72,10 +64,9 @@ export default function UserContact({
   }, [contact, isValid]);
 
   const handleNext = () => {
-    // if (buttonMode == 'ACTIVE') {
-    //   onNext(contact);
-    // }
-    onNext(contact);
+    if (buttonMode == 'ACTIVE') {
+      onNext(contact);
+    }
   };
 
   return (

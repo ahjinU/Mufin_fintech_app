@@ -96,6 +96,7 @@ export default function UserContact({
       >
         <div className="flex items-center gap-[1rem]">
           <Input
+            isNumber={true}
             placeholder="'-'를 제외하고 입력해주세요"
             name="telephone"
             onChange={onChangeInput}

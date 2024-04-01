@@ -1,6 +1,7 @@
 package com.a502.backend.domain.user.response;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserMyPageResponse {
     String name;
-    boolean isParent;
+    @JsonProperty(value = "isParent")
+    Boolean isParent;
     String accountNumber;
     int balance;
     int savings;

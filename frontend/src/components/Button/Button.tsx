@@ -37,7 +37,7 @@ export default function Button({
       className={`w-full h-[4.4rem] rounded-lg text-custom-white custom-semibold-text ${backgroundColor} ${
         mode === 'ACTIVE' && 'hover:bg-custom-dark-purple'
       }`}
-      onClick={onClick}
+      onClick={mode !== 'NON_ACTIVE' ? onClick : undefined}
       {...props}
     >
       {label}

@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Input } from '..';
 
 interface DealType {
@@ -28,9 +29,9 @@ export default function DealList({ mode, deals, ...props }: DealListProps) {
       </div>
       {mode === 'READONLY' ? (
         <>
-          {deals.map(({ item, cnt, total }) => {
+          {deals?.map(({ item, cnt, total }, index) => {
             return (
-              <>
+              <React.Fragment key={`item-${index}`}>
                 <div className="col-span-4 text-[1.6rem] font-normal pl-[0.3rem] text-custom-black">
                   <p>{item}</p>
                 </div>
@@ -40,7 +41,7 @@ export default function DealList({ mode, deals, ...props }: DealListProps) {
                 <div className="col-span-2 text-[1.6rem] font-normal text-right pr-[0.5rem] text-custom-black">
                   <p>{total}원</p>
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
         </>

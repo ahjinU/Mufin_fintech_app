@@ -96,7 +96,12 @@ export default function PaySavings({
       </div>
 
       <Button
-        mode="ACTIVE"
+        mode={
+          appliedSavingsDetail?.savingsPeriod ===
+          appliedSavingsDetail?.paymentCycle
+            ? 'NON_ACTIVE'
+            : 'ACTIVE'
+        }
         label="다음"
         onClick={() => router.push(`/savings/pay/${accountUuid}/form`)}
       />

@@ -50,7 +50,7 @@ export default function OtherInfoElement({
             state === 'UP' ? 'text-custom-purple' : 'text-custom-black'
           }`}
         >
-          {state === 'UP' ? '+ ' + money : '- ' + money}
+          {money}
         </span>
       ) : (
         <div className="min-w-fit flex flex-col justify-between items-end">

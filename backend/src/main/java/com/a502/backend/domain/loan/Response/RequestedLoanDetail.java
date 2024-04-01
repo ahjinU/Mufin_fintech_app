@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestedLoanDetail {
+	private String childName;
 	private String reason;
 	private String loanUuid;
 	private int amount;
@@ -17,7 +18,8 @@ public class RequestedLoanDetail {
 	private String[] chatBotConversation;
 
 	@Builder
-	public RequestedLoanDetail(String reason, String loanUuid, int amount, int paymentDate, String penalty, int paymentTotalCnt, String[] chatBotConversation){
+	public RequestedLoanDetail(String childName, String reason, String loanUuid, int amount, int paymentDate, String penalty, int paymentTotalCnt, String[] chatBotConversation){
+		this.childName = childName;
 		this.reason = reason;
 		this.loanUuid = loanUuid;
 		this.amount = amount;

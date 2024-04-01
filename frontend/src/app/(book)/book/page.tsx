@@ -6,33 +6,75 @@ import {
   Header,
   MoneyShow,
   OtherInfoElement,
+  Tag,
 } from '@/components';
 import Calendar from './_components/Calendar';
 import { commaNum } from '@/utils/commaNum';
-import { format, getDay } from 'date-fns';
+import { format, getDay, getMonth } from 'date-fns';
 import { useEffect, useState } from 'react';
 import BookApis from './_apis';
 import { getKorDay } from '@/utils/getKorDay';
 import useBookStore from './_store';
+import useUserStore from '@/app/_store/store';
+import { TagType } from '@/components/Tag/Tag';
 
 export default function Book() {
-  const { currentStartDate, currentEndDate } = useBookStore();
-  const { getMonthBookDetail } = BookApis();
+  const {
+    currentStartDate,
+    currentEndDate,
+    updateChildren,
+    children,
+    curChild,
+    updateCurChild,
+  } = useBookStore();
+  const [tags, SetTags] = useState<TagType[]>([]);
+  const { getMonthBookDetail, getMonthBook } = BookApis();
+  const { userData } = useUserStore();
 
   const [bookDetail, setBookDetail] = useState<MonthBookDetailType | null>(
     null,
   );
 
   useEffect(() => {
+    let childUuid: string | null = null;
+    userData.isParent &&
+      tags.length === 0 &&
+      (async function () {
+        const res = await getMonthBook({
+          startDate: format(currentStartDate, 'yyyy-MM-dd'),
+          endDate: format(currentEndDate, 'yyyy-MM-dd'),
+          childUuid: null,
+        });
+        if (!curChild) childUuid = res?.data?.childs[0].childUuid;
+        updateChildren(res?.data?.childs);
+        const newData: TagType[] = [];
+        res?.data?.childs?.map((child: childType, index: number) => {
+          newData.push({
+            label: child.name,
+            onClick: () => {
+              updateCurChild({
+                childUuid: child.childUuid,
+                name: child.name,
+                index: index,
+              });
+            },
+          });
+        });
+        SetTags(newData);
+        !curChild && updateCurChild(res?.data?.childs[0]);
+      })();
+  }, []);
+
+  useEffect(() => {
     (async function () {
       const res = await getMonthBookDetail({
         startDate: format(currentStartDate, 'yyyy-MM-dd'),
         endDate: format(currentEndDate, 'yyyy-MM-dd'),
-        childUuid: null,
+        childUuid: curChild.childUuid || null,
       });
       setBookDetail(res?.data);
     })();
-  }, [currentStartDate, currentEndDate]);
+  }, [curChild, currentEndDate, currentStartDate]);
 
   return (
     <div>
@@ -40,6 +82,20 @@ export default function Book() {
         <h1 className="custom-bold-text">용돈 가계부</h1>
       </Header>
       <div className="p-[1.2rem] flex flex-col gap-[1rem]">
+        {userData.isParent && tags && (
+          <div className="flex flex-row gap-[1rem] mt-[-2rem] mb-[1.5rem]">
+            <Tag tags={tags} index={curChild.index || 0} />
+          </div>
+        )}
+        <div className="flex flex-col items-end w-full mb-[1rem] mt-[-2rem] text-[0.9rem] leading-[0.8rem]">
+          <p>대출, 적금 개설할 때 입금하기로 약속한 날짜에요!</p>
+          <p>
+            <span className="text-custom-blue text-[2.5rem]">.</span> 대출 상환
+            예정일{' '}
+            <span className="text-custom-red text-[2.5rem] ml-[0.7rem]">.</span>{' '}
+            적금 입금 예정일
+          </p>
+        </div>
         <Calendar />
         <ComplexInput label={'이번 달 내역'} mode={'NONE'}>
           <MoneyShow
@@ -56,13 +112,13 @@ export default function Book() {
             unit={'원'}
           />
         </ComplexInput>
-        <div className="flex flex-col gap-[1.2rem] max-h-[30rem] overflow-y-scroll  scrollbar-hide">
+        <div className="flex flex-col gap-[1.2rem]">
           {bookDetail?.transactionDtoList?.map((trans, index) => {
             return (
               <FlexBox
                 key={`tarns-${index}`}
                 isDivided={false}
-                mode="LIST"
+                mode="NONE"
                 date={`${format(trans?.date, 'd')}일 ${getKorDay(
                   getDay(trans?.date),
                 )}`}

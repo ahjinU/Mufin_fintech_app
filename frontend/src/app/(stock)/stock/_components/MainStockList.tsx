@@ -12,6 +12,7 @@ import { commaNum } from '@/utils/commaNum';
 import MainRanking from './MainRanking';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { toCompanyEnglishName } from '../../company/_utils';
 
 const toWeatherDescript = (id: number) => {
   switch (Math.floor(id / 100)) {
@@ -30,19 +31,6 @@ const toWeatherDescript = (id: number) => {
   }
 };
 
-const toCompanyEnglishName = (name: string) => {
-  switch (name) {
-    case '눈오리':
-      return 'snowduck';
-    case '바람개비':
-      return 'pinwheel';
-    case '우산':
-      return 'umbrella';
-    case '아이스크림':
-      return 'icecream';
-  }
-};
-
 export default function MainStockList({ data }: { data: DataType }) {
   const { temp, description, stocks, ranks, myRank } = data;
   const router = useRouter();
@@ -58,8 +46,8 @@ export default function MainStockList({ data }: { data: DataType }) {
       <AdBox
         icon="/images/icon-dollar.png"
         mode={'STATIC'}
-        subText={'매일 낮 12시, 내 주식은 서울 날씨에 따라 변화해요!'}
-        title={'주식 시장은 오후 12시부터 7시까지에요.'}
+        subText={'매일 아침 9시, 내 주식은 서울 날씨에 따라 변화해요!'}
+        title={'시장은 오전 9시부터 오후 4시까지에요.'}
       />
       <GuideText
         text={

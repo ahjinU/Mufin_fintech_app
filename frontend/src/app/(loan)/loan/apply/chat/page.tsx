@@ -11,9 +11,14 @@ import ChatBox from '@/components/ChatBox/ChatBox';
 import { PaperAirplaneIcon, ArrowPathIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import ChatArea from './ChatArea';
+import useUserStore from '@/app/_store/store';
+import { useRouter } from 'next/navigation';
 
 export default function LoanApplyChat() {
-  const userName = '김한슐';
+  const router = useRouter();
+  const { userData } = useUserStore();
+
+  const userName = userData?.name;
   return (
     <div>
       <Header>
@@ -35,7 +40,10 @@ export default function LoanApplyChat() {
         </div>
         <div className="flex flex-row w-full items-center justify-end gap-[0.5rem] mb-[0.5rem]">
           <p className="text-custom-purple">다시 처음부터 대화하기</p>
-          <ArrowPathIcon className="text-custom-purple w-[1.5rem]" />
+          <ArrowPathIcon
+            className="text-custom-purple w-[1.5rem]"
+            onClick={() => router.refresh()}
+          />
         </div>
         <ChatBox
           mode={'BOT'}

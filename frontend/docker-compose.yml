@@ -1,6 +1,8 @@
 services:
   front:
-    build: .
+    build:
+      context: . ## build Docker file location
+      dockerfile: Dockerfile ## build file name
     ports:
       - '3000:3000'
     container_name: jasumin

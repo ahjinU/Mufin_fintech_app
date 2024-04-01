@@ -17,7 +17,7 @@ export default async function LoanList() {
     <div className="flex flex-col gap-[1rem]">
       <MoneyShow
         mode={'UNDIVIDED'}
-        text={['남은 대출액']}
+        text={['남은 대출금']}
         money={[commaNum(30000)]}
         unit={'원'}
       />
@@ -27,7 +27,7 @@ export default async function LoanList() {
             src={'/images/icon-repay-smile.png'}
             width={200}
             height={200}
-            alt={'정상 연체 중'}
+            alt={'정상 납부 중'}
             className="w-[2rem] h-[2rem]"
           />
           <p className="custom-light-text text-custom-dark-purple">
@@ -78,7 +78,7 @@ export default async function LoanList() {
                     ? '/images/icon-repay-sad.png'
                     : '/images/icon-repay-smile.png'
                 }
-                leftHighlightText={`잔액 ${commaNum(
+                leftHighlightText={`잔금 ${commaNum(
                   loan.remainderAmount,
                 )}원/ 총 ${commaNum(loan.amount)}원`}
                 leftExplainText={loan.reason}

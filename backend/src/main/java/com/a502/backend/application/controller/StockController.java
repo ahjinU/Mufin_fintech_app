@@ -38,6 +38,7 @@ public class StockController {
 		stockFacade.stockBuy(request);
 		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(request.getName());
 		sendingOperations.convertAndSend("/sub/orders/" + request.getName(), result);
+		log.info("result : {}", result.getPrice());
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_BUY));
 	}
 
@@ -46,6 +47,7 @@ public class StockController {
 		stockFacade.stockSell(request);
 		PriceAndStockOrderList result = stockFacade.getStockOrderInfo(request.getName());
 		sendingOperations.convertAndSend("/sub/orders/" + request.getName(), result);
+		log.info("result : {}", result.getPrice());
 		return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_STOCK_SELL));
 	}
 

@@ -2,17 +2,18 @@
 
 import { useState } from 'react';
 
-interface TagType {
+export interface TagType {
   label: string;
   onClick: () => void;
 }
 
 interface TagProps {
   tags: TagType[];
+  index?: number;
 }
 
-export default function Tag({ tags }: TagProps) {
-  const [selectIndex, setSelectIndex] = useState<number>(0);
+export default function Tag({ tags, index }: TagProps) {
+  const [selectIndex, setSelectIndex] = useState<number>(index || 0);
 
   const handleClick = (ind: number) => {
     setSelectIndex(ind);
@@ -23,7 +24,7 @@ export default function Tag({ tags }: TagProps) {
     <div className="w-full flex gap-[0.4rem] items-center">
       {tags.map(({ label }, index) => (
         <button
-          key={label}
+          key={`tag-${index}`}
           className={`w-[5.0rem] h-[3.0rem] rounded-[0.8rem] custom-medium-text 
           ${
             index === selectIndex

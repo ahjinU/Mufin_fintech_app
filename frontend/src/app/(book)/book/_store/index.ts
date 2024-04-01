@@ -30,6 +30,16 @@ const useBookStore = create(
       },
       updateSelectedTransaction: (transaction) =>
         set(() => ({ selectedTransaction: transaction })),
+
+      children: [],
+      updateChildren: (children) => set(() => ({ children: children })),
+
+      curChild: {
+        name: '',
+        childUuid: '',
+        index: 0,
+      },
+      updateCurChild: (curChild) => set(() => ({ curChild: curChild })),
     }),
     {
       name: 'bookStore',
@@ -55,6 +65,12 @@ export interface Model {
 
   selectedTransaction: TransactionType;
   updateSelectedTransaction: (transaction: TransactionType) => void;
+
+  children: childType[];
+  updateChildren: (children: childType[]) => void;
+
+  curChild: childType;
+  updateCurChild: (curChild: childType) => void;
 }
 
 export default useBookStore;

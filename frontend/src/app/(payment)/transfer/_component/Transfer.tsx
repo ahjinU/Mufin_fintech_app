@@ -146,7 +146,6 @@ export default function Transfer() {
             mode="CHECK"
             handleConfirmButton={handleConfirm}
             handleCloseButton={() => setState('INPUT_MONEY')}
-            accountNumber={userData.accountNumber}
           />
         </div>
       ) : null}

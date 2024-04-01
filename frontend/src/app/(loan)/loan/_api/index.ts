@@ -11,5 +11,13 @@ export default function LoanAPI() {
     return res;
   };
 
-  return { getLoanDetail };
+  const postLoan = async (data: { loanUuid: string; payment_cnt: number }) => {
+    const res = await postFetch({
+      api: '/loan/repay',
+      data: data,
+    });
+    return res;
+  };
+
+  return { getLoanDetail, postLoan };
 }

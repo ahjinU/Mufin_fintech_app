@@ -60,3 +60,9 @@ interface SavingType {
   hasOverdue: boolean;
   name: string;
 }
+
+interface childType {
+  name: string;
+  childUuid: string;
+  index: number;
+}

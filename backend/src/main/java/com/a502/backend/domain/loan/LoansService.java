@@ -61,6 +61,11 @@ public class LoansService {
 		loansRepository.saveAndFlush(loan);
 	}
 
+	public void refuseLoan(Loan loan, Code code){
+		loan.refuseLoan(code);
+		loansRepository.saveAndFlush(loan);
+	}
+
 
 	public List<Loan> findLoansByUserAndCode(User user, Code code){
 		return loansRepository.findByChildAndCode(user, code);

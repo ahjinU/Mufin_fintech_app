@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -72,10 +73,10 @@ public class SavingFacade {
 	public AllSavingsProductResponse getAllSavingProduct() {
 		User child = userService.userFindByEmail();
 		User parents = child.getParent();
+		List<Savings> savingsList = new ArrayList<>();
 		// 부모는 접근 못함
-		if (parents == null)
-			throw BusinessException.of(ErrorCode.API_ERROR_NO_AUTHORIZATION);
-		List<Savings> savingsList = savingsService.findAllByParents(parents);
+
+		savingsList = savingsService.findAllByParents(Objects.requireNonNullElse(parents, child));
 		List<SavingsDetail> detail = new ArrayList<>();
 		for (Savings s : savingsList) {
 			SavingsDetail savingsDetail = SavingsDetail.builder()
@@ -110,11 +111,10 @@ public class SavingFacade {
 		String savingUuid = joinSavingsRequest.getSavingsUuid();
 		int paymentAmount = joinSavingsRequest.getPaymentAmount();
 		int paymentDate = joinSavingsRequest.getPaymentDate();
-		String password = joinSavingsRequest.getPassword();
 
 		Savings savings = savingsService.findByUuid(savingUuid);
 		// 계좌 테이블 추가
-		accountService.createSavingsAccount(savings, 0, paymentDate, paymentAmount, password);
+		accountService.createSavingsAccount(savings, 0, paymentDate, paymentAmount);
 	}
 
 	public MyChildSavingsListResponse getMyChildSavings() {
@@ -279,7 +279,7 @@ public class SavingFacade {
 				.accountDetailStatusCode(codeService.findStatusCode("거래완료"))
 				.build());
 		accountDetailService.save(AccountDetail.builder()
-				.amount(interest+savingsAccount.getBalance())
+				.amount(interest + savingsAccount.getBalance())
 				.balance(childAccount.getBalance())
 				.counterpartyAccount(parentsAccount.getAccountNumber())
 				.counterpartyName("적금 이자")
@@ -293,7 +293,9 @@ public class SavingFacade {
 		User user = userService.userFindByEmail();
 		List<Account> savingsAccountList = accountService.findAllSavingsByChild(user);
 		List<MySavings> myAllSavings = new ArrayList<>();
+		int savingsTotalBalance = 0;
 		for (Account a : savingsAccountList) {
+			savingsTotalBalance += a.getBalance();
 			LocalDate today = LocalDate.now();
 			// 생성 월
 			int createdDay = a.getCreatedAt().getDayOfMonth();
@@ -341,6 +343,7 @@ public class SavingFacade {
 			myAllSavings.add(savings);
 		}
 		return MyAllSavingsResponse.builder()
+				.savingsTotalBalance(savingsTotalBalance)
 				.savingsList(myAllSavings)
 				.build();
 	}

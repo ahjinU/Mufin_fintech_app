@@ -94,6 +94,8 @@ public class StockDetailsService {
 			StockDetail stockDetail = getLastDetail(stock);
 			int price = (stockDetail == null) ? 10000 : stockDetail.getPrice();
 			int startPrice = (int) (price * ratioDif[i++]);
+			startPrice /= 100;
+			startPrice *= 100;
 
 			saveInit(startPrice, startPrice - 1000, startPrice + 1000, stock);
 		}

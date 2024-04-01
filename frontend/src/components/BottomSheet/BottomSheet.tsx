@@ -23,6 +23,8 @@ export default function BottomSheet({
   imageSrc,
   isXButtonVisible,
   isOpen,
+  onConfirm,
+  onClose,
   ...props
 }: BottomSheetProps) {
   const height: string = size === 'SMALL' ? 'h-[30rem]' : 'h-[40rem]';
@@ -48,7 +50,10 @@ export default function BottomSheet({
       {...props}
     >
       {isXButtonVisible && (
-        <XMarkIcon className="w-[2.4rem] h-[2.4rem] absolute top-[2rem] right-[2rem] cursor-pointer" />
+        <XMarkIcon
+          className="w-[2.4rem] h-[2.4rem] absolute top-[2rem] right-[2rem] cursor-pointer"
+          onClick={onClose}
+        />
       )}
 
       <h1 className="custom-bold-text">{title}</h1>
@@ -63,7 +68,9 @@ export default function BottomSheet({
         className="m-[2rem] self-center"
       ></Image>
 
-      {isButtonVisible && <Button mode="ACTIVE" label="확인" />}
+      {isButtonVisible && (
+        <Button mode="ACTIVE" label="확인" onClick={onConfirm} />
+      )}
     </motion.section>
   );
 }

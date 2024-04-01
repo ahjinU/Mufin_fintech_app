@@ -24,7 +24,7 @@ export default function AccountBox({
       <SubGuideText text="아래 내 계좌에서 돈이 빠져나가요!" />
       <MoneyInfoElement
         imageSrc="/images/icon-dollar.png"
-        leftExplainText="내 잔액"
+        leftExplainText="내 입출금 계좌 잔액"
         leftHighlightText={`${commaNum(money)} 원`}
         buttonOption="RIGHT_ARROW"
       />

@@ -22,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Transactional
@@ -516,12 +513,11 @@ public class StockFacade {
 			int balance = userWithScore.getScore().intValue();
 			int curRank = (balance == prevBalance) ? prevRank : rank;
 			RankingDetail userRanking = RankingDetail.builder()
-					.childName(userWithScore.getValue())
+					.childName(userService.findByUserUuid(UUID.fromString(userWithScore.getValue())).getName())
 					.rank(curRank)
 					.balance(balance)
 					.build();
 			userRankings.add(userRanking);
-
 			prevBalance = balance;
 			prevRank = curRank;
 			rank++;

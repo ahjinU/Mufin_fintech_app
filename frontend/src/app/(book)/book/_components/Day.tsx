@@ -29,7 +29,7 @@ const Day = (dayData: DayProps) => {
       text-[1.5rem] items-center text-custom-medium-gray
       `}
     >
-      <div className="flex w-full flex-col leading-[1rem] items-center h-[0.9rem]">
+      <div className="flex w-full flex-col leading-[1rem] items-center h-[0.9rem] justify-center">
         {(savingsDay || loanPaymentDay) && (
           <div className="flex flex-row">
             {savingsDay && (

@@ -18,7 +18,7 @@ export default async function LoanList() {
       <MoneyShow
         mode={'UNDIVIDED'}
         text={['남은 대출금']}
-        money={[commaNum(30000)]}
+        money={[commaNum(res?.data?.totalRemainderAmount)]}
         unit={'원'}
       />
       <div className="flex flex-row items-end justify-end gap-[1rem]">

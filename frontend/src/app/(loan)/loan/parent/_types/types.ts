@@ -11,3 +11,14 @@ export type LoanListType = {
   startDate: string;
   endDate: string;
 };
+
+export type RequestListType = {
+  childName: string;
+  reason: string;
+  loanUuid: string;
+  amount: number;
+  paymentDate: number;
+  penalty: string;
+  paymentTotalCnt: number;
+  chatBotConversation: string;
+};

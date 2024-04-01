@@ -1,15 +1,28 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ComplexInput, Input, Button, TinyButton } from '@/components';
 import { checkEmailParent, checkEmailChild } from '../../_apis/apis';
 import { isValidEmail, isValidPassword } from '../../_utils/validator';
+import { useSession } from 'next-auth/react';
 
 export default function UserAccount({
   onNext,
+  forParent,
 }: {
   onNext: (data: any) => void;
+  forParent: boolean;
 }) {
-  const [account, setAccount] = useState({ email: '', password: '' });
+  const { data: session } = useSession();
+  let Authorization: string;
+  if (session?.Authorization) {
+    Authorization = session.Authorization;
+  }
+
+  const [account, setAccount] = useState({
+    email: '',
+    password: '',
+    password2: '',
+  });
   const [isValid, setIsValid] = useState(false);
   const [message, setMessage] = useState({
     emailMessage: '',
@@ -50,7 +63,12 @@ export default function UserAccount({
   const checkEmail = async () => {
     if (isValidEmail(account.email)) {
       try {
-        const fetchedData = await checkEmailParent(account.email);
+        let fetchedData;
+        if (forParent) {
+          fetchedData = await checkEmailParent(account.email);
+        } else {
+          fetchedData = await checkEmailChild(Authorization, account.email);
+        }
         if (fetchedData.ok) {
           setIsValid(true);
           setMessage({
@@ -70,7 +88,13 @@ export default function UserAccount({
     }
   };
 
-  const checkPassword = () => {};
+  useEffect(() => {
+    if (isValidEmail(account.email) && isValid) {
+      setButtonMode('ACTIVE');
+    } else {
+      setButtonMode('NON_ACTIVE');
+    }
+  }, [account.email, isValid]);
 
   const handleNext = () => {
     onNext(account);
@@ -90,7 +114,7 @@ export default function UserAccount({
             name="email"
             onChange={onChangeInput}
           />
-          <TinyButton label="중복 확인" onClick={checkEmail} />
+          <TinyButton label="중복 확인" handleClick={checkEmail} />
         </div>
       </ComplexInput>
       <ComplexInput
@@ -118,9 +142,13 @@ export default function UserAccount({
         />
       </ComplexInput>
       <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
-        <Link href="/signup/check">
-          <Button label="다음" mode="ACTIVE" onClick={handleNext} />
-        </Link>
+        {buttonMode == 'ACTIVE' ? (
+          <Link href="/signup/check">
+            <Button label="다음" mode={buttonMode} onClick={handleNext} />
+          </Link>
+        ) : (
+          <Button label="다음" mode={buttonMode} onClick={handleNext} />
+        )}
       </div>
     </div>
   );

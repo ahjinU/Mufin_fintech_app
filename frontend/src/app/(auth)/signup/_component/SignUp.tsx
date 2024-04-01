@@ -13,7 +13,11 @@ import UserInfo from './pagegroup/UserInfo';
 import UserContact from './pagegroup/UserContact';
 import UserAccount from './pagegroup/UserAccount';
 
-export default function SignUp() {
+interface SignUpProps {
+  forParent: boolean;
+}
+
+export default function SignUp({ forParent }: SignUpProps) {
   const [state, setState] = useState('first');
   const [barGage, setBarGage] = useState(100 / 3);
   const { registerData, setRegisterData } = useRegisterStore();
@@ -56,14 +60,18 @@ export default function SignUp() {
 
   return (
     <div className="flex flex-col gap-[2rem]">
-      <GuideText text="부모님 먼저 가입한 후 아이도 회원가입할 수 있어요!" />
+      {forParent ? (
+        <GuideText text="부모님 먼저 가입한 후 아이도 회원가입할 수 있어요!" />
+      ) : (
+        <GuideText text="아이를 위한 회원가입이에요!" />
+      )}
       <ProgressBar barGage={barGage} />
       {state == 'first' ? (
         <UserInfo onNext={firstPage.onNext} />
       ) : state == 'second' ? (
-        <UserContact onNext={secondPage.onNext} />
+        <UserContact onNext={secondPage.onNext} forParent={forParent} />
       ) : (
-        <UserAccount onNext={thirdPage.onNext} />
+        <UserAccount onNext={thirdPage.onNext} forParent={forParent} />
       )}
     </div>
   );

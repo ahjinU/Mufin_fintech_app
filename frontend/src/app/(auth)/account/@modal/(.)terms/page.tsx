@@ -14,8 +14,7 @@ export default function Terms() {
   };
 
   const handelConfirm = () => {
-    router.replace('/account/complete');
-    // router.push('/account/password');
+    router.push('/account/password');
     setIsOpen(false);
   };
 

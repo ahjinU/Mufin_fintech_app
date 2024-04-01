@@ -1,9 +1,23 @@
 'use client';
 
 import { BackButton, Header, Accordion } from '@/components';
+import { useState, useEffect } from 'react';
+import { ChildrenSavingsStateListType } from '../../_types';
+import SavingsApis from '../../_apis';
 
 export default function ConfirmSavings() {
-  // 부모 입장에서 적금 현황 확인하기 페이지
+  const [childrenSavingsStateList, setChildrenSavingsStateList] = useState<
+    ChildrenSavingsStateListType[]
+  >([]);
+  const { getChildrenSavingsState } = SavingsApis();
+
+  useEffect(() => {
+    (async () => {
+      const childrenSavingsStateListData = await getChildrenSavingsState();
+      console.log(childrenSavingsStateListData?.data?.savingsDetailListByChild);
+    })();
+  }, []);
+
   return (
     <>
       <Header>

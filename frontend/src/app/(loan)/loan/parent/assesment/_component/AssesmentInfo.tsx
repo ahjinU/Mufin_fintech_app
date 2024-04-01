@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { RequestListType } from '../../_types/types';
 
 export default function AssesmentInfo({
@@ -5,5 +6,6 @@ export default function AssesmentInfo({
 }: {
   childInfo: RequestListType;
 }) {
+  const [state, setState] = useState();
   return <></>;
 }

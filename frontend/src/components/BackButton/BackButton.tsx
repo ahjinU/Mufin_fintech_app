@@ -16,7 +16,9 @@ export default function BackButton({ label, ...props }: BackButtonProps) {
         onClick={() => router.back()}
         {...props}
       />
-      <span className="custom-bold-text text-custom-black">{label}</span>
+      <span className="custom-bold-text text-custom-black mt-[-0.1rem]">
+        {label}
+      </span>
     </nav>
   );
 }

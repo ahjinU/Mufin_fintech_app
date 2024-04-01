@@ -152,6 +152,9 @@ public class AccountService {
 	public Account findByUser(User user) {
 		return accountRepository.findByUser(user).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
 	}
+	public Account findDefaultAccountByUser(User user) {
+		return accountRepository.findDefaultAccountByUser(user).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_DEFAULT_ACCOUNT_NOT_EXIST));
+	}
 
 	public List<Account> findAllSavingsBySaving(Savings savings) {
 		return accountRepository.findAllBySavings(savings);

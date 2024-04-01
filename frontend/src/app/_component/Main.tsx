@@ -52,11 +52,11 @@ export default function Main() {
       try {
         const res = await postFetch({ api: '/user/mypage' });
 
-        if (!res.data) {
-          router.replace('/account');
-        } else {
+        // if (!res.data) {
+        //   router.replace('/account');
+        // } else {
           setUserData(res.data);
-        }
+        // }
       } catch (error) {
         console.error('사용자 정보 가져오기 에러', error);
       }
@@ -111,137 +111,133 @@ export default function Main() {
                 </div>
               }
             />
-            {!userData.isParent ? (
-              <>
-                <AdBox
-                  icon="/images/icon-calendar.png"
-                  link="/book"
-                  mode="INTERACTIVE"
-                  subText="영수증을 등록하고 요술램프 혜택을 받아보세요!"
-                  title="내 가계부에 세부내역 추가하기"
-                />
-                <FlexBox
-                  isDivided
-                  topChildren={
-                    <div className="px-[0.4rem] flex flex-col gap-[1.4rem]">
-                      <div className="flex justify-between items-center">
-                        <MainBoxText
-                          img="/images/icon-card.png"
-                          subText="이번 달 쓴 돈"
-                          mainText={`${userData.monthAmounts}원`}
-                        />
-                        <TinyButton label="가계부" />
-                      </div>
-                      <div className="flex justify-start items-center">
-                        <MainBoxText
-                          img="/images/icon-target.png"
-                          subText="내가 모은 돈"
-                          mainText={`${userData.savings}원`}
-                        />
-                      </div>
-                    </div>
-                  }
-                  bottomChildren={
-                    <Link
-                      href="/loan/apply"
-                      className="flex justify-center items-center gap-[0.4rem]"
-                    >
-                      <p className="custom-medium-text text-custom-dark-gray">
-                        대출 도움받으러 가기
-                      </p>
-                      <ChevronRightIcon className="size-6 fill-custom-medium-gray" />
+            <AdBox
+              icon="/images/icon-calendar.png"
+              link="/book"
+              mode="INTERACTIVE"
+              subText="영수증을 등록하고 요술램프 혜택을 받아보세요!"
+              title="내 가계부에 세부내역 추가하기"
+            />
+            <FlexBox
+              isDivided
+              topChildren={
+                <div className="px-[0.4rem] flex flex-col gap-[1.4rem]">
+                  <div className="flex justify-between items-center">
+                    <MainBoxText
+                      img="/images/icon-card.png"
+                      subText="이번 달 쓴 돈"
+                      mainText={`${userData.monthAmounts}원`}
+                    />
+                    <Link href="/book">
+                      <TinyButton label="가계부" />
                     </Link>
-                  }
-                />
-                <FlexBox
-                  isDivided
-                  topChildren={
-                    <div className="flex justify-between items-center">
-                      <MainBoxText
-                        img="/images/icon-donut-graph.png"
-                        subText="내 초코칩 저장소와 주식 평가"
-                        mainText={`${
-                          userData.chocochip + userData.totalPrice
-                        }초코칩`}
-                      />
-                      <ChevronRightIcon className="size-8 fill-custom-medium-gray" />
-                    </div>
-                  }
-                  bottomChildren={
-                    <div className="flex flex-col gap-[2rem]">
-                      <ProgressBar
-                        barGage={
-                          parseFloat(
+                  </div>
+                  <div className="flex justify-start items-center">
+                    <MainBoxText
+                      img="/images/icon-target.png"
+                      subText="내가 모은 돈"
+                      mainText={`${userData.savings}원`}
+                    />
+                  </div>
+                </div>
+              }
+              bottomChildren={
+                <Link
+                  href="/loan/apply"
+                  className="flex justify-center items-center gap-[0.4rem]"
+                >
+                  <p className="custom-medium-text text-custom-dark-gray">
+                    대출 도움받으러 가기
+                  </p>
+                  <ChevronRightIcon className="size-6 fill-custom-medium-gray" />
+                </Link>
+              }
+            />
+            <FlexBox
+              isDivided
+              topChildren={
+                <div className="flex justify-between items-center">
+                  <MainBoxText
+                    img="/images/icon-donut-graph.png"
+                    subText="내 초코칩 저장소와 주식 평가"
+                    mainText={`${
+                      userData.chocochip + userData.totalPrice
+                    }초코칩`}
+                  />
+                  <ChevronRightIcon className="size-8 fill-custom-medium-gray" />
+                </div>
+              }
+              bottomChildren={
+                <div className="flex flex-col gap-[2rem]">
+                  <ProgressBar
+                    barGage={
+                      parseFloat(
+                        (
+                          (userData.chocochip /
+                            (userData.chocochip + userData.totalPrice)) *
+                          100
+                        ).toFixed(1),
+                      ) || 0
+                    }
+                    height="h-[2.4rem]"
+                    boundary="rounded-none"
+                  />
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-[1rem]">
+                      <div className="size-[3rem] rounded-full bg-custom-purple"></div>
+                      <div>
+                        <p className="custom-medium-text text-custom-black">
+                          초코칩 저장소
+                        </p>
+                        <p className="custom-light-text text-custom-dark-gray">
+                          {parseFloat(
                             (
                               (userData.chocochip /
                                 (userData.chocochip + userData.totalPrice)) *
                               100
                             ).toFixed(1),
-                          ) || 0
-                        }
-                        height="h-[2.4rem]"
-                        boundary="rounded-none"
-                      />
-                      <div className="flex justify-between items-center">
-                        <div className="flex gap-[1rem]">
-                          <div className="size-[3rem] rounded-full bg-custom-purple"></div>
-                          <div>
-                            <p className="custom-medium-text text-custom-black">
-                              초코칩 저장소
-                            </p>
-                            <p className="custom-light-text text-custom-dark-gray">
-                              {parseFloat(
-                                (
-                                  (userData.chocochip /
-                                    (userData.chocochip +
-                                      userData.totalPrice)) *
-                                  100
-                                ).toFixed(1),
-                              ) || '0'}
-                              %
-                            </p>
-                          </div>
-                        </div>
-                        <p className="custom-medium-text text-custom-black">
-                          {userData.chocochip}초코칩
+                          ) || '0'}
+                          %
                         </p>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <div className="flex gap-[1rem]">
-                          <div className="size-[3rem] rounded-full bg-custom-light-purple"></div>
-                          <div>
-                            <p className="custom-medium-text text-custom-black">
-                              주식 평가
-                            </p>
-                            <p className="custom-light-text text-custom-dark-gray">
-                              {parseFloat(
-                                (
-                                  (userData.totalPrice /
-                                    (userData.chocochip +
-                                      userData.totalPrice)) *
-                                  100
-                                ).toFixed(1),
-                              ) || '0'}
-                              %
-                            </p>
-                          </div>
-                        </div>
-                        <div>
-                          <p className="custom-medium-text text-custom-black">
-                            {userData.totalPrice}초코칩
-                          </p>
-                          <p className="custom-light-text text-custom-black">
-                            {userData.totalIncome}초코칩(
-                            {userData.totalIncomePercent}
-                            %)
-                          </p>
-                        </div>
+                    </div>
+                    <p className="custom-medium-text text-custom-black">
+                      {userData.chocochip}초코칩
+                    </p>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-[1rem]">
+                      <div className="size-[3rem] rounded-full bg-custom-light-purple"></div>
+                      <div>
+                        <p className="custom-medium-text text-custom-black">
+                          주식 평가
+                        </p>
+                        <p className="custom-light-text text-custom-dark-gray">
+                          {parseFloat(
+                            (
+                              (userData.totalPrice /
+                                (userData.chocochip + userData.totalPrice)) *
+                              100
+                            ).toFixed(1),
+                          ) || '0'}
+                          %
+                        </p>
                       </div>
                     </div>
-                  }
-                />
-              </>
-            ) : null}
+                    <div>
+                      <p className="custom-medium-text text-custom-black">
+                        {userData.totalPrice}초코칩
+                      </p>
+                      <p className="custom-light-text text-custom-black">
+                        {userData.totalIncome}초코칩(
+                        {userData.totalIncomePercent}
+                        %)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              }
+            />
           </div>
         </div>
         <NavBar mode={userData.isParent ? 'PARENT' : 'CHILD'} />

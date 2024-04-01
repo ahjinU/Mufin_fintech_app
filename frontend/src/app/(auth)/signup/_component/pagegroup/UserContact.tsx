@@ -2,12 +2,21 @@ import { useEffect, useState } from 'react';
 import { ComplexInput, Input, Button, TinyButton } from '@/components';
 import { checkTelephoneParent, checkTelephoneChild } from '../../_apis/apis';
 import { isValidPhoneNumber } from '../../_utils/validator';
+import { useSession } from 'next-auth/react';
 
 export default function UserContact({
   onNext,
+  forParent,
 }: {
   onNext: (data: any) => void;
+  forParent: boolean;
 }) {
+  const { data: session } = useSession();
+  let Authorization: string;
+  if (session?.Authorization) {
+    Authorization = session.Authorization;
+  }
+
   const [contact, setContact] = useState({
     telephone: '',
     address: '',
@@ -35,7 +44,15 @@ export default function UserContact({
   const checkTelephone = async () => {
     if (isValidPhoneNumber(contact.telephone)) {
       try {
-        const fetchedData = await checkTelephoneParent(contact.telephone);
+        let fetchedData;
+        if (forParent) {
+          fetchedData = await checkTelephoneParent(contact.telephone);
+        } else {
+          fetchedData = await checkTelephoneChild(
+            Authorization,
+            contact.telephone,
+          );
+        }
         if (fetchedData.ok) {
           setIsValid(true);
           setMessage('사용 가능한 번호입니다😀');
@@ -64,10 +81,9 @@ export default function UserContact({
   }, [contact, isValid]);
 
   const handleNext = () => {
-    // if (buttonMode == 'ACTIVE') {
-    //   onNext(contact);
-    // }
-    onNext(contact);
+    if (buttonMode == 'ACTIVE') {
+      onNext(contact);
+    }
   };
 
   return (
@@ -84,7 +100,7 @@ export default function UserContact({
             name="telephone"
             onChange={onChangeInput}
           />
-          <TinyButton label="중복 확인" onClick={checkTelephone} />
+          <TinyButton label="중복 확인" handleClick={checkTelephone} />
         </div>
       </ComplexInput>
       <ComplexInput label="주소" mode="NONE">
@@ -95,7 +111,7 @@ export default function UserContact({
               name="address"
               onChange={onChangeInput}
             />
-            <TinyButton label="주소 찾기" onClick={() => {}} />
+            <TinyButton label="주소 찾기" handleClick={() => {}} />
           </div>
           <Input
             placeholder="상세 주소를 입력해주세요"

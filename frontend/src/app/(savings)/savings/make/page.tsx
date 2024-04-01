@@ -1,19 +1,26 @@
-import { GuideText, Button } from '@/components';
-import Image from 'next/image';
+'use client';
+
+import { GuideText, Button, AgreeBottomSheet } from '@/components';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import Lottie from 'react-lottie-player';
+import lottieJson from '../../../../../public/lotties/piggy.json';
 
 export default function MakeSavings() {
+  const router = useRouter();
+  const [isAgreeBottomSheetOpen, setIsAgreeBottomSheetOpen] = useState(false);
+
   return (
     <>
       <section className="w-full p-[1.2rem] flex flex-col gap-[3rem]">
         <GuideText text="적금 상품을 직접 만들 수 있어요!" />
 
         <div className="mx-auto">
-          <Image
-            src={'/images/icon-piggy-bank.png'}
-            width={200}
-            height={200}
-            alt={'돼지 저금통'}
-            className="w-[20rem] h-[20rem]"
+          <Lottie
+            loop
+            animationData={lottieJson}
+            play
+            style={{ width: 250, height: 250 }}
           />
         </div>
 
@@ -27,8 +34,25 @@ export default function MakeSavings() {
       </section>
 
       <div className="absolute w-full bottom-0 left-0 p-[1.2rem]">
-        <Button mode="ACTIVE" label="만들기" />
+        <Button
+          mode="ACTIVE"
+          label="만들기"
+          onClick={() => setIsAgreeBottomSheetOpen(true)}
+        />
       </div>
+
+      {isAgreeBottomSheetOpen && (
+        <div className="absolute top-0 left-0 size-full bg-custom-black-with-opacity flex justify-center">
+          <AgreeBottomSheet
+            title="적금 상품 개설 동의"
+            conditions={['개인 정보 수집 및 이용 동의', '적금 상품 개설 동의']}
+            notice="적금 상품을 개설하려면 약관 동의가 필요해요!"
+            isOpen={isAgreeBottomSheetOpen}
+            handleClickCloseButton={() => setIsAgreeBottomSheetOpen(false)}
+            handleClickConfirmButton={() => router.push('/savings/make/step1')}
+          />
+        </div>
+      )}
     </>
   );
 }

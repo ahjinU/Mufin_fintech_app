@@ -1,12 +1,13 @@
 interface TinyButtonProps {
   label: string;
   isWarning?: boolean;
-  onClick?: () => void;
+  handleClick?: () => void;
 }
 
 export default function TinyButton({
   label,
   isWarning,
+  handleClick,
   ...props
 }: TinyButtonProps) {
   return (
@@ -17,6 +18,7 @@ export default function TinyButton({
             ? 'bg-custom-red hover:bg-custom-dark-red'
             : 'bg-custom-purple hover:bg-custom-dark-purple'
         }`}
+      onClick={handleClick}
       {...props}
     >
       {label}

@@ -10,6 +10,7 @@ interface PayPasswordBoxProps {
   handleConfirmButton: () => void;
   handleCloseButton: () => void;
   mode: 'ACCOUNT' | 'CHECK';
+  accountNumber?: string;
 }
 
 function EachInputBox({
@@ -36,6 +37,7 @@ export default function PayPasswordBox({
   handleConfirmButton,
   handleCloseButton,
   mode,
+  accountNumber,
   ...props
 }: PayPasswordBoxProps) {
   const [password, setPassword] = useState<number[]>([]);
@@ -61,7 +63,7 @@ export default function PayPasswordBox({
         if (mode === 'ACCOUNT') {
           data = await getAccountKeyPadImage();
         } else {
-          data = await getKeyPadImage('5021-1099-80-6902');
+          if (accountNumber) data = await getKeyPadImage(accountNumber);
         }
         const keyPadData = data.data.keypad;
         keyPadData.splice(3, 0, 'delete');
@@ -90,7 +92,8 @@ export default function PayPasswordBox({
       if (mode === 'ACCOUNT') {
         data = await setPayPassword(password);
       } else {
-        data = await checkPayPassword('5021-1099-80-6902', password);
+        if (accountNumber)
+          data = await checkPayPassword(accountNumber, password);
       }
       console.log(data);
 

@@ -23,7 +23,6 @@ export default function BottomSheet({
   imageSrc,
   isXButtonVisible,
   isOpen,
-  onConfirm,
   ...props
 }: BottomSheetProps) {
   const height: string = size === 'SMALL' ? 'h-[30rem]' : 'h-[40rem]';
@@ -64,9 +63,7 @@ export default function BottomSheet({
         className="m-[2rem] self-center"
       ></Image>
 
-      {isButtonVisible && (
-        <Button mode="ACTIVE" label="확인" onClick={onConfirm} />
-      )}
+      {isButtonVisible && <Button mode="ACTIVE" label="확인" />}
     </motion.section>
   );
 }

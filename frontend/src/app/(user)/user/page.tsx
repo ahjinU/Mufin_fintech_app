@@ -1,10 +1,17 @@
 'use client';
 
 import useUserStore from '@/app/_store/store';
-import { NavButton } from '@/components';
+import { Button, NavButton } from '@/components';
+import { signOut } from 'next-auth/react';
 
 export default function UserMenu() {
   const { userData } = useUserStore();
+
+  const handleClick = async () => {
+    await signOut();
+    localStorage.removeItem('userStore');
+    window.location.href = '/';
+  };
 
   const data = !userData.isParent
     ? [
@@ -34,6 +41,13 @@ export default function UserMenu() {
           />
         );
       })}
+      <div className="fixed bottom-[6rem] left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+        <Button
+          mode={'ACTIVE'}
+          label={'로그아웃'}
+          onClick={handleClick}
+        ></Button>
+      </div>
     </section>
   );
 }

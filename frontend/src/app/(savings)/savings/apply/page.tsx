@@ -55,7 +55,7 @@ export default function ApplySavings() {
                     }
                   />
                   <TinyButton
-                    label="신청하기"
+                    label="신청"
                     handleClick={() =>
                       router.push(`/savings/apply/${savings.savingsUuid}/step1`)
                     }

@@ -36,6 +36,7 @@ export default function BookList() {
           date: format(selectedDate, 'yyyy-MM-dd'),
           childUuid: curChild.childUuid || null,
         });
+        console.log(res);
         setLoans(res?.data?.loan);
         setSavings(res?.data?.savings);
         setTotalIncome(res?.data?.dayIncome);
@@ -152,7 +153,7 @@ export default function BookList() {
       </div>
       <ComplexInput label={'오늘 입금 약속한 내 대출'} mode={'NONE'}>
         <div>
-          {loans && loans?.length > 1 ? (
+          {loans && loans?.length > 0 ? (
             loans?.map((loan, index) => {
               return (
                 <FlexBox
@@ -187,7 +188,7 @@ export default function BookList() {
         </div>
       </ComplexInput>
       <ComplexInput label={'오늘 입금 약속한 내 적금'} mode={'NONE'}>
-        <div>
+        <div className="flex flex-col gap-[1rem]">
           {savings && savings.length > 0 ? (
             savings?.map((saving, index) => {
               return (
@@ -203,7 +204,7 @@ export default function BookList() {
                             : '/images/icon-repay-smile.png'
                         }`}
                         leftExplainText={saving?.name}
-                        leftHighlightText={`${commaNum(saving?.amount)}`}
+                        leftHighlightText={`${commaNum(saving?.amount)}원`}
                         buttonOption={'TINY_BUTTON'}
                         tinyButtonLabel="납부하기"
                         link={`/savings/pay/${saving?.accountUuid}`}

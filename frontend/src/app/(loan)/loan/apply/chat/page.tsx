@@ -1,15 +1,8 @@
 'use client';
 
-import {
-  BackButton,
-  GuideText,
-  Header,
-  Input,
-  ProgressBar,
-} from '@/components';
+import { BackButton, GuideText, Header, ProgressBar } from '@/components';
 import ChatBox from '@/components/ChatBox/ChatBox';
-import { PaperAirplaneIcon, ArrowPathIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import ChatArea from './ChatArea';
 import useUserStore from '@/app/_store/store';
 import { useRouter } from 'next/navigation';
@@ -30,7 +23,7 @@ export default function LoanApplyChat() {
             text={
               <div>
                 <span>
-                  대출을 해야 하는 이유를 상세하게 챗봇에게 알려주세요.
+                  챗봇이 세 개의 질문을 할거에요 성실하게 대답해주세요!
                   <br /> 대화 내용은 부모님께 보내지고, 심사하는데 이용됩니다.
                 </span>
               </div>
@@ -42,7 +35,9 @@ export default function LoanApplyChat() {
           <p className="text-custom-purple">다시 처음부터 대화하기</p>
           <ArrowPathIcon
             className="text-custom-purple w-[1.5rem]"
-            onClick={() => router.refresh()}
+            onClick={() => {
+              window.location.reload();
+            }}
           />
         </div>
         <ChatBox

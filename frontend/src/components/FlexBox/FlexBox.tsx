@@ -20,7 +20,13 @@ export default function FlexBox({
 }: FlexBoxProps) {
   return (
     <div>
-      {date && <p className="text-custom-dark-gray ml-[1rem]">{date}</p>}
+      {date && (
+        <p className="text-custom-dark-gray ml-[1rem] mt-[1rem]">{`${new Date(
+          date,
+        ).getFullYear()}년 ${new Date(date).getMonth() + 1}월 ${new Date(
+          date,
+        ).getDate()}일`}</p>
+      )}
       <section
         className={`w-full flex flex-col ${
           mode === 'NONE' ? 'bg-custom-white' : 'bg-custom-light-gray'

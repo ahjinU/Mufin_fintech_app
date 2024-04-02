@@ -110,6 +110,7 @@ export default function UserAccount({
       >
         <div className="flex items-center gap-[1rem]">
           <Input
+            type="email"
             placeholder="이메일을 입력해주세요"
             name="email"
             onChange={onChangeInput}
@@ -124,9 +125,11 @@ export default function UserAccount({
         message={message.passwordMessage}
       >
         <Input
+          type="password"
           placeholder="비밀번호를 입력해주세요"
           name="password"
           onChange={onChangeInput}
+          reset={false}
         />
       </ComplexInput>
       <ComplexInput
@@ -136,9 +139,11 @@ export default function UserAccount({
         message={message.checkMessage}
       >
         <Input
+          type="password"
           placeholder="비밀번호를 한번 더 입력해주세요"
           name="password2"
           onChange={onChangeInput}
+          reset={false}
         />
       </ComplexInput>
       <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">

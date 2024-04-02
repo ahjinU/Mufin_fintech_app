@@ -9,12 +9,12 @@ export const isValidYear = (year: string): boolean => {
 };
 
 export const isValidMonth = (month: string): boolean => {
-  const monthRegex: RegExp = /^(0[1-9]|1[0-2])$/;
+  const monthRegex: RegExp = /^([1-9]|0[1-9]|1[0-2])$/;
   return monthRegex.test(month);
 };
 
 export const isValidDay = (day: string): boolean => {
-  const dayRegex: RegExp = /^(0[1-9]|[1-2][0-9]|3[0-1])$/;
+  const dayRegex: RegExp = /^([1-9]|0[1-9]|[1-2][0-9]|3[0-1])$/;
   return dayRegex.test(day);
 };
 

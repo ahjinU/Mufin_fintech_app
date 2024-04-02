@@ -76,6 +76,7 @@ export default function UserInfo({ onNext }: { onNext: (data: any) => void }) {
         <Input
           placeholder="이름을 입력해주세요"
           name="name"
+          type="text"
           onChange={onChangeInput}
         />
       </ComplexInput>

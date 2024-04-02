@@ -1,6 +1,7 @@
 package com.a502.backend.application.controller;
 
 import com.a502.backend.application.config.dto.JWTokenDto;
+import com.a502.backend.application.entity.User;
 import com.a502.backend.application.facade.UserFacade;
 import com.a502.backend.domain.user.dto.*;
 import com.a502.backend.domain.user.response.*;
@@ -217,10 +218,24 @@ public class UserController {
         System.out.println(parentName);
         userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
 
+        User signup = userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
         response.addCookie(deleteCookie(temporaryUserCookie));
 
+
+        JWTokenDto jwt = userFacade.login(LoginDto.builder()
+                .email(signup.getEmail())
+                .password(signUpDto.getPassword())
+                .build());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HEADER_STRING, GRANT_TYPE + " " + jwt.getAccessToken());
+
+        Cookie refreshCookie = createCookie("refreshtoken", jwt.getRefreshToken());
+        response.addCookie(refreshCookie);
+
         ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_SIGNUP);
-        return ResponseEntity.ok(apiResponse);
+        return ResponseEntity.ok().headers(httpHeaders).body(apiResponse);
+
     }
 
 }

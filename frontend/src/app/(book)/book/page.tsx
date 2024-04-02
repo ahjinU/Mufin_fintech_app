@@ -87,12 +87,12 @@ export default function Book() {
             <Tag tags={tags} index={curChild.index || 0} />
           </div>
         )}
-        <div className="flex flex-col items-end w-full mb-[1rem] mt-[-2rem] text-[0.9rem] leading-[0.8rem]">
+        <div className="flex flex-col items-end w-full mb-[0.5rem] mt-[-2rem] text-[0.9rem] leading-[0.8rem]">
           <p>대출, 적금 개설할 때 입금하기로 약속한 날짜에요!</p>
           <p>
-            <span className="text-custom-blue text-[2.5rem]">.</span> 대출 상환
+            <span className="text-[green] text-[2.5rem]">.</span> 대출 상환
             예정일{' '}
-            <span className="text-custom-red text-[2.5rem] ml-[0.7rem]">.</span>{' '}
+            <span className="text-[#f0cc5f] text-[2.5rem] ml-[0.7rem]">.</span>{' '}
             적금 입금 예정일
           </p>
         </div>
@@ -135,7 +135,6 @@ export default function Book() {
                 <FlexBox
                   isDivided={false}
                   mode="NONE"
-                  // date={date}
                   topChildren={
                     <OtherInfoElement
                       leftExplainText={trans?.code}

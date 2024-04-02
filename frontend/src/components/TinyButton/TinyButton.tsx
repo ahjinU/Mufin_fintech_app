@@ -17,7 +17,7 @@ export default function TinyButton({
           isWarning
             ? 'bg-custom-red hover:bg-custom-dark-red'
             : 'bg-custom-purple hover:bg-custom-dark-purple'
-        }`}
+        } text-center`}
       onClick={handleClick}
       {...props}
     >

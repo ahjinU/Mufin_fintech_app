@@ -31,6 +31,7 @@ export function StockBuySell({
           placeholder="단가를 입력해주세요."
           value={price}
           setValue={handlePrice}
+          isNumber={true}
         />
       </ComplexInput>
 
@@ -43,11 +44,12 @@ export function StockBuySell({
           placeholder="수량을 입력해주세요."
           value={quantity}
           setValue={handleQuantity}
+          isNumber={true}
         />
       </ComplexInput>
 
       <ComplexInput
-        isMsg
+        isMsg={!price || !quantity}
         label="총 가격"
         mode="ERROR"
         message={`${

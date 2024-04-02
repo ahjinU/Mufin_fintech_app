@@ -15,9 +15,7 @@ export default function UserMenuLayout({
           전체 메뉴
         </p>
       </Header>
-      <div className="min-h-[calc(100vh-11.6rem)]">
-        {children}
-      </div>
+      <div className="min-h-[calc(100vh-13.1rem)]">{children}</div>
       <NavBar mode={userData.isParent ? 'PARENT' : 'CHILD'} />
     </div>
   );

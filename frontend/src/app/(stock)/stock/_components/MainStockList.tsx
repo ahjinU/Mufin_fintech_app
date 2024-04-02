@@ -96,7 +96,9 @@ export default function MainStockList({ data }: { data: DataType }) {
                       leftExplainText={`오늘 거래량 ${commaNum(transCnt)}주`}
                       leftHighlightText={name}
                       state={`${incomeRatio < 0 ? 'DOWN' : 'UP'}`}
-                      rightExplainText={`어제보다 ${commaNum(incomeRatio)}%`}
+                      rightExplainText={`오전 9시보다 ${commaNum(
+                        incomeRatio,
+                      )}%`}
                       rightHighlightText={`${commaNum(price)} 초코칩`}
                       handleClick={() =>
                         router.push(`/company/${toCompanyEnglishName(name)}`)

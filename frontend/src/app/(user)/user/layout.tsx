@@ -1,17 +1,24 @@
+'use client';
+
+import useUserStore from '@/app/_store/store';
 import { Header, NavBar } from '@/components';
 
 export default function UserMenuLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
+  const { userData } = useUserStore();
+
   return (
-    <section className="flex flex-col">
+    <div className="flex flex-col">
       <Header>
-        <h1 className="custom-bold-text text-custom-black">전체 메뉴</h1>
+        <p className="pl-[1rem] custom-bold-text text-custom-black">
+          전체 메뉴
+        </p>
       </Header>
-      {children}
-      <NavBar mode="CHILD" />
-    </section>
+      <div className="min-h-[calc(100vh-11.6rem)]">
+        {children}
+      </div>
+      <NavBar mode={userData.isParent ? 'PARENT' : 'CHILD'} />
+    </div>
   );
 }

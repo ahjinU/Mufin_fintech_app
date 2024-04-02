@@ -37,6 +37,17 @@ export function StockCall({ companyName }: { companyName: string }) {
     (acc, cur) => acc + cur.buyOrderCnt,
     0,
   );
+  const cntOrderRateStyle = (orderCnt: number, comparedTotalCnt: number) => {
+    return orderCnt === comparedTotalCnt
+      ? 'w-full'
+      : orderCnt / comparedTotalCnt <= 0.2
+      ? 'w-1/5'
+      : orderCnt / comparedTotalCnt <= 0.4
+      ? 'w-2/5'
+      : orderCnt / comparedTotalCnt <= 0.6
+      ? 'w-3/5'
+      : 'w-4/5';
+  };
 
   const client = useRef<CompatClient | null>(null);
 
@@ -95,34 +106,15 @@ export function StockCall({ companyName }: { companyName: string }) {
           </thead>
           <tbody className="custom-medium-text text-center">
             {data.stockOrderList.map((stockOrder, index) => {
-              const cntSellOrderRateStyle =
-                stockOrder.sellOrderCnt === totalSellOrder
-                  ? 'w-full'
-                  : stockOrder.sellOrderCnt / totalSellOrder < 0.2
-                  ? 'w-1/5'
-                  : stockOrder.sellOrderCnt / totalSellOrder < 0.4
-                  ? 'w-2/5'
-                  : stockOrder.sellOrderCnt / totalSellOrder < 0.6
-                  ? 'w-3/5'
-                  : 'w-4/5';
-              const cntBuyOrderRateStyle =
-                stockOrder.buyOrderCnt === totalBuyOrder
-                  ? 'w-full'
-                  : stockOrder.buyOrderCnt / totalBuyOrder < 0.2
-                  ? 'w-1/5'
-                  : stockOrder.buyOrderCnt / totalBuyOrder < 0.4
-                  ? 'w-2/5'
-                  : stockOrder.buyOrderCnt / totalBuyOrder < 0.6
-                  ? 'w-3/5'
-                  : 'w-4/5';
-
               return (
                 <tr key={`stockOrder-${index}`}>
-                  {stockOrder.price >= data.price &&
-                  stockOrder.sellOrderCnt > 0 ? (
+                  {stockOrder.sellOrderCnt > 0 ? (
                     <td className="text-custom-black flex justify-end">
                       <div
-                        className={`${cntSellOrderRateStyle} bg-custom-blue-with-opacity rounded-l-[0.8rem] px-[0.5rem]`}
+                        className={`${cntOrderRateStyle(
+                          stockOrder.sellOrderCnt,
+                          totalSellOrder,
+                        )} bg-custom-blue-with-opacity rounded-l-[0.8rem] px-[0.5rem]`}
                       >
                         {commaNum(stockOrder.sellOrderCnt)}
                       </div>
@@ -146,11 +138,13 @@ export function StockCall({ companyName }: { companyName: string }) {
                   >
                     {commaNum(stockOrder.price)}
                   </td>
-                  {stockOrder.price <= data.price &&
-                  stockOrder.buyOrderCnt > 0 ? (
+                  {stockOrder.buyOrderCnt > 0 ? (
                     <td className="text-custom-black">
                       <div
-                        className={`${cntBuyOrderRateStyle} bg-custom-red-with-opacity rounded-r-[0.8rem] px-[0.5rem]`}
+                        className={`${cntOrderRateStyle(
+                          stockOrder.buyOrderCnt,
+                          totalBuyOrder,
+                        )} bg-custom-red-with-opacity rounded-r-[0.8rem] px-[0.5rem]`}
                       >
                         {commaNum(stockOrder.buyOrderCnt)}
                       </div>

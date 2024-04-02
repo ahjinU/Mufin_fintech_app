@@ -45,7 +45,7 @@ export default async function LoanList() {
           <p className="custom-light-text text-custom-red">연체 횟수 남음</p>
         </div>
       </div>
-      {LoansList.length === 0 ? (
+      {!LoansList || LoansList?.length === 0 ? (
         <p className="custom-semibold-text text-custom-medium-gray mx-auto  mt-[2rem]">
           신청한 대출이 없습니다.
         </p>

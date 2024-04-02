@@ -152,7 +152,7 @@ export default function BookList() {
         </div>
       </div>
       <ComplexInput label={'오늘 입금 약속한 내 대출'} mode={'NONE'}>
-        <div>
+        <div className="flex flex-col gap-[1rem]">
           {loans && loans?.length > 0 ? (
             loans?.map((loan, index) => {
               return (

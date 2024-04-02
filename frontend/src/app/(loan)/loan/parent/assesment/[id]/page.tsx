@@ -84,7 +84,7 @@ export default function Page({
       ) : null}
       {state == 'COMPLETE' && requestData ? (
         <div className="relative">
-          <div className="min-h-[calc(100vh-11.6rem)]">
+          <div className="min-h-[calc(100vh-13.1rem)]">
             <AssesmentComplete isApproved={isApproved} />
           </div>
           <div className="mx-[-1.2rem]">

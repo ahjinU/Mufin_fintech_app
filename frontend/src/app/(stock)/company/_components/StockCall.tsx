@@ -98,18 +98,23 @@ export function StockCall({ companyName }: { companyName: string }) {
               const cntSellOrderRateStyle =
                 stockOrder.sellOrderCnt === totalSellOrder
                   ? 'w-full'
-                  : `w-${Math.ceil(
-                      (stockOrder.sellOrderCnt / totalSellOrder) * 12,
-                    )}/12`;
+                  : stockOrder.sellOrderCnt / totalSellOrder < 0.2
+                  ? 'w-1/5'
+                  : stockOrder.sellOrderCnt / totalSellOrder < 0.4
+                  ? 'w-2/5'
+                  : stockOrder.sellOrderCnt / totalSellOrder < 0.6
+                  ? 'w-3/5'
+                  : 'w-4/5';
               const cntBuyOrderRateStyle =
                 stockOrder.buyOrderCnt === totalBuyOrder
                   ? 'w-full'
-                  : `w-${Math.ceil(
-                      (stockOrder.buyOrderCnt / totalBuyOrder) * 12,
-                    )}/12`;
-
-              console.log(cntSellOrderRateStyle);
-              console.log(cntBuyOrderRateStyle);
+                  : stockOrder.buyOrderCnt / totalBuyOrder < 0.2
+                  ? 'w-1/5'
+                  : stockOrder.buyOrderCnt / totalBuyOrder < 0.4
+                  ? 'w-2/5'
+                  : stockOrder.buyOrderCnt / totalBuyOrder < 0.6
+                  ? 'w-3/5'
+                  : 'w-4/5';
 
               return (
                 <tr key={`stockOrder-${index}`}>

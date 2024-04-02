@@ -49,10 +49,16 @@ export function StockCandleChart({ name }: { name: string }) {
       },
     },
     plotOptions: {
+      bar: {
+        columnWidth: period === 1 ? 10 : 30,
+      },
       candlestick: {
         colors: {
           upward: '#cd2626',
           downward: '#5969ff',
+        },
+        wick: {
+          useFillColor: true,
         },
       },
     },
@@ -180,8 +186,8 @@ export function StockCandleChart({ name }: { name: string }) {
             onClick: () => setPeriod(1),
           },
           {
-            label: '4일',
-            onClick: () => setPeriod(4),
+            label: '3일',
+            onClick: () => setPeriod(3),
           },
         ]}
       />

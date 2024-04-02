@@ -58,12 +58,7 @@ export default function BookListPost() {
         </ComplexInput>
         <ComplexInput label={'얼마를 사용했나요?'} mode={'ERROR'}>
           <div className="flex flex-row items-end gap-[0.5rem]">
-            <Input
-              isNumber={true}
-              value={amount}
-              setValue={setAmount}
-              width="5rem"
-            />
+            <Input value={amount} setValue={setAmount} width="5rem" />
             <p className="custom-semibold-text text-custom-black">원</p>
           </div>
         </ComplexInput>

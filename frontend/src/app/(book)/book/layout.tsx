@@ -1,6 +1,5 @@
 'use client';
 
-import type { Metadata } from 'next';
 import { NavBar } from '@/components';
 import useUserStore from '@/app/_store/store';
 

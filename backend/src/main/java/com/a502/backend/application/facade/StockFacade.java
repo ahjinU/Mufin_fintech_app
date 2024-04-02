@@ -488,13 +488,13 @@ public class StockFacade {
 		}
 		String imgUrl = stock.getImageUrl();
 
-		TotalStockList stockInfo = TotalStockList.builder().name(name).price(price).incomeRatio(incomeRatio).transCnt(transCnt).imageUrl(imgUrl).build();
-
 		return StockInfoResponse.builder()
 				.price(price)
 				.incomeRatio(incomeRatio)
 				.transCnt(transCnt)
 				.imageUrl(imgUrl)
+				.upperLimitPrice(stockDetail.getUpperLimitPrice())
+				.lowerLimitPrice(stockDetail.getLowerLimitPrice())
 				.build();
 	}
 

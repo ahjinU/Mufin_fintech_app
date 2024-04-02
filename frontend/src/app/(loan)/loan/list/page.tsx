@@ -45,65 +45,71 @@ export default async function LoanList() {
           <p className="custom-light-text text-custom-red">연체 횟수 남음</p>
         </div>
       </div>
-      {LoansList?.map((loan) => {
-        return loan.loanRefusalReason ? (
-          <FlexBox
-            isDivided={true}
-            topChildren={
-              <div className="px-[1.2rem] my-[-1rem]">
-                <OtherInfoElement
-                  leftExplainText={`${commaNum(loan.amount)}원`}
-                  leftHighlightText={loan.reason}
-                  rightHighlightText="거절"
-                  state={'UP'}
+      {LoansList.length === 0 ? (
+        <p className="custom-semibold-text text-custom-medium-gray mx-auto  mt-[2rem]">
+          신청한 대출이 없습니다.
+        </p>
+      ) : (
+        LoansList?.map((loan) => {
+          return loan.loanRefusalReason ? (
+            <FlexBox
+              isDivided={true}
+              topChildren={
+                <div className="px-[1.2rem] my-[-1rem]">
+                  <OtherInfoElement
+                    leftExplainText={`${commaNum(loan.amount)}원`}
+                    leftHighlightText={loan.reason}
+                    rightHighlightText="거절"
+                    state={'UP'}
+                  />
+                </div>
+              }
+              bottomChildren={
+                <div className="flex flex-row gap-[1rem] px-[1.2rem] my-[-0.5rem] mb-[-1rem] justify-between custom-medium-text items-center">
+                  <p className="text-custom-red w-[8rem]">거절 사유</p>
+                  <p className="text-custom-black font-[300] text-[1.4rem] text-right leading-[1.5rem]">
+                    {loan.loanRefusalReason}
+                  </p>
+                </div>
+              }
+            />
+          ) : loan.status !== '심사중' ? (
+            <FlexBox
+              isDivided={false}
+              topChildren={
+                <MoneyInfoElement
+                  imageSrc={
+                    loan.overDueCnt > 0
+                      ? '/images/icon-repay-sad.png'
+                      : '/images/icon-repay-smile.png'
+                  }
+                  leftHighlightText={`잔금 ${commaNum(
+                    loan.remainderAmount,
+                  )}원/ 총 ${commaNum(loan.amount)}원`}
+                  leftExplainText={loan.reason}
+                  buttonOption={'TINY_BUTTON'}
+                  tinyButtonLabel={`납부하기`}
+                  link={`${loan.loanUuid}/detail`}
                 />
-              </div>
-            }
-            bottomChildren={
-              <div className="flex flex-row gap-[1rem] px-[1.2rem] my-[-0.5rem] mb-[-1rem] justify-between custom-medium-text items-center">
-                <p className="text-custom-red w-[8rem]">거절 사유</p>
-                <p className="text-custom-black font-[300] text-[1.4rem] text-right leading-[1.5rem]">
-                  {loan.loanRefusalReason}
-                </p>
-              </div>
-            }
-          />
-        ) : loan.status !== '심사중' ? (
-          <FlexBox
-            isDivided={false}
-            topChildren={
-              <MoneyInfoElement
-                imageSrc={
-                  loan.overDueCnt > 0
-                    ? '/images/icon-repay-sad.png'
-                    : '/images/icon-repay-smile.png'
-                }
-                leftHighlightText={`잔금 ${commaNum(
-                  loan.remainderAmount,
-                )}원/ 총 ${commaNum(loan.amount)}원`}
-                leftExplainText={loan.reason}
-                buttonOption={'TINY_BUTTON'}
-                tinyButtonLabel={`납부하기`}
-                link={`${loan.loanUuid}/detail`}
-              />
-            }
-          />
-        ) : (
-          <FlexBox
-            isDivided={false}
-            topChildren={
-              <div className="px-[1.2rem] my-[-1rem]">
-                <OtherInfoElement
-                  leftExplainText={`${commaNum(loan.amount)}원`}
-                  leftHighlightText={loan.reason}
-                  rightHighlightText="심사중"
-                  state={'UP'}
-                />
-              </div>
-            }
-          />
-        );
-      })}
+              }
+            />
+          ) : (
+            <FlexBox
+              isDivided={false}
+              topChildren={
+                <div className="px-[1.2rem] my-[-1rem]">
+                  <OtherInfoElement
+                    leftExplainText={`${commaNum(loan.amount)}원`}
+                    leftHighlightText={loan.reason}
+                    rightHighlightText="심사중"
+                    state={'UP'}
+                  />
+                </div>
+              }
+            />
+          );
+        })
+      )}
     </div>
   );
 }

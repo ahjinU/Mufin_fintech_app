@@ -28,6 +28,7 @@ export function StockBuySell({
         mode="INFORM"
       >
         <Input
+          type="tel"
           placeholder="단가를 입력해주세요."
           value={price}
           setValue={handlePrice}
@@ -40,6 +41,7 @@ export function StockBuySell({
         mode="INFORM"
       >
         <Input
+          type="tel"
           placeholder="수량을 입력해주세요."
           value={quantity}
           setValue={handleQuantity}

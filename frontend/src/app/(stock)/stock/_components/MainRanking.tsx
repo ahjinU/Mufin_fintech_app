@@ -13,10 +13,9 @@ export default function MainRanking({
   leftHighlightText,
   rightExplainText,
   rightHighlightText,
-  money,
 }: OtherInfoElementProps) {
   return (
-    <section className="w-full flex justify-between items-center">
+    <section className="w-full flex justify-between items-center min-h-[calc(100vh-13.1rem)]">
       <div className="w-full flex items-center gap-[1rem]">
         <Image
           src={'/images/icon-stock-main-rank.png'}

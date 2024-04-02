@@ -69,7 +69,7 @@ export default function Main() {
     return <div></div>;
   } else {
     return (
-      <>
+      <div>
         <div className="relative">
           <div className="w-full min-h-screen mb-[1rem]">
             <MainHeader></MainHeader>
@@ -253,7 +253,7 @@ export default function Main() {
           </div>
         </div>
         <NavBar mode={userData.isParent ? 'PARENT' : 'CHILD'} />
-      </>
+      </div>
     );
   }
 }

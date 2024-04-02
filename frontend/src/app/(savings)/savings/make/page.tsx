@@ -12,7 +12,7 @@ export default function MakeSavings() {
 
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[3rem]">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[3rem] min-h-screen">
         <GuideText text="적금 상품을 직접 만들 수 있어요!" />
 
         <div className="mx-auto">

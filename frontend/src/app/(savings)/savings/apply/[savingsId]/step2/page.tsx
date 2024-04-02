@@ -22,7 +22,7 @@ export default function ApplySavingsStep2() {
 
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] relative">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] relative min-h-screen">
         <GuideText text="정기적으로 매월 납부할 날짜와 금액을 설정해주세요." />
 
         <ComplexInput mode="NONE" label="적금 납부 일자">

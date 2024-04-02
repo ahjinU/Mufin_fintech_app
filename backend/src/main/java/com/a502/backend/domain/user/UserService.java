@@ -19,6 +19,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -52,14 +53,23 @@ public class UserService implements UserDetailsService{
 
 		System.out.println("[UserService] 2. authenticationToken: " + authenticationToken);
 
-		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		SecurityContextHolder.clearContext();
+		JWTokenDto jwt=null;
 
-		System.out.println("[UserService] 4. authentication:" + authentication.toString());
+		try {
+			Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			System.out.println("[UserService] 3. authentication:" + authentication.toString());
+			jwt= jwtUtil.generateToken(authentication);
+		} catch (AuthenticationException e) {
+			// 에러 로깅
+			System.err.println(e);
+			// 적절한 에러 처리 로직
+		}
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		JWTokenDto jwt = jwtUtil.generateToken(authentication);
-		System.out.println("[Controller] 6. 액세스 토큰: " + jwt.getAccessToken());
+
+		System.out.println("[UserService] 4. 액세스 토큰: " + jwt.getAccessToken());
 		System.out.println(jwt.toString());
 
 		return jwt;
@@ -71,11 +81,11 @@ public class UserService implements UserDetailsService{
 		User findMember = userRepository.findByEmail(username)
 				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
 
-		System.out.println("[UserService] findUser:" + findMember.toString());
+		System.out.println("[UserService/loadUserByname] findUser:" + findMember.toString());
 
 		CustomUserDetails cU = new CustomUserDetails(findMember);
-		System.out.println("[UserService] CustomUserDetails:" + cU.toString());
-		return new CustomUserDetails(findMember);
+		System.out.println("[UserService/loadUserByname] CustomUserDetails password:" + cU.getPassword());
+		return cU;
 	}
 
 	public void checkDupleUser(TemporaryUser temporaryUser) {

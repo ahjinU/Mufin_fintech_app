@@ -1,6 +1,7 @@
 package com.a502.backend.application.controller;
 
 import com.a502.backend.application.config.dto.JWTokenDto;
+import com.a502.backend.application.entity.User;
 import com.a502.backend.application.facade.UserFacade;
 import com.a502.backend.domain.user.dto.*;
 import com.a502.backend.domain.user.response.AuthenticationDto;
@@ -80,14 +81,14 @@ public class UserController {
         }
 
         //return checkEmailAndRespond(email.getEmail(), request, response);
-        return checkEmailAndRespond(email.getEmail(), response,request);
+        return checkEmailAndRespond(email.getEmail(), response, request);
     }
 
     @PostMapping("/signup/child/check/email")
     public ResponseEntity<ApiResponse<AuthenticationDto>> checkChildEmail(@Valid @RequestBody EmailDto email, HttpServletRequest request, HttpServletResponse response) {
 
         System.out.println("[UserController]: /signup/child/check/email" + email.toString());
-        return checkEmailAndRespond(email.getEmail(),response,request);
+        return checkEmailAndRespond(email.getEmail(), response, request);
     }
 
     @PostMapping("/signup/parent")
@@ -95,7 +96,7 @@ public class UserController {
 
         System.out.println("[UserController ]: /signup/parent" + signUpDto.toString());
 
-        return signup(signUpDto, null,  request,response);
+        return signup(signUpDto, null, request, response);
     }
 
     @PostMapping("/signup/child")
@@ -166,7 +167,7 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    private ResponseEntity<ApiResponse<AuthenticationDto>> checkEmailAndRespond(String email,HttpServletResponse response, HttpServletRequest request) {
+    private ResponseEntity<ApiResponse<AuthenticationDto>> checkEmailAndRespond(String email, HttpServletResponse response, HttpServletRequest request) {
 
         Cookie authenicationOnlyTelephoneCookie = getCookieByName(request, "authenticationOnlyTelephone");
 
@@ -185,14 +186,24 @@ public class UserController {
     private ResponseEntity<ApiResponse<String>> signup(SignUpDto signUpDto, String parentName, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie temporaryUserCookie = getCookieByName(request, "temporaryUserUuid");
 
-        System.out.println("부모");
-        System.out.println(parentName);
-        userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
-
+        User signup = userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
         response.addCookie(deleteCookie(temporaryUserCookie));
 
+
+        JWTokenDto jwt = userFacade.login(LoginDto.builder()
+                .email(signup.getEmail())
+                .password(signUpDto.getPassword())
+                .build());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HEADER_STRING, GRANT_TYPE + " " + jwt.getAccessToken());
+
+        Cookie refreshCookie = createCookie("refreshtoken", jwt.getRefreshToken());
+        response.addCookie(refreshCookie);
+
         ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_SIGNUP);
-        return ResponseEntity.ok(apiResponse);
+        return ResponseEntity.ok().headers(httpHeaders).body(apiResponse);
+
     }
 
 }

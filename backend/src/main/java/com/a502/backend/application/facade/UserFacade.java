@@ -52,7 +52,7 @@ public class UserFacade {
 
 
     @Transactional
-    public UUID signup(String temporaryUserUuid, SignUpDto signUpDto, String parentName) throws IOException {
+    public User signup(String temporaryUserUuid, SignUpDto signUpDto, String parentName) throws IOException {
         System.out.println("[UserService] 회원가입: " + temporaryUserUuid + "/" + signUpDto.toString());
 
 
@@ -79,7 +79,7 @@ public class UserFacade {
             stockHoldingsService.initStockHolding(user,stocks,stockStartPriceList);
         }
 
-        return user.getUserUuid();
+        return user;
     }
 
     public JWTokenDto login(LoginDto loginDto) {
@@ -141,5 +141,4 @@ public class UserFacade {
 
         return temporaryUser;
     }
-
 }

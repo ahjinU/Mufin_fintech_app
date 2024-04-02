@@ -40,7 +40,7 @@ public class JwtUtil {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
         long now = (new Date()).getTime();
-        System.out.println("[JWTUtill] 1. authoritie: "+authorities);
+        System.out.println("[JWTUtill] 1. authorities: "+authorities);
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);

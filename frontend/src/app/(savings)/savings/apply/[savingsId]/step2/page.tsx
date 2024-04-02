@@ -31,7 +31,12 @@ export default function ApplySavingsStep2() {
 
         <ComplexInput mode="NONE" label="납부할 금액">
           <div className="flex gap-[1rem] items-center">
-            <Input placeholder="1,000" value={money} setValue={setMoney} />
+            <Input
+              placeholder="1,000"
+              value={money}
+              setValue={setMoney}
+              type="tel"
+            />
             <span className="custom-semibold-text text-custom-light-purple">
               원
             </span>

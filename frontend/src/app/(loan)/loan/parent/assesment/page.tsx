@@ -25,6 +25,7 @@ export default function Page() {
                 animationData={lottieJson}
                 play
                 style={{ width: 300, height: 300 }}
+                className='self-center mr-[6rem]'
               />
               <div className="px-[2rem] flex flex-col gap-[2rem] custom-medium-text text-custom-black">
                 <p>

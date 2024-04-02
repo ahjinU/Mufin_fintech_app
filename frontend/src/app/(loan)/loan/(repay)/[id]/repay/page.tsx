@@ -66,13 +66,18 @@ export default function LoanRepay() {
           isMsg={true}
           message={`오늘은 ${paymentCnt}개월분 ${
             loan && commaNum(paymentCnt * loan?.paymentAmount)
-          }납부할게요`}
+          }원 납부할게요`}
           height="h-[10rem]"
         >
           <Select
             mode={'SAVINGS'}
-            min={0}
-            max={12}
+            min={1}
+            max={
+              (loan?.remainderAmount &&
+                loan?.paymentAmount &&
+                loan?.remainderAmount / loan?.paymentAmount) ||
+              12
+            }
             setValue={updatePaymentCnt}
           />
         </ComplexInput>

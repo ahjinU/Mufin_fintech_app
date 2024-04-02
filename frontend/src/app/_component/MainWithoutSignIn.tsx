@@ -28,7 +28,7 @@ export default function MainWithoutSignIn() {
           나의 첫 경제생활 도우미
         </p>
         <div className="flex flex-col items-center custom-medium-text text-custom-black">
-          <p>복잡한 송금, 결제, 가계부 관리, 어려운 주식 공부까지</p>
+          <p>복잡한 송금, 가계부 관리, 어려운 주식 공부까지</p>
           <p>머핀에서 쉽고 재미있게 시작해 보세요!</p>
         </div>
       </div>

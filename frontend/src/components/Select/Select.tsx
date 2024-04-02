@@ -92,7 +92,7 @@ export default function Select({
               damping: 40,
               stiffness: 400,
             }}
-            className="absolute w-[10rem] h-[10rem] overflow-y-scroll scrollbar-hide mt-[0.5rem] flex flex-col g-[1rem] bg-custom-white border-custom-medium-gray border-[0.1rem] rounded-[0.8rem] p-[0.5rem] focus:text-custom-black z-10 border-custom-purple"
+            className="absolute w-[10rem] max-h-[10rem] overflow-y-scroll scrollbar-hide mt-[0.5rem] flex flex-col g-[1rem] bg-custom-white border-custom-medium-gray border-[0.1rem] rounded-[0.8rem] p-[0.5rem] focus:text-custom-black z-10 border-custom-purple"
           >
             {numberArr.map((number, index) => {
               return (

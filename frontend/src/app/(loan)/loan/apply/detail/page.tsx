@@ -97,6 +97,7 @@ export default function LoanApplyDetail() {
         >
           <div className="flex flex-row gap-[1rem] items-end">
             <Input
+              type="tel"
               value={amount}
               setValue={setAmount}
               width="w-[20rem]"

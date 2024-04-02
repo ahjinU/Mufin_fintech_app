@@ -17,7 +17,6 @@ type DayProps = {
 
 const Day = (dayData: DayProps) => {
   const { day, incomeDay, outcomeDay, loanPaymentDay, savingsDay } = dayData;
-
   const { updateSelectDate } = useBookStore();
 
   const koreanDate =
@@ -32,10 +31,10 @@ const Day = (dayData: DayProps) => {
       <div className="flex w-full flex-col leading-[1rem] items-center h-[0.9rem] justify-center">
         {(savingsDay || loanPaymentDay) && (
           <div className="flex flex-row">
-            {savingsDay && (
+            {loanPaymentDay === true && (
               <p className="text-[2.2rem] p-[-2rem] text-[green]">.</p>
             )}
-            {loanPaymentDay && (
+            {savingsDay === true && (
               <p className="text-[2.2rem] p-[-2rem] text-[#f0cc5f]">.</p>
             )}
           </div>

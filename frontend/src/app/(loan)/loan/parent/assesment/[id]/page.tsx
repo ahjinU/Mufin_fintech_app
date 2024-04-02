@@ -9,6 +9,8 @@ import AssesmentChat from '../_component/AssesmentChat';
 import AssesmentCheck from '../_component/AssesmentCheck';
 import AssesmentRefusal from '../_component/AssesmentRefusal';
 import AssesmentComplete from '../_component/AssesmentComplete';
+import { NavBar } from '@/components';
+import useUserStore from '@/app/_store/store';
 
 export default function Page({
   params: { id },
@@ -23,6 +25,7 @@ export default function Page({
   const [requestData, setRequestData] = useState<RequestListType>();
   const [isApproved, setIsApproved] = useState(false);
   const { postFetch } = useFetch();
+  const { userData } = useUserStore();
 
   useEffect(() => {
     const fetchLoanData = async () => {
@@ -40,7 +43,7 @@ export default function Page({
   }, []);
 
   return (
-    <>
+    <div className="relative">
       {state == 'INFO' && requestData ? (
         <AssesmentInfo
           childInfo={requestData}
@@ -80,8 +83,15 @@ export default function Page({
         />
       ) : null}
       {state == 'COMPLETE' && requestData ? (
-        <AssesmentComplete isApproved={isApproved} />
+        <div className="relative">
+          <div className="min-h-[calc(100vh-11.6rem)]">
+            <AssesmentComplete isApproved={isApproved} />
+          </div>
+          <div className="mx-[-1.2rem]">
+            <NavBar mode={userData.isParent ? 'PARENT' : 'CHILD'} />
+          </div>
+        </div>
       ) : null}
-    </>
+    </div>
   );
 }

@@ -19,7 +19,7 @@ export default function UserMenu() {
     ? [
         ['적금 신청하기', '/savings/apply'],
         ['적금 보기 & 납부하기', '/savings/mine'],
-        ['대출 받기', '/loan/apply'],
+        ['대출 신청하기', '/loan/apply'],
         ['대출 보기 & 상환하기', '/loan/list'],
       ]
     : [

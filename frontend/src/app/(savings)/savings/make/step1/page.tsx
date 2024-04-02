@@ -48,7 +48,7 @@ export default function MakeSavingsStep1() {
           isMsg={true}
           message="1%부터 10%까지 자유롭게 지정할 수 있어요."
         >
-          <Input placeholder="0.1" value={rate} setValue={setRate} type="tel" />
+          <Input placeholder="1" value={rate} setValue={setRate} type="tel" />
         </ComplexInput>
       </section>
 

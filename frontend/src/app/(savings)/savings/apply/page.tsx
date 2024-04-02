@@ -39,41 +39,52 @@ export default function ApplySavings() {
 
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative min-h-screen">
-        {savingsList?.map((savings, index) => {
-          return (
-            <FlexBox
-              key={`savings-${index}`}
-              isDivided={true}
-              topChildren={
-                <div className="flex flex-row justify-between items-center mt-[-0.5rem]">
-                  <Title
-                    name={
-                      savings.name.length > 20
-                        ? savings.name.slice(0, 20) + ' ...'
-                        : savings.name
-                    }
-                  />
-                  <TinyButton
-                    label="신청"
-                    handleClick={() =>
-                      router.push(`/savings/apply/${savings.savingsUuid}/step1`)
-                    }
-                  />
-                </div>
-              }
-              bottomChildren={
-                <div className="flex flex-col gap-[0.5rem] my-[-0.7rem]">
-                  <ContentRow keyName="이자율" value={`${savings.interest}%`} />
-                  <ContentRow
-                    keyName="적금 기간"
-                    value={`${savings.period}개월`}
-                  />
-                </div>
-              }
-            />
-          );
-        })}
+      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative">
+        {savingsList.length === 0 ? (
+          <p className="custom-semibold-text text-custom-medium-gray mx-auto  mt-[2rem]">
+            신청할 수 있는 적금이 없어요.
+          </p>
+        ) : (
+          savingsList?.map((savings, index) => {
+            return (
+              <FlexBox
+                key={`savings-${index}`}
+                isDivided={true}
+                topChildren={
+                  <div className="flex flex-row justify-between items-center mt-[-0.5rem]">
+                    <Title
+                      name={
+                        savings.name.length > 20
+                          ? savings.name.slice(0, 20) + ' ...'
+                          : savings.name
+                      }
+                    />
+                    <TinyButton
+                      label="신청"
+                      handleClick={() =>
+                        router.push(
+                          `/savings/apply/${savings.savingsUuid}/step1`,
+                        )
+                      }
+                    />
+                  </div>
+                }
+                bottomChildren={
+                  <div className="flex flex-col gap-[0.5rem] my-[-0.7rem]">
+                    <ContentRow
+                      keyName="이자율"
+                      value={`${savings.interest}%`}
+                    />
+                    <ContentRow
+                      keyName="적금 기간"
+                      value={`${savings.period}개월`}
+                    />
+                  </div>
+                }
+              />
+            );
+          })
+        )}
       </section>
     </>
   );

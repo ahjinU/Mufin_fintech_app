@@ -27,7 +27,11 @@ export default function ConfirmSavings() {
         <BackButton label="적금 현황 확인하기" />
       </Header>
       <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative min-h-screen">
-        {childrenSavingsStateList &&
+        {childrenSavingsStateList && childrenSavingsStateList.length === 0 ? (
+          <p className="custom-semibold-text text-custom-medium-gray mx-auto  mt-[2rem]">
+            아이가 가입한 적금이 없습니다.
+          </p>
+        ) : (
           childrenSavingsStateList.map((childrenSavingsState, index) => {
             return childrenSavingsState.savingsDetailList.map(
               (savingsDetail, index2) => {
@@ -80,7 +84,8 @@ export default function ConfirmSavings() {
                 );
               },
             );
-          })}
+          })
+        )}
       </section>
     </>
   );

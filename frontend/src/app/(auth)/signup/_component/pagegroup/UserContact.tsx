@@ -3,6 +3,7 @@ import { ComplexInput, Input, Button, TinyButton } from '@/components';
 import { checkTelephoneParent, checkTelephoneChild } from '../../_apis/apis';
 import { isValidPhoneNumber } from '../../_utils/validator';
 import { useSession } from 'next-auth/react';
+import { useDaumPostcodePopup } from 'react-daum-postcode';
 
 export default function UserContact({
   onNext,
@@ -55,11 +56,11 @@ export default function UserContact({
         if (fetchedData.ok) {
           setIsValid(true);
           setMessage('사용 가능한 번호입니다😀');
-          console.log(fetchedData.headers.getSetCookie);
+          // console.log(fetchedData.headers.getSetCookie);
         } else {
           setIsValid(false);
           setMessage('중복된 번호입니다😢');
-          console.log(fetchedData);
+          // console.log(fetchedData);
         }
       } catch (error) {
         console.error('전화번호 중복 검사 에러', error);
@@ -85,6 +86,29 @@ export default function UserContact({
     }
   };
 
+  const open = useDaumPostcodePopup();
+
+  const handleComplete = (data: any) => {
+    let fullAddress = data.address;
+    let extraAddress = '';
+
+    if (data.addressType === 'R') {
+      if (data.bname !== '') {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== '') {
+        extraAddress +=
+          extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+    }
+    setContact({ ...contact, address: fullAddress });
+  };
+
+  const handleClick = () => {
+    open({ onComplete: handleComplete });
+  };
+
   return (
     <div className="flex flex-col gap-[2rem]">
       <ComplexInput
@@ -105,12 +129,18 @@ export default function UserContact({
       </ComplexInput>
       <ComplexInput label="주소" mode="NONE">
         <div className="flex flex-col gap-[0.6rem]">
+          <div className="flex items-center gap-[1rem]">
+            <Input
+              type="text"
+              placeholder="주소를 입력해주세요"
+              name="address"
+              value={contact.address}
+              reset={false}
+            />
+            <TinyButton label="주소 찾기" handleClick={handleClick} />
+          </div>
           <Input
-            placeholder="주소를 입력해주세요"
-            name="address"
-            onChange={onChangeInput}
-          />
-          <Input
+            type="text"
             placeholder="상세 주소를 입력해주세요"
             name="address2"
             onChange={onChangeInput}

@@ -20,7 +20,8 @@ export default function Password() {
       id &&
       paymentCnt &&
       (await postLoan({ loanUuid: id, payment_cnt: paymentCnt }));
-    res.message === '정상적으로 상환되었습니다.' && router.push('loan/list');
+    res.message === '정상적으로 상환되었습니다.' &&
+      router.replace('/loan/list');
   };
 
   return (

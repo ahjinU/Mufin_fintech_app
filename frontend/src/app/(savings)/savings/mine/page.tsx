@@ -8,6 +8,7 @@ import {
   TinyButton,
   MoneyShow,
   AlertConfirmModal,
+  NavBar,
 } from '@/components';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -44,7 +45,7 @@ export default function MySavings() {
       <Header>
         <BackButton label="나의 적금"></BackButton>
       </Header>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative min-h-[calc(100vh-11.6rem)]">
         <MoneyShow
           mode="UNDIVIDED"
           text={['적금 누적 총액']}
@@ -74,70 +75,77 @@ export default function MySavings() {
             return (
               <FlexBox
                 key={`appliedSavings-${index}`}
-                isDivided={true}
+                isDivided={false}
                 topChildren={
-                  <MoneyInfoElement
-                    imageSrc={
-                      appliedSavings.state === '정상' ||
-                      appliedSavings.state === '만기'
-                        ? '/images/icon-smile.png'
-                        : '/images/icon-sad.png'
-                    }
-                    leftExplainText={
-                      appliedSavings.savingsName.slice(0, 20) + ' ...'
-                    }
-                    leftHighlightText={`${commaNum(
-                      appliedSavings.balance,
-                    )}원 / ${commaNum(
-                      appliedSavings.paymentAmount *
-                        appliedSavings.savingsPeriod,
-                    )}원`}
-                    buttonOption="NO"
-                  />
-                }
-                bottomChildren={
-                  <div className="flex gap-[1rem] self-end">
-                    <TinyButton
-                      label={
-                        appliedSavings.state === '만기'
-                          ? '이자까지 전부 받기'
-                          : '납부하기'
-                      }
-                      handleClick={async () => {
-                        if (appliedSavings.state === '만기') {
-                          const result = await terminateSavings(
-                            appliedSavings.accountUuid,
-                          ); // 아직 확인이 어려움
-                          console.log(result);
-
-                          router.push('/result/savings/success');
-                        } else {
-                          router.push(
-                            `/savings/pay/${appliedSavings.accountUuid}`,
-                          );
+                  <div className="flex flex-row justify-betw">
+                    <div>
+                      <MoneyInfoElement
+                        imageSrc={
+                          appliedSavings.state === '정상' ||
+                          appliedSavings.state === '만기'
+                            ? '/images/icon-smile.png'
+                            : '/images/icon-sad.png'
                         }
-                      }}
-                    />
-                    {appliedSavings.state !== '만기' && (
+                        leftExplainText={
+                          appliedSavings.savingsName.length > 20
+                            ? appliedSavings.savingsName.slice(0, 20) + ' ...'
+                            : appliedSavings.savingsName
+                        }
+                        leftHighlightText={`${commaNum(
+                          appliedSavings.balance,
+                        )}원 / ${commaNum(
+                          appliedSavings.paymentAmount *
+                            appliedSavings.savingsPeriod,
+                        )}원`}
+                        buttonOption="NO"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-[0.5rem] self-end py-[-1rem] my-[-0.5rem] mr-[-0.2rem]">
                       <TinyButton
-                        isWarning={true}
-                        label="중도 해지하기"
-                        handleClick={() => {
-                          setTargetAccountUuid(appliedSavings.accountUuid);
-                          setIsModalOpen(true);
-                          setUserData({
-                            ...userData,
-                            balance: userData.balance + appliedSavings.balance,
-                          });
+                        label={
+                          appliedSavings.state === '만기'
+                            ? '이자까지 전부 받기'
+                            : '납부하기'
+                        }
+                        handleClick={async () => {
+                          if (appliedSavings.state === '만기') {
+                            const result = await terminateSavings(
+                              appliedSavings.accountUuid,
+                            ); // 아직 확인이 어려움
+                            console.log(result);
+
+                            router.push('/result/savings/success');
+                          } else {
+                            console.log('hi');
+                            router.push(
+                              `/savings/pay/${appliedSavings.accountUuid}`,
+                            );
+                          }
                         }}
                       />
-                    )}
+                      {appliedSavings.state !== '만기' && (
+                        <TinyButton
+                          isWarning={true}
+                          label="중도 해지하기"
+                          handleClick={() => {
+                            setTargetAccountUuid(appliedSavings.accountUuid);
+                            setIsModalOpen(true);
+                            setUserData({
+                              ...userData,
+                              balance:
+                                userData.balance + appliedSavings.balance,
+                            });
+                          }}
+                        />
+                      )}
+                    </div>
                   </div>
                 }
               />
             );
           })}
       </section>
+      <NavBar mode={'CHILD'} />
 
       {isModalOpen && (
         <div className="absolute top-0 left-0 size-full bg-custom-black-with-opacity flex justify-center">

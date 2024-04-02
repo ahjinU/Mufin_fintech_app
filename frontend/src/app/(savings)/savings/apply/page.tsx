@@ -56,7 +56,23 @@ export default function ApplySavings() {
             <FlexBox
               key={`savings-${index}`}
               isDivided={true}
-              topChildren={<Title name={savings.name.slice(0, 20) + ' ...'} />}
+              topChildren={
+                <div className="flex flex-row justify-between items-center mt-[-0.5rem]">
+                  <Title
+                    name={
+                      savings.name.length > 20
+                        ? savings.name.slice(0, 20) + ' ...'
+                        : savings.name
+                    }
+                  />
+                  <TinyButton
+                    label="선택하기"
+                    handleClick={() =>
+                      router.push(`/savings/apply/${savings.savingsUuid}/step1`)
+                    }
+                  />
+                </div>
+              }
               bottomChildren={
                 <>
                   <div className="flex flex-col gap-[0.5rem]">
@@ -67,16 +83,6 @@ export default function ApplySavings() {
                     <ContentRow
                       keyName="적금 기간"
                       value={`${savings.period}개월`}
-                    />
-                  </div>
-                  <div className="self-end">
-                    <TinyButton
-                      label="선택하기"
-                      handleClick={() =>
-                        router.push(
-                          `/savings/apply/${savings.savingsUuid}/step1`,
-                        )
-                      }
                     />
                   </div>
                 </>

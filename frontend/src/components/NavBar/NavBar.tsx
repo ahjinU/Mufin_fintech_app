@@ -38,6 +38,8 @@ const setIndex = (path: string | null) => {
     case '/user':
     case '/loan/list':
     case '/loan/apply/success':
+    case '/savings/mine':
+    case '/loan/success':
       return 4;
     default:
       return 0;

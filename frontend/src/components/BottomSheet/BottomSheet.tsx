@@ -4,14 +4,16 @@ import Image from 'next/image';
 import Button from '../Button/Button';
 import { motion } from 'framer-motion';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import { ReactNode } from 'react';
 
 interface BottomSheetProps {
   size: 'SMALL' | 'MEDIUM';
   title: string;
   content?: string;
-  imageSrc: string;
+  imageSrc?: string;
   isXButtonVisible: boolean;
   isOpen: boolean;
+  children?: ReactNode;
   onClose?: () => void;
   onConfirm?: () => void;
 }
@@ -23,6 +25,7 @@ export default function BottomSheet({
   imageSrc,
   isXButtonVisible,
   isOpen,
+  children,
   onConfirm,
   onClose,
   ...props
@@ -55,19 +58,18 @@ export default function BottomSheet({
           onClick={onClose}
         />
       )}
-
       <h1 className="custom-bold-text">{title}</h1>
-
       {content && <p className="custom-semibold-text text-wrap">{content}</p>}
-
-      <Image
-        width={100}
-        height={100}
-        src={imageSrc}
-        alt={'bottom sheet image'}
-        className="m-[2rem] self-center"
-      ></Image>
-
+      {imageSrc && (
+        <Image
+          width={100}
+          height={100}
+          src={imageSrc}
+          alt={'bottom sheet image'}
+          className="m-[2rem] self-center"
+        ></Image>
+      )}
+      {children}
       {isButtonVisible && (
         <Button mode="ACTIVE" label="확인" onClick={onConfirm} />
       )}

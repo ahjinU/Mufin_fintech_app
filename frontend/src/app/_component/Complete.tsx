@@ -1,6 +1,8 @@
 import { NavText, Header, NavBar } from '@/components';
-import Lottie from 'react-lottie-player';
-import lottieJson from '../../../public/lotties/success.json';
+
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
+import lottieJson from '@/../public/lotties/success.json';
 
 export default function Complete({
   title,

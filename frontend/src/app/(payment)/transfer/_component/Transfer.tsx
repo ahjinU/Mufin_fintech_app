@@ -10,6 +10,10 @@ import {
 } from '@/components';
 import { useRouter } from 'next/navigation';
 
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
+import lottieJson from '@/../public/lotties/transfer.json';
+
 export default function Transfer() {
   const router = useRouter();
   const { userData } = useUserStore();
@@ -89,16 +93,16 @@ export default function Transfer() {
     }
   };
 
-  const whiteBoxClass =
-    'w-full h-[12.6rem] rounded-[2rem] p-[2rem] bg-custom-white flex flex-col justify-center gap-[1rem]';
+  const grayBoxClass =
+    'w-full h-[12.6rem] rounded-[2rem] p-[2rem] bg-custom-light-gray flex flex-col justify-center gap-[1rem]';
 
   const modalBackground =
     'absolute top-0 left-0 size-full bg-custom-black-with-opacity flex justify-center';
 
   return (
     <div className="mt-[0.4rem] flex flex-col gap-[1rem]">
-      <AccountBox />
-      <div className={whiteBoxClass}>
+      <AccountBox isGrayBackground />
+      <div className={grayBoxClass}>
         <p className="custom-bold-text text-custom-black">
           어디로 돈을 보낼까요?
         </p>
@@ -110,7 +114,7 @@ export default function Transfer() {
         />
       </div>
       {state == 'INPUT_MONEY' ? (
-        <div className={whiteBoxClass}>
+        <div className={grayBoxClass}>
           <p className="custom-bold-text text-custom-black">얼마를 보낼까요?</p>
           <Input
             placeholder="보낼 금액 입력"
@@ -154,11 +158,18 @@ export default function Transfer() {
           <BottomSheet
             size="SMALL"
             title="송금이 완료됐어요!"
-            imageSrc="/images/icon-gold.png"
             isXButtonVisible={true}
             isOpen={true}
             onClose={() => router.replace('/')}
-          />
+          >
+            <Lottie
+              loop={1}
+              animationData={lottieJson}
+              play
+              style={{ width: 250, height: 250 }}
+              className='self-center'
+            />
+          </BottomSheet>
         </div>
       ) : null}
       {state == 'FAIL' ? (
@@ -170,7 +181,7 @@ export default function Transfer() {
             isXButtonVisible={true}
             isOpen={true}
             onClose={() => setState('INPUT_ACCOUNT')}
-          />
+          ></BottomSheet>
         </div>
       ) : null}
     </div>

@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function OpenAccount() {
   return (
     <div className="flex flex-col gap-[1rem]">
-      <GuideText text="계좌를 개설해주세요" />
+      <GuideText text="서비스를 이용하시려면 계좌를 개설해주세요!" />
       <div
         className="w-full h-[28.4rem] p-[2rem] rounded-[2rem] bg-custom-light-gray
       flex flex-col justify-center items-center"
@@ -18,9 +18,9 @@ export default function OpenAccount() {
           className="w-[30rem]"
         ></Image>
         <div className="text-custom-black">
-          <p className="custom-semibold-text mb-2">스님은행</p>
+          <p className="custom-semibold-text my-2">머핀은행</p>
           <p className="custom-medium-text">
-            스님은행은 아이들이 서비스에서 사용할 수 있는 계좌를 개설하고
+            머핀은행은 부모님과 아이들이 서비스에서 사용할 수 있는 계좌를 개설하고
             있어요.
           </p>
           <p className="custom-medium-text">

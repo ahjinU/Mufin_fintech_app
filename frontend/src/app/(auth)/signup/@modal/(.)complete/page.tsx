@@ -5,8 +5,9 @@ import { Button } from '@/components';
 import useRegisterStore from '../../_store/store';
 import useUserStore from '@/app/_store/store';
 
-import Lottie from 'react-lottie-player';
-import lottieJson from '../../../../../../public/lotties/celebration.json';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
+import lottieJson from '@/../public/lotties/celebration.json';
 
 export default function Complete() {
   const { registerData } = useRegisterStore();

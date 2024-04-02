@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { BackButton, Button, GuideText, Header } from '@/components';
 import Assesment from './_component/Assesment';
 
-import Lottie from 'react-lottie-player';
-import lottieJson from '../../../../../../public/lotties/assesment.json';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
+import lottieJson from '@/../public/lotties/assesment.json';
 
 export default function Page() {
   const [state, setState] = useState<'START' | 'IN_PROGRESS'>('START');
@@ -24,6 +25,7 @@ export default function Page() {
                 animationData={lottieJson}
                 play
                 style={{ width: 300, height: 300 }}
+                className='self-center mr-[6rem]'
               />
               <div className="px-[2rem] flex flex-col gap-[2rem] custom-medium-text text-custom-black">
                 <p>

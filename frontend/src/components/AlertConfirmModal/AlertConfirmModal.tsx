@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import ConfimButton from './ConfirmButton';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { ReactNode, useState } from 'react';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 
 interface AlertConfirmProps {
   text: string;
@@ -12,6 +12,12 @@ interface AlertConfirmProps {
   handleClickNo: () => void;
   handleClickClose?: () => void;
   mode?: 'DEFAULT' | 'ONLYCLOSE';
+  height?: string;
+  content?: string;
+  closeButtonText?: string;
+  isXButtonVisible?: boolean;
+  handleXButtonClose?: () => void;
+  children?: ReactNode;
 }
 
 export default function AlertConfirm({
@@ -21,9 +27,14 @@ export default function AlertConfirm({
   handleClickNo,
   handleClickClose,
   mode = 'DEFAULT',
+  height = 'h-[13.6rem]',
+  content,
+  closeButtonText = '닫기',
+  isXButtonVisible = false,
+  handleXButtonClose,
+  children,
 }: AlertConfirmProps) {
   const [isClose, setIsClose] = useState<boolean>(false);
-  const router = useRouter();
 
   const container = {
     show: { y: 0, opacity: 1 },
@@ -47,14 +58,28 @@ export default function AlertConfirm({
         stiffness: 400,
       }}
       className={`fixed top-[13.9rem]
-      w-[90%]  h-[13.6rem]
+      w-[90%] ${height}
       rounded-[0.8rem] bg-custom-white text-custom-black p-[2rem] 
       flex flex-col justify-between`}
     >
-      <p className="custom-semibold-text">{text}</p>
+      {isXButtonVisible && (
+        <XMarkIcon
+          className="size-[2rem] absolute top-[1rem] right-[1rem] cursor-pointer"
+          onClick={handleXButtonClose}
+        />
+      )}
+      <p className="custom-semibold-text text-custom-black">{text}</p>
+      <p className="custom-light-text text-custom-black pb-[1.6rem]">
+        {content}
+      </p>
+      {children}
       {mode === 'ONLYCLOSE' ? (
         <div className="flex gap-[1rem] justify-end">
-          <ConfimButton label="닫기" mode={'OKAY'} onClick={handleClickClose} />
+          <ConfimButton
+            label={closeButtonText}
+            mode={'OKAY'}
+            onClick={handleClickClose}
+          />
         </div>
       ) : (
         <div className="flex gap-[1rem] justify-end">

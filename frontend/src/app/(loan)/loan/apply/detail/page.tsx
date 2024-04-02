@@ -97,6 +97,7 @@ export default function LoanApplyDetail() {
         >
           <div className="flex flex-row gap-[1rem] items-end">
             <Input
+              type="tel"
               value={amount}
               setValue={setAmount}
               width="w-[20rem]"
@@ -156,13 +157,19 @@ export default function LoanApplyDetail() {
           </div>
         </ComplexInput>
       </div>
-      <Link
-        className="fixed bottom-0 w-full p-[1.2rem] pt-0 bg-custom-white border-none outline-none"
-        href={'/loan/apply/chat'}
-        onClick={saveLoanApplyData}
-      >
-        <Button mode={isActive ? 'ACTIVE' : 'NON_ACTIVE'} label={'다음'} />
-      </Link>
+      {isActive ? (
+        <Link
+          className="fixed bottom-0 w-full p-[1.2rem] pt-0 bg-custom-white border-none outline-none"
+          href={'/loan/apply/chat'}
+          onClick={saveLoanApplyData}
+        >
+          <Button mode={isActive ? 'ACTIVE' : 'NON_ACTIVE'} label={'다음'} />
+        </Link>
+      ) : (
+        <div className="fixed bottom-0 w-full p-[1.2rem] pt-0 bg-custom-white border-none outline-none">
+          <Button mode={isActive ? 'ACTIVE' : 'NON_ACTIVE'} label={'다음'} />
+        </div>
+      )}
     </>
   );
 }

@@ -33,10 +33,10 @@ const Day = (dayData: DayProps) => {
         {(savingsDay || loanPaymentDay) && (
           <div className="flex flex-row">
             {savingsDay && (
-              <p className="text-[2.2rem] p-[-2rem] text-custom-blue">.</p>
+              <p className="text-[2.2rem] p-[-2rem] text-[green]">.</p>
             )}
             {loanPaymentDay && (
-              <p className="text-[2.2rem] p-[-2rem] text-custom-red">.</p>
+              <p className="text-[2.2rem] p-[-2rem] text-[#f0cc5f]">.</p>
             )}
           </div>
         )}
@@ -50,11 +50,11 @@ const Day = (dayData: DayProps) => {
       >
         {day && format(day, 'd')}
       </Link>
-      <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center">
-        <p className="text-[0.75rem] text-custom-blue font-[200]">
+      <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center justify-center">
+        <p className="text-[0.75rem] text-custom-blue font-[200] opacity-80">
           {incomeDay != '0' && incomeDay}
         </p>
-        <p className="text-[0.75rem] text-custom-red font-[200]">
+        <p className="text-[0.75rem] text-custom-red font-[200] opacity-70">
           {outcomeDay != '0' && outcomeDay}
         </p>
       </div>

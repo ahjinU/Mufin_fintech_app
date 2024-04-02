@@ -1,12 +1,20 @@
 'use client';
 
+import Link from 'next/link';
 import useUserStore from '@/app/_store/store';
-import { NavButton } from '@/components';
+import { Button, NavButton, NavText } from '@/components';
+import { signOut } from 'next-auth/react';
 
 export default function UserMenu() {
   const { userData } = useUserStore();
 
-  const data = !userData.isParent
+  const handleClick = async () => {
+    await signOut();
+    localStorage.removeItem('userStore');
+    window.location.href = '/';
+  };
+
+  const menuList = !userData.isParent
     ? [
         ['적금 신청하기', '/savings/apply'],
         ['적금 보기 & 납부하기', '/savings/mine'],
@@ -14,26 +22,41 @@ export default function UserMenu() {
         ['대출 보기 & 상환하기', '/loan/list'],
       ]
     : [
-        ['아이 회원가입하기', '/'],
+        ['우리 아이 회원가입하기', '/signup'],
         ['아이를 위한 적금 상품 만들기', '/savings/list'],
         ['적금 현황 확인하기', '/savings/confirm'],
-        ['아이의 대출 요청 확인하기', '/'],
-        ['대출 현황 확인하기', '/'],
+        ['아이의 대출 요청 심사하기', '/loan/parent/assesment'],
+        ['대출 현황 확인하기', '/loan/parent'],
       ];
 
   return (
-    <section className="p-[1.2rem] flex flex-col gap-[1rem] min-h-[calc(100vh-11.6rem)]">
-      <NavButton mode="HIGHLIGHT" label="김지니" link="/" />
-      {data.map((menu, index) => {
-        return (
-          <NavButton
-            key={`menu-${index}`}
-            mode="GENERAL"
-            label={menu[0]}
-            link={menu[1]}
-          />
-        );
-      })}
+    <section className="flex flex-col gap-[1rem]">
+      <div className="w-full h-[12rem] p-[1.6rem] bg-custom-purple text-custom-white flex flex-col justify-between">
+        <div className="self-start">
+          <div>
+            <p className="custom-light-text">오늘도 좋은 하루되세요!</p>
+            <p className="custom-semibold-text">{userData.name}</p>
+          </div>
+        </div>
+        {/* <div className="w-full h-[0.1rem] bg-custom-medium-gray"></div> */}
+        <div className="self-end flex gap-[1.4rem] underline custom-light-text">
+          <Link href="/">아이 목록</Link>
+          <Link href="/">내 정보</Link>
+          <p onClick={handleClick}>로그아웃</p>
+        </div>
+      </div>
+      <div className="px-[1.2rem] flex flex-col gap-[0.8rem]">
+        {menuList.map((menu, index) => {
+          return (
+            <NavButton
+              key={`menu-${index}`}
+              mode="GENERAL"
+              label={menu[0]}
+              link={menu[1]}
+            />
+          );
+        })}
+      </div>
     </section>
   );
 }

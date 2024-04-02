@@ -3,19 +3,19 @@
 import { useState } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 
-interface GuideAccordionProps {
+interface AccordionProps {
   mode: 'NORMAL' | 'EXCEPTIONAL' | 'COMPLETED';
   name: string;
   title: string;
   contents: string[][];
 }
 
-export default function GuideAccordionContent({
+export default function AccordionContent({
   mode,
   name,
   title,
   contents,
-}: GuideAccordionProps) {
+}: AccordionProps) {
   const [isOpen, setIsOpen] = useState(false);
   let iconColor: string;
 

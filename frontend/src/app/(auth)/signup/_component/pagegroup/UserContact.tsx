@@ -17,7 +17,6 @@ export default function UserContact({
   if (session?.Authorization) {
     Authorization = session.Authorization;
   }
-
   const [contact, setContact] = useState({
     telephone: '',
     address: '',

@@ -18,8 +18,10 @@ export default function SignInForm() {
       password,
     });
 
-    if (result && result.error) {
-      setMessage('아이디와 비밀번호를 다시 확인해주세요!');
+    if (result) {
+      result.error
+        ? setMessage('아이디와 비밀번호를 다시 확인해주세요!')
+        : (window.location.href = '/');
     }
   };
 

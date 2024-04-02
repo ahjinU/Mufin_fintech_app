@@ -16,7 +16,6 @@ export default function UserContact({
   if (session?.Authorization) {
     Authorization = session.Authorization;
   }
-
   const [contact, setContact] = useState({
     telephone: '',
     address: '',
@@ -106,14 +105,11 @@ export default function UserContact({
       </ComplexInput>
       <ComplexInput label="주소" mode="NONE">
         <div className="flex flex-col gap-[0.6rem]">
-          <div className="flex items-center gap-[1rem]">
-            <Input
-              placeholder="주소를 입력해주세요"
-              name="address"
-              onChange={onChangeInput}
-            />
-            <TinyButton label="주소 찾기" handleClick={() => {}} />
-          </div>
+          <Input
+            placeholder="주소를 입력해주세요"
+            name="address"
+            onChange={onChangeInput}
+          />
           <Input
             placeholder="상세 주소를 입력해주세요"
             name="address2"

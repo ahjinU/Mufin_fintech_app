@@ -19,7 +19,7 @@ export const checkTelephoneChild = async (
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authrization: AccessToken,
+      Authorization: AccessToken,
     },
     body: JSON.stringify({ telephone }),
   });
@@ -43,7 +43,7 @@ export const checkEmailChild = async (AccessToken: string, email: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authrization: AccessToken,
+      Authorization: AccessToken,
     },
     credentials: 'include',
     body: JSON.stringify({ email }),
@@ -83,7 +83,7 @@ export const signUpChild = async (
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authrization: AccessToken,
+      Authorization: AccessToken,
     },
     credentials: 'include',
     body: JSON.stringify({ name, gender, birth, address, address2, password }),

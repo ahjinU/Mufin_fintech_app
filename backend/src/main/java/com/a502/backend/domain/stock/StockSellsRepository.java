@@ -13,7 +13,7 @@ import java.util.Optional;
 
 interface StockSellsRepository extends JpaRepository<StockSell, Integer> {
 	// 주식 하나당 매수 주문 들어온 것 리스트 조회
-	List<StockSell> findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(int id, int cnt, LocalDateTime localDateTime);
+	List<StockSell> findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThanOrderByPriceDesc(int id, int cnt, LocalDateTime localDateTime);
 //	@Lock(LockModeType.PESSIMISTIC_WRITE)
 //	@Transactional
 	@Query("select ss from StockSell ss where ss.code.id = 'S001' and ss.stock = :stock and ss.price = :price order by ss.createdAt asc")

@@ -23,7 +23,7 @@ public class StockSellsService {
 	}
 
 	public List<StockSell> getSellOrderList(int id, int cnt, LocalDateTime localDateTime) {
-		return stockSellsRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThan(id, cnt, localDateTime);
+		return stockSellsRepository.findAllByStock_IdAndCntNotGreaterThanAndCreatedAtGreaterThanOrderByPriceDesc(id, cnt, localDateTime);
 	}
 
 	@Transactional

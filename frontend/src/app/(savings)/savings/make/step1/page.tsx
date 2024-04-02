@@ -22,7 +22,7 @@ export default function MakeSavingsStep1() {
 
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] relative">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] relative min-h-screen">
         <GuideText text="상품 이름, 기간, 이자율을 정해주세요." />
 
         <ComplexInput label="상품 이름" mode="NONE">

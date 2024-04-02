@@ -26,7 +26,7 @@ export default function ConfirmSavings() {
       <Header>
         <BackButton label="적금 현황 확인하기" />
       </Header>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative min-h-screen">
         {childrenSavingsStateList &&
           childrenSavingsStateList.map((childrenSavingsState, index) => {
             return childrenSavingsState.savingsDetailList.map(

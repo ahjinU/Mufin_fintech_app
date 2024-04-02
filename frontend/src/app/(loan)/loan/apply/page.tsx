@@ -7,7 +7,7 @@ export default function LoanApply() {
       <Header>
         <BackButton label="대출 신청하기" />
       </Header>
-      <div className="p-[1.2rem] gap-[5rem] flex flex-col">
+      <div className="p-[1.2rem] gap-[5rem] flex flex-col min-h-[calc(100vh-13.1rem)]">
         <GuideText text={'부모님께 급하게 돈을 요청할 수 있어요.'} />
         <div className="flex items-center justify-center">
           <Image

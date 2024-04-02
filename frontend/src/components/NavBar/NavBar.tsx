@@ -120,7 +120,7 @@ export default function NavBar({ mode }: NavBarProps) {
 
   return (
     <div
-      className={`w-full sticky bottom-0 h-[7.5rem] rounded-[1.6rem] border border-b-0 border-custom-light-gray bg-custom-white flex justify-center pt-[1.5rem]`}
+      className={`w-full sticky bottom-0 h-[7.5rem] rounded-t-[1.6rem] border border-b-0 border-x-0 border-custom-light-gray bg-custom-white flex justify-center pt-[1.5rem]`}
     >
       {items.map(({ icon, path, label }, index) => (
         <Link

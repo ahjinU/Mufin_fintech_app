@@ -6,7 +6,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-custom-light-gray">
+    <div className="min-h-screen bg-custom-white">
       <Header>
         <BackButton label="송금하기" />
       </Header>

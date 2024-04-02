@@ -174,6 +174,11 @@ public class StockFacade {
 		List<StockOrderList> stockOrderList = new ArrayList<>();
 		// 주식 id에 해당하는 매도 주문 리스트 조회
 		List<StockSell> sellList = stockSellsService.getSellOrderList(id, 0, LocalDate.now().atStartOfDay());
+		for (StockSell s : sellList) {
+			System.out.println(s.getPrice());
+			System.out.println(s.getCntNot());
+			System.out.println("################");
+		}
 		if (!sellList.isEmpty()) {
 			int sellPrice = sellList.get(0).getPrice();
 			int sellCnt = 0;
@@ -209,6 +214,7 @@ public class StockFacade {
 				}
 			}
 		}
+		stockOrderList.sort(Collections.reverseOrder());
 		return PriceAndStockOrderList.builder().price(price).stockOrderList(stockOrderList).build();
 	}
 

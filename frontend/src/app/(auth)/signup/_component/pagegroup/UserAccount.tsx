@@ -73,13 +73,13 @@ export default function UserAccount({
           setIsValid(true);
           setMessage({
             ...message,
-            passwordMessage: '사용 가능한 이메일입니다😀',
+            emailMessage: '사용 가능한 이메일입니다😀',
           });
         } else {
           setIsValid(false);
           setMessage({
             ...message,
-            passwordMessage: '중복된 이메일입니다😢',
+            emailMessage: '중복된 이메일입니다😢',
           });
         }
       } catch (error) {
@@ -89,12 +89,16 @@ export default function UserAccount({
   };
 
   useEffect(() => {
-    if (isValidEmail(account.email) && isValid) {
+    if (
+      isValidEmail(account.email) &&
+      isValidPassword(account.password) &&
+      isValid
+    ) {
       setButtonMode('ACTIVE');
     } else {
       setButtonMode('NON_ACTIVE');
     }
-  }, [account.email, isValid]);
+  }, [account.email, account.password, isValid]);
 
   const handleNext = () => {
     onNext(account);
@@ -110,7 +114,6 @@ export default function UserAccount({
       >
         <div className="flex items-center gap-[1rem]">
           <Input
-            type="email"
             placeholder="이메일을 입력해주세요"
             name="email"
             onChange={onChangeInput}

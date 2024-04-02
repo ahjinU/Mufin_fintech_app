@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { BackButton, Button, GuideText, Header } from '@/components';
 import Assesment from './_component/Assesment';
 
-import Lottie from 'react-lottie-player';
-import lottieJson from '../../../../../../public/lotties/assesment.json';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
+import lottieJson from '@/../public/lotties/assesment.json';
 
 export default function Page() {
   const [state, setState] = useState<'START' | 'IN_PROGRESS'>('START');

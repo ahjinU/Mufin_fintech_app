@@ -10,7 +10,8 @@ import {
 } from '@/components';
 import { useRouter } from 'next/navigation';
 
-import Lottie from 'react-lottie-player';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
 import lottieJson from '@/../public/lotties/transfer.json';
 
 export default function Transfer() {

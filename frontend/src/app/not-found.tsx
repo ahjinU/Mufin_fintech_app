@@ -1,7 +1,9 @@
 'use client';
 
-import Lottie from 'react-lottie-player';
-import lottieJson from '../../public/lotties/404.json';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
+import lottieJson from '@/../public/lotties/404.json';
+
 import { Button } from '@/components';
 import { useRouter } from 'next/navigation';
 

@@ -3,8 +3,9 @@
 import { Button } from '@/components';
 import Link from 'next/link';
 
-import Lottie from 'react-lottie-player';
-import lottieJson from '../../../../../../public/lotties/account.json';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
+import lottieJson from '@/../public/lotties/account.json';
 
 export default function Complete() {
   return (

@@ -13,7 +13,7 @@ interface InputProps {
   disabled?: boolean;
   setValue?: Function;
   isRight?: boolean;
-  isNumber?: boolean;
+  type?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -28,7 +28,7 @@ export default function Input({
   onChange,
   disabled,
   isRight,
-  isNumber = false,
+  type = 'text',
   ...props
 }: InputProps) {
   const [inputPlaceholder, setInputPlaceholder] = useState(placeholder || '');
@@ -69,7 +69,7 @@ export default function Input({
         placeholder={inputPlaceholder}
         name={name}
         value={value || inputValue}
-        type={isNumber ? 'number' : 'text'}
+        type={type}
         ref={inputRef}
         disabled={disabled}
         onChange={handleChange}

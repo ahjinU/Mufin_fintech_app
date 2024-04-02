@@ -14,7 +14,7 @@ export default function MakeSavings() {
 
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[3rem] relative min-h-screen">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[3rem] relative">
         <GuideText text="부모님이 만든 적금 상품에 가입할 수 있어요!" />
 
         <div className="mx-auto">

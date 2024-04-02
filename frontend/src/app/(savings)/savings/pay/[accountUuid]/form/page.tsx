@@ -72,7 +72,7 @@ export default function PaySavingsForm({
         </ComplexInput>
       </section>
 
-      <div className="absolute w-full bottom-0 left-0 p-[1.2rem]">
+      <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[2rem]">
         <Button
           mode="ACTIVE"
           label="납부하기"

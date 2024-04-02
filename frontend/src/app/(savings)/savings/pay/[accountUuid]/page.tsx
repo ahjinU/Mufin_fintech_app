@@ -95,7 +95,7 @@ export default function PaySavings({
         />
       </div>
 
-      <div className="absolute w-full bottom-0 left-0 p-[1.2rem]">
+      <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[2rem]">
         <Button
           mode={
             appliedSavingsDetail?.savingsPeriod ===

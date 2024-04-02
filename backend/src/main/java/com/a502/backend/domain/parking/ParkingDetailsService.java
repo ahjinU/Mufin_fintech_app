@@ -60,6 +60,7 @@ public class ParkingDetailsService {
 				.counterpartyName("쟈수민의 요술 오븐")
 				.code(code)
 				.cnt(0)
+				.ratio(parking.getInterest())
 				.build()
 		);
 	}

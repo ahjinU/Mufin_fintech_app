@@ -5,22 +5,11 @@ import { useState, useEffect } from 'react';
 import { SavingsListType } from '../../_types';
 import SavingsApis from '../../_apis';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 function Title({ name }: { name: string }) {
   return (
     <section className="flex items-center gap-[1rem]">
-      <Image
-        src={'/images/icon-smile.png'}
-        width={42}
-        height={42}
-        alt={'웃음 아이콘'}
-        className="w-[4.2rem] h-[4.2rem]"
-      />
-      <div>
-        <h2 className="custom-medium-text">{name}</h2>
-        <span className="custom-light-text">적금</span>
-      </div>
+      <h2 className="custom-semibold-text text-custom-purple">{name}</h2>
     </section>
   );
 }
@@ -66,7 +55,7 @@ export default function ApplySavings() {
                     }
                   />
                   <TinyButton
-                    label="선택하기"
+                    label="신청하기"
                     handleClick={() =>
                       router.push(`/savings/apply/${savings.savingsUuid}/step1`)
                     }
@@ -74,18 +63,13 @@ export default function ApplySavings() {
                 </div>
               }
               bottomChildren={
-                <>
-                  <div className="flex flex-col gap-[0.5rem]">
-                    <ContentRow
-                      keyName="이자율"
-                      value={`${savings.interest}%`}
-                    />
-                    <ContentRow
-                      keyName="적금 기간"
-                      value={`${savings.period}개월`}
-                    />
-                  </div>
-                </>
+                <div className="flex flex-col gap-[0.5rem] my-[-0.7rem]">
+                  <ContentRow keyName="이자율" value={`${savings.interest}%`} />
+                  <ContentRow
+                    keyName="적금 기간"
+                    value={`${savings.period}개월`}
+                  />
+                </div>
               }
             />
           );

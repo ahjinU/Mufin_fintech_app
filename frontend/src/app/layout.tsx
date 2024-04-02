@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className="bg-custom-black-with-opacity">
         <AuthContext>
           <MSWComponent />
-          <div className="w-[36rem] min-h-[64rem] mx-auto bg-custom-white relative">
+          <div className="size-full mx-auto bg-custom-white relative">
             {children}
           </div>
         </AuthContext>

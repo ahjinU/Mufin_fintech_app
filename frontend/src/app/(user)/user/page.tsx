@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import useUserStore from '@/app/_store/store';
 import { Button, NavButton, NavText } from '@/components';
 import { signOut } from 'next-auth/react';
@@ -33,15 +34,15 @@ export default function UserMenu() {
     <section className="flex flex-col gap-[1rem]">
       <div className="w-full h-[12rem] p-[1.6rem] bg-custom-purple text-custom-white flex flex-col justify-between">
         <div className="self-start">
-          <div>
+          
+          <div className='flex flex-col'>
             <p className="custom-light-text">오늘도 좋은 하루되세요!</p>
             <p className="custom-semibold-text">{userData.name}</p>
           </div>
         </div>
-        {/* <div className="w-full h-[0.1rem] bg-custom-medium-gray"></div> */}
         <div className="self-end flex gap-[1.4rem] underline custom-light-text">
-          <Link href="/">아이 목록</Link>
-          <Link href="/">내 정보</Link>
+          {userData.isParent ? <Link href="/child">아이 목록</Link> : null}
+          <Link href="/info">내 정보</Link>
           <p onClick={handleClick}>로그아웃</p>
         </div>
       </div>

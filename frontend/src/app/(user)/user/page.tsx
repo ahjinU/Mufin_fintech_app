@@ -8,7 +8,6 @@ export default function UserMenu() {
 
   const data = !userData.isParent
     ? [
-        ['최근 결제 내역 확인하기', '/'],
         ['적금 신청하기', '/savings/apply'],
         ['적금 보기 & 납부하기', '/savings/mine'],
         ['대출 받기', '/loan/apply'],
@@ -23,7 +22,7 @@ export default function UserMenu() {
       ];
 
   return (
-    <section className="p-[1.2rem] flex flex-col gap-[1rem] min-h-[calc(100vh-12rem)]">
+    <section className="p-[1.2rem] flex flex-col gap-[1rem] min-h-[calc(100vh-11.6rem)]">
       <NavButton mode="HIGHLIGHT" label="김지니" link="/" />
       {data.map((menu, index) => {
         return (

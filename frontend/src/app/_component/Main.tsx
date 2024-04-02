@@ -105,21 +105,36 @@ export default function Main() {
                     <Link href="/transfer">
                       <SmallButton mode="ACTIVE" label="송금하기" />
                     </Link>
-                    <Link href="/savings/mine">
-                      <SmallButton mode="ACTIVE" label="적금 납부하기" />
+                    <Link
+                      href={
+                        userData.isParent ? '/savings/confirm' : '/savings/mine'
+                      }
+                    >
+                      <SmallButton mode="ACTIVE" label="적금보기" />
                     </Link>
                   </div>
                 }
               />
+              {userData.isParent ? (
+                <AdBox
+                  icon="/images/icon-hands.png"
+                  link="/loan/parent/assesment"
+                  mode="INTERACTIVE"
+                  subText="꼼꼼하고 합리적인 소비 습관을 길러주세요!"
+                  title="아이들의 대출 요청 바로가기"
+                />
+              ) : (
+                <AdBox
+                  icon="/images/icon-calendar.png"
+                  link="/book"
+                  mode="INTERACTIVE"
+                  subText="영수증으로 자세한 지출 내역을 간편하게 등록해보세요!"
+                  title="내 가계부에 세부내역 추가하기"
+                />
+              )}
+
               {userData.isParent ? null : (
                 <>
-                  <AdBox
-                    icon="/images/icon-calendar.png"
-                    link="/book"
-                    mode="INTERACTIVE"
-                    subText="영수증을 등록하고 요술램프 혜택을 받아보세요!"
-                    title="내 가계부에 세부내역 추가하기"
-                  />
                   <FlexBox
                     isDivided
                     topChildren={

@@ -29,7 +29,7 @@ export default function Page() {
       <Header>
         <BackButton label="아이 대출 현황" />
       </Header>
-      <div className="px-[1.2rem] pt-[0.4rem]">
+      <div className="min-h-screen px-[1.2rem] pt-[0.4rem]">
         <div className="flex flex-col gap-[1rem]">
           {loanList.length == 0 ? (
             <p className="custom-semibold-text text-custom-medium-gray mx-auto mt-[2rem]">

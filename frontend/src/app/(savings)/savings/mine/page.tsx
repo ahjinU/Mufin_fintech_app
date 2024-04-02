@@ -145,9 +145,9 @@ export default function MySavings() {
             );
           })
         ) : (
-          <div className="flex items-center justify-center custom-semibold-text h-[20rem]">
-            신청한 적금이 없어요
-          </div>
+          <p className="custom-semibold-text text-custom-medium-gray mx-auto mt-[2rem]">
+            신청한 적금이 없습니다.
+          </p>
         )}
       </section>
       <NavBar mode={'CHILD'} />
@@ -158,9 +158,9 @@ export default function MySavings() {
             text="적금 상품을 중도에 해지하시겠어요?"
             isOpen={isModalOpen}
             handleClickOkay={async () => {
-              const result = await cancelSavings(targetAccountUuid);
+              await cancelSavings(targetAccountUuid);
               setIsModalOpen(false);
-              router.refresh(); // 추후에 변경해야 함
+              window.location.reload();
             }}
             handleClickNo={() => setIsModalOpen(false)}
           />

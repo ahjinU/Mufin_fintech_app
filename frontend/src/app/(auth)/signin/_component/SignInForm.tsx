@@ -28,7 +28,7 @@ export default function SignInForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-[1rem]">
       <ComplexInput label="이메일" mode="NONE">
-        <Input type="email" placeholder="이메일을 입력해주세요" name="email" />
+        <Input placeholder="이메일을 입력해주세요" name="email" />
       </ComplexInput>
       <ComplexInput isMsg label="비밀번호" message={message} mode="ERROR">
         <Input

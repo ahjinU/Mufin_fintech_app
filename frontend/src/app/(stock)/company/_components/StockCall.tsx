@@ -84,74 +84,72 @@ export function StockCall({ companyName }: { companyName: string }) {
         unit="주"
       />
 
-      {totalBuyOrder !== 0 ||
-        (totalSellOrder !== 0 && (
-          <table className="table table-fixed border-separate border-spacing-y-[0.5rem]">
-            <thead className="custom-medium-text text-center">
-              <tr>
-                <th>판매 호가량</th>
-                <th></th>
-                <th>구매 호가량</th>
-              </tr>
-            </thead>
-            <tbody className="custom-medium-text text-center">
-              {data.stockOrderList.map((stockOrder, index) => {
-                const cntSellOrderRateStyle = `w-${Math.ceil(
-                  stockOrder.sellOrderCnt / 10,
-                )}/10`;
-                const cntBuyOrderRateStyle = `w-${Math.ceil(
-                  stockOrder.buyOrderCnt / 10,
-                )}/10`;
+      {(totalBuyOrder !== 0 || totalSellOrder !== 0) && (
+        <table className="table table-fixed border-separate border-spacing-y-[0.5rem]">
+          <thead className="custom-medium-text text-center">
+            <tr>
+              <th>판매 호가량</th>
+              <th></th>
+              <th>구매 호가량</th>
+            </tr>
+          </thead>
+          <tbody className="custom-medium-text text-center">
+            {data.stockOrderList.map((stockOrder, index) => {
+              const cntSellOrderRateStyle = `w-${Math.ceil(
+                stockOrder.sellOrderCnt / 10,
+              )}/10`;
+              const cntBuyOrderRateStyle = `w-${Math.ceil(
+                stockOrder.buyOrderCnt / 10,
+              )}/10`;
 
-                return (
-                  <tr key={`stockOrder-${index}`}>
-                    {stockOrder.price >= data.price &&
-                    stockOrder.sellOrderCnt > 0 ? (
-                      <td className="text-custom-black flex justify-end">
-                        <div
-                          className={`${cntSellOrderRateStyle} bg-custom-blue-with-opacity rounded-l-[0.8rem] px-[0.5rem]`}
-                        >
-                          {commaNum(stockOrder.sellOrderCnt)}
-                        </div>
-                      </td>
-                    ) : (
-                      <td className="text-custom-black"></td>
-                    )}
-                    <td
-                      className={
-                        stockOrder.price === data.price
-                          ? 'text-custom-purple'
-                          : stockOrder.price === data.stockOrderList[0].price &&
-                            stockOrder.price > data.price
-                          ? 'text-custom-red'
-                          : stockOrder.price ===
-                              data.stockOrderList[
-                                data.stockOrderList.length - 1
-                              ].price && stockOrder.price < data.price
-                          ? 'text-custom-blue'
-                          : 'text-custom-black'
-                      }
-                    >
-                      {commaNum(stockOrder.price)}
+              return (
+                <tr key={`stockOrder-${index}`}>
+                  {stockOrder.price >= data.price &&
+                  stockOrder.sellOrderCnt > 0 ? (
+                    <td className="text-custom-black flex justify-end">
+                      <div
+                        className={`${cntSellOrderRateStyle} bg-custom-blue-with-opacity rounded-l-[0.8rem] px-[0.5rem]`}
+                      >
+                        {commaNum(stockOrder.sellOrderCnt)}
+                      </div>
                     </td>
-                    {stockOrder.price <= data.price &&
-                    stockOrder.buyOrderCnt > 0 ? (
-                      <td className="text-custom-black">
-                        <div
-                          className={`${cntBuyOrderRateStyle} bg-custom-red-with-opacity rounded-r-[0.8rem] px-[0.5rem]`}
-                        >
-                          {commaNum(stockOrder.buyOrderCnt)}
-                        </div>
-                      </td>
-                    ) : (
-                      <td className="text-custom-black"></td>
-                    )}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ))}
+                  ) : (
+                    <td className="text-custom-black"></td>
+                  )}
+                  <td
+                    className={
+                      stockOrder.price === data.price
+                        ? 'text-custom-purple'
+                        : stockOrder.price === data.stockOrderList[0].price &&
+                          stockOrder.price > data.price
+                        ? 'text-custom-red'
+                        : stockOrder.price ===
+                            data.stockOrderList[data.stockOrderList.length - 1]
+                              .price && stockOrder.price < data.price
+                        ? 'text-custom-blue'
+                        : 'text-custom-black'
+                    }
+                  >
+                    {commaNum(stockOrder.price)}
+                  </td>
+                  {stockOrder.price <= data.price &&
+                  stockOrder.buyOrderCnt > 0 ? (
+                    <td className="text-custom-black">
+                      <div
+                        className={`${cntBuyOrderRateStyle} bg-custom-red-with-opacity rounded-r-[0.8rem] px-[0.5rem]`}
+                      >
+                        {commaNum(stockOrder.buyOrderCnt)}
+                      </div>
+                    </td>
+                  ) : (
+                    <td className="text-custom-black"></td>
+                  )}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </section>
   );
 }

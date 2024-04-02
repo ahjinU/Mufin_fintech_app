@@ -98,9 +98,9 @@ export default function MainMyStock({
                     leftExplainText={`${commaNum(cnt)}주`}
                     leftHighlightText={`${name}`}
                     state={`${incomeRatio >= 0 ? 'UP' : 'DOWN'}`}
-                    rightExplainText={`${commaNum(
-                      totalPriceAvg,
-                    )} 초코칩(${commaNum(incomeRatio)}%)`}
+                    rightExplainText={`${commaNum(totalPriceAvg)}(${commaNum(
+                      incomeRatio,
+                    )}%)`}
                     rightHighlightText={`${commaNum(totalPriceCur)} 초코칩`}
                   />
                 );

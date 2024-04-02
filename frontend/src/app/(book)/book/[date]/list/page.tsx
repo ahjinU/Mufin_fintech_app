@@ -206,6 +206,7 @@ export default function BookList() {
                         leftHighlightText={`${commaNum(saving?.amount)}`}
                         buttonOption={'TINY_BUTTON'}
                         tinyButtonLabel="납부하기"
+                        link={`/savings/pay/${saving?.accountUuid}`}
                       />
                     </div>
                   }

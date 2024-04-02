@@ -14,6 +14,7 @@ interface InputProps {
   setValue?: Function;
   isRight?: boolean;
   type?: string;
+  regExp?: RegExp;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -29,6 +30,7 @@ export default function Input({
   disabled,
   isRight,
   type = 'text',
+  regExp,
   ...props
 }: InputProps) {
   const [inputPlaceholder, setInputPlaceholder] = useState(placeholder || '');
@@ -45,7 +47,13 @@ export default function Input({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     onChange && onChange(e);
-    setValue ? setValue(newValue) : setInputValue(newValue);
+    if (regExp) {
+      if (regExp.test(newValue)) {
+        setValue ? setValue(newValue) : setInputValue(newValue);
+      }
+    } else {
+      setValue ? setValue(newValue) : setInputValue(newValue);
+    }
   };
 
   return (

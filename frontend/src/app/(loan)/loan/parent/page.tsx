@@ -30,7 +30,7 @@ export default function Page() {
         <BackButton label="아이 대출 현황" />
       </Header>
       <div className="px-[1.2rem] pt-[0.4rem]">
-        <div className="flex flex-col items-center gap-[1rem]">
+        <div className="flex flex-col gap-[1rem]">
           {loanList.length == 0 ? (
             <p className="py-[4rem] custom-semibold-text text-custom-black">
               대출 현황이 없습니다

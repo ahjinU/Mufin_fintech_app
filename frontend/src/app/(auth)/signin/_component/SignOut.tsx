@@ -3,8 +3,8 @@ import { Button, NavText } from '@/components';
 
 export default function SignOut() {
   const handleClick = () => {
-    signOut();
     localStorage.removeItem('userStore');
+    signOut();
   };
 
   return (

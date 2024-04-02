@@ -41,6 +41,7 @@ export default function Input({
 
   const handleReset = () => {
     setValue && setValue('');
+    setInputValue('');
     inputRef.current?.focus();
   };
 

@@ -12,7 +12,7 @@ export default function GuideText({ text, ...props }: GuideTextProps) {
       {...props}
     >
       <InformationCircleIcon className="w-[2rem] h-[2rem] text-custom-purple" />
-      <span className="mt-[0.1rem]">{text}</span>
+      <span className="mb-[0.1rem]">{text}</span>
     </div>
   );
 }

@@ -113,24 +113,39 @@ export default function Book() {
           />
         </ComplexInput>
         <div className="flex flex-col gap-[1.2rem]">
-          {bookDetail?.transactionDtoList?.map((trans, index) => {
+          {bookDetail?.transactionDtoList?.map((trans, index, array) => {
+            const prev = index > 0 && array[index - 1];
+            const date =
+              index === 0 ||
+              (prev &&
+                format(prev?.date, 'yyyy-MM-dd') !==
+                  format(trans?.date, 'yyyy-MM-dd'))
+                ? `${format(trans?.date, 'd')}일 ${getKorDay(
+                    getDay(trans?.date),
+                  )}`
+                : undefined;
+
             return (
-              <FlexBox
-                key={`tarns-${index}`}
-                isDivided={false}
-                mode="NONE"
-                date={`${format(trans?.date, 'd')}일 ${getKorDay(
-                  getDay(trans?.date),
-                )}`}
-                topChildren={
-                  <OtherInfoElement
-                    leftExplainText={trans?.code}
-                    leftHighlightText={trans?.counterpartyName}
-                    money={`${commaNum(trans?.amount)}원`}
-                    state={trans.amount > 0 ? 'UP' : 'DOWN'}
-                  />
-                }
-              />
+              <div key={`tarns-${index}`}>
+                {date && (
+                  <div className="mb-[0.5rem] text-[1.2rem] font-[300] text-custom-medium-gray w-full border-b-[0.1rem]">
+                    {date}
+                  </div>
+                )}
+                <FlexBox
+                  isDivided={false}
+                  mode="NONE"
+                  // date={date}
+                  topChildren={
+                    <OtherInfoElement
+                      leftExplainText={trans?.code}
+                      leftHighlightText={trans?.counterpartyName}
+                      money={`${commaNum(trans?.amount)}원`}
+                      state={trans.amount > 0 ? 'UP' : 'DOWN'}
+                    />
+                  }
+                />
+              </div>
             );
           })}
         </div>

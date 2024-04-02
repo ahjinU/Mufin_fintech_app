@@ -2,7 +2,7 @@ interface FlexBoxProps {
   isDivided: boolean;
   topChildren?: React.ReactElement;
   bottomChildren?: React.ReactElement;
-  date?: string;
+  date?: string | undefined;
   mode?: 'LIST' | 'SHOW' | 'NONE';
 }
 

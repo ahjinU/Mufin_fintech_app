@@ -2,7 +2,6 @@
 
 import useUserStore from '@/app/_store/store';
 import { NavButton } from '@/components';
-import { useState, useEffect } from 'react';
 
 export default function UserMenu() {
   const { userData } = useUserStore();

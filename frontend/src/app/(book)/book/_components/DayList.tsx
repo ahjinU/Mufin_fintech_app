@@ -20,7 +20,6 @@ const DayList = ({ list }: { list: Date[] }) => {
         endDate: format(currentEndDate, 'yyyy-MM-dd'),
         childUuid: curChild.childUuid || null,
       });
-      console.log(res);
       setBookList(res?.data?.dayDetailList);
     })();
   }, [curChild, currentEndDate, currentStartDate]);

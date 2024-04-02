@@ -36,7 +36,7 @@ export default function MainStockList({ data }: { data: DataType }) {
   const router = useRouter();
 
   return (
-    <div className="p-[1.2rem] flex flex-col gap-[1rem] overflow-y-hidden">
+    <div className="p-[1.2rem] flex flex-col gap-[1rem] overflow-y-hidden min-h-screen">
       <AdBox
         icon={`/images/icon-weather.png`}
         mode={'WEATHER'}

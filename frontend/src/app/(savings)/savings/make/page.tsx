@@ -13,7 +13,7 @@ export default function MakeSavings() {
 
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[3rem] min-h-screen">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[3rem]">
         <GuideText text="적금 상품을 직접 만들 수 있어요!" />
 
         <div className="mx-auto">
@@ -34,7 +34,7 @@ export default function MakeSavings() {
         </p>
       </section>
 
-      <div className="absolute w-full bottom-0 left-0 p-[1.2rem]">
+      <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[2rem]">
         <Button
           mode="ACTIVE"
           label="만들기"

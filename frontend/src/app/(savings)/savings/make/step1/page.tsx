@@ -22,7 +22,7 @@ export default function MakeSavingsStep1() {
 
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] relative min-h-screen">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] relative">
         <GuideText text="상품 이름, 기간, 이자율을 정해주세요." />
 
         <ComplexInput label="상품 이름" mode="NONE">
@@ -52,7 +52,7 @@ export default function MakeSavingsStep1() {
         </ComplexInput>
       </section>
 
-      <div className="absolute w-full bottom-0 left-0 p-[1.2rem]">
+      <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[2rem]">
         <Button
           mode="ACTIVE"
           label="만들기"

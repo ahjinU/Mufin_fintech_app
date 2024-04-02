@@ -36,7 +36,7 @@ export default function SavingsList() {
           <BackButton label="등록된 적금 상품" />
         </Header>
 
-        <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] min-h-screen">
+        <section className="w-full p-[1.2rem] flex flex-col gap-[1rem]">
           {savingsList &&
             savingsList.map((savings, index) => {
               return (

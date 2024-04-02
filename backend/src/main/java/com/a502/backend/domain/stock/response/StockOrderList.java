@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString
-public class StockOrderList {
+public class StockOrderList implements Comparable<StockOrderList> {
 	private int price;
 	private int buyOrderCnt;
 	private int sellOrderCnt;
@@ -16,5 +16,15 @@ public class StockOrderList {
 		this.price = price;
 		this.buyOrderCnt = buyOrderCnt;
 		this.sellOrderCnt = sellOrderCnt;
+	}
+
+	@Override
+	public int compareTo(StockOrderList stockOrderList) {
+		if (stockOrderList.price < price) {
+			return 1;
+		} else if (stockOrderList.price > price) {
+			return -1;
+		}
+		return 0;
 	}
 }

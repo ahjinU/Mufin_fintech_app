@@ -209,6 +209,7 @@ public class StockFacade {
 				}
 			}
 		}
+		stockOrderList.sort(Collections.reverseOrder());
 		return PriceAndStockOrderList.builder().price(price).stockOrderList(stockOrderList).build();
 	}
 

@@ -39,7 +39,7 @@ export default function ApplySavings() {
 
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative min-h-screen">
         {savingsList?.map((savings, index) => {
           return (
             <FlexBox

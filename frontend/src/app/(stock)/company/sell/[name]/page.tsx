@@ -116,7 +116,7 @@ export default function Sell({ params }: { params: { name: string } }) {
             companyName && price && quantity
               ? async () => {
                   const result = await sellStock(companyName, price, quantity);
-                  if (!result.data) setIsModalOpen(true);
+                  if (!result.message.includes('성공')) setIsModalOpen(true);
                   else
                     router.replace(
                       `/company/${toCompanyEnglishName(companyName)}`,

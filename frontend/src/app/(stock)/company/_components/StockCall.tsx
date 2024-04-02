@@ -95,12 +95,21 @@ export function StockCall({ companyName }: { companyName: string }) {
           </thead>
           <tbody className="custom-medium-text text-center">
             {data.stockOrderList.map((stockOrder, index) => {
-              const cntSellOrderRateStyle = `w-${Math.ceil(
-                stockOrder.sellOrderCnt / 10,
-              )}/10`;
-              const cntBuyOrderRateStyle = `w-${Math.ceil(
-                stockOrder.buyOrderCnt / 10,
-              )}/10`;
+              const cntSellOrderRateStyle =
+                stockOrder.sellOrderCnt === totalSellOrder
+                  ? 'w-full'
+                  : `w-${Math.ceil(
+                      (stockOrder.sellOrderCnt / totalSellOrder) * 12,
+                    )}/12`;
+              const cntBuyOrderRateStyle =
+                stockOrder.buyOrderCnt === totalBuyOrder
+                  ? 'w-full'
+                  : `w-${Math.ceil(
+                      (stockOrder.buyOrderCnt / totalBuyOrder) * 12,
+                    )}/12`;
+
+              console.log(cntSellOrderRateStyle);
+              console.log(cntBuyOrderRateStyle);
 
               return (
                 <tr key={`stockOrder-${index}`}>

@@ -216,7 +216,6 @@ public class UserController {
 
         System.out.println("부모");
         System.out.println(parentName);
-        userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
 
         User signup = userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
         response.addCookie(deleteCookie(temporaryUserCookie));

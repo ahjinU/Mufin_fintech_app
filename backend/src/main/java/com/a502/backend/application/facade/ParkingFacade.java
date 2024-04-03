@@ -86,7 +86,7 @@ public class ParkingFacade {
 		// 이자율
 		double ratio = parking.getInterest();
 		// 내일 받을 수 있는 이자
-		int interest = (int) (balanceToday * ratio) / 365;
+		int interest = (int) (balanceToday * ratio) / 365 / 100;
 		// 내일 통장 예정 잔액
 		int balanceTmrw = balanceToday + interest;
 		return MyParkingInfoResponse.builder()

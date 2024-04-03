@@ -38,17 +38,17 @@ export default function Calendar() {
 
   return (
     <div className="flex flex-col items-center w-full mb-[1rem] px-[0.5rem]">
-      <div className="flex w-full justify-around h-[2rem]">
+      <div className="flex w-full justify-around h-[2rem] px-[1rem] items-center">
         <ChevronLeftIcon
           onClick={movePrevMonth}
-          className="text-custom-medium-gray cursor-pointer"
+          className="text-custom-medium-gray cursor-pointer w-[3.2rem] h-[3.2rem]"
         />
-        <p className="custom-semibold-text text-custom-purple w-[30rem] flex justify-center items-center">
+        <p className="font-medium text-[1.8rem] text-custom-purple w-[30rem] flex justify-center items-center">
           {format(currentMonth, 'yyyy')}년 {format(currentMonth, 'M')}월
         </p>
         <ChevronRightIcon
           onClick={moveNextMonth}
-          className="text-custom-medium-gray cursor-pointer"
+          className="text-custom-medium-gray cursor-pointer w-[3.2rem] h-[3.2rem]"
         />
       </div>
       <DateList />

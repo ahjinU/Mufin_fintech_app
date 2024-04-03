@@ -71,7 +71,7 @@ export default function Main() {
     return (
       <div>
         <div className="relative">
-          <div className="w-full min-h-screen mb-[1rem]">
+          <div className="w-full min-h-[calc(100dvh-8.5rem)] mb-[1rem]">
             <MainHeader></MainHeader>
             <div className="px-[1.2rem] flex flex-col gap-[1rem]">
               <Link

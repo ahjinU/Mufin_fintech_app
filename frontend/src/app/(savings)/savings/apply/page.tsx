@@ -41,7 +41,7 @@ export default function ApplySavings() {
     <>
       <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative">
         {savingsList.length === 0 ? (
-          <p className="custom-semibold-text text-custom-medium-gray mx-auto  mt-[2rem]">
+          <p className="custom-semibold-text text-custom-medium-gray mx-auto mt-[2rem]">
             신청할 수 있는 적금이 없어요.
           </p>
         ) : (

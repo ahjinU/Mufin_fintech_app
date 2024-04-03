@@ -28,35 +28,36 @@ const Day = (dayData: DayProps) => {
       text-[1.5rem] items-center text-custom-medium-gray
       `}
     >
-      <div className="flex w-full flex-col leading-[1.2rem] items-center h-[0.9rem] justify-center min-h-[1rem]">
-        {(savingsDay || loanPaymentDay) && (
-          <div className="flex flex-row mb-[-1.5rem] gap-[0.15rem] pr-[0.1rem]">
-            {loanPaymentDay === true && (
-              <p className="text-[0.4rem]  text-[green]">●</p>
-            )}
-            {savingsDay === true && (
-              <p className="text-[0.4rem] text-[#f0cc5f]">●</p>
-            )}
-          </div>
-        )}
-      </div>
       <Link
-        className="cursor-pointer"
+        className="cursor-pointer flex items-center justify-center flex-col"
         onClick={() => {
           day && updateSelectDate(day);
         }}
         href={`/book/${koreanDate}/list`}
       >
+        <div className="flex w-full flex-col leading-[0.7rem] items-center h-[0.9rem] justify-center min-h-[1.4rem]">
+          {(savingsDay || loanPaymentDay) && (
+            <div className="flex flex-row mb-[-1.5rem] gap-[0.15rem]">
+              {loanPaymentDay === true && (
+                <p className="text-[0.5rem]  text-[green]">●</p>
+              )}
+              {savingsDay === true && (
+                <p className="text-[0.5rem] text-[#f0cc5f]">●</p>
+              )}
+            </div>
+          )}
+        </div>
         <p className="text-[1.7rem]">{day && format(day, 'd')}</p>
+
+        <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center justify-center min-h-[1.5rem]">
+          <p className="text-[0.78rem] text-custom-blue font-[500] opacity-70">
+            {incomeDay != '0' && incomeDay}
+          </p>
+          <p className="text-[0.78rem] text-custom-red font-[500] opacity-60 pr-[0.4rem]">
+            {outcomeDay != '0' && outcomeDay}
+          </p>
+        </div>
       </Link>
-      <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center justify-center min-h-[1.5rem]">
-        <p className="text-[0.78rem] text-custom-blue font-[400] opacity-70">
-          {incomeDay != '0' && incomeDay}
-        </p>
-        <p className="text-[0.78rem] text-custom-red font-[400] opacity-60">
-          {outcomeDay != '0' && outcomeDay}
-        </p>
-      </div>
     </div>
   );
 };

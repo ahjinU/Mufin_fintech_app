@@ -3,7 +3,7 @@ interface FlexBoxProps {
   topChildren?: React.ReactElement;
   bottomChildren?: React.ReactElement;
   date?: string | undefined;
-  mode?: 'LIST' | 'SHOW' | 'NONE';
+  mode?: 'LIST' | 'SHOW' | 'NONE' | 'NONELIST';
 }
 
 function HorizontalLine() {
@@ -32,7 +32,7 @@ export default function FlexBox({
           mode === 'NONE' ? 'bg-custom-white' : 'bg-custom-light-gray'
         } rounded-[2rem]
         ${
-          mode === 'LIST'
+          mode === 'LIST' || mode === 'NONELIST'
             ? 'p-[1rem]'
             : mode === 'NONE'
             ? 'P-[0.5rem]'

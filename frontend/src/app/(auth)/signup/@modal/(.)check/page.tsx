@@ -51,7 +51,7 @@ export default function Check() {
             password,
           });
         }
-        router.replace('/signup/complete');
+        router.push('/signup/complete');
       } else {
         console.log('회원가입 토큰 문제', fetchedData);
       }

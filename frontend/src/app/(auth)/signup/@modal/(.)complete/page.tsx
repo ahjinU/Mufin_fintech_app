@@ -31,46 +31,38 @@ export default function Complete() {
           ) : (
             <>
               <p>환영합니다! 아이의 회원가입을 완료했어요.</p>
-              <p>
-                아이에게 아래 계정 정보를 전달해주고, 로그인 후 계좌를
-                개설해주세요.
-              </p>
-              <p>
-                계좌 개설이 완료되면 내 아이 정보 목록에서 아이를 확인할 수
-                있어요!
-              </p>
+              <p>아이에게 아래 계정 정보를 전달해주고,</p>
+              <p>로그인 후 계좌를 개설해주세요.</p>
             </>
           )}
         </div>
-        <div>
-          {!userData.isParent ? null : (
-            <>
-              <InfoShow
-                label={'이름'}
-                text={registerData.name}
-                copyIcon={false}
-              />
-              <InfoShow
-                label={'이메일'}
-                text={registerData.email}
-                copyIcon={true}
-              />
-              <InfoShow
-                label={'비밀번호'}
-                text={registerData.password}
-                copyIcon={true}
-              />
-            </>
-          )}
-        </div>
+        <Lottie
+          loop
+          animationData={lottieJson}
+          play
+          style={{ width: 180, height: 180 }}
+          className="self-center"
+        />
+        {!userData.isParent ? null : (
+          <div className='flex flex-col gap-[1.6rem]'>
+            <InfoShow
+              label={'이름'}
+              text={registerData.name}
+              copyIcon={false}
+            />
+            <InfoShow
+              label={'이메일'}
+              text={registerData.email}
+              copyIcon={true}
+            />
+            <InfoShow
+              label={'비밀번호'}
+              text={registerData.password}
+              copyIcon={true}
+            />
+          </div>
+        )}
       </div>
-      <Lottie
-        loop
-        animationData={lottieJson}
-        play
-        style={{ width: 200, height: 200 }}
-        className="self-center"
-      />
       <div className="fixed bottom-0 inset-x-0 px-[1.2rem] py-[3rem]">
         <Link href={!userData.isParent ? '/account' : '/'} replace>
           <Button

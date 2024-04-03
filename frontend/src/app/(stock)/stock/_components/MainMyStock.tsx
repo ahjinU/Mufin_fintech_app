@@ -17,7 +17,7 @@ export default function MainMyStock({
   const { balanceToday } = data.myParking;
 
   return (
-    <div className="p-[1.2rem] flex flex-col gap-[1rem] min-h-screen">
+    <div className="p-[1.2rem] flex flex-col gap-[1rem]">
       <AdBox
         icon="/images/icon-dollar.png"
         mode={'STATIC'}

@@ -67,7 +67,7 @@ export default function LoanApplyDetail() {
       <Header>
         <BackButton label={'대출 신청하기'} />
       </Header>
-      <div className="p-[1.2rem] gap-[0.5rem] flex flex-col w-full min-h-[calc(100vh-13.1rem)]">
+      <div className="p-[1.2rem] gap-[0.5rem] flex flex-col w-full">
         <div className="flex flex-col gap-[1rem] mb-[1.5rem]">
           <GuideText
             text={

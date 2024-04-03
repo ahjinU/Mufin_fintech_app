@@ -214,26 +214,10 @@ public class UserController {
         if(temporaryUserCookie==null)
             throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_COMPLETE_EMAIL_CHECK);
 
-        System.out.println("부모");
-        System.out.println(parentName);
-
-        User signup = userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
-        response.addCookie(deleteCookie(temporaryUserCookie));
-
-
-        JWTokenDto jwt = userFacade.login(LoginDto.builder()
-                .email(signup.getEmail())
-                .password(signUpDto.getPassword())
-                .build());
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HEADER_STRING, GRANT_TYPE + " " + jwt.getAccessToken());
-
-        Cookie refreshCookie = createCookie("refreshtoken", jwt.getRefreshToken());
-        response.addCookie(refreshCookie);
+        userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);
 
         ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_SIGNUP);
-        return ResponseEntity.ok().headers(httpHeaders).body(apiResponse);
+        return ResponseEntity.ok().body(apiResponse);
 
     }
 

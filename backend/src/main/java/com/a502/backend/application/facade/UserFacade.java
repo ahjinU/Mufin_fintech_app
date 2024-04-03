@@ -124,20 +124,6 @@ public class UserFacade {
     }
 
 
-
-    public UUID findUserByTelephone(String telephone) {
-        TemporaryUser newUser = TemporaryUser.builder()
-                .telephone(telephone)
-                .build();
-
-        System.out.println("[UserFacade] TemporaryUser:" + newUser.toString());
-
-        TemporaryUser temporaryUser = temporaryUserRepository.save(newUser);
-
-        return temporaryUser.getTemporaryUserUuid();
-    }
-
-
     public TemporaryUser findTemporaryUser(UUID uuid) {
 
         TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)

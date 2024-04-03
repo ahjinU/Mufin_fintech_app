@@ -22,7 +22,7 @@ export default function Complete() {
         style={{ width: 240, height: 240 }}
         className="mt-[4rem] self-center"
       />
-      <div className="fixed bottom-0 inset-x-0 p-[1.2rem]">
+      <div className="fixed bottom-0 inset-x-0 px-[1.2rem] py-[3rem]">
         <Link href="/" replace>
           <Button mode={'ACTIVE'} label={'홈으로 가기'}></Button>
         </Link>

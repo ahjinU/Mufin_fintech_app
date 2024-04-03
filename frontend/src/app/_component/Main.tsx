@@ -55,7 +55,7 @@ export default function Main() {
         if (res.errorMessage == '입출금 계좌를 먼저 생성해주세요') {
           router.replace('/account');
         } else {
-          setUserData(res.data);
+          setUserData({ ...res.data, ranking: res.data.ranking + 1 });
         }
       } catch (error) {
         console.error('사용자 정보 가져오기 에러', error);
@@ -71,7 +71,7 @@ export default function Main() {
     return (
       <div>
         <div className="relative">
-          <div className="w-full min-h-screen mb-[1rem]">
+          <div className="w-full min-h-[calc(100dvh-8.5rem)] mb-[1rem]">
             <MainHeader></MainHeader>
             <div className="px-[1.2rem] flex flex-col gap-[1rem]">
               <Link

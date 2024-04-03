@@ -106,7 +106,7 @@ export default function UserInfo({ onNext }: { onNext: (data: any) => void }) {
           <DateInput name="day" onChange={onChangeInput} />
         </div>
       </ComplexInput>
-      <div className="fixed bottom-0 inset-x-0 p-[1.2rem]">
+      <div className="fixed bottom-0 inset-x-0 px-[1.2rem] py-[3rem]">
         <Button label="다음" mode={buttonMode} onClick={handleNext} />
       </div>
     </div>

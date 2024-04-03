@@ -100,7 +100,7 @@ export default function ChatArea() {
   return (
     <div>
       <div
-        className="flex flex-col gap-[1rem] mb-[1rem] overflow-y-scroll scroll-hidden"
+        className="flex flex-col gap-[1rem] mb-[1rem] overflow-y-scroll scroll-hide"
         ref={messagesEndRef}
       >
         {messages.map((msg, index) => {

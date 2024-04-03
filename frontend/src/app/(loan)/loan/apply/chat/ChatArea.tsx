@@ -78,7 +78,7 @@ export default function ChatArea() {
 
   useEffect(() => {
     if (messages.length == 8) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
       messages.map((msg, index) => {
         if (index > 1) {
           string += `${msg.content}!#@#!`;

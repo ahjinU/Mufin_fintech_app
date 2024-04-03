@@ -49,11 +49,11 @@ const Day = (dayData: DayProps) => {
         </div>
         <p className="text-[1.7rem]">{day && format(day, 'd')}</p>
 
-        <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center justify-center min-h-[1.5rem]">
+        <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center justify-start min-h-[1.5rem]">
           <p className="text-[0.78rem] text-custom-blue font-[500] opacity-70">
             {incomeDay != '0' && incomeDay}
           </p>
-          <p className="text-[0.78rem] text-custom-red font-[500] opacity-60 pr-[0.4rem]">
+          <p className="text-[0.78rem] text-custom-red font-[500] opacity-60 pr-[0.3rem]">
             {outcomeDay != '0' && outcomeDay}
           </p>
         </div>

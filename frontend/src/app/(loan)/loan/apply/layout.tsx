@@ -13,7 +13,7 @@ export default function LoanApplyLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <div className="pb-[6rem]">
+    <div>
       {children}
       {modal}
     </div>

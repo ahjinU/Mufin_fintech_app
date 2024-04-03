@@ -118,6 +118,7 @@ export default function UserAccount({
             name="email"
             onChange={onChangeInput}
             disabled={isValid}
+            reset={!isValid}
           />
           {!isValid && (
             <TinyButton label="중복 확인" handleClick={checkEmail} />

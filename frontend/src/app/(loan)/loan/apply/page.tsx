@@ -25,7 +25,10 @@ export default function LoanApply() {
           <br />꼭 갚아야 한다는 것을 명심하세요 :)
         </span>
       </div>
-      <Link className="fixed bottom-0 w-full p-[1.2rem]" href={'apply/agree'}>
+      <Link
+        className="fixed bottom-0 w-full px-[1.2rem] py-[3rem]"
+        href={'apply/agree'}
+      >
         <Button mode={'ACTIVE'} label={'신청하기'} />
       </Link>
     </div>

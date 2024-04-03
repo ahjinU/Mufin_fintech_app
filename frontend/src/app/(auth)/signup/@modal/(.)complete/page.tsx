@@ -33,7 +33,7 @@ export default function Complete() {
         style={{ width: 200, height: 200 }}
         className="self-center"
       />
-      <div className="fixed bottom-0 inset-x-0 p-[1.2rem]">
+      <div className="fixed bottom-0 inset-x-0 px-[1.2rem] py-[3rem]">
         <Link href="/account" replace>
           <Button mode={'ACTIVE'} label={'계좌 만들기'}></Button>
         </Link>

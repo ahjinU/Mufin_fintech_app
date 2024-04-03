@@ -52,7 +52,7 @@ export default function MakeSavingsStep1() {
         </ComplexInput>
       </section>
 
-      <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[2rem]">
+      <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[3rem]">
         <Button
           mode="ACTIVE"
           label="만들기"

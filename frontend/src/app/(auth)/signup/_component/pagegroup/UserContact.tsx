@@ -24,7 +24,6 @@ export default function UserContact({
   });
   const [isValid, setIsValid] = useState(false);
   const [message, setMessage] = useState('');
-  const [isCheckValid, setIsCheckValid] = useState(false);
   const [buttonMode, setButtonMode] = useState<'ACTIVE' | 'NON_ACTIVE'>(
     'NON_ACTIVE',
   );
@@ -56,13 +55,10 @@ export default function UserContact({
         }
         if (fetchedData.ok) {
           setIsValid(true);
-          setIsCheckValid(true);
           setMessage('사용 가능한 번호입니다😀');
-          // console.log(fetchedData.headers.getSetCookie);
         } else {
           setIsValid(false);
           setMessage('중복된 번호입니다😢');
-          // console.log(fetchedData);
         }
       } catch (error) {
         console.error('전화번호 중복 검사 에러', error);
@@ -125,8 +121,9 @@ export default function UserContact({
             placeholder="'-'를 제외하고 입력해주세요"
             name="telephone"
             onChange={onChangeInput}
+            disabled={isValid}
           />
-          {!isCheckValid && (
+          {!isValid && (
             <TinyButton label="중복 확인" handleClick={checkTelephone} />
           )}
         </div>

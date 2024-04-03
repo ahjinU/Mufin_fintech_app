@@ -25,7 +25,7 @@ export default function Page() {
                 animationData={lottieJson}
                 play
                 style={{ width: 300, height: 300 }}
-                className='self-center mr-[6rem]'
+                className="self-center mr-[6rem]"
               />
               <div className="px-[2rem] flex flex-col gap-[2rem] custom-medium-text text-custom-black">
                 <p>
@@ -39,7 +39,7 @@ export default function Page() {
                 </p>
               </div>
 
-              <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+              <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[3rem]">
                 <Button
                   label="심사하기"
                   mode="ACTIVE"

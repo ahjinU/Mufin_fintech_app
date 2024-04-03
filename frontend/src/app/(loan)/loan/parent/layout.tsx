@@ -13,7 +13,7 @@ export default function Layout({
   const { userData } = useUserStore();
 
   return (
-    <div className="min-h-screen bg-custom-white">
+    <div className="bg-custom-white">
       {session && userData && userData.isParent ? (
         children
       ) : (

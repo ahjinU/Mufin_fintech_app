@@ -42,7 +42,7 @@ public class AccountService {
 		String end = String.format("%04d", random.nextInt(10000));
 
 		// 생성된 부분들을 하이픈(-)으로 연결
-		return prefix + "-" + middle1 + "-" + middle2 + "-" + end;
+		return prefix + middle1 + middle2 + end;
 	}
 
 	public Account findByAccountNumber(String accountNumber) {

@@ -1,6 +1,8 @@
 import { NavText, Header, NavBar } from '@/components';
-import Lottie from 'react-lottie-player';
-import lottieJson from '../../../public/lotties/success.json';
+
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
+import lottieJson from '@/../public/lotties/success.json';
 
 export default function Complete({
   title,
@@ -15,7 +17,7 @@ export default function Complete({
 }) {
   return (
     <>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] min-h-screen">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[2rem] min-h-[calc(100dvh-7.5rem)]">
         <Header>
           <h1 className="custom-bold-text">{title}</h1>
         </Header>

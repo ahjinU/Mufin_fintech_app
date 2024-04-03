@@ -24,7 +24,7 @@ export default async function UserInfo() {
   const infoData = await getUserInfo();
 
   return (
-    <div>
+    <div className="min-h-screen">
       <Header>
         <BackButton label="내 정보 확인" />
       </Header>

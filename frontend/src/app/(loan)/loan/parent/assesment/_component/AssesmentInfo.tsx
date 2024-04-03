@@ -24,7 +24,7 @@ export default function AssesmentInfo({
             reset={false}
             disabled={true}
             isRight={true}
-            width="w-fit"
+            width="w-3/5"
           ></Input>
           <p className="custom-semibold-text text-custom-black">원</p>
         </div>
@@ -35,7 +35,7 @@ export default function AssesmentInfo({
         height="h-fit"
         isMsg
         message={`매월 ${commaNum(
-          amount / paymentTotalCnt,
+          Math.round(amount / paymentTotalCnt),
         )}원씩 상환될 예정이에요`}
       >
         <div className="flex items-center gap-[0.8rem]">
@@ -44,7 +44,7 @@ export default function AssesmentInfo({
             reset={false}
             disabled={true}
             isRight={true}
-            width="w-fit"
+            width="w-1/5"
           ></Input>
           <p className="custom-semibold-text text-custom-black">개월</p>
         </div>
@@ -56,7 +56,7 @@ export default function AssesmentInfo({
             reset={false}
             disabled={true}
             isRight={true}
-            width="w-fit"
+            width="w-1/5"
           ></Input>
           <p className="custom-semibold-text text-custom-black">일</p>
         </div>

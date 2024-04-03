@@ -83,9 +83,11 @@ public class LoanFacade {
 		List<LoanList> loansList = new ArrayList<>();
 		int totalRemainderAmount = 0;
 		for (Loan l : loans) {
-			LoanRefusal loanRefusal = loanRefusalService.findByLoan(l);
 			int remainderAmount = l.getAmount() - l.getPaymentNowCnt() * (l.getAmount() / l.getPaymentTotalCnt());
-			totalRemainderAmount += remainderAmount;
+			if (l.getCode().getId().equals("L002")) {
+				totalRemainderAmount += remainderAmount;
+			}
+			LoanRefusal loanRefusal = loanRefusalService.findByLoan(l);
 			LoanList loanDetail = LoanList.builder()
 					.reason(l.getReason())
 					.loanUuid(String.valueOf(l.getLoanUuid()))

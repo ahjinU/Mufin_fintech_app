@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp, CompatClient } from '@stomp/stompjs';
 import { commaNum } from '@/utils/commaNum';
+import { revalidatePath } from 'next/cache';
 
 interface OrderData {
   price: number;
@@ -83,6 +84,13 @@ export function StockCall({ companyName }: { companyName: string }) {
   return (
     <section className="flex flex-col gap-[1rem]">
       <h3 className="custom-semibold-text">호가</h3>
+
+      <MoneyShow
+        mode="UNDIVIDED"
+        money={[commaNum(data.price).toString()]}
+        text={['실시간 가격']}
+        unit="초코칩"
+      />
 
       <MoneyShow
         mode="DIVIDED_GRAY"

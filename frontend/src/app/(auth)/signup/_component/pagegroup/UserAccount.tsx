@@ -32,6 +32,7 @@ export default function UserAccount({
   const [buttonMode, setButtonMode] = useState<'ACTIVE' | 'NON_ACTIVE'>(
     'NON_ACTIVE',
   );
+  const [isCheckValid, setIsCheckValid] = useState(false);
 
   const onChangeInput = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
@@ -71,6 +72,7 @@ export default function UserAccount({
         }
         if (fetchedData.ok) {
           setIsValid(true);
+          setIsCheckValid(true);
           setMessage({
             ...message,
             emailMessage: '사용 가능한 이메일입니다😀',
@@ -118,7 +120,9 @@ export default function UserAccount({
             name="email"
             onChange={onChangeInput}
           />
-          <TinyButton label="중복 확인" handleClick={checkEmail} />
+          {!setIsCheckValid && (
+            <TinyButton label="중복 확인" handleClick={checkEmail} />
+          )}
         </div>
       </ComplexInput>
       <ComplexInput

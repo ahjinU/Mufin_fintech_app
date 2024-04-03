@@ -13,6 +13,7 @@ export async function serverPostFetch(data: dataType) {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api${data.api}`,
     {
       method: 'POST',
+      cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${session?.Authorization}`,

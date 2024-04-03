@@ -1,5 +1,6 @@
 'use client';
 
+import { commaNum } from '@/utils/commaNum';
 import React from 'react';
 
 interface DealType {
@@ -35,7 +36,7 @@ export default function ListDeal({ deals }: DealListProps) {
               <p>{cnt}</p>
             </div>
             <div className="col-span-2 text-[1.2rem] font-normal text-right pr-[0.5rem] text-custom-dark-gray">
-              <p>{total}원</p>
+              <p>{commaNum(total)}원</p>
             </div>
           </React.Fragment>
         );

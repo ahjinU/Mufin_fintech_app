@@ -123,7 +123,7 @@ export default function LoanApplyDetail() {
           mode={'NONE'}
           height="h-[14rem]"
         >
-          <div className="flex flex-col gap-[1rem] mt-[2rem]">
+          <div className="flex flex-col gap-[1rem] mt-[1rem]">
             <div className="flex flex-row custom-semibold-text text-custom-light-purple items-center gap-[0.7rem] mt-[-0.5rem]">
               <p>매월 </p>
               <Select

@@ -30,7 +30,7 @@ export function StockLineChart({ name }: { name: string }) {
       const prices = data.data.map((dataObj: StockData) => dataObj.price);
       setData(prices.reverse());
     })();
-  }, [period]);
+  });
 
   const option = {
     chart: {

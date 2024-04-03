@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Input } from '..';
+import { commaNum } from '@/utils/commaNum';
 
 interface DealType {
   item: string;
@@ -39,7 +40,7 @@ export default function DealList({ mode, deals, ...props }: DealListProps) {
                   <p>{cnt}</p>
                 </div>
                 <div className="col-span-2 text-[1.6rem] font-normal text-right pr-[0.5rem] text-custom-black">
-                  <p>{total}원</p>
+                  <p>{commaNum(total)}원</p>
                 </div>
               </React.Fragment>
             );

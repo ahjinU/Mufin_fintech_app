@@ -276,8 +276,8 @@ public class LoanFacade {
 				.counterpartyName(childAccount.getUser().getName())
 				.counterpartyAccount(childAccount.getAccountNumber())
 				.account(parentAccount)
-				.accountDetailStatusCode(codeService.findByName("대출"))
-				.accountDetailTypeCode(codeService.findByName("거래완료"))
+				.accountDetailStatusCode(codeService.findByName("거래완료"))
+				.accountDetailTypeCode(codeService.findByName("대출"))
 				.build());
 		// 아이
 		accountDetailService.save(AccountDetail.builder()
@@ -286,8 +286,8 @@ public class LoanFacade {
 				.counterpartyName(parentAccount.getUser().getName())
 				.counterpartyAccount(parentAccount.getAccountNumber())
 				.account(childAccount)
-				.accountDetailStatusCode(codeService.findByName("대출"))
-				.accountDetailTypeCode(codeService.findByName("거래완료"))
+				.accountDetailStatusCode(codeService.findByName("거래완료"))
+				.accountDetailTypeCode(codeService.findByName("대출"))
 				.build());
 	}
 

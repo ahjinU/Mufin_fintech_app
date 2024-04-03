@@ -33,7 +33,7 @@ function RateShow() {
       className={`min-w-fit h-[1.8rem] px-[0.8rem] rounded-[0.8rem]
         text-custom-white custom-light-text bg-custom-light-purple`}
     >
-      금리 일 0.2%
+      금리 연0.2%
     </div>
   );
 }

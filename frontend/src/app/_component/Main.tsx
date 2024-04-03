@@ -55,7 +55,7 @@ export default function Main() {
         if (res.errorMessage == '입출금 계좌를 먼저 생성해주세요') {
           router.replace('/account');
         } else {
-          setUserData(res.data);
+          setUserData({ ...res.data, ranking: res.data.ranking + 1 });
         }
       } catch (error) {
         console.error('사용자 정보 가져오기 에러', error);

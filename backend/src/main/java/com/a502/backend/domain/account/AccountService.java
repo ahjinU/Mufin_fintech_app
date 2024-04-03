@@ -163,8 +163,6 @@ public class AccountService {
 
 	public List<Account> findAllSavingsByChild(User child) {
 		List<Account> accountList = accountRepository.findAllSavingsByChild(child);
-		for (Account a : accountList)
-			System.out.println(a.getAccountNumber());
 		return accountList;
 	}
 

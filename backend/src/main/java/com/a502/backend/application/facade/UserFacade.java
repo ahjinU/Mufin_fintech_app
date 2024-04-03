@@ -56,8 +56,6 @@ public class UserFacade {
 
 	@Transactional
 	public User signup(String temporaryUserUuid, SignUpDto signUpDto, String parentName) throws IOException {
-		System.out.println("[UserService] 회원가입: " + temporaryUserUuid + "/" + signUpDto.toString());
-
 
 		UUID uuid = userService.convertToUuid(temporaryUserUuid);
 		TemporaryUser temporaryUser = findTemporaryUser(uuid);
@@ -91,10 +89,8 @@ public class UserFacade {
 
 	@Transactional
 	public void checkDupleEmail(String temporaryUserUuidString, String email) {
-		System.out.println("[UserService/이메일중복] 이메일: " + email);
 
 		UUID uuid = userService.convertToUuid(temporaryUserUuidString);
-		System.out.println("[UserService] uuid: " + uuid.toString());
 
 		userService.findUserByEmail(email);
 
@@ -107,15 +103,12 @@ public class UserFacade {
 
 	@Transactional
 	public UUID checkDupleTelephone(String telephone) {
-		System.out.println("[UserService] /checkDupleTelephone telephone:" + telephone);
 
 		userService.findUserByTelephone(telephone);
 
 		TemporaryUser newUser = TemporaryUser.builder()
 				.telephone(telephone)
 				.build();
-
-		System.out.println("[UserService] TemporaryUser:" + newUser.toString());
 
 		TemporaryUser temporaryUser = temporaryUserRepository.save(newUser);
 

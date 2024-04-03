@@ -122,6 +122,7 @@ export default function UserContact({
             name="telephone"
             onChange={onChangeInput}
             disabled={isValid}
+            reset={!isValid}
           />
           {!isValid && (
             <TinyButton label="중복 확인" handleClick={checkTelephone} />

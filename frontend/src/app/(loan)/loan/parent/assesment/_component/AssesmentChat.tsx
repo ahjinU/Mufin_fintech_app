@@ -26,7 +26,7 @@ export default function AssesmentChat({
           );
         })}
       </div>
-      <div className="sticky bottom-[1.2rem] left-[1.2rem] right-[1.2rem]">
+      <div className="sticky w-full bottom-0 left-0 py-[3rem]">
         <Button label="심사 결정하기" mode="ACTIVE" onClick={buttonClick} />
       </div>
     </div>

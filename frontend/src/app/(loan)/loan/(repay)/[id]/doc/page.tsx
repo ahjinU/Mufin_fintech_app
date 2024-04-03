@@ -84,7 +84,7 @@ export default function LoanRepayDoc() {
           </div>
         }
       />
-      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem] py-[3rem]">
         <Link href={'password'}>
           <Button mode={'ACTIVE'} label={'동의하기'} />
         </Link>

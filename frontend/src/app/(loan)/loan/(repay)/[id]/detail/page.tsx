@@ -28,7 +28,7 @@ export default function LoanDetail() {
   return (
     <div className="flex flex-col">
       <GuideText text={`부모님께 빌렸던 돈을 갚아요.`} />
-      <div className="flex items-center justify-center mb-[-3rem]">
+      <div className="flex items-center justify-center mb-[-5rem]">
         <Image
           src={'/images/icon-loan-repay.png'}
           width={200}

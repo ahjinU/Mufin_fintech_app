@@ -1,5 +1,6 @@
 'use client';
 
+import { signIn } from 'next-auth/react';
 import useRegisterStore from '../../_store/store';
 import AlertConfirm from '@/components/AlertConfirmModal/AlertConfirmModal';
 import { useRouter } from 'next/navigation';
@@ -9,7 +10,8 @@ import { signUpParent, signUpChild } from '../../_apis/apis';
 export default function Check() {
   const { data: session } = useSession();
   const { registerData } = useRegisterStore();
-  const { name, gender, birth, address, address2, password } = registerData;
+  const { name, gender, birth, address, address2, password, email } =
+    registerData;
 
   const router = useRouter();
 
@@ -42,7 +44,14 @@ export default function Check() {
         );
       }
       if (fetchedData.ok) {
-        router.replace('/signup/complete');
+        if (!session) {
+          await signIn('credentials', {
+            redirect: false,
+            email,
+            password,
+          });
+        }
+        router.push('/signup/complete');
       } else {
         console.log('회원가입 토큰 문제', fetchedData);
       }

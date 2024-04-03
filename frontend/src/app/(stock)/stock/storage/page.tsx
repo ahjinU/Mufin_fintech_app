@@ -49,8 +49,8 @@ export default async function StockStroage() {
           }
           bottomChildren={
             <OtherInfoElement
-              leftExplainText={`이자율은 ${ratio}%`}
-              leftHighlightText={`내일 갖게 될 초코칩`}
+              leftExplainText={`이자율 ${ratio}%로 받는 초코칩`}
+              leftHighlightText={`내일의 초코칩 보관함`}
               rightHighlightText={`${commaNum(balanceTmrw)} 초코칩`}
               rightExplainText={`+${interest} 초코칩`}
               state={'DOWN'}

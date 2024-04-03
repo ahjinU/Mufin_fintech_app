@@ -1,24 +1,46 @@
+'use client';
+
 import {
   FlexBox,
   MoneyInfoElement,
   MoneyShow,
   OtherInfoElement,
 } from '@/components';
-import { serverPostFetch } from '@/hooks/useServerFetch';
 import { commaNum } from '@/utils/commaNum';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import useFetch from '@/hooks/useFetch';
 import { LoanType } from '../_types';
 
-export default async function LoanList() {
-  const res = await serverPostFetch({ api: '/loan/total/child' });
-  const LoansList: LoanType[] = res && res?.data?.loansList;
+export default function LoanList() {
+  const { postFetch } = useFetch();
+  const [loanReminder, setLoanReminder] = useState();
+
+  const [LoansList, setLoansList] = useState<LoanType[]>();
+
+  useEffect(() => {
+    const fetchLoanData = async () => {
+      try {
+        const res = await postFetch({ api: '/loan/total/child' });
+        if (res?.data) {
+          setLoanReminder(res?.data?.totalRemainderAmount);
+          setLoansList(res?.data?.loansList);
+        }
+        console.log(res);
+      } catch (error) {
+        console.error(' 대출 신청 가져오기 에러', error);
+      }
+    };
+    fetchLoanData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex flex-col gap-[1rem]">
       <MoneyShow
         mode={'UNDIVIDED'}
         text={['남은 대출금']}
-        money={[commaNum(res?.data?.totalRemainderAmount)]}
+        money={[commaNum(loanReminder)]}
         unit={'원'}
       />
       <div className="flex flex-row items-end justify-end gap-[1rem]">

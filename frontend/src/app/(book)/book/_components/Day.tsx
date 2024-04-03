@@ -28,14 +28,14 @@ const Day = (dayData: DayProps) => {
       text-[1.5rem] items-center text-custom-medium-gray
       `}
     >
-      <div className="flex w-full flex-col leading-[1rem] items-center h-[0.9rem] justify-center">
+      <div className="flex w-full flex-col leading-[1.2rem] items-center h-[0.9rem] justify-center">
         {(savingsDay || loanPaymentDay) && (
-          <div className="flex flex-row">
+          <div className="flex flex-row mb-[0.3rem]">
             {loanPaymentDay === true && (
-              <p className="text-[2.2rem] p-[-2rem] text-[green]">.</p>
+              <p className="text-[2.5rem]  text-[green]">.</p>
             )}
             {savingsDay === true && (
-              <p className="text-[2.2rem] p-[-2rem] text-[#f0cc5f]">.</p>
+              <p className="text-[2.5rem] text-[#f0cc5f]">.</p>
             )}
           </div>
         )}
@@ -47,13 +47,13 @@ const Day = (dayData: DayProps) => {
         }}
         href={`/book/${koreanDate}/list`}
       >
-        {day && format(day, 'd')}
+        <p className="text-[1.5rem]">{day && format(day, 'd')}</p>
       </Link>
       <div className="flex w-full flex-col leading-[0.8rem] mt-[-0.3rem] items-center justify-center">
-        <p className="text-[0.75rem] text-custom-blue font-[200] opacity-80">
+        <p className="text-[0.78rem] text-custom-blue font-[300] opacity-70">
           {incomeDay != '0' && incomeDay}
         </p>
-        <p className="text-[0.75rem] text-custom-red font-[200] opacity-70">
+        <p className="text-[0.78rem] text-custom-red font-[300] opacity-60">
           {outcomeDay != '0' && outcomeDay}
         </p>
       </div>

@@ -67,7 +67,7 @@ export default function LoanApplyDetail() {
       <Header>
         <BackButton label={'대출 신청하기'} />
       </Header>
-      <div className="p-[1.2rem] gap-[0.5rem] flex flex-col w-full">
+      <div className="p-[1.2rem] gap-[0.5rem] flex flex-col w-full pb-[3rem] ">
         <div className="flex flex-col gap-[1rem] mb-[1.5rem]">
           <GuideText
             text={
@@ -107,7 +107,7 @@ export default function LoanApplyDetail() {
           </div>
         </ComplexInput>
         <ComplexInput
-          label={'대출 기한을 설정해주세요(최대 12개월)'}
+          label={'상환 기한을 설정해주세요(최대 12개월)'}
           mode={'NONE'}
           height="h-[10rem]"
         >
@@ -129,7 +129,7 @@ export default function LoanApplyDetail() {
               <Select
                 mode={'LOAN'}
                 min={1}
-                max={12}
+                max={30}
                 setValue={setPaymentDate}
               />
             </div>
@@ -143,7 +143,7 @@ export default function LoanApplyDetail() {
           label={'패널티 규칙을 정해주세요(최대 20자)'}
           mode={'NONE'}
         >
-          <div className="flex flex-col gap-[1rem]">
+          <div className="flex flex-col pb-[2rem] gap-[1rem]">
             <p className="leading-[1.2rem] text-custom-black custom-light-text">
               약속한 상환 날짜를 못지켰을 때,
               <br />
@@ -159,14 +159,14 @@ export default function LoanApplyDetail() {
       </div>
       {isActive ? (
         <Link
-          className="fixed bottom-0 w-full px-[1.2rem] py-[3rem] pt-0 bg-custom-white border-none outline-none"
+          className="fixed bottom-0 w-full px-[1.2rem] py-[3rem] pt-[1rem] bg-custom-white border-none outline-none"
           href={'/loan/apply/chat'}
           onClick={saveLoanApplyData}
         >
           <Button mode={isActive ? 'ACTIVE' : 'NON_ACTIVE'} label={'다음'} />
         </Link>
       ) : (
-        <div className="fixed bottom-0 w-full px-[1.2rem] py-[3rem] pt-0 bg-custom-white border-none outline-none">
+        <div className="fixed bottom-0 w-full px-[1.2rem] py-[3rem] pt-[1rem] bg-custom-white border-none outline-none z-50">
           <Button mode={isActive ? 'ACTIVE' : 'NON_ACTIVE'} label={'다음'} />
         </div>
       )}

@@ -67,11 +67,11 @@ export default function BookListPost() {
 
       if (res?.message === '영수증 분석을 완료햐였습니다.') {
         setTimeout(() => {
-          setIsBottomTitle('영수증 분석을 완료했어요.');
+          setIsBottomTitle('영수증 분석을 완료했어요!');
           setBottomContent('지출 세부 내역이 등록되었어요');
         }, 1500);
         setTimeout(() => {
-          setIsBottomSheet(false);
+          window.location.reload();
         }, 3000);
       } else {
         setTimeout(() => {

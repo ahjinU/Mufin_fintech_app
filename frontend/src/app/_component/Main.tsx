@@ -84,7 +84,7 @@ export default function Main() {
                     {userData.name}
                   </p>
                   {userData.isParent ? null : (
-                    <div className="size-fit px-[0.8rem] rounded-[8rem] bg-custom-light-purple">
+                    <div className="size-fit px-[0.8rem] rounded-[8rem] bg-custom-light-purple flex items-center">
                       <p className="custom-light-text text-custom-white">{`${userData.ranking}위`}</p>
                     </div>
                   )}

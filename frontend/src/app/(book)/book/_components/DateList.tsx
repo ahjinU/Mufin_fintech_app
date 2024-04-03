@@ -2,7 +2,7 @@ const DateList = () => {
   const date = ['일', '월', '화', '수', '목', '금', '토'];
 
   return (
-    <div className="flex flex-row w-full px-[1.2rem] mt-[1.8rem] justify-around text-custom-medium-gray">
+    <div className="flex flex-row w-full px-[1.2rem] mt-[2.5rem] justify-around text-custom-medium-gray mb-[0.5rem]">
       {date?.map((day, index) => {
         return (
           <div key={`date-${index}`}>

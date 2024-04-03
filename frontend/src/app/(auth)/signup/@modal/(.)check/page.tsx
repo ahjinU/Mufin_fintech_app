@@ -49,11 +49,9 @@ export default function Check() {
             redirect: false,
             email,
             password,
-            callbackUrl: '/signup/complete',
           });
-        } else {
-          router.push('/signup/complete');
         }
+        window.location.href = '/signup/complete';
       } else {
         console.log('회원가입 토큰 문제', fetchedData);
       }

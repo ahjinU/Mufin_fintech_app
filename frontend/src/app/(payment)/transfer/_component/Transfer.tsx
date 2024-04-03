@@ -124,7 +124,7 @@ export default function Transfer() {
           <p className="custom-light-text text-custom-red">{message}</p>
         </div>
       ) : null}
-      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem] py-[3rem]">
         {state == 'INPUT_ACCOUNT' ? (
           <Button label="다음" mode="ACTIVE" onClick={handleNext} />
         ) : (
@@ -167,7 +167,7 @@ export default function Transfer() {
               animationData={lottieJson}
               play
               style={{ width: 250, height: 250 }}
-              className='self-center'
+              className="self-center"
             />
           </BottomSheet>
         </div>

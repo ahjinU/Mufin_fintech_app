@@ -83,11 +83,11 @@ export default function Book() {
       </Header>
       <div className="p-[1.2rem] flex flex-col gap-[1rem]">
         {userData.isParent && tags && (
-          <div className="flex flex-row gap-[1rem] mt-[-2rem] mb-[1.5rem]">
+          <div className="flex flex-row gap-[1rem] mt-[-2rem] mb-[2rem]">
             <Tag tags={tags} index={curChild.index || 0} />
           </div>
         )}
-        <div className="flex flex-col items-end w-full mb-[0.5rem] mt-[-2rem] text-[0.9rem] leading-[1r.2em]">
+        <div className="flex flex-col items-end w-full mb-[1rem] mt-[-2rem] text-[0.9rem] leading-[1r.2em]">
           <p>대출, 적금 개설할 때 입금하기로 약속한 날짜에요!</p>
           <p>
             <span className="text-[green] text-[0.8rem]">●</span> 대출 상환

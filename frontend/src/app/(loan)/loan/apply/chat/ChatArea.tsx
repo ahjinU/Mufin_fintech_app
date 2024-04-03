@@ -78,6 +78,7 @@ export default function ChatArea() {
 
   useEffect(() => {
     if (messages.length == 8) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       messages.map((msg, index) => {
         if (index > 1) {
           string += `${msg.content}!#@#!`;
@@ -100,7 +101,7 @@ export default function ChatArea() {
   return (
     <div>
       <div
-        className="flex flex-col gap-[1rem] mb-[1rem] overflow-y-scroll scroll-hide"
+        className="flex flex-col gap-[1rem] mb-[1rem] overflow-y-scroll scroll-hidden pb-[8rem]"
         ref={messagesEndRef}
       >
         {messages.map((msg, index) => {
@@ -116,7 +117,7 @@ export default function ChatArea() {
           }
         })}
       </div>
-      <div className="flex flex-row gap-[0.7rem] fixed bottom-0 w-full p-[1.2rem] pt-0 pr-[2.5rem] bg-custom-white border-none outline-none">
+      <div className="flex flex-row gap-[0.7rem] fixed bottom-0 w-full p-[1.2rem] py-[3rem] pr-[2.5rem] bg-custom-white border-none outline-none">
         <Input reset={false} value={input} setValue={setInput} />
         <PaperAirplaneIcon
           className="text-custom-purple w-[4rem] cursor-pointer"

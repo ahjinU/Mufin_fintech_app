@@ -18,6 +18,7 @@ import { format } from 'date-fns';
 import useBookStore from '../../_store';
 import Image from 'next/image';
 import useUserStore from '@/app/_store/store';
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
 export default function BookList() {
   const [dayData, setDayData] = useState<TransactionType[]>();
   const [totalIncome, setTotalIncome] = useState(0);
@@ -68,7 +69,8 @@ export default function BookList() {
       )}
       <div className="flex flex-col gap-[1rem]">
         {dayData?.map((deal, index) =>
-          !deal.counterpartyName.startsWith('적금' || '대출') &&
+          !deal.counterpartyName.startsWith('적금') &&
+          !deal.counterpartyName.startsWith('대출') &&
           !userData.isParent ? (
             <Link
               className="cursor-pointer"
@@ -81,12 +83,15 @@ export default function BookList() {
                 mode="LIST"
                 topChildren={
                   <div>
-                    <OtherInfoElement
-                      leftExplainText={`${deal.code}`}
-                      leftHighlightText={`${deal?.counterpartyName}`}
-                      money={`${commaNum(deal.amount)}원`}
-                      state={`${deal.amount > 0 ? 'UP' : 'DOWN'}`}
-                    />
+                    <div className="flex flex-row gap-[0.2rem] items-center">
+                      <OtherInfoElement
+                        leftExplainText={`${deal.code}`}
+                        leftHighlightText={`${deal?.counterpartyName}`}
+                        money={`${commaNum(deal.amount)}원`}
+                        state={`${deal.amount > 0 ? 'UP' : 'DOWN'}`}
+                      />
+                      <ChevronRightIcon className="text-custom-medium-gray cursor-pointer w-[2.3rem] h-[2.3rem] mr-[-0.5rem]" />
+                    </div>
                     {deal.receipts && <ListDeal deals={deal.receipts} />}
                   </div>
                 }
@@ -103,7 +108,7 @@ export default function BookList() {
             <FlexBox
               key={`deal-noMove-${index}`}
               isDivided={deal?.memo ? true : false}
-              mode="LIST"
+              mode="NONELIST"
               topChildren={
                 <div>
                   <OtherInfoElement
@@ -121,6 +126,7 @@ export default function BookList() {
                 </>
               }
             />
+            // <div key={`deal-noMove-${index}`}>hi</div>
           ),
         )}
       </div>

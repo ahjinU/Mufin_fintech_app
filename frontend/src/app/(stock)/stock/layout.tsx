@@ -13,7 +13,7 @@ export default function StockLayout({
 }>) {
   return (
     <>
-      <div>{children}</div>
+      <div className="min-h-[calc(100dvh-7.5rem)]">{children}</div>
       <NavBar mode={'CHILD'} />
     </>
   );

@@ -36,14 +36,14 @@ export default function InfoShow({ label, text, copyIcon }: InfoShowProps) {
           readOnly
           type="text"
           value={text}
-          className="px-[0.4rem] py-[0.4rem] custom-semibold-text bg-transparent focus:outline-none"
+          className="h-[2.4rem] px-[0.4rem] py-[0.4rem] custom-semibold-text bg-transparent focus:outline-none"
         />
         {iconContent}
       </div>
       {showSnackbar && (
         <div
-          className="fixed bottom-[4rem] left-1/2 transform -translate-x-1/2
-          p-4 rounded-[0.8rem] custom-light-text text-custom-white bg-custom-black-with-opacity"
+          className="fixed bottom-[8rem] left-1/2 transform -translate-x-1/2
+          p-4 rounded-[0.8rem] custom-light-text text-custom-white bg-custom-black-with-opacity z-10"
         >
           클립보드에 복사되었습니다!
         </div>

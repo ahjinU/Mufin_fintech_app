@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function MainWithoutSignIn() {
   return (
-    <div className="h-screen">
+    <div className="h-screen px-[1.2rem]">
       <div className="h-[84%] flex flex-col justify-center items-center gap-[1rem]">
         <div className="relative">
           <Image

@@ -11,7 +11,7 @@ export default function BookLayout({
   const { userData } = useUserStore();
   return (
     <div className="relative">
-      <div className="min-h-[calc(100vh-6rem)]">{children}</div>
+      <div className="min-h-[calc(100vh-7.5rem)]">{children}</div>
       <NavBar mode={userData.isParent ? 'PARENT' : 'CHILD'} />
     </div>
   );

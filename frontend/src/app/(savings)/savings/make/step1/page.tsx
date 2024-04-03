@@ -46,13 +46,13 @@ export default function MakeSavingsStep1() {
           label="이자율"
           mode="INFORM"
           isMsg={true}
-          message="0.1%부터 10%까지 자유롭게 지정할 수 있어요."
+          message="1%부터 10%까지 자유롭게 지정할 수 있어요."
         >
-          <Input placeholder="0.1" value={rate} setValue={setRate} />
+          <Input placeholder="1" value={rate} setValue={setRate} type="tel" />
         </ComplexInput>
       </section>
 
-      <div className="absolute w-full bottom-0 left-0 p-[1.2rem]">
+      <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[2rem]">
         <Button
           mode="ACTIVE"
           label="만들기"

@@ -45,33 +45,33 @@ export default function MySavings() {
       <Header>
         <BackButton label="나의 적금"></BackButton>
       </Header>
-      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative min-h-[calc(100vh-11.6rem)]">
+      <section className="w-full p-[1.2rem] flex flex-col gap-[1rem] relative min-h-[calc(100vh-13.1rem)]">
         <MoneyShow
           mode="UNDIVIDED"
           text={['적금 누적 총액']}
           money={[`${commaNum(totalPayment)}`]}
           unit=" 원"
         />
+        <div className="w-fit flex gap-[0.5rem] items-center custom-medium-text self-end">
+          <Image
+            src="/images/icon-smile.png"
+            width={16}
+            height={16}
+            alt="정상 납부"
+          />
+          <span className="text-custom-blue">정상 납부 중</span>
+          <Image
+            src="/images/icon-sad.png"
+            width={16}
+            height={16}
+            alt="정상 납부"
+          />
+          <span className="text-custom-red">연체 횟수 남음</span>
+        </div>
         {appliedSavingsList.length > 0 ? (
           appliedSavingsList.map((appliedSavings, index) => {
             return (
               <>
-                <div className="w-fit flex gap-[0.5rem] items-center custom-medium-text self-end">
-                  <Image
-                    src="/images/icon-smile.png"
-                    width={16}
-                    height={16}
-                    alt="정상 납부"
-                  />
-                  <span className="text-custom-blue">정상 납부 중</span>
-                  <Image
-                    src="/images/icon-sad.png"
-                    width={16}
-                    height={16}
-                    alt="정상 납부"
-                  />
-                  <span className="text-custom-red">연체 횟수 남음</span>
-                </div>
                 <FlexBox
                   key={`appliedSavings-${index}`}
                   isDivided={false}
@@ -145,9 +145,9 @@ export default function MySavings() {
             );
           })
         ) : (
-          <div className="flex items-center justify-center custom-semibold-text h-[20rem]">
-            신청한 적금이 없어요
-          </div>
+          <p className="custom-semibold-text text-custom-medium-gray mx-auto mt-[2rem]">
+            신청한 적금이 없습니다.
+          </p>
         )}
       </section>
       <NavBar mode={'CHILD'} />
@@ -158,9 +158,9 @@ export default function MySavings() {
             text="적금 상품을 중도에 해지하시겠어요?"
             isOpen={isModalOpen}
             handleClickOkay={async () => {
-              const result = await cancelSavings(targetAccountUuid);
+              await cancelSavings(targetAccountUuid);
               setIsModalOpen(false);
-              router.refresh(); // 추후에 변경해야 함
+              window.location.reload();
             }}
             handleClickNo={() => setIsModalOpen(false)}
           />

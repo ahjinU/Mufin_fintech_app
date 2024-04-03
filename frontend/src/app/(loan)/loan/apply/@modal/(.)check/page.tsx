@@ -24,7 +24,7 @@ export default function Check() {
       className={`absolute top-0 left-0 size-full ${
         isOpen && 'bg-custom-black-with-opacity'
       } 
-    flex justify-center`}
+    flex justify-center z-50`}
     >
       <AlertConfirm
         handleClickOkay={useHandleOkay}

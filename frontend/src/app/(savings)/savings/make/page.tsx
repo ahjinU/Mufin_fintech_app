@@ -3,8 +3,9 @@
 import { GuideText, Button, AgreeBottomSheet } from '@/components';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Lottie from 'react-lottie-player';
-import lottieJson from '../../../../../public/lotties/piggy.json';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
+import lottieJson from '@/../public/lotties/piggy.json';
 
 export default function MakeSavings() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function MakeSavings() {
         </p>
       </section>
 
-      <div className="absolute w-full bottom-0 left-0 p-[1.2rem]">
+      <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[2rem]">
         <Button
           mode="ACTIVE"
           label="만들기"

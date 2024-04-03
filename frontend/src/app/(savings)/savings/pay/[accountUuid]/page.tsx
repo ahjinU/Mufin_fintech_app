@@ -42,7 +42,7 @@ export default function PaySavings({
     <section className="w-full p-[1.2rem] flex flex-col gap-[1rem]">
       <GuideText text="적금에 가입했을 때, 약속한 금액을 부모님에게 납부해요." />
 
-      <div className="mx-auto mt-[-2rem]">
+      <div className="mx-auto mt-[-1.9rem]">
         <Lottie
           loop
           animationData={lottieJson}
@@ -95,16 +95,18 @@ export default function PaySavings({
         />
       </div>
 
-      <Button
-        mode={
-          appliedSavingsDetail?.savingsPeriod ===
-          appliedSavingsDetail?.paymentCycle
-            ? 'NON_ACTIVE'
-            : 'ACTIVE'
-        }
-        label="다음"
-        onClick={() => router.push(`/savings/pay/${accountUuid}/form`)}
-      />
+      <div className="absolute w-full bottom-0 left-0 px-[1.2rem] py-[2rem]">
+        <Button
+          mode={
+            appliedSavingsDetail?.savingsPeriod ===
+            appliedSavingsDetail?.paymentCycle
+              ? 'NON_ACTIVE'
+              : 'ACTIVE'
+          }
+          label="다음"
+          onClick={() => router.push(`/savings/pay/${accountUuid}/form`)}
+        />
+      </div>
     </section>
   );
 }

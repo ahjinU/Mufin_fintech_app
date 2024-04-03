@@ -18,10 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="bg-custom-black-with-opacity">
+      <body className="bg-custom-white">
         <AuthContext>
           <MSWComponent />
-          <div className="size-full mx-auto bg-custom-white relative">
+          <div className="w-dvw h-dvh mx-auto bg-custom-white relative">
             {children}
           </div>
         </AuthContext>

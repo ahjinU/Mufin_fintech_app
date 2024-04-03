@@ -52,7 +52,7 @@ export default async function Stock() {
   };
 
   return (
-    <div>
+    <div className="min-h-[calc(100vh-7.5rem)]">
       <Header>
         <h1 className="custom-bold-text">날씨 주식</h1>
       </Header>

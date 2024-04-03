@@ -19,7 +19,7 @@ export default function UserMenu() {
     ? [
         ['적금 신청하기', '/savings/apply'],
         ['적금 보기 & 납부하기', '/savings/mine'],
-        ['대출 받기', '/loan/apply'],
+        ['대출 신청하기', '/loan/apply'],
         ['대출 보기 & 상환하기', '/loan/list'],
       ]
     : [
@@ -33,11 +33,17 @@ export default function UserMenu() {
   return (
     <section className="flex flex-col gap-[1rem]">
       <div className="w-full h-[12rem] p-[1.6rem] bg-custom-purple text-custom-white flex flex-col justify-between">
-        <div className="self-start">
-          
-          <div className='flex flex-col'>
-            <p className="custom-light-text">오늘도 좋은 하루되세요!</p>
-            <p className="custom-semibold-text">{userData.name}</p>
+        <div className="self-start flex items-center gap-[1rem]">
+          <Image
+            src="/images/icon-muffin.png"
+            width={200}
+            height={200}
+            alt={userData.name}
+            className="size-[4.8rem]"
+          />
+          <div className="flex flex-col">
+            <p className="custom-medium-text">오늘도 좋은 하루되세요!</p>
+            <p className="custom-bold-text">{userData.name}</p>
           </div>
         </div>
         <div className="self-end flex gap-[1.4rem] underline custom-light-text">

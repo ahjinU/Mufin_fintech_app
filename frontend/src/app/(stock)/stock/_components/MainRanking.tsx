@@ -13,7 +13,6 @@ export default function MainRanking({
   leftHighlightText,
   rightExplainText,
   rightHighlightText,
-  money,
 }: OtherInfoElementProps) {
   return (
     <section className="w-full flex justify-between items-center">

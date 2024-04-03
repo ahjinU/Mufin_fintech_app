@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <main>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col">
         {session ? <Main /> : <MainWithoutSignIn />}
       </div>
     </main>

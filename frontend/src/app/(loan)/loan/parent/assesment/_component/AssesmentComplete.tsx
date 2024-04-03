@@ -1,7 +1,8 @@
 import Lottie from 'react-lottie-player';
 import lottieJson from '../../../../../../../public/lotties/check.json';
 
-export default function Complete(isApproved: { isApproved: boolean }) {
+export default function Complete({ isApproved }: { isApproved: boolean }) {
+  console.log(isApproved);
   return (
     <div className="flex flex-col items-center gap-[4rem]">
       <div className="mt-[4rem] flex flex-col gap-[1rem] text-custom-black">

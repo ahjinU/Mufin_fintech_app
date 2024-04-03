@@ -40,244 +40,245 @@ import java.util.*;
 @Service
 public class UserFacade {
 
-    private final UserService userService;
-    private final AccountService accountService;
-    private final TemporaryUserRepository temporaryUserRepository;
-    private final ParkingService parkingService;
-    private final CodeService codeService;
-    private final ParkingDetailsService parkingDetailsService;
-    private final StocksService stocksService;
-    private final StockDetailsService stockDetailsService;
-    private final StockHoldingsService stockHoldingsService;
-    private final RankService rankService;
-    private final SavingsService savingsService;
-    private final AllowanceFacade allowanceFacade;
+	private final UserService userService;
+	private final AccountService accountService;
+	private final TemporaryUserRepository temporaryUserRepository;
+	private final ParkingService parkingService;
+	private final CodeService codeService;
+	private final ParkingDetailsService parkingDetailsService;
+	private final StocksService stocksService;
+	private final StockDetailsService stockDetailsService;
+	private final StockHoldingsService stockHoldingsService;
+	private final RankService rankService;
+	private final SavingsService savingsService;
+	private final AllowanceFacade allowanceFacade;
 
 
-
-    @Transactional
-    public User signup(String temporaryUserUuid, SignUpDto signUpDto, String parentName) throws IOException {
-        System.out.println("[UserService] 회원가입: " + temporaryUserUuid + "/" + signUpDto.toString());
-
-
-        UUID uuid = userService.convertToUuid(temporaryUserUuid);
-        TemporaryUser temporaryUser = findTemporaryUser(uuid);
-
-        userService.checkDupleUser(temporaryUser);
-
-        User parent = userService.findUser(parentName);
-        User user = userService.convertToUserEntity(signUpDto, temporaryUser, parent);
-
-        userService.save(user);
-        temporaryUserRepository.delete(temporaryUser);
-
-        if (parent != null){
-            Parking parkingAccount = parkingService.createParkingAccount(user);
-
-            Code initCode = codeService.findTypeCode("시드머니");
-            parkingDetailsService.initSeadMoney(parkingAccount, initCode);
+	@Transactional
+	public User signup(String temporaryUserUuid, SignUpDto signUpDto, String parentName) throws IOException {
+		System.out.println("[UserService] 회원가입: " + temporaryUserUuid + "/" + signUpDto.toString());
 
 
-            List<Stock> stocks = stocksService.findAllList();
-            HashMap<String, Integer> stockStartPriceList = stockDetailsService.getStockStartPriceList(stocks);
-            stockHoldingsService.initStockHolding(user,stocks,stockStartPriceList);
-        }
+		UUID uuid = userService.convertToUuid(temporaryUserUuid);
+		TemporaryUser temporaryUser = findTemporaryUser(uuid);
 
-        return user;
-    }
+		userService.checkDupleUser(temporaryUser);
 
-    public JWTokenDto login(LoginDto loginDto) {
-        return userService.login(loginDto);
-    }
+		User parent = userService.findUser(parentName);
+		User user = userService.convertToUserEntity(signUpDto, temporaryUser, parent);
 
-    @Transactional
-    public void checkDupleEmail(String temporaryUserUuidString, String email) {
-        System.out.println("[UserService/이메일중복] 이메일: " + email);
+		userService.save(user);
+		temporaryUserRepository.delete(temporaryUser);
 
-        UUID uuid = userService.convertToUuid(temporaryUserUuidString);
-        System.out.println("[UserService] uuid: " + uuid.toString());
+		if (parent != null) {
+			Parking parkingAccount = parkingService.createParkingAccount(user);
 
-        userService.findUserByEmail(email);
-
-        TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
-                .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
-
-        temporaryUser.updateEmail(email);
-    }
+			Code initCode = codeService.findTypeCode("시드머니");
+			parkingDetailsService.initSeadMoney(parkingAccount, initCode);
 
 
-    @Transactional
-    public UUID checkDupleTelephone(String telephone) {
-        System.out.println("[UserService] /checkDupleTelephone telephone:" + telephone);
+			List<Stock> stocks = stocksService.findAllList();
+			HashMap<String, Integer> stockStartPriceList = stockDetailsService.getStockStartPriceList(stocks);
+			stockHoldingsService.initStockHolding(user, stocks, stockStartPriceList);
+		}
 
-        userService.findUserByTelephone(telephone);
+		return user;
+	}
 
-        TemporaryUser newUser = TemporaryUser.builder()
-                .telephone(telephone)
-                .build();
+	public JWTokenDto login(LoginDto loginDto) {
+		return userService.login(loginDto);
+	}
 
-        System.out.println("[UserService] TemporaryUser:" + newUser.toString());
+	@Transactional
+	public void checkDupleEmail(String temporaryUserUuidString, String email) {
+		System.out.println("[UserService/이메일중복] 이메일: " + email);
 
-        TemporaryUser temporaryUser = temporaryUserRepository.save(newUser);
+		UUID uuid = userService.convertToUuid(temporaryUserUuidString);
+		System.out.println("[UserService] uuid: " + uuid.toString());
 
-        return temporaryUser.getTemporaryUserUuid();
-    }
+		userService.findUserByEmail(email);
 
+		TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
+				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
 
-    public TemporaryUser findTemporaryUser(UUID uuid) {
-
-        TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
-                .orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
-
-        return temporaryUser;
-    }
+		temporaryUser.updateEmail(email);
+	}
 
 
-    public UserMyPageResponse mypageInfo(){
-        User user = userService.userFindByEmail();
-        String[] date = getMonthDate();
-        return getfinInfo(user, date[0], date[1]);
-    }
+	@Transactional
+	public UUID checkDupleTelephone(String telephone) {
+		System.out.println("[UserService] /checkDupleTelephone telephone:" + telephone);
 
-    public UserMyPageResponse getfinInfo(User user, String startDate, String endDate){
-        String name = user.getName();
-        boolean isParent = (user.getParent() == null) ? true : false;
-        String accountNumber = accountService.findDefaultAccountByUser(user).getAccountNumber();
-        int balance = accountService.findDefaultAccountByUser(user).getBalance();
+		userService.findUserByTelephone(telephone);
 
-        if (!isParent){
-            int savings = accountService.findSavingsMoneyByChild(user);
-            int ranking = getMyRanking(user);
-            int chocochip = parkingService.getParkingBalance(user);
-            int monthAmounts = allowanceFacade.getTransactionsForPeriod(CalendarDTO.builder()
-                    .startDate(startDate)
-                    .endDate(endDate)
-                    .childUuid(user.getUserUuid().toString())
-                    .build()).getIncomeMonth();
-            int totalIncome = 0;
-            int totalPrice = 0;
-            double totalIncomePercent;
-            List<StockHolding> stockHoldingList = stockHoldingsService.findAllByUser(user);
-            for (StockHolding sh : stockHoldingList) {
-                Stock stock = stocksService.findById(sh.getStock().getId());
-                StockDetail stockDetail = stockDetailsService.getLastDetail(stock);
-                int totalPriceAvg = sh.getTotal();
-                int totalPriceCur = sh.getCnt() * stockDetail.getPrice();
-                int income = totalPriceCur - totalPriceAvg;
-                totalIncome += income;
-                totalPrice += totalPriceCur;
-            }
+		TemporaryUser newUser = TemporaryUser.builder()
+				.telephone(telephone)
+				.build();
 
-            if (totalPrice - totalIncome == 0)
-                totalIncomePercent = 0;
-            else totalIncomePercent = (double) totalIncome / (totalPrice - totalIncome) * 100.0;
+		System.out.println("[UserService] TemporaryUser:" + newUser.toString());
 
-            String formatted = String.format("%.2f", totalIncomePercent);
-            return new UserMyPageResponse(name, isParent, accountNumber, balance, savings, monthAmounts, ranking, chocochip, totalIncome, totalPrice, formatted);
-        }
-        else return new UserMyPageResponse(name, isParent, accountNumber, balance, -1, -1, -1, -1, -1, -1, "");
-    }
+		TemporaryUser temporaryUser = temporaryUserRepository.save(newUser);
 
-    public UserInfoResponse userInfo() {
-        User user = userService.userFindByEmail();
-        return getUserInfo(user);
-    }
+		return temporaryUser.getTemporaryUserUuid();
+	}
 
-    public UserChildrenInfoResponse getChildrenInfo(){
-        List<UserInfoResponse> response = new ArrayList<>();
-        User user = userService.userFindByEmail();
-        if (user.getParent() != null)
-            throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_PARENT);
-        List<User> children = userService.findMyKidsByParents(user);
-        for(User child : children){
-            response.add(getUserInfo(child));
-        }
-        return new UserChildrenInfoResponse(response);
-    }
 
-    public UserInfoResponse getUserInfo(User user){
-        String userUuid = user.getUserUuid().toString();
-        String name = user.getName();
-        String email = user.getEmail();
-        boolean isParent = (user.getParent() == null) ? true : false;
-        Date createdAt = Date.from(user.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant());
-        String address = user.getAddress();
-        String address2 = user.getAddress2();
-        String telephone = user.getTelephone();
-        Account account = accountService.findDefaultAccountByUser(user);
-        String accountNumber = account.getAccountNumber();
-        String accountUuid = account.getAccountUuid().toString();
-        return new UserInfoResponse(userUuid, name, email, isParent, createdAt, address, address2, telephone, accountNumber, accountUuid);
-    }
+	public TemporaryUser findTemporaryUser(UUID uuid) {
 
-    public UserAccountInfoResponse getUserAccountInfo(){
-        User user = userService.userFindByEmail();
-        Account account = accountService.findDefaultAccountByUser(user);
-        String accountUuid = account.getAccountUuid().toString();
-        int balance = account.getBalance();
-        int savings = accountService.findSavingsMoneyByChild(user);
-        String[] date = getMonthDate();
-        int monthAmounts = allowanceFacade.getTransactionsForPeriod(CalendarDTO.builder()
-                .startDate(date[0])
-                .endDate(date[1])
-                .childUuid(user.getUserUuid().toString())
-                .build()).getIncomeMonth();
-        return new UserAccountInfoResponse(accountUuid, balance, savings, monthAmounts);
-    }
+		TemporaryUser temporaryUser = temporaryUserRepository.findByTemporaryUserUuid(uuid)
+				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_TEMPORARY_UUID_NOT_EXIST));
 
-    public String[] getMonthDate(){
-        Date today = new Date();
-        LocalDate localDate = new java.sql.Date(today.getTime()).toLocalDate();
+		return temporaryUser;
+	}
 
-        LocalDate firstDayOfMonth = localDate.withDayOfMonth(1);
-        LocalDate lastDayOfMonth = localDate.withDayOfMonth(localDate.lengthOfMonth());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	public UserMyPageResponse mypageInfo() {
+		User user = userService.userFindByEmail();
+		String[] date = getMonthDate();
+		return getfinInfo(user, date[0], date[1]);
+	}
 
-        String formattedFirstDay = firstDayOfMonth.format(formatter);
-        String formattedLastDay = lastDayOfMonth.format(formatter);
-        return new String[] {formattedFirstDay, formattedLastDay};
-    }
+	public UserMyPageResponse getfinInfo(User user, String startDate, String endDate) {
+		String name = user.getName();
+		boolean isParent = (user.getParent() == null) ? true : false;
+		String accountNumber = accountService.findDefaultAccountByUser(user).getAccountNumber();
+		int balance = accountService.findDefaultAccountByUser(user).getBalance();
 
-    public int getMyRanking(User user) {
-        Long temp = rankService.getUserRank(user);
-        if (temp == null) return 0;
-        int rank = Math.toIntExact(temp);;
+		if (!isParent) {
+			int savings = accountService.findSavingsMoneyByChild(user);
+			int ranking = getMyRanking(user);
+			int chocochip = parkingService.getParkingBalance(user);
+			int monthAmounts = allowanceFacade.getTransactionsForPeriod(CalendarDTO.builder()
+					.startDate(startDate)
+					.endDate(endDate)
+					.childUuid(user.getUserUuid().toString())
+					.build()).getIncomeMonth();
+			int totalIncome = 0;
+			int totalPrice = 0;
+			double totalIncomePercent;
+			List<StockHolding> stockHoldingList = stockHoldingsService.findAllByUser(user);
+			for (StockHolding sh : stockHoldingList) {
+				Stock stock = stocksService.findById(sh.getStock().getId());
+				StockDetail stockDetail = stockDetailsService.getLastDetail(stock);
+				int totalPriceAvg = sh.getTotal();
+				int totalPriceCur = sh.getCnt() * stockDetail.getPrice();
+				int income = totalPriceCur - totalPriceAvg;
+				totalIncome += income;
+				totalPrice += totalPriceCur;
+			}
 
-        List<RankingDetail> rankingList = getTop10UserRankings();
-        for (RankingDetail detail : rankingList) {
-            if (detail.getChildName().equals(user.getName()))
-                return detail.getRank();
-        }
+			if (totalPrice - totalIncome == 0)
+				totalIncomePercent = 0;
+			else totalIncomePercent = (double) totalIncome / (totalPrice - totalIncome) * 100.0;
 
-        return rank;
-    }
+			String formatted = String.format("%.2f", totalIncomePercent);
+			return new UserMyPageResponse(name, isParent, accountNumber, balance, savings, monthAmounts, ranking, chocochip, totalIncome, totalPrice, formatted);
+		} else return new UserMyPageResponse(name, isParent, accountNumber, balance, -1, -1, -1, -1, -1, -1, "");
+	}
 
-    public List<RankingDetail> getTop10UserRankings() {
-        Set<ZSetOperations.TypedTuple<String>> top10UsersWithScores = rankService.getTop10Users();
-        List<RankingDetail> userRankings = new ArrayList<>();
-        int rank = 1;
-        int prevRank = 1;
-        int prevBalance = 0;
-        for (ZSetOperations.TypedTuple<String> userWithScore : top10UsersWithScores) {
-            if (prevBalance == 0)
-                prevBalance = userWithScore.getScore().intValue();
-            int balance = userWithScore.getScore().intValue();
-            int curRank = (balance == prevBalance) ? prevRank : rank;
-            RankingDetail userRanking = RankingDetail.builder()
-                    .childName(userWithScore.getValue())
-                    .rank(curRank)
-                    .balance(balance)
-                    .build();
-            userRankings.add(userRanking);
+	public UserInfoResponse userInfo() {
+		User user = userService.userFindByEmail();
+		return getUserInfo(user);
+	}
 
-            prevBalance = balance;
-            prevRank = curRank;
-            rank++;
-        }
-        return userRankings;
-    }
+	public UserChildrenInfoResponse getChildrenInfo() {
+		List<UserInfoResponse> response = new ArrayList<>();
+		User user = userService.userFindByEmail();
+		if (user.getParent() != null)
+			throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_PARENT);
+		List<User> children = userService.findMyKidsByParents(user);
+		for (User child : children) {
+			response.add(getUserInfo(child));
+		}
+		return new UserChildrenInfoResponse(response);
+	}
 
+	public UserInfoResponse getUserInfo(User user) {
+		String userUuid = user.getUserUuid().toString();
+		String name = user.getName();
+		String email = user.getEmail();
+		boolean isParent = (user.getParent() == null) ? true : false;
+		Date createdAt = Date.from(user.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant());
+		String address = user.getAddress();
+		String address2 = user.getAddress2();
+		String telephone = user.getTelephone();
+		Account account = accountService.findMyKidsDefaultAccount(user);
+		if (account != null) {
+			String accountNumber = account.getAccountNumber();
+			String accountUuid = account.getAccountUuid().toString();
+			return new UserInfoResponse(userUuid, name, email, isParent, createdAt, address, address2, telephone, accountUuid, accountNumber);
+		}
+		return UserInfoResponse.builder().userUuid(userUuid).name(name).email(email).isParent(isParent).createdAt(createdAt).address(address).address2(address2).telephone(telephone).build();
+	}
+
+	public UserAccountInfoResponse getUserAccountInfo() {
+		User user = userService.userFindByEmail();
+		Account account = accountService.findDefaultAccountByUser(user);
+		String accountUuid = account.getAccountUuid().toString();
+		int balance = account.getBalance();
+		int savings = accountService.findSavingsMoneyByChild(user);
+		String[] date = getMonthDate();
+		int monthAmounts = allowanceFacade.getTransactionsForPeriod(CalendarDTO.builder()
+				.startDate(date[0])
+				.endDate(date[1])
+				.childUuid(user.getUserUuid().toString())
+				.build()).getIncomeMonth();
+		return new UserAccountInfoResponse(accountUuid, balance, savings, monthAmounts);
+	}
+
+	public String[] getMonthDate() {
+		Date today = new Date();
+		LocalDate localDate = new java.sql.Date(today.getTime()).toLocalDate();
+
+		LocalDate firstDayOfMonth = localDate.withDayOfMonth(1);
+		LocalDate lastDayOfMonth = localDate.withDayOfMonth(localDate.lengthOfMonth());
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		String formattedFirstDay = firstDayOfMonth.format(formatter);
+		String formattedLastDay = lastDayOfMonth.format(formatter);
+		return new String[]{formattedFirstDay, formattedLastDay};
+	}
+
+	public int getMyRanking(User user) {
+		Long temp = rankService.getUserRank(user);
+		if (temp == null) return 0;
+		int rank = Math.toIntExact(temp);
+		;
+
+		List<RankingDetail> rankingList = getTop10UserRankings();
+		for (RankingDetail detail : rankingList) {
+			if (detail.getChildName().equals(user.getName()))
+				return detail.getRank();
+		}
+
+		return rank;
+	}
+
+	public List<RankingDetail> getTop10UserRankings() {
+		Set<ZSetOperations.TypedTuple<String>> top10UsersWithScores = rankService.getTop10Users();
+		List<RankingDetail> userRankings = new ArrayList<>();
+		int rank = 1;
+		int prevRank = 1;
+		int prevBalance = 0;
+		for (ZSetOperations.TypedTuple<String> userWithScore : top10UsersWithScores) {
+			if (prevBalance == 0)
+				prevBalance = userWithScore.getScore().intValue();
+			int balance = userWithScore.getScore().intValue();
+			int curRank = (balance == prevBalance) ? prevRank : rank;
+			RankingDetail userRanking = RankingDetail.builder()
+					.childName(userWithScore.getValue())
+					.rank(curRank)
+					.balance(balance)
+					.build();
+			userRankings.add(userRanking);
+
+			prevBalance = balance;
+			prevRank = curRank;
+			rank++;
+		}
+		return userRankings;
+	}
 
 
 }

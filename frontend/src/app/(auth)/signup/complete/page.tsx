@@ -1,5 +1,5 @@
-import RedirectToSignUp from '../_component/RedirectToSignUp';
+import { redirect } from 'next/navigation';
 
 export default function Complete() {
-  return <RedirectToSignUp />;
+  redirect('/');
 }

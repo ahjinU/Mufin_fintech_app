@@ -56,11 +56,9 @@ export default function UserContact({
         if (fetchedData.ok) {
           setIsValid(true);
           setMessage('사용 가능한 번호입니다😀');
-          // console.log(fetchedData.headers.getSetCookie);
         } else {
           setIsValid(false);
           setMessage('중복된 번호입니다😢');
-          // console.log(fetchedData);
         }
       } catch (error) {
         console.error('전화번호 중복 검사 에러', error);
@@ -123,8 +121,12 @@ export default function UserContact({
             placeholder="'-'를 제외하고 입력해주세요"
             name="telephone"
             onChange={onChangeInput}
+            disabled={isValid}
+            reset={!isValid}
           />
-          <TinyButton label="중복 확인" handleClick={checkTelephone} />
+          {!isValid && (
+            <TinyButton label="중복 확인" handleClick={checkTelephone} />
+          )}
         </div>
       </ComplexInput>
       <ComplexInput label="주소" mode="NONE">
@@ -147,7 +149,7 @@ export default function UserContact({
           />
         </div>
       </ComplexInput>
-      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem] py-[3rem]">
         <Button label="다음" mode={buttonMode} onClick={handleNext} />
       </div>
     </div>

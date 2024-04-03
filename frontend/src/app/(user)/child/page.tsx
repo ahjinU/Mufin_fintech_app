@@ -15,6 +15,8 @@ export default function ChildInfo() {
     const fetchChildrenData = async () => {
       try {
         const res = await postFetch({ api: '/user/child' });
+        console.log('hi');
+        console.log(res);
         if (res.message == '아이 정보가 조회되었습니다.') {
           setChildren(res.data.children);
         } else {

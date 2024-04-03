@@ -117,8 +117,12 @@ export default function UserAccount({
             placeholder="이메일을 입력해주세요"
             name="email"
             onChange={onChangeInput}
+            disabled={isValid}
+            reset={!isValid}
           />
-          <TinyButton label="중복 확인" handleClick={checkEmail} />
+          {!isValid && (
+            <TinyButton label="중복 확인" handleClick={checkEmail} />
+          )}
         </div>
       </ComplexInput>
       <ComplexInput
@@ -149,7 +153,7 @@ export default function UserAccount({
           reset={false}
         />
       </ComplexInput>
-      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem] py-[3rem]">
         {buttonMode == 'ACTIVE' ? (
           <Link href="/signup/check">
             <Button label="다음" mode={buttonMode} onClick={handleNext} />

@@ -45,7 +45,7 @@ export function StockCandleChart({ name }: { name: string }) {
         enabled: true,
       },
       animations: {
-        enabled: false,
+        enabled: true,
       },
     },
     plotOptions: {

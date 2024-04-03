@@ -152,6 +152,7 @@ public class AccountService {
 	public Account findByUser(User user) {
 		return accountRepository.findByUser(user).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
 	}
+
 	public Account findDefaultAccountByUser(User user) {
 		return accountRepository.findDefaultAccountByUser(user).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_DEFAULT_ACCOUNT_NOT_EXIST));
 	}
@@ -160,43 +161,47 @@ public class AccountService {
 		return accountRepository.findAllBySavings(savings);
 	}
 
-	public List<Account> findAllSavingsByChild(User child){
+	public List<Account> findAllSavingsByChild(User child) {
 		List<Account> accountList = accountRepository.findAllSavingsByChild(child);
-		for(Account a : accountList)
+		for (Account a : accountList)
 			System.out.println(a.getAccountNumber());
 		return accountList;
 	}
 
-	public int findSavingsMoneyByChild(User child){
+	public int findSavingsMoneyByChild(User child) {
 		List<Account> accountList = accountRepository.findAllSavingsByChild(child);
 		int result = 0;
-		for(Account a : accountList)
+		for (Account a : accountList)
 			result += a.getBalance();
 		return result;
 	}
 
-	public Account findByAccountUuid(String accountUuid){
+	public Account findByAccountUuid(String accountUuid) {
 		UUID uuid = UUID.fromString(accountUuid);
-		return accountRepository.findByAccountUuid(uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
+		return accountRepository.findByAccountUuid(uuid).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
 	}
 
-	public List<Account>findAllByASavingAccount(){
+	public List<Account> findAllByASavingAccount() {
 		return accountRepository.findAllSavingAccount();
 	}
 
-	public void updateStatusCode(Account account, Code code){
+	public void updateStatusCode(Account account, Code code) {
 		account.updateCode(code);
 		accountRepository.saveAndFlush(account);
 	}
 
-	public Account findExpiredSavingsAccountByUuid(String accountUuid){
+	public Account findExpiredSavingsAccountByUuid(String accountUuid) {
 		UUID uuid = UUID.fromString(accountUuid);
-		return accountRepository.findExpiredSavingsAccountByUuid(uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
+		return accountRepository.findExpiredSavingsAccountByUuid(uuid).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_NOT_EXIST));
 	}
 
 	public List<Account> searchActiveSavings(User user, Code statusCode) {
 
 		Code typeCode = codeService.findTypeCode("적금계좌");
 		return accountRepository.findByUserAndStatusCodeAndTypeCode(user, statusCode, typeCode);
+	}
+
+	public Account findMyKidsDefaultAccount(User user) {
+		return accountRepository.findDefaultAccountByUser(user).orElse(null);
 	}
 }

@@ -33,10 +33,10 @@ const DayList = ({ list }: { list: Date[] }) => {
   }
 
   return (
-    <div className="px-[1.2rem] flex flex-col w-full items-center">
+    <div className="px-[1.2rem] ml-[0.3rem] flex flex-col w-full items-center">
       {cal?.map((dayRow, rowIndex) => (
         <div
-          className="flex flex-row w-full h-[4.5rem]"
+          className="flex flex-row w-full h-[5.5rem]"
           key={`cal-${rowIndex}`}
         >
           {dayRow?.map((day, colIndex) => {

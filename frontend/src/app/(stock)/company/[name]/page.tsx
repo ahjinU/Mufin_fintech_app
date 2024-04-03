@@ -9,6 +9,7 @@ import {
 } from '@/components';
 import { StockLineChart } from '../_components/StockLineChart';
 import { StockCandleChart } from '../_components/StockCandleChart';
+import StockInfo from '../_components/StockInfo';
 import { StockCall } from '../_components/StockCall';
 import { serverPostFetch } from '@/hooks/useServerFetch';
 import { commaNum } from '@/utils/commaNum';
@@ -23,11 +24,11 @@ export default async function Company({
   const companyName = toCompanyKoreanName(params.name);
 
   // 주식 상세 정보 불러오기
-  const stockDetail = await serverPostFetch({
-    api: '/stock/detail',
-    data: { name: companyName },
-  });
-  const stockDetailData = stockDetail?.data;
+  // const stockDetail = await serverPostFetch({
+  //   api: '/stock/detail',
+  //   data: { name: companyName },
+  // });
+  // const stockDetailData = stockDetail?.data;
 
   return (
     <>
@@ -35,21 +36,7 @@ export default async function Company({
         <BackButton label={`${companyName} 회사`} />
       </Header>
       <main className="p-[1.2rem] flex flex-col gap-[1rem]">
-        <FlexBox
-          isDivided={false}
-          topChildren={
-            <OtherInfoElement
-              imageSrc={stockDetailData?.imageUrl}
-              leftHighlightText={companyName || ''}
-              leftExplainText={`오늘 거래량 ${commaNum(
-                stockDetailData?.transCnt,
-              )}주`}
-              rightExplainText={`${commaNum(stockDetailData?.incomeRatio)}%`}
-              rightHighlightText={`${commaNum(stockDetailData?.price)} 초코칩`}
-              state="UP"
-            ></OtherInfoElement>
-          }
-        />
+        {companyName && <StockInfo name={companyName} />}
 
         <GuideAccordion
           icon="/images/icon-bulb.png"

@@ -67,7 +67,7 @@ export default function LoanApplyDetail() {
       <Header>
         <BackButton label={'대출 신청하기'} />
       </Header>
-      <div className="p-[1.2rem] gap-[0.5rem] flex flex-col w-full pb-[3rem] ">
+      <div className="p-[1.2rem] gap-[0.5rem] flex flex-col w-full pb-[10rem]">
         <div className="flex flex-col gap-[1rem] mb-[1.5rem]">
           <GuideText
             text={
@@ -123,7 +123,7 @@ export default function LoanApplyDetail() {
           mode={'NONE'}
           height="h-[14rem]"
         >
-          <div className="flex flex-col gap-[1rem] mt-[2rem]">
+          <div className="flex flex-col gap-[1rem] mt-[1rem]">
             <div className="flex flex-row custom-semibold-text text-custom-light-purple items-center gap-[0.7rem] mt-[-0.5rem]">
               <p>매월 </p>
               <Select
@@ -143,7 +143,7 @@ export default function LoanApplyDetail() {
           label={'패널티 규칙을 정해주세요(최대 20자)'}
           mode={'NONE'}
         >
-          <div className="flex flex-col pb-[2rem] gap-[1rem]">
+          <div className="flex flex-col gap-[1rem]">
             <p className="leading-[1.2rem] text-custom-black custom-light-text">
               약속한 상환 날짜를 못지켰을 때,
               <br />

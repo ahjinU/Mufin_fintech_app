@@ -33,41 +33,45 @@ public class LoansService {
 		return loans;
 	}
 
-	public Loan findByUuid(String loanUuid){
+	public Loan findByUuid(String loanUuid) {
 		UUID Uuid = UUID.fromString(loanUuid);
-		return loansRepository.findByUuid(Uuid).orElseThrow(()->BusinessException.of(ErrorCode.API_ERROR_LOAN_NOT_EXIST));
+		return loansRepository.findByUuid(Uuid).orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_LOAN_NOT_EXIST));
 	}
 
-	public List<Loan> getAllLoansForParents(User parents){
-		List<Loan> result =  loansRepository.findAllLoansInProgressByParents(parents);
-		if(result.isEmpty())
+	public List<Loan> getAllLoansForParents(User parents) {
+		List<Loan> result = loansRepository.findAllLoansInProgressByParents(parents);
+		if (result.isEmpty())
 			throw BusinessException.of(ErrorCode.API_ERROR_LOAN_NOT_EXIST_FOR_PARENTS);
 		return result;
 	}
 
-	public List<Loan> getRequestedLoansForParents(User parents){
+	public List<Loan> getRequestedLoansForParents(User parents) {
 		List<Loan> result = loansRepository.findRequestedLoansByParents(parents);
-		if(result.isEmpty())
+		if (result.isEmpty())
 			throw BusinessException.of(ErrorCode.API_ERROR_LOAN_REQUESTED_NOT_EXIST_FOR_PARENTS);
 		return result;
 	}
 
-	public List<Loan> findAllLoansInProgress(){
+	public List<Loan> findAllLoansInProgress() {
 		return loansRepository.findAllLoansInProgress();
 	}
 
-	public void updateOverdueCnt(Loan loan){
+	public void updateOverdueCnt(Loan loan) {
 		loan.updateOverdueCnt(loan.getOverdueCnt() + 1);
 		loansRepository.saveAndFlush(loan);
 	}
 
-	public void refuseLoan(Loan loan, Code code){
+	public void refuseLoan(Loan loan, Code code) {
 		loan.refuseLoan(code);
 		loansRepository.saveAndFlush(loan);
 	}
 
 
-	public List<Loan> findLoansByUserAndCode(User user, Code code){
+	public List<Loan> findLoansByUserAndCode(User user, Code code) {
 		return loansRepository.findByChildAndCode(user, code);
+	}
+
+	public boolean terminateLoan(Loan loan, int cnt) {
+		return loan.repayLoan(cnt);
 	}
 }

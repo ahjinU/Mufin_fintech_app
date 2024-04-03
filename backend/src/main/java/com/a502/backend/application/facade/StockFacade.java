@@ -380,7 +380,6 @@ public class StockFacade {
 			int cnt = sb.getCntNot();
 			// 총 주문금액
 			int amount = price * cnt;
-			System.out.println(transName);
 			// 거래 종류(매도/매수)
 			String type = "매수";
 			myWaitingStockOrders.add(MyWaitingStockOrder.builder()

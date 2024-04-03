@@ -72,8 +72,6 @@ public class ParkingService {
                 .balance(100000)
                 .build();
 
-        System.out.println("파킹통장 생성=-=====");
-
          return parkingRepository.save(newParkingAccount);
     }
 

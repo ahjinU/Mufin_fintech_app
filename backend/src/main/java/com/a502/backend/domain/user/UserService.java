@@ -45,13 +45,8 @@ public class UserService implements UserDetailsService{
 
 	public JWTokenDto login(LoginDto loginDto) {
 
-		System.out.println("[UserService] 아이디/패스워드: " + loginDto.toString());
-		System.out.println("[UserService] 1. authenticationToken 확인");
-
 		UsernamePasswordAuthenticationToken authenticationToken =
 				new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
-
-		System.out.println("[UserService] 2. authenticationToken: " + authenticationToken);
 
 		SecurityContextHolder.clearContext();
 		JWTokenDto jwt=null;
@@ -59,18 +54,10 @@ public class UserService implements UserDetailsService{
 		try {
 			Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			System.out.println("[UserService] 3. authentication:" + authentication.toString());
 			jwt= jwtUtil.generateToken(authentication);
 		} catch (AuthenticationException e) {
-			// 에러 로깅
 			System.err.println(e);
-			// 적절한 에러 처리 로직
 		}
-
-
-
-		System.out.println("[UserService] 4. 액세스 토큰: " + jwt.getAccessToken());
-		System.out.println(jwt.toString());
 
 		return jwt;
 	}
@@ -81,10 +68,7 @@ public class UserService implements UserDetailsService{
 		User findMember = userRepository.findByEmail(username)
 				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));
 
-		System.out.println("[UserService/loadUserByname] findUser:" + findMember.toString());
-
 		CustomUserDetails cU = new CustomUserDetails(findMember);
-		System.out.println("[UserService/loadUserByname] CustomUserDetails password:" + cU.getPassword());
 		return cU;
 	}
 
@@ -133,8 +117,6 @@ public class UserService implements UserDetailsService{
 	public User userFindByEmail() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName(); // Username 추출
-
-		System.out.println("email: " + email);
 
 		return userRepository.findByEmail(email)
 				.orElseThrow(() -> BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST));

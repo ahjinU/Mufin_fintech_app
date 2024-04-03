@@ -57,57 +57,35 @@ public class UserController {
     @PostMapping("/signup/child/check/telephone")
     public ResponseEntity checkChildTelephone(@Valid @RequestBody TelephoneDto telephone, HttpServletResponse response) {
 
-        System.out.println("[UserController]: ");
-
         return checkTelephoneAndRespond(telephone.getTelephone(), response);
     }
 
     @PostMapping("/signup/parent/check/telephone")
     public ResponseEntity<ApiResponse<AuthenticationDto>> checkParentTelephone(@Valid @RequestBody TelephoneDto telephone, HttpServletResponse response) {
 
-        System.out.println("[UserController]: ");
-
         return checkTelephoneAndRespond(telephone.getTelephone(), response);
     }
 
     @PostMapping("/signup/parent/check/email")
     public ResponseEntity<ApiResponse<AuthenticationDto>> checkParentEmail(@Valid @RequestBody EmailDto email, HttpServletRequest request, HttpServletResponse response) {
-
-        System.out.println("[UserController]: /signup/parent/check/email" + email.toString());
-
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            System.out.println(headerName + ": " + request.getHeader(headerName));
-        }
-
-        //return checkEmailAndRespond(email.getEmail(), request, response);
         return checkEmailAndRespond(email.getEmail(), response,request);
     }
 
     @PostMapping("/signup/child/check/email")
     public ResponseEntity<ApiResponse<AuthenticationDto>> checkChildEmail(@Valid @RequestBody EmailDto email, HttpServletRequest request, HttpServletResponse response) {
-
-        System.out.println("[UserController]: /signup/child/check/email" + email.toString());
         return checkEmailAndRespond(email.getEmail(),response,request);
     }
 
     @PostMapping("/signup/parent")
     public ResponseEntity<ApiResponse<String>> signupParent(@Valid @RequestBody SignUpDto signUpDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        System.out.println("[UserController ]: /signup/parent" + signUpDto.toString());
-
         return signup(signUpDto, null,  request,response);
     }
 
     @PostMapping("/signup/child")
     public ResponseEntity<ApiResponse<String>> signupChild(@Valid @RequestBody SignUpDto signUpDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // 현재 인증된 사용자의 Authentication 객체 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println("[authentication]");
-        System.out.println(authentication.toString());
         if (authentication == null)
             throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST);
 

@@ -60,7 +60,6 @@ public class ReceiptService {
             transaction.updateReceipt(registeredReceipt);
         }else if(type.equals("현금")){
             CashDetail transaction = cashDetailService.findTransaction(convertToUuid(receiptRequestDto.getTransactionUuid()));
-            System.out.println(transaction.getUsageName());
             transaction.updateReceipt(registeredReceipt);
         }
         return ReceiptResponseDto.convertFromEntity(registeredReceipt);

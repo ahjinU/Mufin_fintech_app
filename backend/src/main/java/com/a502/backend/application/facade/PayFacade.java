@@ -107,7 +107,6 @@ public class PayFacade {
 	public void requestPayment(PaymentRequest paymentRequest) {
 		int amount = paymentRequest.getAmount();
 		String counterpartyName = paymentRequest.getCounterpartyName();
-		System.out.println(counterpartyName);
 		User user = userService.userFindByEmail();
 
 		Account account = accountService.findByUser(user);

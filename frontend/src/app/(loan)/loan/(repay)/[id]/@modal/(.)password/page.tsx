@@ -9,7 +9,7 @@ import useLoanRepayStore from '../../_store';
 export default function Password() {
   const router = useRouter();
   const { postLoan } = LoanAPI();
-  const { paymentCnt } = useLoanRepayStore();
+  const { paymentCnt, updatePaymentCnt } = useLoanRepayStore();
 
   var currentUrl = usePathname();
   var id = currentUrl?.split('/')[2];
@@ -22,6 +22,8 @@ export default function Password() {
       (await postLoan({ loanUuid: id, payment_cnt: paymentCnt }));
     res.message === '정상적으로 상환되었습니다.' &&
       router.replace('/loan/list');
+
+    updatePaymentCnt(1);
   };
 
   return (

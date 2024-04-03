@@ -18,10 +18,11 @@ import BookApis from '../../../_apis';
 import { usePathname } from 'next/navigation';
 import useBookStore from '../../../_store';
 import { useRouter } from 'next/navigation';
+import SearchBottomSheet from './SearchBottomSheet';
+import lottieJson from '@/../public/lotties/loading.json';
+import fail from '@/../public/lotties/fail.json';
 
 export default function BookListPost() {
-  const router = useRouter();
-
   var currentUrl = usePathname();
   var id = currentUrl?.split('/')[3];
   const [isOpen, setIsOpen] = useState<boolean>();
@@ -30,6 +31,12 @@ export default function BookListPost() {
   const { postReceipt, getOneTransaction } = BookApis();
   const [data, setData] = useState<TransactionType>();
   const [isBottomSheet, setIsBottomSheet] = useState<boolean>();
+  const [bottomTitle, setIsBottomTitle] =
+    useState<string>('영수증을 분석 중입니다.');
+  const [bottomContent, setBottomContent] = useState<string>(
+    '시간이 소요되거나 사진이 불명확한 경우 실패할 수 있어요.',
+  );
+  const [lottie, setLottie] = useState<any>(lottieJson);
 
   useEffect(() => {
     (async function () {
@@ -45,6 +52,11 @@ export default function BookListPost() {
     if (image && id) {
       setIsOpen(false);
       setIsBottomSheet(true);
+      setLottie(lottieJson);
+      setIsBottomTitle('영수증을 분석 중입니다.');
+      setBottomContent(
+        '시간이 소요되거나 사진이 불명확한 경우 실패할 수 있어요.',
+      );
 
       const formData = new FormData();
       formData.append('file', image);
@@ -54,8 +66,22 @@ export default function BookListPost() {
       console.log(res);
 
       if (res?.message === '영수증 분석을 완료햐였습니다.') {
-        setIsBottomSheet(false);
-        router.back();
+        setTimeout(() => {
+          setIsBottomTitle('영수증 분석을 완료했어요.');
+          setBottomContent('지출 세부 내역이 등록되었어요');
+        }, 1500);
+        setTimeout(() => {
+          setIsBottomSheet(false);
+        }, 3000);
+      } else {
+        setTimeout(() => {
+          setLottie(fail);
+          setIsBottomTitle('영수증 분석을 실패했어요.');
+          setBottomContent('내용이 잘 보이도록 다시 시도해주세요');
+        }, 1500);
+        setTimeout(() => {
+          setIsBottomSheet(false);
+        }, 4000);
       }
     }
   };
@@ -115,7 +141,7 @@ export default function BookListPost() {
       </div>
 
       {image && (
-        <div className="fixed bottom-[6rem] left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+        <div className="fixed bottom-[7rem] left-[1.2rem] right-[1.2rem] my-[1.2rem]">
           <Button
             onClick={() => {
               setIsOpen(true);
@@ -137,11 +163,12 @@ export default function BookListPost() {
       )}
       {isBottomSheet && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <BottomSheet
+          <SearchBottomSheet
             size={'SMALL'}
-            title={'영수증을 분석중입니다'}
-            imageSrc={'/images/icon-search.png'}
+            title={bottomTitle}
+            content={bottomContent}
             isXButtonVisible={false}
+            lottie={lottie}
             isOpen={isBottomSheet}
           />
         </div>

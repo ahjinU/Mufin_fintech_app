@@ -62,10 +62,15 @@ export default function LoanRepayDoc() {
                   앞으로 남은 금액은{' '}
                   <span className="text-custom-red">
                     {loan &&
-                      commaNum(
+                      (commaNum(
                         loan?.remainderAmount -
                           paymentCnt * loan?.paymentAmount,
-                      )}
+                      ) === '1'
+                        ? 0
+                        : commaNum(
+                            loan?.remainderAmount -
+                              paymentCnt * loan?.paymentAmount,
+                          ))}
                   </span>
                   원이라는 사실에 <br />
                   동의합니다.

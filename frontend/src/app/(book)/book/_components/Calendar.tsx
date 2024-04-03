@@ -37,7 +37,7 @@ export default function Calendar() {
   };
 
   return (
-    <div className="flex flex-col items-center w-full mb-[1rem]">
+    <div className="flex flex-col items-center w-full mb-[1rem] px-[0.5rem]">
       <div className="flex w-full justify-around h-[2rem]">
         <ChevronLeftIcon
           onClick={movePrevMonth}

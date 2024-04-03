@@ -151,7 +151,7 @@ export default function UserContact({
           />
         </div>
       </ComplexInput>
-      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem] py-[3rem]">
         <Button label="다음" mode={buttonMode} onClick={handleNext} />
       </div>
     </div>

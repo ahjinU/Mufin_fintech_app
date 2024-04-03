@@ -39,7 +39,6 @@ public class TransactionDto {
         for(AccountDetail detail : accountDetails){
             TransactionDto transactionDto = createTransactionDto(detail);
             result.add(transactionDto);
-            System.out.println(transactionDto.getTransactionUuid());
         }
         return result;
     }
@@ -60,8 +59,6 @@ public class TransactionDto {
         for(CashDetail detail : cashDetails){
             TransactionDto transactionDto = convertFromCashetail(detail);
             result.add(transactionDto);
-            System.out.println("dto 변환");
-            System.out.println(transactionDto.getTransactionUuid());
         }
         return result;
     }

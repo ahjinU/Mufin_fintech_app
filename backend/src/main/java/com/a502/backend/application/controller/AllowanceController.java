@@ -35,11 +35,7 @@ public class AllowanceController {
 
     @PostMapping("/calender")
     public ResponseEntity<ApiResponse<CalendarSummary>> calender(@RequestBody CalendarDTO calendarDTO) {
-
-        System.out.println("allowance 컨트롤러 진입");
-        System.out.println(calendarDTO.toString());
        CalendarSummary summary = allowanceFacade.getTransactionsForPeriod(calendarDTO);
-        System.out.println(summary.getOutcomeMonth());
        ApiResponse<CalendarSummary> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_ALLOWANCE_GET_BY_MONTH, summary);
         return ResponseEntity.ok().body(apiResponse);
     }
@@ -51,7 +47,6 @@ public class AllowanceController {
     public ResponseEntity<ApiResponse<CalendarDetailSummary>> calenderDetail(@RequestBody CalendarDTO calendarDTO) {
 
         CalendarDetailSummary summary = allowanceFacade.getTransactionsDetailForMonth(calendarDTO);
-        System.out.println(summary.getMonthIncome());
         ApiResponse<CalendarDetailSummary> apiResponse = new ApiResponse<>(ResponseCode.API_SUCCESS_ALLOWANCE_GET_BY_MONTH_DETAIL, summary);
 
 

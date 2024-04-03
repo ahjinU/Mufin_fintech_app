@@ -21,7 +21,7 @@ export default function Check() {
 
   return (
     <div
-      className={`absolute top-0 left-0 size-full ${
+      className={`fixed top-0 left-0 size-full ${
         isOpen && 'bg-custom-black-with-opacity'
       } 
     flex justify-center z-50`}

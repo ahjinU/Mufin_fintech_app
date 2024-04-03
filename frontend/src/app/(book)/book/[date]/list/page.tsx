@@ -36,7 +36,6 @@ export default function BookList() {
           date: format(selectedDate, 'yyyy-MM-dd'),
           childUuid: curChild.childUuid || null,
         });
-        console.log(res);
         setLoans(res?.data?.loan);
         setSavings(res?.data?.savings);
         setTotalIncome(res?.data?.dayIncome);
@@ -51,7 +50,7 @@ export default function BookList() {
         <AdBox
           mode={'STATIC'}
           subText={'영수증을 촬영해서 상세 정보를 추가해보세요!'}
-          title={'각 지출 내역을 누르면 선택할 수 있어요 '}
+          title={'계좌나 현금 지출 내역을 선택할 수 있어요'}
         />
       )}
       <MoneyShow
@@ -173,7 +172,7 @@ export default function BookList() {
                         )}원 납부/${commaNum(loan?.totalPaymentAmount)}원`}
                         buttonOption={'TINY_BUTTON'}
                         tinyButtonLabel="상환하기"
-                        link={`${loan.loanUuid}/detail`}
+                        link={`/loan/${loan.loanUuid}/detail`}
                       />
                     </div>
                   }

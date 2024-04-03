@@ -14,11 +14,9 @@ export default function Layout({
   const { data: session } = useSession();
   const { userData } = useUserStore();
 
-  console.log(session)
-
   return (
     <div className="min-h-screen bg-custom-white">
-      {userData.accountNumber.length == 0 ? (
+      {session && userData.accountNumber.length == 0 ? (
         <>
           <Header>
             <BackButton label="계좌개설" />

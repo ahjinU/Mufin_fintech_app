@@ -206,7 +206,7 @@ public class UserFacade {
 		if (account != null) {
 			String accountNumber = account.getAccountNumber();
 			String accountUuid = account.getAccountUuid().toString();
-			return new UserInfoResponse(userUuid, name, email, isParent, createdAt, address, address2, telephone, accountNumber, accountUuid);
+			return new UserInfoResponse(userUuid, name, email, isParent, createdAt, address, address2, telephone, accountUuid, accountNumber);
 		}
 		return UserInfoResponse.builder().userUuid(userUuid).name(name).email(email).isParent(isParent).createdAt(createdAt).address(address).address2(address2).telephone(telephone).build();
 	}

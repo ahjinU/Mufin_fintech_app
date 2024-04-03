@@ -24,6 +24,7 @@ export default function UserContact({
   });
   const [isValid, setIsValid] = useState(false);
   const [message, setMessage] = useState('');
+  const [isCheckValid, setIsCheckValid] = useState(false);
   const [buttonMode, setButtonMode] = useState<'ACTIVE' | 'NON_ACTIVE'>(
     'NON_ACTIVE',
   );
@@ -55,6 +56,7 @@ export default function UserContact({
         }
         if (fetchedData.ok) {
           setIsValid(true);
+          setIsCheckValid(true);
           setMessage('사용 가능한 번호입니다😀');
           // console.log(fetchedData.headers.getSetCookie);
         } else {
@@ -124,7 +126,9 @@ export default function UserContact({
             name="telephone"
             onChange={onChangeInput}
           />
-          <TinyButton label="중복 확인" handleClick={checkTelephone} />
+          {!isCheckValid && (
+            <TinyButton label="중복 확인" handleClick={checkTelephone} />
+          )}
         </div>
       </ComplexInput>
       <ComplexInput label="주소" mode="NONE">

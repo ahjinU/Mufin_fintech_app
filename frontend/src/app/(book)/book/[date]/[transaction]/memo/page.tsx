@@ -75,7 +75,7 @@ export default function BookListPost() {
           />
         </ComplexInput>
       </div>
-      <div>
+      <div className="fixed bottom-[7rem] left-[1.2rem] right-[1.2rem] my-[1.2rem]">
         <Button
           mode={'ACTIVE'}
           label={'저장하기'}

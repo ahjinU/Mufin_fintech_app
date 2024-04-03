@@ -53,7 +53,7 @@ const Day = (dayData: DayProps) => {
           <p className="text-[0.78rem] text-custom-blue font-[500] opacity-70">
             {incomeDay != '0' && incomeDay}
           </p>
-          <p className="text-[0.78rem] text-custom-red font-[500] opacity-60">
+          <p className="text-[0.78rem] text-custom-red font-[500] opacity-60 pr-[0.4rem]">
             {outcomeDay != '0' && outcomeDay}
           </p>
         </div>

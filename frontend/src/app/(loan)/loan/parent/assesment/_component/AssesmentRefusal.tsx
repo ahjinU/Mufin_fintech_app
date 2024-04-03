@@ -20,7 +20,6 @@ export default function AssesmentRefusal({
         api: '/loan/refuse',
         data: { loanUuid: uuid, reason: reason },
       });
-      console.log(reason);
       if (res.message == '대출 거절에 성공하였습니다.') {
         goToComplete();
       } else {
@@ -32,7 +31,7 @@ export default function AssesmentRefusal({
   };
 
   return (
-    <div className="absolute top-0 left-0 size-full bg-custom-black-with-opacity flex justify-center">
+    <div className="fixed top-0 left-0 size-full bg-custom-black-with-opacity flex justify-center">
       <AlertConfirm
         isOpen
         mode="ONLYCLOSE"

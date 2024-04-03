@@ -29,9 +29,9 @@ export default function AssesmentCheck({
       console.error('대출 승인 에러', error);
     }
   };
-
+ 
   return (
-    <div className="absolute top-0 left-0 size-full bg-custom-black-with-opacity flex justify-center">
+    <div className="fixed top-0 left-0 size-full bg-custom-black-with-opacity flex justify-center">
       <AlertConfirm
         isOpen
         height="h-[16rem]"

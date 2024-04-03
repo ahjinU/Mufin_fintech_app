@@ -137,23 +137,23 @@ public class LoanFacade {
 	public void repayLoan(RepayLoanRequest repayLoanRequest) {
 		String loanUuid = repayLoanRequest.getLoanUuid();
 		int paymentCnt = repayLoanRequest.getPayment_cnt();
-
 		Loan loan = loansService.findByUuid(loanUuid);
+		User parents = loan.getParent();
 		int payment = loan.getAmount() / loan.getPaymentTotalCnt();
-
-
 		User user = userService.userFindByEmail();
-		// 계좌
+		// 아이 계좌
 		Account account = accountService.findByUser(user);
-
+		// 부모 계좌
+		Account parentsAccount = accountService.findByUser(parents);
 		// 계좌 잔액이 적은 경우
 		AtomicInteger atomicInteger = new AtomicInteger(account.getBalance());
 		if (atomicInteger.addAndGet(-payment * paymentCnt) < 0)
 			throw BusinessException.of(ErrorCode.API_ERROR_ACCOUNT_INSUFFICIENT_BALANCE);
 		// 있다면 상환
 		account.updateAccount(account.getBalance() - payment * paymentCnt);
-		// 대출 상품 업데이트
-		boolean isFinal = loan.repayLoan(paymentCnt);
+		account.updateAccount(parentsAccount.getBalance() + payment * paymentCnt);
+		// 대출 cnt 업데이트 및 전액 상환여부 체크
+		boolean isFinal = loansService.terminateLoan(loan, paymentCnt);
 		// 상환된 경우 업데이트
 		if (isFinal)
 			loan.completeLoan(codeService.findStatusCode("상환완료"));
@@ -162,16 +162,28 @@ public class LoanFacade {
 		Code typeCode = codeService.findTypeCode("대출");
 		// 상태코드
 		Code statusCode = codeService.findStatusCode("거래완료");
-
+		// 아이계좌 거래 내역 업데이트
 		AccountDetail accountDetail = AccountDetail.builder()
 				.amount(-payment * paymentCnt)
 				.balance(account.getBalance())
 				.counterpartyName("대출 상환  (" + loan.getPaymentNowCnt() + "/" + loan.getPaymentTotalCnt() + ")")
+				.counterpartyAccount(parentsAccount.getAccountNumber())
 				.account(account)
 				.accountDetailTypeCode(typeCode)
 				.accountDetailStatusCode(statusCode)
 				.build();
 		accountDetailService.save(accountDetail);
+		// 부모 계좌 거래 내역 업데이트
+		AccountDetail parentAccountDetail = AccountDetail.builder()
+				.amount(payment * paymentCnt)
+				.balance(parentsAccount.getBalance())
+				.counterpartyName("대출금 입금  (" + loan.getPaymentNowCnt() + "/" + loan.getPaymentTotalCnt() + ")")
+				.counterpartyAccount(account.getAccountNumber())
+				.account(parentsAccount)
+				.accountDetailTypeCode(typeCode)
+				.accountDetailStatusCode(statusCode)
+				.build();
+		accountDetailService.save(parentAccountDetail);
 		// 대출 납부 내역 등록(대출 , 거래내역 연결)
 		LoanDetail loanDetail = LoanDetail.builder()
 				.accountDetail(accountDetail)

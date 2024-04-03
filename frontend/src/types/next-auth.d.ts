@@ -2,7 +2,7 @@ import NextAuth from 'next-auth/next';
 declare module 'next-auth' {
   interface Session {
     Authorization: string | null | undefined;
-    refreshToken: string | null | undefined;
+    RefreshToken: string | null | undefined;
     // & DefaultSession['user'];
   }
   interface User {

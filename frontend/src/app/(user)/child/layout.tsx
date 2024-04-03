@@ -13,7 +13,7 @@ export default function UserMenuLayout({
   const { userData } = useUserStore();
 
   return (
-    <div className="min-h-screen bg-custom-white">
+    <div className="bg-custom-white">
       {session && userData && userData.isParent ? (
         <section className="flex flex-col">
           <Header>

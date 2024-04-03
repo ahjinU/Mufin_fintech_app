@@ -61,7 +61,7 @@ export default function AssesmentInfo({
           <p className="custom-semibold-text text-custom-black">일</p>
         </div>
       </ComplexInput>
-      <div className="fixed bottom-0 left-[1.2rem] right-[1.2rem] my-[1.2rem]">
+      <div className="fixed w-full bottom-0 left-0 px-[1.2rem] py-[3rem]">
         <Button label="다음" mode="ACTIVE" onClick={buttonClick} />
       </div>
     </div>

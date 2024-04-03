@@ -74,7 +74,7 @@ export default function LoanDetail() {
           }
         />
       </ComplexInput>{' '}
-      <div className="fixed bottom-0 inset-x-0 p-[1.2rem]">
+      <div className="fixed bottom-0 inset-x-0 px-[1.2rem] py-[3rem]">
         <Link href={'repay'}>
           <Button mode={'ACTIVE'} label={'다음'} />
         </Link>

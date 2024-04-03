@@ -4,7 +4,7 @@ import { TransactionType } from '../../_types';
 
 export default function PeningList({ list }: { list: TransactionType[] }) {
   return (
-    <div className="flex flex-col gap-[1rem] py-[1.2rem] min-h-screen">
+    <div className="flex flex-col gap-[1rem] py-[1.2rem] min-h-[27.6rem]">
       {list?.map(({ type, cnt, transName, amount, price }, index) => {
         return (
           <FlexBox

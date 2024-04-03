@@ -67,7 +67,7 @@ export default function LoanApplyDetail() {
       <Header>
         <BackButton label={'대출 신청하기'} />
       </Header>
-      <div className="p-[1.2rem] gap-[0.5rem] flex flex-col w-full min-h-[calc(100vh-13.1rem)]">
+      <div className="p-[1.2rem] gap-[0.5rem] flex flex-col w-full">
         <div className="flex flex-col gap-[1rem] mb-[1.5rem]">
           <GuideText
             text={
@@ -159,14 +159,14 @@ export default function LoanApplyDetail() {
       </div>
       {isActive ? (
         <Link
-          className="fixed bottom-0 w-full p-[1.2rem] pt-0 bg-custom-white border-none outline-none"
+          className="fixed bottom-0 w-full px-[1.2rem] py-[3rem] pt-0 bg-custom-white border-none outline-none"
           href={'/loan/apply/chat'}
           onClick={saveLoanApplyData}
         >
           <Button mode={isActive ? 'ACTIVE' : 'NON_ACTIVE'} label={'다음'} />
         </Link>
       ) : (
-        <div className="fixed bottom-0 w-full p-[1.2rem] pt-0 bg-custom-white border-none outline-none">
+        <div className="fixed bottom-0 w-full px-[1.2rem] py-[3rem] pt-0 bg-custom-white border-none outline-none">
           <Button mode={isActive ? 'ACTIVE' : 'NON_ACTIVE'} label={'다음'} />
         </div>
       )}

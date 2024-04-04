@@ -109,7 +109,7 @@ export default function NavBar({ mode }: NavBarProps) {
           label: '가계부',
         },
         {
-          id: 3,
+          id: 4,
           icon: <Bars3Icon className="h-[2.4rem] w-[2.4rem] 4" />,
           path: '/user',
           label: '전체',
@@ -122,7 +122,7 @@ export default function NavBar({ mode }: NavBarProps) {
     <div
       className={`w-full sticky bottom-0 h-[7.5rem] rounded-t-[1.6rem] border border-b-0 border-x-0 border-custom-light-gray bg-custom-white flex justify-center pt-[1.5rem]`}
     >
-      {items.map(({ icon, path, label }, index) => (
+      {items.map(({ icon, path, label, id }, index) => (
         <Link
           className={` w-full h-[3.7rem] text-custom-black custom-semibold-text bg-custom-white flex items-center justify-center`}
           href={path}
@@ -131,7 +131,7 @@ export default function NavBar({ mode }: NavBarProps) {
         >
           <div
             className={`flex flex-col items-center ${
-              selectIndex === index
+              selectIndex === id
                 ? 'text-custom-purple'
                 : 'text-custom-medium-gray'
             }`}

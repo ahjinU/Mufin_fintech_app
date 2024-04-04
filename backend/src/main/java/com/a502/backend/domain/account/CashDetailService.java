@@ -23,7 +23,7 @@ public class CashDetailService {
 	private final CashDetailRepository cashDetailRepository;
 
 	public List<CashDetail> getAllCashDetailsByUserAndPeriod(User user, LocalDateTime startDay, LocalDateTime endDay) {
-		List<CashDetail> cashDetailList = cashDetailRepository.findByUserAndPeriod(user, startDay, endDay);
+		List<CashDetail> cashDetailList = cashDetailRepository.findAllByUserAndTransAtBetween(user, startDay, endDay);
 		return cashDetailList;
 	}
 

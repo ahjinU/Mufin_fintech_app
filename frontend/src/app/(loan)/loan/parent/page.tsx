@@ -15,6 +15,7 @@ export default function Page() {
         const res = await postFetch({ api: '/loan/total/parents' });
         if (res?.data?.loansList) {
           setLoanList(res.data.loansList);
+          console.log(res.data.loansList)
         }
       } catch (error) {
         console.error('아이 대출 정보 가져오기 에러', error);
@@ -42,7 +43,7 @@ export default function Page() {
                   <Accordion
                     mode={
                       v.overdueCnt == 0
-                        ? v.statusCode == '진행'
+                        ? v.statusCode == '진행중'
                           ? 'NORMAL'
                           : 'COMPLETED'
                         : 'EXCEPTIONAL'
@@ -50,7 +51,7 @@ export default function Page() {
                     name={v.childName}
                     title={
                       v.overdueCnt == 0
-                        ? v.statusCode == '진행'
+                        ? v.statusCode == '진행중'
                           ? ' 아이는 꾸준히 상환 중...'
                           : ' 아이는 대출금을 모두 갚았습니다!'
                         : ` 아이는 상환이 ${v.overdueCnt}번이나 밀렸습니다!`

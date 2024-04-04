@@ -69,7 +69,7 @@ public class TransactionDto {
                 .code("현금")
                 .amount(detail.getAmount())
                 .counterpartyName(detail.getUsageName())
-                .date(detail.getCreatedAt())
+                .date(detail.getTransAt())
                 .build();
     }
 }

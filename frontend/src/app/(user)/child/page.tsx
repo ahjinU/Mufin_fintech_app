@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { PlusButton } from '@/components';
 import { ChildrenType } from './_types/types';
+import { Square2StackIcon } from '@heroicons/react/24/solid';
 
 export default function ChildInfo() {
   const [children, setChildren] = useState<ChildrenType[]>([]);
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const { postFetch } = useFetch();
   const router = useRouter();
 
@@ -30,6 +32,13 @@ export default function ChildInfo() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleCopyText = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 3000);
+    });
+  };
+
   return (
     <div className="flex flex-col gap-[1rem]">
       {children.map((v, k) => {
@@ -44,9 +53,29 @@ export default function ChildInfo() {
                 {v.email}
               </p>
             </div>
-            <p className="custom-medium-text text-custom-purple">
-              {v.accountNumber}
-            </p>
+            {v.accountNumber && (
+              <div className="flex flex-row gap-[0.2rem] items-center">
+                <label className="custom-medium-text">
+                  <p className="custom-medium-text text-custom-purple">
+                    {v.accountNumber}
+                  </p>
+                </label>
+                <button
+                  onClick={() => handleCopyText(v.accountNumber)}
+                  className="hover:bg-custom-light-gray p-1 rounded-[0.8rem]"
+                >
+                  <Square2StackIcon className="size-[1.3rem] fill-custom-dark-gray mb-[0.2rem]" />
+                </button>
+                {showSnackbar && (
+                  <div
+                    className="fixed bottom-[8rem] left-1/2 transform -translate-x-1/2
+          p-4 rounded-[0.8rem] custom-light-text text-custom-white bg-custom-black-with-opacity z-10"
+                  >
+                    클립보드에 복사되었습니다!
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         );
       })}

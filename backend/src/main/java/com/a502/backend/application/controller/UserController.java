@@ -55,19 +55,13 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(HttpServletRequest request,HttpServletResponse response) {
-
+    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
 
         Cookie refreshtoken = getCookieByName(request, "refreshtoken");
-        Cookie deleteCookie = deleteCookie(refreshtoken);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        response.addCookie(deleteCookie);
+        response.addCookie(deleteCookie(refreshtoken));
 
         ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_LOGOUT);
-
-        return ResponseEntity.ok().headers(httpHeaders).body(apiResponse);
-
+        return ResponseEntity.ok().body(apiResponse);
     }
 
     @PostMapping("/signup/child/check/telephone")
@@ -84,17 +78,17 @@ public class UserController {
 
     @PostMapping("/signup/parent/check/email")
     public ResponseEntity<ApiResponse<AuthenticationDto>> checkParentEmail(@Valid @RequestBody EmailDto email, HttpServletRequest request, HttpServletResponse response) {
-        return checkEmailAndRespond(email.getEmail(), response,request);
+        return checkEmailAndRespond(email.getEmail(), response, request);
     }
 
     @PostMapping("/signup/child/check/email")
     public ResponseEntity<ApiResponse<AuthenticationDto>> checkChildEmail(@Valid @RequestBody EmailDto email, HttpServletRequest request, HttpServletResponse response) {
-        return checkEmailAndRespond(email.getEmail(),response,request);
+        return checkEmailAndRespond(email.getEmail(), response, request);
     }
 
     @PostMapping("/signup/parent")
     public ResponseEntity<ApiResponse<String>> signupParent(@Valid @RequestBody SignUpDto signUpDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        return signup(signUpDto, null,  request,response);
+        return signup(signUpDto, null, request, response);
     }
 
     @PostMapping("/signup/child")
@@ -111,24 +105,25 @@ public class UserController {
     }
 
     @PostMapping("/mypage")
-    public ResponseEntity<ApiResponse<UserMyPageResponse>> mypage(){
+    public ResponseEntity<ApiResponse<UserMyPageResponse>> mypage() {
         UserMyPageResponse response = userFacade.mypageInfo();
-        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_MYPAGE_LIST,response));
+        return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_MYPAGE_LIST, response));
     }
 
     @PostMapping("/info")
-    public ResponseEntity<ApiResponse<UserInfoResponse>> myinfo(){
+    public ResponseEntity<ApiResponse<UserInfoResponse>> myinfo() {
         UserInfoResponse response = userFacade.userInfo();
         return ResponseEntity.ok(new ApiResponse<>(API_SUCCESS_MYINFO_LIST, response));
     }
 
     @PostMapping("/child")
-    public ResponseEntity<ApiResponse<UserChildrenInfoResponse>> childinfo(){
+    public ResponseEntity<ApiResponse<UserChildrenInfoResponse>> childinfo() {
         UserChildrenInfoResponse response = userFacade.getChildrenInfo();
         return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_CHILDINFO_LIST, response));
     }
+
     @PostMapping("/account")
-    public ResponseEntity<ApiResponse<UserAccountInfoResponse>> accountinfo(){
+    public ResponseEntity<ApiResponse<UserAccountInfoResponse>> accountinfo() {
         UserAccountInfoResponse response = userFacade.getUserAccountInfo();
         return ResponseEntity.ok(new ApiResponse<>(ResponseCode.API_SUCCESS_ACCOUNTINFO, response));
     }
@@ -148,7 +143,6 @@ public class UserController {
 
         throw BusinessException.of(API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND);
     }
-
 
 
     public Cookie createCookie(String name, String value) {
@@ -183,11 +177,11 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    private ResponseEntity<ApiResponse<AuthenticationDto>> checkEmailAndRespond(String email,HttpServletResponse response, HttpServletRequest request) {
+    private ResponseEntity<ApiResponse<AuthenticationDto>> checkEmailAndRespond(String email, HttpServletResponse response, HttpServletRequest request) {
 
         Cookie authenicationOnlyTelephoneCookie = getCookieByName(request, "authenticationOnlyTelephone");
 
-        if(authenicationOnlyTelephoneCookie==null)
+        if (authenicationOnlyTelephoneCookie == null)
             throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_COMPLETE_TELEPHONE_CHECK);
 
         userFacade.checkDupleEmail(authenicationOnlyTelephoneCookie.getValue(), email);
@@ -205,7 +199,7 @@ public class UserController {
     private ResponseEntity<ApiResponse<String>> signup(SignUpDto signUpDto, String parentName, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie temporaryUserCookie = getCookieByName(request, "temporaryUserUuid");
 
-        if(temporaryUserCookie==null)
+        if (temporaryUserCookie == null)
             throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_COMPLETE_EMAIL_CHECK);
 
         userFacade.signup(temporaryUserCookie.getValue(), signUpDto, parentName);

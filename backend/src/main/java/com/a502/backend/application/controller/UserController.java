@@ -54,6 +54,22 @@ public class UserController {
 
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity logout(HttpServletRequest request,HttpServletResponse response) {
+
+
+        Cookie refreshtoken = getCookieByName(request, "refreshtoken");
+        Cookie deleteCookie = deleteCookie(refreshtoken);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        response.addCookie(deleteCookie);
+
+        ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_LOGIN);
+
+        return ResponseEntity.ok().headers(httpHeaders).body(apiResponse);
+
+    }
+
     @PostMapping("/signup/child/check/telephone")
     public ResponseEntity checkChildTelephone(@Valid @RequestBody TelephoneDto telephone, HttpServletResponse response) {
 

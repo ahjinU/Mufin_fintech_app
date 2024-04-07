@@ -18,7 +18,7 @@ export default function GlobalError({
         <div className="relative w-[36rem] h-[64rem] pt-[5rem]">
           <section className="w-full mx-auto flex flex-col gap-[1rem]">
             <h3 className="custom-bold-text ml-[1rem] mb-[1rem]">
-              서버 오류가 발생했어요. 다시 접근해주세요!
+              세션이 만료되었어요.
             </h3>
             <Lottie
               loop
@@ -29,7 +29,11 @@ export default function GlobalError({
           </section>
 
           <div className="w-full absolute p-[1rem] left-0 bottom-0">
-            <Button mode="ACTIVE" label="홈으로 이동하기" />
+            <Button
+              mode="ACTIVE"
+              label="홈으로 가기"
+              onClick={() => window.location.replace('https://mufin.life')}
+            />
           </div>
         </div>
       </body>

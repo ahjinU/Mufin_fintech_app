@@ -17,12 +17,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 import static com.a502.backend.global.exception.ErrorCode.API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtFilter extends GenericFilterBean {
 
     private final JwtProvider jwtTokenProvider;
@@ -39,13 +41,14 @@ public class JwtFilter extends GenericFilterBean {
             return;
         }
 
+
         try {
-            // 로그인 경로의 요청에 대해서는 JWT 검증을 생략
+            log.info("REQUEST PATH : {}", httpServletRequest.getServletPath());
+
             if (isLoginRequest(httpServletRequest.getServletPath()) || isSignupRequest(httpServletRequest.getServletPath())) {
                 chain.doFilter(request, response);
                 return;
             }
-
 
             String token = resolveToken(httpServletRequest);
 
@@ -58,18 +61,20 @@ public class JwtFilter extends GenericFilterBean {
 
             chain.doFilter(request, response);
         } catch (AuthenticationException e) {
+            log.info("AuthenticationException : {}", e);
             httpServletResponse.sendError(ErrorCode.API_ERROR_USER_ACCESSTOKEN_EXPIRED.getStatus(), e.getMessage());
         }
     }
+
     private boolean isSignupRequest(String path) {
 
-        if(path.equals("/api/user/signup/parent/check/telephone")) {
+        if (path.equals("/api/user/signup/parent/check/telephone")) {
             return true;
         }
-        if(path.equals("/api/user/signup/parent/check/email")) {
+        if (path.equals("/api/user/signup/parent/check/email")) {
             return true;
         }
-        if(path.equals("/api/user/signup/parent")) {
+        if (path.equals("/api/user/signup/parent")) {
             return true;
         }
 
@@ -79,6 +84,7 @@ public class JwtFilter extends GenericFilterBean {
     private boolean isLoginRequest(String path) {
         return path.equals("/api/user/login");
     }
+
     // Request Header에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");

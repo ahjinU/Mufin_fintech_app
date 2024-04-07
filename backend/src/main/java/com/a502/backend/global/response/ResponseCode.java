@@ -20,6 +20,7 @@ public enum ResponseCode {
 	API_SUCCESS_MYINFO_LIST("U006", "회원정보가 조회되었습니다."),
 	API_SUCCESS_CHILDINFO_LIST("U007", "아이 정보가 조회되었습니다."),
 	API_SUCCESS_ACCOUNTINFO("U008", "계좌 정보가 조회되었습니다."),
+	API_SUCCESS_LOGOUT("U009", "로그아웃 되었습니다."),
 
 	// account
 	API_SUCCESS_ACCOUNT_EXIST("A001", "존재하는 계좌입니다."),

@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,7 @@ import static com.a502.backend.global.response.ResponseCode.*;
 @RestController
 @RequestMapping("api/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
     private final UserFacade userFacade;
 
@@ -140,8 +142,8 @@ public class UserController {
                 }
             }
         }
-
-        throw BusinessException.of(API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND);
+        log.info("FIND NOT REFRESHTOKEN: {}",name);
+        throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_FIND_REFRESH_TOKEN);
     }
 
 

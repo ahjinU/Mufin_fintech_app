@@ -56,12 +56,13 @@ public class JwtFilter extends GenericFilterBean {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
+                log.info("ACCESS_TOKEN_NOT_FOUND");
                 throw BusinessException.of(API_ERROR_SESSION_EXPIRED_OR_NOT_FOUND);
             }
 
             chain.doFilter(request, response);
         } catch (AuthenticationException e) {
-            log.info("AuthenticationException : {}", e);
+            log.info("Authentication_EXCETPTION : {}", e);
             httpServletResponse.sendError(ErrorCode.API_ERROR_USER_ACCESSTOKEN_EXPIRED.getStatus(), e.getMessage());
         }
     }

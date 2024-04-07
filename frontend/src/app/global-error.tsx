@@ -3,7 +3,6 @@
 import dynamic from 'next/dynamic';
 const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
 import lottieJson from '@/../public/lotties/500.json';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components';
 
 export default function GlobalError({
@@ -13,8 +12,6 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const router = useRouter();
-
   return (
     <html>
       <body>
@@ -32,11 +29,7 @@ export default function GlobalError({
           </section>
 
           <div className="w-full absolute p-[1rem] left-0 bottom-0">
-            <Button
-              mode="ACTIVE"
-              label="홈으로 이동하기"
-              onClick={() => router.push('/')}
-            />
+            <Button mode="ACTIVE" label="홈으로 이동하기" />
           </div>
         </div>
       </body>

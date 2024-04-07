@@ -24,6 +24,7 @@ public enum ErrorCode {
     API_ERROR_USER_NOT_PARENT(400, "U010", "부모 회원만 요청할 수 있는 기능입니다."),
     API_ERROR_USER_NOT_COMPLETE_TELEPHONE_CHECK(401, "U010", "핸드폰 중복 검사를 먼저 해 주세요."),
     API_ERROR_USER_NOT_COMPLETE_EMAIL_CHECK(401, "U011", "이메일 중복 검사 및 핸드폰 중복 검사를 확인해 주세요."),
+    API_ERROR_USER_NOT_FIND_REFRESH_TOKEN(401, "U012", "리프레시 토큰이 없습니다."),
 
 
     //Allowance

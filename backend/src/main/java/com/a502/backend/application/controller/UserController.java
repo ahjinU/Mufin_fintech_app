@@ -64,7 +64,7 @@ public class UserController {
         HttpHeaders httpHeaders = new HttpHeaders();
         response.addCookie(deleteCookie);
 
-        ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_LOGIN);
+        ApiResponse<String> apiResponse = new ApiResponse<>(API_SUCCESS_LOGOUT);
 
         return ResponseEntity.ok().headers(httpHeaders).body(apiResponse);
 

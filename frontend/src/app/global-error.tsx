@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
 import lottieJson from '@/../public/lotties/500.json';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components';
 
 export default function GlobalError({

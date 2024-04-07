@@ -143,7 +143,7 @@ public class UserController {
             }
         }
         log.info("FIND NOT REFRESHTOKEN: {}",name);
-        throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_FIND_REFRESH_TOKEN);
+        throw BusinessException.of(ErrorCode.API_ERROR_USER_NOT_EXIST_REFRESH_TOKEN);
     }
 
 

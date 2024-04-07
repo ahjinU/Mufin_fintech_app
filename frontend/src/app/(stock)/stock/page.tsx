@@ -2,7 +2,6 @@ import { Header, Tab } from '@/components';
 import MainMyStock from './_components/MainMyStock';
 import MainStockList from './_components/MainStockList';
 import { StockAllType, RankType } from './_types';
-const url = `${process.env.REACT_APP_WEATHER_API}?q=Seoul&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
 import { serverGetFetch, serverPostFetch } from '@/hooks/useServerFetch';
 
 export interface DataType {
@@ -14,6 +13,8 @@ export interface DataType {
 }
 
 export default async function Stock() {
+  const url = `${process.env.REACT_APP_WEATHER_API}?q=Seoul&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
+
   // 전체 주식 정보 가져오기
   const stocks = await serverPostFetch({ api: '/stock/all' });
   // console.log(stocks.data);

@@ -176,7 +176,6 @@ export function StockCandleChart({ name }: { name: string }) {
         options={option}
         series={series}
         height={300}
-        width={336}
       />
 
       <Tag

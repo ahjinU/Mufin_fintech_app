@@ -139,7 +139,6 @@ export function StockLineChart({ name }: { name: string }) {
         options={option}
         series={[{ name, data }]}
         height={300}
-        width={336}
       />
 
       <Tag

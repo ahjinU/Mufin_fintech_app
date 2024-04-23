@@ -1,6 +1,5 @@
 # 머핀 (mufin)
 
-> 삼성 청년 소프트웨어 아카데미(SSAFY) 10기 2학기 특화 프로젝트 (A502)
 
 ![Project Cover](./assets/cover.jpg)
 
